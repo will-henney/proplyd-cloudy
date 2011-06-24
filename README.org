@@ -2,3 +2,9 @@
 * Cloudy models of proplyds
 
 Work with Nahiely
+
+** Random edit to try out the new github mac app
+   :LOGBOOK:
+   - Note taken on [2011-06-23 Thu 23:29] \\
+     Nothing really
+   :END:
