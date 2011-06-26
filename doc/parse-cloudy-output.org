@@ -11,3 +11,27 @@
   import numpy
   import argparse
 #+end_src
+
+** TODO Tests
+
+Put some test data in a top-level directory =claudia-test= 
+
+* TODO Makefile
+
+How can we automate the tangling and generating the HTML docs?
+
+* Export template						   :noexport:
+#+TITLE:     Parse Cloudy Output with claudia.py
+#+AUTHOR:    William Henney
+#+EMAIL:     whenney@gmail.com
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:nil toc:t \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
