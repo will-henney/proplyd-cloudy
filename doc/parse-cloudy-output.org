@@ -1,7 +1,12 @@
 
 * Parse Cloudy Output: claudia.py
+  :LOGBOOK:
+  CLOCK: [2011-06-27 Mon 23:28]--[2011-06-27 Mon 23:46] =>  0:18
+  CLOCK: [2011-06-26 Sun 22:54]--[2011-06-26 Sun 23:23] =>  0:29
+  :END:
   :PROPERTIES:
   :tangle:   ../src/claudia.py
+  :dir: ~/Work/Nahiely/proplyd-cloudy/src
   :END:
 
 ** Imports
@@ -10,11 +15,158 @@
 #+begin_src python
   import numpy
   import argparse
+  import string
 #+end_src
 
-** TODO Tests
+** Parsing the input file
 
+*** Find which save files were written
+    :LOGBOOK:
+    CLOCK: [2011-06-28 Tue 13:14]--[2011-06-28 Tue 13:16] =>  0:02
+    CLOCK: [2011-06-27 Mon 23:46]--[2011-06-27 Mon 23:46] =>  0:00
+    :END:
+
+This originally seemed like a job for regular expressions, but that quickly got out of hand. 
+
+#+srcname: claudia-get-list-of-save-files
+#+begin_src python
+  def find_save_commands(s):
+      """
+      Find all save commands in a Cloudy input file and return a list of [type, file] pairs
+  
+      >>> find_save_commands('save overview last ".ovr"\\nsave pressures last ".pre"')
+      [['overview', '.ovr'], ['pressures', '.pre']]
+      """
+      save_commands = [] 
+      for line in s.split("\n"):
+          found = find_single_save_command(line)
+          if found: save_commands.append(found)
+      return save_commands or None
+      
+  
+  def find_single_save_command(line):
+      """
+      Parse single line of a Cloudy input file, looking for a save command
+  
+      It should work both with C08-style (punch) and C10-style (save) commands:
+  
+      >>> find_single_save_command('save overview last ".ovr"')
+      ['overview', '.ovr']
+      >>> find_single_save_command('punch last overview ".ovr"')
+      ['overview', '.ovr']
+      """
+      if line.startswith("save") or line.startswith("punch"):
+          pass
+      else:
+          return None
+  
+  def cut_out(s, phrase):
+      """
+      Returns the input string <s> but with all occurences of <phrase> deleted
+  
+      <phrase> should be one or more words, separated by whitespace. Effort is made
+      to preserve one space between words, which makes it better than s.replace(phrase, '')
+  
+      >>> s = 'the quick brown fox, which is the brownest ever, jumped over the lazy dog'
+      >>> cut_out(s, 'the')
+      'quick brown fox, which is brownest ever, jumped over lazy dog'
+      >>> s.replace('the', '')
+      ' quick brown fox, which is  brownest ever, jumped over  lazy dog'
+  
+      Note the extra spaces in the s.replace version
+      """
+      return ' '.join(map(string.strip, s.split(phrase))).strip()
+#+end_src
+
+
+** Mindlessly loading all the data from all the output files
+
+** TODO Dealing with multiple iterations
+
+For simplicity, we first implement only the last iteration. So, either 
+
+1. There is only 1 iteration
+2. Only last iteration is saved (using "last" keyword)
+3. Or, we just ignore all the earlier ones
+
+Cases 1 and 2 are easiest to deal with, whereas Case 3 requires some preprocessing of the output file before using =numpy.genfromtxt=
+
+There is also:
+
+4. We use all the iterations
+
+Which requires a more complicated structure to hold them. 
+
+
+** TODO Tests
+The main choices for testing frameworks are 
+
++ py.test http://doc.pytest.org/
++ nose http://www.somethingaboutorange.com/mrl/projects/nose/
+
+Of these, py.test seems marginally simpler and has nicer-looking docs. So we will use that. Will also combine with some doctest tests for illustration and testing the documentation. 
+
+*** Example data for tests
 Put some test data in a top-level directory =claudia-test= 
+
+*** pytest tests
+    :LOGBOOK:
+    CLOCK: [2011-06-28 Tue 13:16]--[2011-06-28 Tue 13:27] =>  0:11
+    :END:
+
+*** Doctest tests
+    :LOGBOOK:
+    CLOCK: [2011-06-28 Tue 13:27]--[2011-06-28 Tue 13:28] =>  0:01
+    :END:
+
+Doctest gets mixed reviews. It is the simplest of all to use and seems to be fine for illustrating how to call functions and to make sure that the documentation is in sync with the code. Lots of people warn that it should not replace proper unit testing though. 
+
+**** DONE Run all the doctest tests in claudia.py
+     CLOSED: [2011-06-28 Tue 14:24]
+     :LOGBOOK:
+     - Note taken on [2011-06-28 Tue 14:24] \\
+       Re-factored to be standalone test
+     :END:
+
+
+#+srcname: claudia-doctests
+#+begin_src python :tangle no :results output
+  import doctest
+  import claudia
+  doctest.testmod(claudia)
+#+end_src
+
+#+results: claudia-doctests
+#+begin_example
+**********************************************************************
+File "claudia.py", line 10, in claudia.find_save_commands
+Failed example:
+    find_save_commands('save overview last ".ovr"\nsave pressures last ".pre"')
+Expected:
+    [['overview', '.ovr'], ['pressures', '.pre']]
+Got nothing
+**********************************************************************
+File "claudia.py", line 26, in claudia.find_single_save_command
+Failed example:
+    find_single_save_command('save overview last ".ovr"')
+Expected:
+    ['overview', '.ovr']
+Got nothing
+**********************************************************************
+File "claudia.py", line 28, in claudia.find_single_save_command
+Failed example:
+    find_single_save_command('punch last overview ".ovr"')
+Expected:
+    ['overview', '.ovr']
+Got nothing
+**********************************************************************
+2 items had failures:
+   1 of   1 in claudia.find_save_commands
+   2 of   2 in claudia.find_single_save_command
+***Test Failed*** 3 failures.
+#+end_example
+
+
 
 * TODO Makefile
 
