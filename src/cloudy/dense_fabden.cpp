@@ -69,7 +69,6 @@ double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, doub
 
   /* Calculamos R en funcion de la profundidad z del paso en el que vaya el modelo*/
   R = Rmax-((depth)/r0);
-  dR = A/(r0*sigma*rho_Rmax);
 
   /* First time called, so set up spline interpolation for U vs R using the tables Utab and Rtab */
   if (nzone == 0) spline(Rtab, Utab, 50, 2e31, 2e31, Uspline);
@@ -80,6 +79,7 @@ double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, doub
   if (nzone == 0) {
 	U_Rmax = U;
 	fabden_v = rho_Rmax;
+	dR = A/(r0*sigma*rho_Rmax*Rmax*Rmax*U_Rmax); // Approximation to i-front thickness
   }	else {
 	if (R > 1) {
 	  // Calculate density from continuity in spherical symmetry
