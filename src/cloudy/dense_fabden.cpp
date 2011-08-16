@@ -37,21 +37,22 @@ static double Utab [50] = {1.0, 1.0612244898, 1.12244897959, 1.18367346939, 1.24
 						   3.75510204082, 3.81632653061, 3.87755102041, 3.9387755102, 4.0};
 
 
-double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, double x0, double A, double ifrac_m)
+double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, double A)
 {
   
   /* New variables for interpolating velocity of globule flow 14 Jun 2011 */ 
   double R; /* Dimensionless globule radius */
   double U; /* Dimensionless velocity */
-  static double U_Rmax; /* Dimensionless velocity at the beginnig of model */
+  double x;
+  static double x0=1.946;
   static double rho_m; /* Density at the sonic point, R=1 */
   static double c_m; /* Isothermal sound speed at sonic point, R=1*/
+  double fabden_v;
+  double ifrac;
+  static double ifrac_m;
+  static double U_Rmax;
   static double dR; /* Dimension of the Ioniation Front*/
-  static double sigma=6.3e-18; 
-  double fabden_v; /* The density */
-  double c_s; /* Calculated sound speed */
-  double ifrac; /* Ionization fraction X(R) */
-  double x; /* ifrac argument x(R)*/
+  static double sigma=6.3e-18;
   static double Uspline [50] ; 		// Coefficients for spline interpolation
   
 
@@ -86,12 +87,14 @@ double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, doub
 	  c_m = timesc.sound_speed_isothermal;
 	  rho_m = fabden_v;
 	} else {
-	  x = x0 * (R - dR -1.0)/dR;
-	  ifrac = 0.5 * (tanh(x) + 1.0);
-	  fabden_v = rho_m * (1.0 - sqrt(1.0-((1.0+ifrac)/(1.0+ifrac_m))));
+		x = x0 * (R + (dR/2.0) - 1.0) / (dR/2.0);
+		ifrac = 0.5 * (tanh(x) + 1.0);
+		ifrac_m = 0.5 * (tanh(x0) + 1.0);
+		U = (1.0 - sqrt(1.0-((1.0+ifrac)/(1.0+ifrac_m))));
+		fabden_v = rho_Rmax * (U_Rmax/U) * POW2(Rmax/R);
 	} 
   }	
-  fprintf(ioQQQ,"%.3i %.4e  %.4f %.4e %.4e %.5f \n", nzone, c_m, dense.xIonDense[ipHYDROGEN][1]/(dense.xIonDense[ipHYDROGEN][1]+dense.xIonDense[ipHYDROGEN][0]), rho_m, U, R);
+  fprintf(ioQQQ,"%.3i %.4e  %.4e %.4e %.4e %.5f \n", nzone, x, dR, ifrac, U, R);
 
   return(fabden_v);
 
@@ -314,7 +317,7 @@ double dense_fabden(double radius,
 	  fabden_v = dense_proplyd_LinealInterpol(depth,  dense.DensityLaw[1], dense.DensityLaw[2], dense.DensityLaw[3]); /* refactored into a separate function */
 	  break;		  
 	case 53:
-	  fabden_v = dense_proplyd(depth,  dense.DensityLaw[1], dense.DensityLaw[2], dense.DensityLaw[3], dense.DensityLaw[4], dense.DensityLaw[5], dense.DensityLaw[6] ); /* refactored into a separate function */
+	  fabden_v = dense_proplyd(depth,  dense.DensityLaw[1], dense.DensityLaw[2], dense.DensityLaw[3], dense.DensityLaw[4]); /* refactored into a separate function */
 	  break;	  
 	}
 
