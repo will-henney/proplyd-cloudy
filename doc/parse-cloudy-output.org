@@ -7,6 +7,7 @@
   :PROPERTIES:
   :tangle:   ../src/claudia.py
   :dir: ~/Work/Nahiely/proplyd-cloudy/src
+  :comments: org
   :END:
 
 ** Imports
@@ -18,15 +19,129 @@
   import string
 #+end_src
 
+** The SmartDict class
+
++ Taken from the excellent [[http://code.activestate.com/recipes/577590-dictionary-whos-keys-act-like-attributes-as-well/][Python Recipe]] by [[http://code.activestate.com/recipes/users/4174115/][Sunjay Varma]]
++ I will use this as a base class 
+
+#+srcname: claudia-smartdict
+#+begin_src python
+  class SmartDict(dict):
+      """
+      Combines the best features of a class and a dict
+      """
+      def __getattr__(self, name):
+          try:
+              return self[name]
+          except KeyError as e:
+              raise AttributeError(e)
+      def __setattr__(self, name, value):
+          self[name] = value
+#+end_src
+
+*** Original description by Sunjay Varma from Python Recipes
+
+Dictionary Who's Keys Act Like Attributes As Well (Python recipe)
+
+Think of this as a JavaScript object. In JavaScript, the objects can be referenced by indexing (e.g. d[name]) or by directly using the dot (.) operator (e.g. d.name).
+
+This is the same concept.
+
+Note to Python 2.4 Users: You will need to change the =except KeyError as e:= line to =except KeyError, (e):=.
+
+#+begin_example
+>>> d = Dict(radius=10)
+>>> d.radius
+10
+>>> d.copy = 10
+>>> d.copy
+<built-in method copy of Dict object at 0x02A056B8>
+>>> d["copy"]
+10
+>>> d.copy()
+{'copy': 10, 'radius': 10}
+>>> d.fromkeys = lambda x: x * 2
+>>> d.fromkeys([10], [10])
+{10: [10]}
+>>> d["fromkeys"](20)
+40
+#+end_example
+
+** The class for a Cloudy model
+
+#+srcname: claudia-model-class
+#+begin_src python
+  class CloudyModel(SmartDict):
+      """
+      A single Cloudy model
+      """
+      indir, outdir = "in", "out"
+      insuff, outsuff = ".in", ".out"
+      def __init__(modelname):
+          self.infilepath = os.join(indir, modelname + insuff)
+          with open(self.infilepath) as f:
+              self._inscript = f.read() 
+          savecommands = find_save_commands(self._inscript)
+  
+#+end_src
+
+
 ** Parsing the input file
+
+*** List of possibilities for cloudy save files
+
++ Taken from Hazy1 C10 version 2011/08/14
++ This is nowhere near exhaustive
++ These are checked in turn, so more specific types should come first. 
+
+#+srcname: claudia-types-of-cloudy-save-files
+#+begin_src python
+  SAVETYPES = [
+      "cooling",
+      "element hydrogen",
+      "element helium",
+      "element carbon",
+      "element nitrogen",
+      "element oxygen",
+      "element sulfur",
+      "element silicon",
+      "element iron",
+      "heating",
+      "lines emissivity",
+      "overview",
+      "PDR",
+      "physical conditions",
+      "pressure",
+      "source function, spectrum",
+      "source function, depth",
+      ]
+#+end_src
+
+*** Find basic info about the run
+    :LOGBOOK:
+    CLOCK: [2011-08-20 Sat 18:24]--[2011-08-21 Sun 00:04] =>  5:40
+    :END:
+
+#+srcname: claudia-input-parse-basic-info
+#+begin_src python
+
+#+end_src
+
 
 *** Find which save files were written
     :LOGBOOK:
+    - Note taken on [2011-08-20 Sat 18:21] \\
+      OK, this is just about working now, time to move on
+    - Note taken on [2011-08-20 Sat 14:16] \\
+      Not sure what we were doing here? What was the use-case of the cut_out function.
+    CLOCK: [2011-08-20 Sat 14:16]--[2011-08-20 Sat 18:24] =>  4:08
     CLOCK: [2011-06-28 Tue 13:14]--[2011-06-28 Tue 13:16] =>  0:02
     CLOCK: [2011-06-27 Mon 23:46]--[2011-06-27 Mon 23:46] =>  0:00
     :END:
 
 This originally seemed like a job for regular expressions, but that quickly got out of hand. 
+
+Instead of allowing any type of save file, we use a finite list =SAVETYPES= since that makes the parsing much simpler. The only problem is that Cloudy allows the names to be abbreviated to four letters. 
 
 #+srcname: claudia-get-list-of-save-files
 #+begin_src python
@@ -34,8 +149,8 @@ This originally seemed like a job for regular expressions, but that quickly got 
       """
       Find all save commands in a Cloudy input file and return a list of [type, file] pairs
   
-      >>> find_save_commands('save overview last ".ovr"\\nsave pressures last ".pre"')
-      [['overview', '.ovr'], ['pressures', '.pre']]
+      >>> find_save_commands('save heating last ".heat"\\nsave cooling last ".cool"')
+      [('heating', '.heat'), ('cooling', '.cool')]
       """
       save_commands = [] 
       for line in s.split("\n"):
@@ -51,18 +166,47 @@ This originally seemed like a job for regular expressions, but that quickly got 
       It should work both with C08-style (punch) and C10-style (save) commands:
   
       >>> find_single_save_command('save overview last ".ovr"')
-      ['overview', '.ovr']
-      >>> find_single_save_command('punch last overview ".ovr"')
-      ['overview', '.ovr']
+      ('overview', '.ovr')
+      >>> find_single_save_command('PUNCH LAST OVERVIEW ".ovr"')
+      ('overview', '.ovr')
+      >>> find_single_save_command('save over no buffering, last, file=".ovr"')
+      ('overview', '.ovr')
+      >>> find_single_save_command('save madeupname file=".xyz"')
+      (None, '.xyz')
+      >>> find_single_save_command('this is not the right command')
+  
+      Note that the last command prints nothing since it returns None
+     
       """
+      line = line.lower()
       if line.startswith("save") or line.startswith("punch"):
-          pass
+          assert '"' in line or "'" in line, "No filename given in save/punch command"
+          line = cut_out(line, "save")
+          line = cut_out(line, "punch")
+          if "last" in line:
+              line = cut_out(line, "last")
+          if '"' in line:
+              delim = '"'
+          elif "'" in line:
+              delim = "'"
+          firstpart, savefile = line.split(delim)[:2]
+          for savetype in SAVETYPES:
+              if look4stringinline(savetype, firstpart):
+                  return savetype, savefile
+          # failed to find anything
+          return None, savefile
       else:
           return None
   
+  
+#+end_src
+
+*** Utility functions for input parsing 
+#+srcname: claudia-input-parse-utilities
+#+begin_src python
   def cut_out(s, phrase):
       """
-      Returns the input string <s> but with all occurences of <phrase> deleted
+      Returns the input string <s> but with all occurrences of <phrase> deleted
   
       <phrase> should be one or more words, separated by whitespace. Effort is made
       to preserve one space between words, which makes it better than s.replace(phrase, '')
@@ -76,8 +220,34 @@ This originally seemed like a job for regular expressions, but that quickly got 
       Note the extra spaces in the s.replace version
       """
       return ' '.join(map(string.strip, s.split(phrase))).strip()
+  
+  def look4stringinline(string, line):
+      """
+      Look for string in line, only comparing the first 4 characters of each word
+  
+      This is because cloudy does the same.
+  
+      Case should not matter: 
+      >>> look4stringinline('punch pressure', 'PUNC FINAL PRES')
+      True
+  
+      And it is OK to have strings with less than 4 characters:
+      >>> look4stringinline('PDR', 'save pdr')
+      True
+  
+      And here is an example that should fail:
+      >>> look4stringinline('save whatever', 'save foobar')
+      False
+  
+      """
+      words = string.split()
+      for word in words:
+          if len(word) > 4: word = word[:4] 
+          if not word.upper() in line.upper():
+              return False
+      return True
+  
 #+end_src
-
 
 ** Mindlessly loading all the data from all the output files
 
@@ -99,20 +269,89 @@ Which requires a more complicated structure to hold them.
 
 
 ** TODO Tests
+   :LOGBOOK:
+   - Note taken on [2011-08-21 Sun 00:07] \\
+     Changed mind - nose has clearer docs than py.test does
+   CLOCK: [2011-08-20 Sat 23:40]
+   :END:
 The main choices for testing frameworks are 
 
 + py.test http://doc.pytest.org/
 + nose http://www.somethingaboutorange.com/mrl/projects/nose/
 
-Of these, py.test seems marginally simpler and has nicer-looking docs. So we will use that. Will also combine with some doctest tests for illustration and testing the documentation. 
+After looking further at the docs, it seems that nose might be better. 
+
+Will also combine with some doctest tests for illustration and testing the documentation. 
+
+*** CANCELED Earlier comment
+    CLOSED: [2011-08-21 Sun 00:05]
+Of these, py.test seems marginally simpler and has nicer-looking docs. So we will use that. /Now changed my mind/
 
 *** Example data for tests
 Put some test data in a top-level directory =claudia-test= 
 
-*** pytest tests
+*** Nose tests
     :LOGBOOK:
     CLOCK: [2011-06-28 Tue 13:16]--[2011-06-28 Tue 13:27] =>  0:11
     :END:
+**** Example tests
+     :PROPERTIES:
+     :tangle:   ../src/test-claudia.py
+     :END:
+#+srcname: test-claudia-examples
+#+begin_src python
+  import nose
+  from nose.tools import with_setup
+  import claudia
+  
+  def setup_func():
+      "set up test fixtures"
+      model = claudia.CloudyModel()
+  
+  def teardown_func():
+      "tear down test fixtures"
+  
+  @with_setup(setup_func, teardown_func)
+  def test():
+      "test destined to fail"
+      assert False
+  
+#+end_src
+
+
+**** Run all the nose tests
+#+srcname: run-claudia-nosetests
+#+begin_src sh :tangle no :results output
+  echo "Running nose tests in $(pwd)"
+  nosetests 2>&1 
+  echo
+  echo "Tests last ran $(date)"
+#+end_src
+
+#+results: run-claudia-nosetests
+#+begin_example
+Running nose tests in /Users/will/Work/Nahiely/proplyd-cloudy/src
+F
+======================================================================
+FAIL: test destined to fail
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/7.1/lib/python2.7/site-packages/nose-1.1.2-py2.7.egg/nose/case.py", line 197, in runTest
+    self.test(*self.arg)
+  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test-claudia.py", line 20, in test
+    assert False
+AssertionError
+
+----------------------------------------------------------------------
+Ran 1 test in 0.030s
+
+FAILED (failures=1)
+
+Tests last ran Sun Aug 21 16:09:50 CDT 2011
+#+end_example
+
+
+
 
 *** Doctest tests
     :LOGBOOK:
@@ -124,6 +363,8 @@ Doctest gets mixed reviews. It is the simplest of all to use and seems to be fin
 **** DONE Run all the doctest tests in claudia.py
      CLOSED: [2011-06-28 Tue 14:24]
      :LOGBOOK:
+     - Note taken on [2011-08-20 Sat 14:13] \\
+       Print the time that test was last run
      - Note taken on [2011-06-28 Tue 14:24] \\
        Re-factored to be standalone test
      :END:
@@ -133,38 +374,13 @@ Doctest gets mixed reviews. It is the simplest of all to use and seems to be fin
 #+begin_src python :tangle no :results output
   import doctest
   import claudia
+  from datetime import datetime
   doctest.testmod(claudia)
+  print 'Tests run ', datetime.now()
 #+end_src
 
 #+results: claudia-doctests
-#+begin_example
-**********************************************************************
-File "claudia.py", line 10, in claudia.find_save_commands
-Failed example:
-    find_save_commands('save overview last ".ovr"\nsave pressures last ".pre"')
-Expected:
-    [['overview', '.ovr'], ['pressures', '.pre']]
-Got nothing
-**********************************************************************
-File "claudia.py", line 26, in claudia.find_single_save_command
-Failed example:
-    find_single_save_command('save overview last ".ovr"')
-Expected:
-    ['overview', '.ovr']
-Got nothing
-**********************************************************************
-File "claudia.py", line 28, in claudia.find_single_save_command
-Failed example:
-    find_single_save_command('punch last overview ".ovr"')
-Expected:
-    ['overview', '.ovr']
-Got nothing
-**********************************************************************
-2 items had failures:
-   1 of   1 in claudia.find_save_commands
-   2 of   2 in claudia.find_single_save_command
-***Test Failed*** 3 failures.
-#+end_example
+: Tests run  2011-08-20 18:12:07.929649
 
 
 
