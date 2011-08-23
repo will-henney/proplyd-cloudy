@@ -6,6 +6,7 @@
 import numpy
 import argparse
 import string
+import os
 
 # ** The SmartDict class
 
@@ -28,19 +29,71 @@ class SmartDict(dict):
 
 # ** The class for a Cloudy model
 
+
 # #+srcname: claudia-model-class
 
-class CloudyModel(SmartDict):
+class CloudyModel(object):
     """
     A single Cloudy model
+
+    >>> from claudia import CloudyModel
+    >>> modelname = 'sample'
+    >>> CloudyModel.indir = '.'
+    >>> m = CloudyModel(modelname)
+    >>> m.savecommands
     """
     indir, outdir = "in", "out"
     insuff, outsuff = ".in", ".out"
-    def __init__(modelname):
-        self.infilepath = os.join(indir, modelname + insuff)
+    # list of save types to skip (problematic to read with genfromtxt)
+    skipsaves = ["continuum", "line emissivity"]
+    def __init__(self, modelname, **kwargs):
+        # Any optional keywords get set as attributes
+        # We do this first in case indir or insuff are set
+        self.__dict__.update(kwargs)
+
+        # Read in the input script
+        self.infilepath = os.path.join(self.indir, modelname + self.insuff)
         with open(self.infilepath) as f:
             self._inscript = f.read() 
-        savecommands = find_save_commands(self._inscript)
+
+        # Now read in from all the save files
+        for savetype, savesuff in find_save_commands(self._inscript):
+            savefilepath = os.path.join(self.outdir, modelname + savesuff)
+            saveid = savesuff[1:]       # strip the leading dot to make the attribute name
+            if not savetype in self.skipsaves:
+                setattr(self, saveid, parse_savefile(savetype, savefilepath))
+
+# ** Parsing the save files
+
+# It is almost impossible to do this cleanly with output from older versions of Cloudy. At the moment I am resorting to editing the header of the "line emissivity" file to put the header on two lines and delete the final tab and 
+
+# #+srcname: claudia-parse-save-file
+
+class CloudySave(object):
+    """
+    A dataset writen by a Cloudy 'save' command (formerly 'punch')
+    """
+    def __init__(self, longid, data):
+        self.longid = longid
+        self._data = data
+        # push all the columns up into the top-level namespace for easy access
+        for name in self._data.dtype.names:
+            setattr(self, name, self._data[name])
+
+SAVETYPES_TWO_LINE_HEADER = [
+    "line emissivity",
+    ] 
+def parse_savefile(savetype, filepath):
+    print "Trying to read ", filepath
+    if savetype in SAVETYPES_TWO_LINE_HEADER:
+        skip = 1
+    else:
+        skip = 0
+    return CloudySave(savetype, numpy.genfromtxt(filepath, 
+                                                 delimiter='\t', 
+                                                 skip_header=skip,
+                                                 invalid_raise=False,
+                                                 names=True))
 
 # *** List of possibilities for cloudy save files
 
@@ -51,7 +104,22 @@ class CloudyModel(SmartDict):
 # #+srcname: claudia-types-of-cloudy-save-files
 
 SAVETYPES = [
+    "diffuse continuum", 
+    "emitted continuum", 
+    "fine continuum", 
+    "grain continuum", 
+    "incident continuum", 
+    "interactive continuum", 
+    "ionizing continuum", 
+    "outward continuum", 
+    "raw continuum", 
+    "reflected continuum", 
+    "transmitted continuum", 
+    "two photon continuum", 
+    "continuum", 
     "cooling",
+    "dr",
+    "dynamics",
     "element hydrogen",
     "element helium",
     "element carbon",
@@ -61,11 +129,13 @@ SAVETYPES = [
     "element silicon",
     "element iron",
     "heating",
-    "lines emissivity",
+    "line emissivity",
+    "line list", 
     "overview",
     "PDR",
     "physical conditions",
     "pressure",
+    "radius",
     "source function, spectrum",
     "source function, depth",
     ]

@@ -1,6 +1,7 @@
 
 * Parse Cloudy Output: claudia.py
   :LOGBOOK:
+  CLOCK: [2011-08-23 Tue 09:40]--[2011-08-23 Tue 10:50] =>  1:10
   CLOCK: [2011-06-27 Mon 23:28]--[2011-06-27 Mon 23:46] =>  0:18
   CLOCK: [2011-06-26 Sun 22:54]--[2011-06-26 Sun 23:23] =>  0:29
   :END:
@@ -17,6 +18,7 @@
   import numpy
   import argparse
   import string
+  import os
 #+end_src
 
 ** The SmartDict class
@@ -69,21 +71,77 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
 
 ** The class for a Cloudy model
 
+
 #+srcname: claudia-model-class
 #+begin_src python
-  class CloudyModel(SmartDict):
+  class CloudyModel(object):
       """
       A single Cloudy model
+  
+      >>> from claudia import CloudyModel
+      >>> modelname = 'sample'
+      >>> CloudyModel.indir = '.'
+      >>> m = CloudyModel(modelname)
+      >>> m.savecommands
       """
       indir, outdir = "in", "out"
       insuff, outsuff = ".in", ".out"
-      def __init__(modelname):
-          self.infilepath = os.join(indir, modelname + insuff)
+      # list of save types to skip (problematic to read with genfromtxt)
+      skipsaves = ["continuum", "line emissivity"]
+      def __init__(self, modelname, **kwargs):
+          # Any optional keywords get set as attributes
+          # We do this first in case indir or insuff are set
+          self.__dict__.update(kwargs)
+  
+          # Read in the input script
+          self.infilepath = os.path.join(self.indir, modelname + self.insuff)
           with open(self.infilepath) as f:
               self._inscript = f.read() 
-          savecommands = find_save_commands(self._inscript)
+  
+          # Now read in from all the save files
+          for savetype, savesuff in find_save_commands(self._inscript):
+              savefilepath = os.path.join(self.outdir, modelname + savesuff)
+              saveid = savesuff[1:]       # strip the leading dot to make the attribute name
+              if not savetype in self.skipsaves:
+                  setattr(self, saveid, parse_savefile(savetype, savefilepath))
+  
   
 #+end_src
+
+** Parsing the save files
+
+It is almost impossible to do this cleanly with output from older versions of Cloudy. At the moment I am resorting to editing the header of the "line emissivity" file to put the header on two lines and delete the final tab and 
+
+#+srcname: claudia-parse-save-file
+#+begin_src python
+  class CloudySave(object):
+      """
+      A dataset writen by a Cloudy 'save' command (formerly 'punch')
+      """
+      def __init__(self, longid, data):
+          self.longid = longid
+          self._data = data
+          # push all the columns up into the top-level namespace for easy access
+          for name in self._data.dtype.names:
+              setattr(self, name, self._data[name])
+  
+  SAVETYPES_TWO_LINE_HEADER = [
+      "line emissivity",
+      ] 
+  def parse_savefile(savetype, filepath):
+      print "Trying to read ", filepath
+      if savetype in SAVETYPES_TWO_LINE_HEADER:
+          skip = 1
+      else:
+          skip = 0
+      return CloudySave(savetype, numpy.genfromtxt(filepath, 
+                                                   delimiter='\t', 
+                                                   skip_header=skip,
+                                                   invalid_raise=False,
+                                                   names=True))
+  
+#+end_src
+
 
 
 ** Parsing the input file
@@ -97,7 +155,22 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
 #+srcname: claudia-types-of-cloudy-save-files
 #+begin_src python
   SAVETYPES = [
+      "diffuse continuum", 
+      "emitted continuum", 
+      "fine continuum", 
+      "grain continuum", 
+      "incident continuum", 
+      "interactive continuum", 
+      "ionizing continuum", 
+      "outward continuum", 
+      "raw continuum", 
+      "reflected continuum", 
+      "transmitted continuum", 
+      "two photon continuum", 
+      "continuum", 
       "cooling",
+      "dr",
+      "dynamics",
       "element hydrogen",
       "element helium",
       "element carbon",
@@ -107,11 +180,13 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
       "element silicon",
       "element iron",
       "heating",
-      "lines emissivity",
+      "line emissivity",
+      "line list", 
       "overview",
       "PDR",
       "physical conditions",
       "pressure",
+      "radius",
       "source function, spectrum",
       "source function, depth",
       ]
@@ -272,7 +347,7 @@ Which requires a more complicated structure to hold them.
    :LOGBOOK:
    - Note taken on [2011-08-21 Sun 00:07] \\
      Changed mind - nose has clearer docs than py.test does
-   CLOCK: [2011-08-20 Sat 23:40]
+   CLOCK: [2011-08-20 Sat 23:40]--[2011-08-21 Sun 16:52] => 17:12
    :END:
 The main choices for testing frameworks are 
 
@@ -288,25 +363,131 @@ Will also combine with some doctest tests for illustration and testing the docum
 Of these, py.test seems marginally simpler and has nicer-looking docs. So we will use that. /Now changed my mind/
 
 *** Example data for tests
-Put some test data in a top-level directory =claudia-test= 
+Put some test data in a top-level directory =testdata= 
+
+*** Unittest tests
+    :LOGBOOK:
+    CLOCK: [2011-08-23 Tue 10:50]
+    :END:
+
++ [2011-08-23 Tue] With Python version 2.7, it seems that the standard library =unittest= module can now do lots of the things that =nose= can do. So, I will switch to using that since it seems to have better documentation. 
+
+
+**** Example unittest tests
+     :LOGBOOK:
+     - Note taken on [2011-08-23 Tue 11:10] \\
+       Note that we had to use test_claudia.py not test-claudia.py since the latter is not a valid module name.
+     - Note taken on [2011-08-23 Tue 11:02] \\
+       First version is a straight port of the nose tests I already had
+     :END:
+     :PROPERTIES:
+     :tangle:   ../src/test_claudia.py
+     :END:
+
+#+srcname: unittest-claudia
+#+begin_src python
+  import unittest
+  from claudia import CloudyModel
+  
+  class ClaudiaTestSample01(unittest.TestCase):
+      def setUp(self):
+          "set up test fixtures"
+          self.model = CloudyModel('sample01', 
+                                   indir='../testdata', 
+                                   outdir='../testdata',
+                                   skipsaves=[])
+  
+      # def teardown_func():
+      #     "tear down test fixtures"
+  
+      def test_doomed_to_fail(self):
+          self.assertEquals(1, 2)
+  
+      def test_infilepath(self):
+          self.assertEquals(self.model.infilepath, '../testdata/sample01.in')
+  
+#+end_src
+
+**** Run all the unit tests
+#+srcname: run-claudia-unitttests
+#+begin_src sh :tangle no :results output
+  echo "Running unit tests in $(pwd)"
+  python -m unittest discover -v 2>&1 
+  echo
+  echo "Tests last ran $(date)"
+#+end_src
+
+#+results: run-claudia-unitttests
+#+begin_example
+Running unit tests in /Users/will/Work/Nahiely/proplyd-cloudy/src
+test_doomed_to_fail (test_claudia.ClaudiaTestSample01) ... FAIL
+test_infilepath (test_claudia.ClaudiaTestSample01) ... ok
+
+======================================================================
+FAIL: test_doomed_to_fail (test_claudia.ClaudiaTestSample01)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test_claudia.py", line 30, in test_doomed_to_fail
+    self.assertEquals(1, 2)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.369s
+
+FAILED (failures=1)
+Trying to read  ../testdata/sample01.con
+Trying to read  ../testdata/sample01.phy
+Trying to read  ../testdata/sample01.ion_o
+Trying to read  ../testdata/sample01.ovr
+Trying to read  ../testdata/sample01.lin
+Trying to read  ../testdata/sample01.pre
+Trying to read  ../testdata/sample01.str
+Trying to read  ../testdata/sample01.con
+Trying to read  ../testdata/sample01.phy
+Trying to read  ../testdata/sample01.ion_o
+Trying to read  ../testdata/sample01.ovr
+Trying to read  ../testdata/sample01.lin
+Trying to read  ../testdata/sample01.pre
+Trying to read  ../testdata/sample01.str
+
+Tests last ran Tue Aug 23 13:39:02 CDT 2011
+#+end_example
+
 
 *** Nose tests
     :LOGBOOK:
     CLOCK: [2011-06-28 Tue 13:16]--[2011-06-28 Tue 13:27] =>  0:11
     :END:
-**** Example tests
+
+**** Notes on using nose
+     :LOGBOOK:
+     - Note taken on [2011-08-23 Tue 10:38] \\
+       It seems I still don't understand how to use the setup and teardown functions. The variables created there are not available in the individual tests. There must be a way round this.
+     :END:
+
+
+
+**** Example nose tests
+     :LOGBOOK:
+     - Note taken on [2011-08-23 Tue 11:01] \\
+       Turned off tangling here aince we don't use this any more
+     :END:
      :PROPERTIES:
      :tangle:   ../src/test-claudia.py
      :END:
-#+srcname: test-claudia-examples
-#+begin_src python
+
+
+
+#+srcname: test-claudia-nose-examples
+#+begin_src python :tangle no
   import nose
   from nose.tools import with_setup
-  import claudia
+  from claudia import CloudyModel
   
   def setup_func():
       "set up test fixtures"
-      model = claudia.CloudyModel()
+      CloudyModel.indir = '../testdata'
+      model = CloudyModel('sample01')
   
   def teardown_func():
       "tear down test fixtures"
@@ -315,6 +496,11 @@ Put some test data in a top-level directory =claudia-test=
   def test():
       "test destined to fail"
       assert False
+  
+  @with_setup(setup_func, teardown_func)
+  def infilepath_test():
+      "test destined to fail"
+      assert model.infilepath == '../testdata/sample01.in'
   
 #+end_src
 
@@ -331,23 +517,33 @@ Put some test data in a top-level directory =claudia-test=
 #+results: run-claudia-nosetests
 #+begin_example
 Running nose tests in /Users/will/Work/Nahiely/proplyd-cloudy/src
-F
+FE
+======================================================================
+ERROR: test destined to fail
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/7.1/lib/python2.7/site-packages/nose-1.1.2-py2.7.egg/nose/case.py", line 197, in runTest
+    self.test(*self.arg)
+  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test-claudia.py", line 28, in infilepath_test
+    assert model.infilepath == '../testdata/sample01.in'
+NameError: global name 'model' is not defined
+
 ======================================================================
 FAIL: test destined to fail
 ----------------------------------------------------------------------
 Traceback (most recent call last):
   File "/Library/Frameworks/Python.framework/Versions/7.1/lib/python2.7/site-packages/nose-1.1.2-py2.7.egg/nose/case.py", line 197, in runTest
     self.test(*self.arg)
-  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test-claudia.py", line 20, in test
+  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test-claudia.py", line 23, in test
     assert False
 AssertionError
 
 ----------------------------------------------------------------------
-Ran 1 test in 0.030s
+Ran 2 tests in 0.274s
 
-FAILED (failures=1)
+FAILED (errors=1, failures=1)
 
-Tests last ran Sun Aug 21 16:09:50 CDT 2011
+Tests last ran Tue Aug 23 10:37:25 CDT 2011
 #+end_example
 
 
