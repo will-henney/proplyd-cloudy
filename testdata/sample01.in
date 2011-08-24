@@ -1,0 +1,33 @@
+no molecules
+no level2 lines
+grains Orion
+metals depleted
+table star "wmbasic.mod" 35000.0 4.0 0
+phi(H)=14.54
+dlaw 53, 8.e14, 9., 9800., 20.
+C stop efrac = 1.02
+set punch prefix "phi14.54_rhoi9.8e3_wm35e3"
+punch last continuum ".con"
+punch last physical conditions ".phy"
+punch last element oxygen ".ion_O"
+punch last overview ".ovr"
+punch last lineslist ".lin" "line_list.in"
+punch last pressure ".pre"
+punch last lines emissivity, ".str"
+H  1  4861
+H  1  6563
+TOTr  5199
+N  2  6584
+O  1  6300
+O II  3726
+TOTL	 4363
+O  3  4959
+O  3  5007
+S II  6731
+S II  6716
+S  3  6312A
+He 1  5876
+Ne 2 12.81m
+Ne 3 15.55m
+end of lines
+iterate
