@@ -43,12 +43,12 @@ double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, doub
   /* New variables for interpolating velocity of globule flow 14 Jun 2011 */ 
   double R; /* Dimensionless globule radius */
   double U; /* Dimensionless velocity */
-  double x;
-  static double x0=1.946;
+  double x=1.0;
+  static double x0=2.3;
   static double rho_m; /* Density at the sonic point, R=1 */
   static double c_m; /* Isothermal sound speed at sonic point, R=1*/
   double fabden_v;
-  double ifrac;
+  double ifrac=1.0;
   static double ifrac_m;
   static double U_Rmax;
   static double dR; /* Dimension of the Ioniation Front*/
@@ -87,14 +87,14 @@ double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, doub
 	  c_m = timesc.sound_speed_isothermal;
 	  rho_m = fabden_v;
 	} else {
-		x = x0 * (R + (dR/2.0) - 1.0) / (dR/2.0);
+		x = x0 * (R + (dR) - 1.0) / (dR);
 		ifrac = 0.5 * (tanh(x) + 1.0);
 		ifrac_m = 0.5 * (tanh(x0) + 1.0);
 		U = (1.0 - sqrt(1.0-((1.0+ifrac)/(1.0+ifrac_m))));
 		fabden_v = rho_Rmax * (U_Rmax/U) * POW2(Rmax/R);
 	} 
+	fprintf(ioQQQ,"%.3i %.4e %.4e %.4e %.4e %.4e %.5f \n", nzone, x, dR, ifrac, dense.xIonDense[ipHYDROGEN][1]/(dense.xIonDense[ipHYDROGEN][1] + dense.xIonDense[ipHYDROGEN][0]), U, R);
   }	
-  fprintf(ioQQQ,"%.3i %.4e  %.4e %.4e %.4e %.5f \n", nzone, x, dR, ifrac, U, R);
 
   return(fabden_v);
 
