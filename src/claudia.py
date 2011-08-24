@@ -1,5 +1,5 @@
 
-# Imports
+# ** Imports
 
 # #+srcname: claudia-imports
 
@@ -8,8 +8,10 @@ import argparse
 import string
 import os
 
-# ** [1/1] Some SmartDict classes
-
+# *** [1/1] Some SmartDict classes
+# + /I am still not convinced that this is a good idea/
+#   + Currently I am using my modified version for the =metadata= attribute, where it can't do much harm.
+#   + My main improvement over the original is that mine supports tab completion of attributes. 
 # + Taken from the interesting [[http://code.activestate.com/recipes/577590-dictionary-whos-keys-act-like-attributes-as-well/][Python Recipe]] by [[http://code.activestate.com/recipes/users/4174115/][Sunjay Varma]]
 # + One problem with using this is that the tab completion does not work for the attributes
 # + [X] How can this be fixed?
@@ -95,7 +97,7 @@ class CloudyModel(object):
     >>> CloudyModel.outdir = '../testdata'
     >>> m = CloudyModel(modelname)
     """
-    indir, outdir = "in", "out"
+    indir, outdir = ".", "."
     insuff, outsuff = ".in", ".out"
     # list of save types to skip (problematic to read with genfromtxt)
     skipsaves = ["continuum", "line emissivity"]
@@ -107,7 +109,7 @@ class CloudyModel(object):
         self.__dict__.update(kwargs)
 
         # "metadata" for each file implemented as a SmartDict of SmartDicts
-        self.metadata = SmartDict()
+        self.metadata = WJHSmartDict()
 
         # Read in the input script
         self.infilepath = os.path.join(self.indir, modelname + self.insuff)
@@ -121,7 +123,7 @@ class CloudyModel(object):
             if not savetype in self.skipsaves:
                 skip = 0 if not savetype in SAVETYPES_TWO_LINE_HEADER else 1
                 setattr(self, saveid, recarray_from_savefile(savefilepath, skip))
-                self.metadata[saveid] = SmartDict(savetype=savetype, savefilepath=savefilepath)
+                self.metadata[saveid] = WJHSmartDict(savetype=savetype, savefilepath=savefilepath)
 
 # ** Parsing the save files
 
@@ -191,14 +193,15 @@ SAVETYPES = [
     "source function, depth",
     ]
 
-# *** Find basic info about the run
+# *** TODO Find basic info about the run
 #     :LOGBOOK:
 #     CLOCK: [2011-08-20 Sat 18:24]--[2011-08-21 Sun 00:04] =>  5:40
 #     :END:
+# We should at least read the =title= and =save prefix= lines (currently we assume that the prefix is the same as for the input file). 
 
 # #+srcname: claudia-input-parse-basic-info
 
-
+pass
 
 # *** Find which save files were written
 #     :LOGBOOK:

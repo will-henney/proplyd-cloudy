@@ -1,5 +1,21 @@
+#+SEQ_TODO: TODO(t) STARTED(s) WAITING(w@) | DONE(d) CANCELED(c@)
+#+STYLE: <link rel="stylesheet" type="text/css" href="main.css" />
 
-* Parse Cloudy Output: claudia.py
+Claudia is a lightweight python library for parsing the output from the Cloudy plasma code. The design goal is to be as flexible as possible, and to present a simple interface to the user. The Cloudy save files (or "punch files" in Cloudy versions before 10) are identified automatically from the input script and each file is loaded into a numpy record array, so that the data columns are immediately available with the same names as in the output file: 
+
+#+srcname: usage-example
+#+begin_src python
+  import claudia
+  m = claudia.CloudyModel("mymodel")
+  
+  import pylab
+  plot(m.ovr.depth, m.ovr.eden)
+  xlabel("Depth, cm")
+  ylabel("log10 (Electron Density, pcc)")
+#+end_src
+
+
+* The source code for =claudia.py=
   :LOGBOOK:
   CLOCK: [2011-08-23 Tue 09:40]--[2011-08-23 Tue 10:50] =>  1:10
   CLOCK: [2011-06-27 Mon 23:28]--[2011-06-27 Mon 23:46] =>  0:18
@@ -22,8 +38,12 @@
   import os
 #+end_src
 
-** [1/1] Some SmartDict classes
+** Utility classes
 
+*** [1/1] Some SmartDict classes
++ /I am still not convinced that this is a good idea/
+  + Currently I am using my modified version for the =metadata= attribute, where it can't do much harm.
+  + My main improvement over the original is that mine supports tab completion of attributes. 
 + Taken from the interesting [[http://code.activestate.com/recipes/577590-dictionary-whos-keys-act-like-attributes-as-well/][Python Recipe]] by [[http://code.activestate.com/recipes/users/4174115/][Sunjay Varma]]
 + One problem with using this is that the tab completion does not work for the attributes
 + [X] How can this be fixed?
@@ -93,7 +113,7 @@
   
 #+end_src
 
-*** Original description by Sunjay Varma from Python Recipes
+**** Original description by Sunjay Varma from Python Recipes
 
 Dictionary Who's Keys Act Like Attributes As Well (Python recipe)
 
@@ -140,7 +160,7 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
       >>> CloudyModel.outdir = '../testdata'
       >>> m = CloudyModel(modelname)
       """
-      indir, outdir = "in", "out"
+      indir, outdir = ".", "."
       insuff, outsuff = ".in", ".out"
       # list of save types to skip (problematic to read with genfromtxt)
       skipsaves = ["continuum", "line emissivity"]
@@ -152,7 +172,7 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
           self.__dict__.update(kwargs)
   
           # "metadata" for each file implemented as a SmartDict of SmartDicts
-          self.metadata = SmartDict()
+          self.metadata = WJHSmartDict()
   
           # Read in the input script
           self.infilepath = os.path.join(self.indir, modelname + self.insuff)
@@ -166,7 +186,7 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
               if not savetype in self.skipsaves:
                   skip = 0 if not savetype in SAVETYPES_TWO_LINE_HEADER else 1
                   setattr(self, saveid, recarray_from_savefile(savefilepath, skip))
-                  self.metadata[saveid] = SmartDict(savetype=savetype, savefilepath=savefilepath)
+                  self.metadata[saveid] = WJHSmartDict(savetype=savetype, savefilepath=savefilepath)
   
   
   
@@ -247,14 +267,16 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
       ]
 #+end_src
 
-*** Find basic info about the run
+*** TODO Find basic info about the run
     :LOGBOOK:
     CLOCK: [2011-08-20 Sat 18:24]--[2011-08-21 Sun 00:04] =>  5:40
     :END:
+We should at least read the =title= and =save prefix= lines (currently we assume that the prefix is the same as for the input file). 
 
 #+srcname: claudia-input-parse-basic-info
 #+begin_src python
-
+  pass
+  
 #+end_src
 
 
@@ -398,46 +420,51 @@ There is also:
 Which requires a more complicated structure to hold them. 
 
 
-** TODO Tests
-   :LOGBOOK:
+* STARTED Tests for =claudia.py=
+  :LOGBOOK:
    - Note taken on [2011-08-21 Sun 00:07] \\
      Changed mind - nose has clearer docs than py.test does
-   CLOCK: [2011-08-20 Sat 23:40]--[2011-08-21 Sun 16:52] => 17:12
-   :END:
+  CLOCK: [2011-08-20 Sat 23:40]--[2011-08-21 Sun 16:52] => 17:12
+  :END:
    :PROPERTIES:
    :cache:    no
+   :dir: ~/Work/Nahiely/proplyd-cloudy/src
    :END:
 The main choices for testing frameworks are 
 
++ unittest http://docs.python.org/library/unittest.html
 + py.test http://doc.pytest.org/
 + nose http://www.somethingaboutorange.com/mrl/projects/nose/
 
-After looking further at the docs, it seems that nose might be better. 
+After trying each of these, I have decided to use unittest because
 
-Will also combine with some doctest tests for illustration and testing the documentation. 
++ It is in the standard library
 
-*** CANCELED Earlier comment
-    CLOSED: [2011-08-21 Sun 00:05]
-Of these, py.test seems marginally simpler and has nicer-looking docs. So we will use that. /Now changed my mind/
++ [2011-08-23 Tue] With Python version 2.7, it seems that the =unittest= module can now do lots of the things that =nose= can do (e.g., automated discovery of tests). This is backported to earlier pythons as =unittest2=
 
-*** Example data for tests
++ The online documentation seems clearer
+
+I am also using =doctest= lines in the documentation strings, mainly to ensure that documentation of API is accurate. 
+
+Scripts for running all the tests are given below for [[id:6F33DE3F-2B88-4934-9A63-FA02441BB188][unittest]] and [[id:929CD6C9-98BE-4698-A27C-78E7060AB4D1][doctest]]. 
+
+** Example data for tests
 Put some test data in a top-level directory =testdata= 
 
-*** Unittest tests
+** Unittest tests
+   :LOGBOOK:
+   CLOCK: [2011-08-23 Tue 10:50]--[2011-08-23 Tue 13:45] =>  2:55
+   :END:
+
+
+
+*** Example unittest tests
     :LOGBOOK:
-    CLOCK: [2011-08-23 Tue 10:50]--[2011-08-23 Tue 13:45] =>  2:55
-    :END:
-
-+ [2011-08-23 Tue] With Python version 2.7, it seems that the standard library =unittest= module can now do lots of the things that =nose= can do. So, I will switch to using that since it seems to have better documentation. 
-
-
-**** Example unittest tests
-     :LOGBOOK:
      - Note taken on [2011-08-23 Tue 11:10] \\
        Note that we had to use test_claudia.py not test-claudia.py since the latter is not a valid module name.
      - Note taken on [2011-08-23 Tue 11:02] \\
        First version is a straight port of the nose tests I already had
-     :END:
+    :END:
      :PROPERTIES:
      :tangle:   ../src/test_claudia.py
      :END:
@@ -466,7 +493,11 @@ Put some test data in a top-level directory =testdata=
   
 #+end_src
 
-**** Run all the unit tests
+*** Run all the unit tests
+    :PROPERTIES:
+    :exports:  both
+    :ID:       6F33DE3F-2B88-4934-9A63-FA02441BB188
+    :END:
 #+srcname: run-claudia-unitttests
 #+begin_src sh :tangle no :results output
   echo "Running unit tests in $(pwd)"
@@ -485,128 +516,39 @@ test_infilepath (test_claudia.ClaudiaTestSample01) ... ok
 FAIL: test_doomed_to_fail (test_claudia.ClaudiaTestSample01)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test_claudia.py", line 30, in test_doomed_to_fail
+  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test_claudia.py", line 17, in test_doomed_to_fail
     self.assertEquals(1, 2)
 AssertionError: 1 != 2
 
 ----------------------------------------------------------------------
-Ran 2 tests in 0.253s
+Ran 2 tests in 0.205s
 
 FAILED (failures=1)
 
-Tests last ran Tue Aug 23 23:41:15 CDT 2011
-#+end_example
-
-
-*** Nose tests
-    :LOGBOOK:
-    CLOCK: [2011-06-28 Tue 13:16]--[2011-06-28 Tue 13:27] =>  0:11
-    :END:
-
-**** Notes on using nose
-     :LOGBOOK:
-     - Note taken on [2011-08-23 Tue 10:38] \\
-       It seems I still don't understand how to use the setup and teardown functions. The variables created there are not available in the individual tests. There must be a way round this.
-     :END:
-
-
-
-**** Example nose tests
-     :LOGBOOK:
-     - Note taken on [2011-08-23 Tue 11:01] \\
-       Turned off tangling here aince we don't use this any more
-     :END:
-     :PROPERTIES:
-     :tangle:   ../src/test-claudia.py
-     :END:
-
-
-
-#+srcname: test-claudia-nose-examples
-#+begin_src python :tangle no
-  import nose
-  from nose.tools import with_setup
-  from claudia import CloudyModel
-  
-  def setup_func():
-      "set up test fixtures"
-      CloudyModel.indir = '../testdata'
-      model = CloudyModel('sample01')
-  
-  def teardown_func():
-      "tear down test fixtures"
-  
-  @with_setup(setup_func, teardown_func)
-  def test():
-      "test destined to fail"
-      assert False
-  
-  @with_setup(setup_func, teardown_func)
-  def infilepath_test():
-      "test destined to fail"
-      assert model.infilepath == '../testdata/sample01.in'
-  
-#+end_src
-
-
-**** Run all the nose tests
-#+srcname: run-claudia-nosetests
-#+begin_src sh :tangle no :results output
-  echo "Running nose tests in $(pwd)"
-  nosetests 2>&1 
-  echo
-  echo "Tests last ran $(date)"
-#+end_src
-
-#+results: run-claudia-nosetests
-#+begin_example
-Running nose tests in /Users/will/Work/Nahiely/proplyd-cloudy/src
-FE
-======================================================================
-ERROR: test destined to fail
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/Library/Frameworks/Python.framework/Versions/7.1/lib/python2.7/site-packages/nose-1.1.2-py2.7.egg/nose/case.py", line 197, in runTest
-    self.test(*self.arg)
-  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test-claudia.py", line 28, in infilepath_test
-    assert model.infilepath == '../testdata/sample01.in'
-NameError: global name 'model' is not defined
-
-======================================================================
-FAIL: test destined to fail
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/Library/Frameworks/Python.framework/Versions/7.1/lib/python2.7/site-packages/nose-1.1.2-py2.7.egg/nose/case.py", line 197, in runTest
-    self.test(*self.arg)
-  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test-claudia.py", line 23, in test
-    assert False
-AssertionError
-
-----------------------------------------------------------------------
-Ran 2 tests in 0.274s
-
-FAILED (errors=1, failures=1)
-
-Tests last ran Tue Aug 23 10:37:25 CDT 2011
+Tests last ran Wed Aug 24 09:49:37 CDT 2011
 #+end_example
 
 
 
 
-*** Doctest tests
-    :LOGBOOK:
-    CLOCK: [2011-06-28 Tue 13:27]--[2011-06-28 Tue 13:28] =>  0:01
-    :END:
+** Doctest tests
+   :LOGBOOK:
+   CLOCK: [2011-06-28 Tue 13:27]--[2011-06-28 Tue 13:28] =>  0:01
+   :END:
 
 Doctest gets mixed reviews. It is the simplest of all to use and seems to be fine for illustrating how to call functions and to make sure that the documentation is in sync with the code. Lots of people warn that it should not replace proper unit testing though. 
 
-**** DONE Run all the doctest tests in claudia.py
-     CLOSED: [2011-06-28 Tue 14:24]
-     :LOGBOOK:
+*** DONE Run all the doctest tests in claudia.py
+    CLOSED: [2011-06-28 Tue 14:24]
+    :LOGBOOK:
      - Note taken on [2011-08-20 Sat 14:13] \\
        Print the time that test was last run
      - Note taken on [2011-06-28 Tue 14:24] \\
        Re-factored to be standalone test
+    :END:
+     :PROPERTIES:
+     :exports:  both
+     :ID:       929CD6C9-98BE-4698-A27C-78E7060AB4D1
      :END:
 
 
@@ -616,26 +558,33 @@ Doctest gets mixed reviews. It is the simplest of all to use and seems to be fin
   import claudia
   from datetime import datetime
   doctest.testmod(claudia)
-  print 'Tests run ', datetime.now()
+  print 'Tests last ran ', datetime.now()
 #+end_src
 
 #+results: claudia-doctests
-: Tests run  2011-08-23 23:24:59.449184
+: Tests last ran  2011-08-24 09:49:19.405874
 
 
 
-* TODO Makefile
+* Infrastructure for tangling the code and exporting HTML docs
 
-How can we automate the tangling and generating the HTML docs?
++ Tangle the source code with =C-c C-v t=
++ Export to HTML with =C-c C-e h= (or =C-c C-e b= to also browse)
++ Run the tests with =C-c C-c= in the relevent source code block
+  + Tests are also run automatically when exporting to HTML
 
-* Export template						   :noexport:
+** TODO How can we automate this better?
+
+There was a post on the org mailing list a while back with something similar. 
+
+** Export template						   :noexport:
 #+TITLE:     Parse Cloudy Output with claudia.py
 #+AUTHOR:    William Henney
 #+EMAIL:     whenney@gmail.com
 #+DESCRIPTION:
 #+KEYWORDS:
 #+LANGUAGE:  en
-#+OPTIONS:   H:3 num:nil toc:t \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
+#+OPTIONS:   H:5 num:t toc:t \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
 #+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
 #+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
 #+EXPORT_SELECT_TAGS: export
@@ -643,3 +592,45 @@ How can we automate the tangling and generating the HTML docs?
 #+LINK_UP:   
 #+LINK_HOME: 
 #+XSLT:
+
+* Scratch pad 							   :noexport:
+** Can class definitions come after use?
+   :PROPERTIES:
+   :tangle:   no
+   :END:
+
+No it can't - which is obvious really. 
+
+#+srcname: def-before-use
+#+begin_src python :results output
+  
+   
+  class A(object):
+      def __init__(self):
+          print "Initialized"
+  
+  a = A()
+  
+#+end_src
+
+#+results: def-before-use
+: Initialized
+
+#+srcname: use-before-def
+#+begin_src python :results output
+  a = A()
+   
+  class A(object):
+      def __init__(self):
+          print "Initialized"
+  
+  
+#+end_src
+
+#+stderr: use-before-def
+: Traceback (most recent call last):
+:   File "<stdin>", line 1, in <module>
+: NameError: name 'A' is not defined
+
+
+

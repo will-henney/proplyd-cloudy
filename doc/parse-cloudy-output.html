@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Parse Cloudy Output with claudia.py</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2011-08-23 12:42:31 CDT"/>
+<meta name="generated" content="2011-08-24 08:59:48 CDT"/>
 <meta name="author" content="William Henney"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -60,6 +60,7 @@ lang="en" xml:lang="en">
                                  font-weight:bold; }
   /*]]>*/-->
 </style>
+<link rel="stylesheet" type="text/css" href="main.css" />
 <script type="text/javascript">
 <!--/*--><![CDATA[/*><!--*/
  function CodeHighlightOn(elem, id)
@@ -90,47 +91,72 @@ lang="en" xml:lang="en">
 <div id="content">
 <h1 class="title">Parse Cloudy Output with claudia.py</h1>
 
+<p><code>claudia</code> is a lightweight python library for parsing the output from the Cloudy plasma code. The design goal is to be as flexible as possible, and to present a simple interface to the user. The Cloudy save files (or "punch files" in Cloudy versions before 10) are identified automatically from the input script and each file is loaded into a numpy record array, so that the data columns are immediately available with the same names as in the output file: 
+</p>
+
+
+
+<pre class="src src-python"><span style="color: #008a00;">import</span> claudia
+<span style="color: #8a6407;">m</span> = claudia.CloudyModel(<span style="color: #698a21;">"mymodel"</span>)
+
+<span style="color: #008a00;">import</span> pylab
+plot(m.ovr.depth, m.ovr.eden)
+xlabel(<span style="color: #698a21;">"Depth, cm"</span>)
+ylabel(<span style="color: #698a21;">"log10 (Electron Density, pcc)"</span>)
+</pre>
+
+
+
+
+
+
 
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">Parse Cloudy Output: claudia.py </a>
+<li><a href="#sec-1">1 Parse Cloudy Output: claudia.py </a>
 <ul>
-<li><a href="#sec-1-1">Imports </a></li>
-<li><a href="#sec-1-2">The SmartDict class </a>
+<li><a href="#sec-1-1">1.1 Imports </a></li>
+<li><a href="#sec-1-2">1.2 [1/1] Some SmartDict classes </a>
 <ul>
-<li><a href="#sec-1-2-1">Original description by Sunjay Varma from Python Recipes </a></li>
+<li><a href="#sec-1-2-1">1.2.1 Original description by Sunjay Varma from Python Recipes </a></li>
 </ul>
 </li>
-<li><a href="#sec-1-3">The class for a Cloudy model </a></li>
-<li><a href="#sec-1-4">Parsing the save files </a></li>
-<li><a href="#sec-1-5">Parsing the input file </a>
+<li><a href="#sec-1-3">1.3 The class for a Cloudy model </a></li>
+<li><a href="#sec-1-4">1.4 Parsing the save files </a></li>
+<li><a href="#sec-1-5">1.5 Parsing the input file </a>
 <ul>
-<li><a href="#sec-1-5-1">List of possibilities for cloudy save files </a></li>
-<li><a href="#sec-1-5-2">Find basic info about the run </a></li>
-<li><a href="#sec-1-5-3">Utility functions for input parsing </a></li>
+<li><a href="#sec-1-5-1">1.5.1 List of possibilities for cloudy save files </a></li>
+<li><a href="#sec-1-5-2">1.5.2 Find basic info about the run </a></li>
+<li><a href="#sec-1-5-3">1.5.3 Utility functions for input parsing </a></li>
 </ul>
 </li>
-<li><a href="#sec-1-6">Mindlessly loading all the data from all the output files </a></li>
-<li><a href="#sec-1-7">Dealing with multiple iterations </a></li>
-<li><a href="#sec-1-8">Tests </a>
+<li><a href="#sec-1-6">1.6 Mindlessly loading all the data from all the output files </a></li>
+<li><a href="#sec-1-7">1.7 Dealing with multiple iterations </a></li>
+<li><a href="#sec-1-8">1.8 Tests </a>
 <ul>
-<li><a href="#sec-1-8-1">CANCELED Earlier comment </a></li>
-<li><a href="#sec-1-8-2">Example data for tests </a></li>
-<li><a href="#sec-1-8-3">Unittest tests </a></li>
-<li><a href="#sec-1-8-4">Nose tests </a></li>
-<li><a href="#sec-1-8-5">Doctest tests </a></li>
+<li><a href="#sec-1-8-1">1.8.1 Example data for tests </a></li>
+<li><a href="#sec-1-8-2">1.8.2 Unittest tests </a>
+<ul>
+<li><a href="#sec-1-8-2-1">1.8.2.1 Example unittest tests </a></li>
+<li><a href="#sec-1-8-2-2">1.8.2.2 Run all the unit tests </a></li>
+</ul>
+</li>
+<li><a href="#sec-1-8-3">1.8.3 Doctest tests </a>
+<ul>
+<li><a href="#sec-1-8-3-1">1.8.3.1 Run all the doctest tests in claudia.py </a></li>
+</ul></li>
 </ul></li>
 </ul>
 </li>
-<li><a href="#sec-2">Makefile </a></li>
+<li><a href="#sec-2">2 Makefile </a></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1">Parse Cloudy Output: claudia.py </h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> Parse Cloudy Output: claudia.py </h2>
 <div class="outline-text-2" id="text-1">
 
 
@@ -138,7 +164,7 @@ lang="en" xml:lang="en">
 </div>
 
 <div id="outline-container-1-1" class="outline-3">
-<h3 id="sec-1-1">Imports </h3>
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Imports </h3>
 <div class="outline-text-3" id="text-1-1">
 
 
@@ -160,14 +186,23 @@ lang="en" xml:lang="en">
 </div>
 
 <div id="outline-container-1-2" class="outline-3">
-<h3 id="sec-1-2">The SmartDict class </h3>
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> [1/1] Some SmartDict classes </h3>
 <div class="outline-text-3" id="text-1-2">
 
 
 <ul>
-<li>Taken from the excellent <a href="http://code.activestate.com/recipes/577590-dictionary-whos-keys-act-like-attributes-as-well/">Python Recipe</a> by <a href="http://code.activestate.com/recipes/users/4174115/">Sunjay Varma</a>
+<li>Taken from the interesting <a href="http://code.activestate.com/recipes/577590-dictionary-whos-keys-act-like-attributes-as-well/">Python Recipe</a> by <a href="http://code.activestate.com/recipes/users/4174115/">Sunjay Varma</a>
 </li>
-<li>I will use this as a base class 
+<li>One problem with using this is that the tab completion does not work for the attributes
+</li>
+<li><code>[X]</code> How can this be fixed?
+<ul>
+<li>We could do <code>self.__dict__[name] = value</code> in <code>__setattr__()</code>
+</li>
+<li>Yes, this is now implemented in <code>WJHSmartDict</code> below. It turned out that I had to change the implementation a lot. I no longer need to define <code>__getattr__()</code>, since <code>__setattr__()</code> defines both the attribute and the dict item. Meanwhile, <code>__setitem==()</code> does exactly the same as <code>__setattr__()</code> . I also had to define <code>__init__()</code>, <code>__delattr__()</code> and <code>update*()</code> for completeness. 
+</li>
+</ul>
+
 </li>
 </ul>
 
@@ -175,9 +210,10 @@ lang="en" xml:lang="en">
 
 
 
+
 <pre class="src src-python"><span style="color: #008a00;">class</span> <span style="color: #218a21;">SmartDict</span>(<span style="color: #8a4688;">dict</span>):
     <span style="color: #698a21;">"""</span>
-<span style="color: #698a21;">    Combines the best features of a class and a dict</span>
+<span style="color: #698a21;">    Combines the features of a class and a dict</span>
 <span style="color: #698a21;">    """</span>
     <span style="color: #008a00;">def</span> <span style="color: #00008a;">__getattr__</span>(<span style="color: #008a00;">self</span>, name):
         <span style="color: #008a00;">try</span>:
@@ -186,6 +222,53 @@ lang="en" xml:lang="en">
             <span style="color: #008a00;">raise</span> <span style="color: #218a21;">AttributeError</span>(e)
     <span style="color: #008a00;">def</span> <span style="color: #00008a;">__setattr__</span>(<span style="color: #008a00;">self</span>, name, value):
         <span style="color: #008a00;">self</span>[name] = value
+
+<span style="color: #008a00;">class</span> <span style="color: #218a21;">WJHSmartDict</span>(<span style="color: #8a4688;">dict</span>):
+    <span style="color: #698a21;">"""</span>
+<span style="color: #698a21;">    Combines the features of a class and a dict in a different way</span>
+
+<span style="color: #698a21;">    This has the advantage that tab completion works on attributes. </span>
+<span style="color: #698a21;">    Are there any disadvantages?</span>
+
+<span style="color: #698a21;">    The attributes and the dict keys are views on the same data:</span>
+
+<span style="color: #698a21;">    &gt;&gt;&gt; d = WJHSmartDict(x=1, y=2)</span>
+<span style="color: #698a21;">    &gt;&gt;&gt; d.x</span>
+<span style="color: #698a21;">    1</span>
+<span style="color: #698a21;">    &gt;&gt;&gt; d['x']</span>
+<span style="color: #698a21;">    1</span>
+<span style="color: #698a21;">    &gt;&gt;&gt; d.y is d['y']</span>
+<span style="color: #698a21;">    True</span>
+<span style="color: #698a21;">    &gt;&gt;&gt; d.update(dict(aa=[100, 200], bb=500))</span>
+<span style="color: #698a21;">    &gt;&gt;&gt; d.aa[1] += 10</span>
+<span style="color: #698a21;">    &gt;&gt;&gt; d['aa']</span>
+<span style="color: #698a21;">    [100, 210]</span>
+
+<span style="color: #698a21;">    """</span>
+    <span style="color: #008a00;">def</span> <span style="color: #00008a;">__init__</span>(<span style="color: #008a00;">self</span>, **kwdargs):
+        <span style="color: #008a00;">for</span> k <span style="color: #008a00;">in</span> kwdargs:
+            <span style="color: #8a4688;">setattr</span>(<span style="color: #008a00;">self</span>, k, kwdargs[k])
+
+    <span style="color: #008a00;">def</span> <span style="color: #00008a;">__setattr__</span>(<span style="color: #008a00;">self</span>, name, value):
+        <span style="color: #8a4688;">dict</span>.__setitem__(<span style="color: #008a00;">self</span>, name, value)
+        <span style="color: #008a00;">self</span>.__dict__[name] = value
+
+    <span style="color: #008a00;">def</span> <span style="color: #00008a;">__delattr__</span>(<span style="color: #008a00;">self</span>, name):
+        <span style="color: #008a00;">self</span>.__dict__.pop(name)
+        <span style="color: #008a00;">self</span>.pop(name)
+
+    __setitem__ = __setattr__
+
+    <span style="color: #008a00;">def</span> <span style="color: #00008a;">update</span>(<span style="color: #008a00;">self</span>, E):
+        <span style="color: #698a21;">"""</span>
+<span style="color: #698a21;">        Supplement dict update by also updating self.__dict__</span>
+
+<span style="color: #698a21;">        This doesn't work for **kwdargs though.</span>
+<span style="color: #698a21;">        """</span>
+        <span style="color: #8a4688;">dict</span>.update(<span style="color: #008a00;">self</span>.__dict__, E)
+        <span style="color: #8a4688;">dict</span>.update(<span style="color: #008a00;">self</span>, E)
+
+
 </pre>
 
 
@@ -196,7 +279,7 @@ lang="en" xml:lang="en">
 </div>
 
 <div id="outline-container-1-2-1" class="outline-4">
-<h4 id="sec-1-2-1">Original description by Sunjay Varma from Python Recipes </h4>
+<h4 id="sec-1-2-1"><span class="section-number-4">1.2.1</span> Original description by Sunjay Varma from Python Recipes </h4>
 <div class="outline-text-4" id="text-1-2-1">
 
 
@@ -240,7 +323,7 @@ Note to Python 2.4 Users: You will need to change the <code>except KeyError as e
 </div>
 
 <div id="outline-container-1-3" class="outline-3">
-<h3 id="sec-1-3">The class for a Cloudy model </h3>
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> The class for a Cloudy model </h3>
 <div class="outline-text-3" id="text-1-3">
 
 
@@ -248,22 +331,33 @@ Note to Python 2.4 Users: You will need to change the <code>except KeyError as e
 
 
 
-<pre class="src src-python"><span style="color: #008a00;">class</span> <span style="color: #218a21;">CloudyModel</span>(<span style="color: #8a4688;">object</span>):
+<pre class="src src-python"><span style="color: #8a6407;">SAVETYPES_TWO_LINE_HEADER</span> = [
+    <span style="color: #698a21;">"line emissivity"</span>,
+    ] 
+
+<span style="color: #008a00;">class</span> <span style="color: #218a21;">CloudyModel</span>(<span style="color: #8a4688;">object</span>):
     <span style="color: #698a21;">"""</span>
 <span style="color: #698a21;">    A single Cloudy model</span>
 
 <span style="color: #698a21;">    &gt;&gt;&gt; from claudia import CloudyModel</span>
-<span style="color: #698a21;">    &gt;&gt;&gt; modelname = 'sample'</span>
-<span style="color: #698a21;">    &gt;&gt;&gt; CloudyModel.indir = '.'</span>
+<span style="color: #698a21;">    &gt;&gt;&gt; modelname = 'sample01'</span>
+<span style="color: #698a21;">    &gt;&gt;&gt; CloudyModel.indir = '../testdata'</span>
+<span style="color: #698a21;">    &gt;&gt;&gt; CloudyModel.outdir = '../testdata'</span>
 <span style="color: #698a21;">    &gt;&gt;&gt; m = CloudyModel(modelname)</span>
-<span style="color: #698a21;">    &gt;&gt;&gt; m.savecommands</span>
 <span style="color: #698a21;">    """</span>
     indir, outdir = <span style="color: #698a21;">"in"</span>, <span style="color: #698a21;">"out"</span>
     insuff, outsuff = <span style="color: #698a21;">".in"</span>, <span style="color: #698a21;">".out"</span>
+    <span style="color: #473c8a;"># </span><span style="color: #473c8a;">list of save types to skip (problematic to read with genfromtxt)</span>
+    skipsaves = [<span style="color: #698a21;">"continuum"</span>, <span style="color: #698a21;">"line emissivity"</span>]
+
+
     <span style="color: #008a00;">def</span> <span style="color: #00008a;">__init__</span>(<span style="color: #008a00;">self</span>, modelname, **kwargs):
         <span style="color: #473c8a;"># </span><span style="color: #473c8a;">Any optional keywords get set as attributes</span>
         <span style="color: #473c8a;"># </span><span style="color: #473c8a;">We do this first in case indir or insuff are set</span>
         <span style="color: #008a00;">self</span>.__dict__.update(kwargs)
+
+        <span style="color: #473c8a;"># </span><span style="color: #473c8a;">"metadata" for each file implemented as a SmartDict of SmartDicts</span>
+        <span style="color: #008a00;">self</span>.metadata = SmartDict()
 
         <span style="color: #473c8a;"># </span><span style="color: #473c8a;">Read in the input script</span>
         <span style="color: #008a00;">self</span>.infilepath = os.path.join(<span style="color: #008a00;">self</span>.indir, modelname + <span style="color: #008a00;">self</span>.insuff)
@@ -274,7 +368,11 @@ Note to Python 2.4 Users: You will need to change the <code>except KeyError as e
         <span style="color: #008a00;">for</span> savetype, savesuff <span style="color: #008a00;">in</span> find_save_commands(<span style="color: #008a00;">self</span>._inscript):
             savefilepath = os.path.join(<span style="color: #008a00;">self</span>.outdir, modelname + savesuff)
             saveid = savesuff[1:]       <span style="color: #473c8a;"># </span><span style="color: #473c8a;">strip the leading dot to make the attribute name</span>
-            <span style="color: #8a4688;">setattr</span>(<span style="color: #008a00;">self</span>, saveid, parse_savefile(savetype, savefilepath))
+            <span style="color: #008a00;">if</span> <span style="color: #008a00;">not</span> savetype <span style="color: #008a00;">in</span> <span style="color: #008a00;">self</span>.skipsaves:
+                skip = 0 <span style="color: #008a00;">if</span> <span style="color: #008a00;">not</span> savetype <span style="color: #008a00;">in</span> SAVETYPES_TWO_LINE_HEADER <span style="color: #008a00;">else</span> 1
+                <span style="color: #8a4688;">setattr</span>(<span style="color: #008a00;">self</span>, saveid, recarray_from_savefile(savefilepath, skip))
+                <span style="color: #008a00;">self</span>.metadata[saveid] = SmartDict(savetype=savetype, savefilepath=savefilepath)
+
 
 
 </pre>
@@ -288,26 +386,46 @@ Note to Python 2.4 Users: You will need to change the <code>except KeyError as e
 </div>
 
 <div id="outline-container-1-4" class="outline-3">
-<h3 id="sec-1-4">Parsing the save files </h3>
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Parsing the save files </h3>
 <div class="outline-text-3" id="text-1-4">
 
 
+<ul>
+<li>It is almost impossible to do this cleanly with output from older versions of Cloudy. At the moment I am resorting to editing the header of the "line emissivity" file to put the header on two lines and delete the final tab. 
+
+</li>
+<li><span class="timestamp-wrapper"> <span class="timestamp">2011-08-23 Tue</span></span> Some design questions:
+
+<ul>
+<li>Recarray looks useful, since it gives you attribute access for free. But, if we make, for instance,  <code>model.ovr</code> actually <i>be</i> a recarray, then it doesn't allow adding extra metadata to the instance. So, there are two possibilities:
+
+<ol>
+<li>Use the composition pattern and have that <code>model.ovr.data</code> is the recarray, so we can have things like <code>model.ovr.savetype</code> as well.
+
+</li>
+<li>An alternative design would be to optimize for the most common use-case by making <code>model.ovr</code> be the recarray, and then putting the metadata somewhere else, such as <code>model.metadata.ovr.savetype</code>
+
+</li>
+</ol>
+
+</li>
+<li>For the moment, we are going to plump for the second option, even though it is a bit more work to implement. 
+</li>
+</ul>
+
+</li>
+</ul>
 
 
 
-<pre class="src src-python"><span style="color: #008a00;">class</span> <span style="color: #218a21;">CloudySave</span>(<span style="color: #8a4688;">object</span>):
-    <span style="color: #698a21;">"""</span>
-<span style="color: #698a21;">    A dataset writen by a Cloudy 'save' command (formerly 'punch')</span>
-<span style="color: #698a21;">    """</span>
-    <span style="color: #008a00;">def</span> <span style="color: #00008a;">__init__</span>(<span style="color: #008a00;">self</span>, longid, data):
-        <span style="color: #008a00;">self</span>.longid = longid
-        <span style="color: #008a00;">try</span>:
-            <span style="color: #008a00;">self</span>._data = data
-        <span style="color: #008a00;">except</span>:
-            <span style="color: #008a00;">pass</span>
 
-<span style="color: #008a00;">def</span> <span style="color: #00008a;">parse_savefile</span>(savetype, filepath):
-    <span style="color: #008a00;">return</span> CloudySave(savetype, numpy.genfromtxt(filepath, names=<span style="color: #008a00;">True</span>))
+
+
+
+
+<pre class="src src-python"><span style="color: #008a00;">def</span> <span style="color: #00008a;">recarray_from_savefile</span>(filepath, skip=0):
+    <span style="color: #008a00;">return</span> numpy.genfromtxt(filepath, delimiter=<span style="color: #698a21;">'\t'</span>, skip_header=skip,
+                            invalid_raise=<span style="color: #008a00;">False</span>, names=<span style="color: #008a00;">True</span>).view(numpy.recarray)
 
 </pre>
 
@@ -322,7 +440,7 @@ Note to Python 2.4 Users: You will need to change the <code>except KeyError as e
 </div>
 
 <div id="outline-container-1-5" class="outline-3">
-<h3 id="sec-1-5">Parsing the input file </h3>
+<h3 id="sec-1-5"><span class="section-number-3">1.5</span> Parsing the input file </h3>
 <div class="outline-text-3" id="text-1-5">
 
 
@@ -330,7 +448,7 @@ Note to Python 2.4 Users: You will need to change the <code>except KeyError as e
 </div>
 
 <div id="outline-container-1-5-1" class="outline-4">
-<h4 id="sec-1-5-1">List of possibilities for cloudy save files </h4>
+<h4 id="sec-1-5-1"><span class="section-number-4">1.5.1</span> List of possibilities for cloudy save files </h4>
 <div class="outline-text-4" id="text-1-5-1">
 
 
@@ -394,7 +512,7 @@ Note to Python 2.4 Users: You will need to change the <code>except KeyError as e
 </div>
 
 <div id="outline-container-1-5-2" class="outline-4">
-<h4 id="sec-1-5-2">Find basic info about the run </h4>
+<h4 id="sec-1-5-2"><span class="section-number-4">1.5.2</span> Find basic info about the run </h4>
 <div class="outline-text-4" id="text-1-5-2">
 
 
@@ -487,7 +605,7 @@ Instead of allowing <span style="color: #8a4688;">any</span> type of save <span 
 </div>
 
 <div id="outline-container-1-5-3" class="outline-4">
-<h4 id="sec-1-5-3">Utility functions for input parsing </h4>
+<h4 id="sec-1-5-3"><span class="section-number-4">1.5.3</span> Utility functions for input parsing </h4>
 <div class="outline-text-4" id="text-1-5-3">
 
 
@@ -548,7 +666,7 @@ Instead of allowing <span style="color: #8a4688;">any</span> type of save <span 
 </div>
 
 <div id="outline-container-1-6" class="outline-3">
-<h3 id="sec-1-6">Mindlessly loading all the data from all the output files </h3>
+<h3 id="sec-1-6"><span class="section-number-3">1.6</span> Mindlessly loading all the data from all the output files </h3>
 <div class="outline-text-3" id="text-1-6">
 
 
@@ -557,7 +675,7 @@ Instead of allowing <span style="color: #8a4688;">any</span> type of save <span 
 </div>
 
 <div id="outline-container-1-7" class="outline-3">
-<h3 id="sec-1-7"><span class="todo TODO"> TODO</span> Dealing with multiple iterations </h3>
+<h3 id="sec-1-7"><span class="section-number-3">1.7</span> <span class="todo TODO"> TODO</span> Dealing with multiple iterations </h3>
 <div class="outline-text-3" id="text-1-7">
 
 
@@ -595,12 +713,14 @@ Which requires a more complicated structure to hold them.
 </div>
 
 <div id="outline-container-1-8" class="outline-3">
-<h3 id="sec-1-8"><span class="todo TODO"> TODO</span> Tests </h3>
+<h3 id="sec-1-8"><span class="section-number-3">1.8</span> <span class="todo STARTED"> STARTED</span> Tests </h3>
 <div class="outline-text-3" id="text-1-8">
 
 <p>The main choices for testing frameworks are 
 </p>
 <ul>
+<li>unittest <a href="http://docs.python.org/library/unittest.html">http://docs.python.org/library/unittest.html</a>
+</li>
 <li>py.test <a href="http://doc.pytest.org/">http://doc.pytest.org/</a>
 </li>
 <li>nose <a href="http://www.somethingaboutorange.com/mrl/projects/nose/">http://www.somethingaboutorange.com/mrl/projects/nose/</a>
@@ -609,28 +729,32 @@ Which requires a more complicated structure to hold them.
 
 
 <p>
-After looking further at the docs, it seems that nose might be better. 
+After trying each of these, I have decided to use unittest because
+</p>
+<ul>
+<li>It is in the standard library
+
+</li>
+<li><span class="timestamp-wrapper"> <span class="timestamp">2011-08-23 Tue</span></span> With Python version 2.7, it seems that the <code>unittest</code> module can now do lots of the things that <code>nose</code> can do (e.g., automated discovery of tests). This is backported to earlier pythons as <code>unittest2</code>
+
+</li>
+<li>The online documentation seems clearer
+</li>
+</ul>
+
+
+<p>
+I am also using <code>doctest</code> lines in the documentation strings, mainly to ensure that documentation of API is accurate. 
 </p>
 <p>
-Will also combine with some doctest tests for illustration and testing the documentation. 
+Scripts for running all the tests are given below for <a href="#sec-1-8-2-2">unittest</a> and <a href="#sec-1-8-3-1">doctest</a>. 
 </p>
 
 </div>
 
 <div id="outline-container-1-8-1" class="outline-4">
-<h4 id="sec-1-8-1">CANCELED Earlier comment </h4>
+<h4 id="sec-1-8-1"><span class="section-number-4">1.8.1</span> Example data for tests </h4>
 <div class="outline-text-4" id="text-1-8-1">
-
-<p>     <span class="timestamp-wrapper"><span class="timestamp-kwd">CLOSED: </span> <span class="timestamp">2011-08-21 Sun 00:05</span></span><br/>
-Of these, py.test seems marginally simpler and has nicer-looking docs. So we will use that. <i>Now changed my mind</i>
-</p>
-</div>
-
-</div>
-
-<div id="outline-container-1-8-2" class="outline-4">
-<h4 id="sec-1-8-2">Example data for tests </h4>
-<div class="outline-text-4" id="text-1-8-2">
 
 <p>Put some test data in a top-level directory <code>testdata</code> 
 </p>
@@ -638,20 +762,20 @@ Of these, py.test seems marginally simpler and has nicer-looking docs. So we wil
 
 </div>
 
-<div id="outline-container-1-8-3" class="outline-4">
-<h4 id="sec-1-8-3">Unittest tests </h4>
-<div class="outline-text-4" id="text-1-8-3">
-
-
-<ul>
-<li><span class="timestamp-wrapper"> <span class="timestamp">2011-08-23 Tue</span></span> With Python version 2.7, it seems that the standard library <code>unittest</code> module can now do lots of the things that <code>nose</code> can do. So, I will switch to using that since it seems to have better documentation. 
-</li>
-</ul>
+<div id="outline-container-1-8-2" class="outline-4">
+<h4 id="sec-1-8-2"><span class="section-number-4">1.8.2</span> Unittest tests </h4>
+<div class="outline-text-4" id="text-1-8-2">
 
 
 
-<ul>
-<li id="sec-1-8-3-1">Example unittest tests <br/>
+
+
+</div>
+
+<div id="outline-container-1-8-2-1" class="outline-5">
+<h5 id="sec-1-8-2-1"><span class="section-number-5">1.8.2.1</span> Example unittest tests </h5>
+<div class="outline-text-5" id="text-1-8-2-1">
+
 
 
 
@@ -662,7 +786,10 @@ Of these, py.test seems marginally simpler and has nicer-looking docs. So we wil
 <span style="color: #008a00;">class</span> <span style="color: #218a21;">ClaudiaTestSample01</span>(unittest.TestCase):
     <span style="color: #008a00;">def</span> <span style="color: #00008a;">setUp</span>(<span style="color: #008a00;">self</span>):
         <span style="color: #698a21;">"set up test fixtures"</span>
-        <span style="color: #008a00;">self</span>.model = CloudyModel(<span style="color: #698a21;">'sample01'</span>, indir=<span style="color: #698a21;">'../testdata'</span>, outdir=<span style="color: #698a21;">'../testdata'</span>)
+        <span style="color: #008a00;">self</span>.model = CloudyModel(<span style="color: #698a21;">'sample01'</span>, 
+                                 indir=<span style="color: #698a21;">'../testdata'</span>, 
+                                 outdir=<span style="color: #698a21;">'../testdata'</span>,
+                                 skipsaves=[])
 
     <span style="color: #473c8a;"># </span><span style="color: #473c8a;">def teardown_func():</span>
     <span style="color: #473c8a;">#     </span><span style="color: #473c8a;">"tear down test fixtures"</span>
@@ -679,10 +806,14 @@ Of these, py.test seems marginally simpler and has nicer-looking docs. So we wil
 
 
 
-</li>
-</ul>
-<ul>
-<li id="sec-1-8-3-2">Run all the unit tests <br/>
+</div>
+
+</div>
+
+<div id="outline-container-1-8-2-2" class="outline-5">
+<h5 id="sec-1-8-2-2"><a name="ID-6F33DE3F-2B88-4934-9A63-FA02441BB188" id="ID-6F33DE3F-2B88-4934-9A63-FA02441BB188"></a><span class="section-number-5">1.8.2.2</span> Run all the unit tests </h5>
+<div class="outline-text-5" id="text-1-8-2-2">
+
 
 
 
@@ -697,54 +828,25 @@ python -m unittest discover -v 2&gt;&amp;1
 
 
 
-</li>
-</ul>
-</div>
 
-</div>
+<pre class="example">Running unit tests in /Users/will/Work/Nahiely/proplyd-cloudy/src
+test_doomed_to_fail (test_claudia.ClaudiaTestSample01) ... FAIL
+test_infilepath (test_claudia.ClaudiaTestSample01) ... ok
 
-<div id="outline-container-1-8-4" class="outline-4">
-<h4 id="sec-1-8-4">Nose tests </h4>
-<div class="outline-text-4" id="text-1-8-4">
+======================================================================
+FAIL: test_doomed_to_fail (test_claudia.ClaudiaTestSample01)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test_claudia.py", line 30, in test_doomed_to_fail
+    self.assertEquals(1, 2)
+AssertionError: 1 != 2
 
+----------------------------------------------------------------------
+Ran 2 tests in 0.370s
 
-<ul>
-<li id="sec-1-8-4-1">Notes on using nose <br/>
+FAILED (failures=1)
 
-
-
-</li>
-</ul>
-<ul>
-<li id="sec-1-8-4-2">Example nose tests <br/>
-
-
-
-
-
-
-<pre class="src src-python"><span style="color: #008a00;">import</span> nose
-<span style="color: #008a00;">from</span> nose.tools <span style="color: #008a00;">import</span> with_setup
-<span style="color: #008a00;">from</span> claudia <span style="color: #008a00;">import</span> CloudyModel
-
-<span style="color: #008a00;">def</span> <span style="color: #00008a;">setup_func</span>():
-    <span style="color: #698a21;">"set up test fixtures"</span>
-    CloudyModel.indir = <span style="color: #698a21;">'../testdata'</span>
-    model = CloudyModel(<span style="color: #698a21;">'sample01'</span>)
-
-<span style="color: #008a00;">def</span> <span style="color: #00008a;">teardown_func</span>():
-    <span style="color: #698a21;">"tear down test fixtures"</span>
-
-<span style="color: #218a21;">@with_setup</span>(setup_func, teardown_func)
-<span style="color: #008a00;">def</span> <span style="color: #00008a;">test</span>():
-    <span style="color: #698a21;">"test destined to fail"</span>
-    <span style="color: #008a00;">assert</span> <span style="color: #008a00;">False</span>
-
-<span style="color: #218a21;">@with_setup</span>(setup_func, teardown_func)
-<span style="color: #008a00;">def</span> <span style="color: #00008a;">infilepath_test</span>():
-    <span style="color: #698a21;">"test destined to fail"</span>
-    <span style="color: #008a00;">assert</span> model.infilepath == <span style="color: #698a21;">'../testdata/sample01.in'</span>
-
+Tests last ran Wed Aug 24 08:59:31 CDT 2011
 </pre>
 
 
@@ -752,44 +854,28 @@ python -m unittest discover -v 2&gt;&amp;1
 
 
 
-</li>
-</ul>
-<ul>
-<li id="sec-1-8-4-3">Run all the nose tests <br/>
-
-
-
-<pre class="src src-sh"><span style="color: #8a4688;">echo</span> <span style="color: #698a21;">"Running nose tests in $(</span><span style="color: #ff00ff;">pwd</span><span style="color: #698a21;">)"</span>
-nosetests 2&gt;&amp;1 
-<span style="color: #8a4688;">echo</span>
-<span style="color: #8a4688;">echo</span> <span style="color: #698a21;">"Tests last ran $(</span><span style="color: #ff00ff;">date</span><span style="color: #698a21;">)"</span>
-</pre>
-
-
-
-
-
-
-
-
-</li>
-</ul>
+</div>
 </div>
 
 </div>
 
-<div id="outline-container-1-8-5" class="outline-4">
-<h4 id="sec-1-8-5">Doctest tests </h4>
-<div class="outline-text-4" id="text-1-8-5">
+<div id="outline-container-1-8-3" class="outline-4">
+<h4 id="sec-1-8-3"><span class="section-number-4">1.8.3</span> Doctest tests </h4>
+<div class="outline-text-4" id="text-1-8-3">
 
 
 <p>
 Doctest gets mixed reviews. It is the simplest of all to use and seems to be fine for illustrating how to call functions and to make sure that the documentation is in sync with the code. Lots of people warn that it should not replace proper unit testing though. 
 </p>
-<ul>
-<li id="sec-1-8-5-1"><span class="done DONE"> DONE</span> Run all the doctest tests in claudia.py <br/>
-      <span class="timestamp-wrapper"><span class="timestamp-kwd">CLOSED: </span> <span class="timestamp">2011-06-28 Tue 14:24</span></span><br/>
 
+</div>
+
+<div id="outline-container-1-8-3-1" class="outline-5">
+<h5 id="sec-1-8-3-1"><a name="ID-929CD6C9-98BE-4698-A27C-78E7060AB4D1" id="ID-929CD6C9-98BE-4698-A27C-78E7060AB4D1"></a><span class="section-number-5">1.8.3.1</span> <span class="done DONE"> DONE</span> Run all the doctest tests in claudia.py </h5>
+<div class="outline-text-5" id="text-1-8-3-1">
+
+<p>      <span class="timestamp-wrapper"><span class="timestamp-kwd">CLOSED: </span> <span class="timestamp">2011-06-28 Tue 14:24</span></span><br/>
+</p>
 
 
 
@@ -798,17 +884,26 @@ Doctest gets mixed reviews. It is the simplest of all to use and seems to be fin
 <span style="color: #008a00;">import</span> claudia
 <span style="color: #008a00;">from</span> datetime <span style="color: #008a00;">import</span> datetime
 doctest.testmod(claudia)
-<span style="color: #008a00;">print</span> <span style="color: #698a21;">'Tests run '</span>, datetime.now()
+<span style="color: #008a00;">print</span> <span style="color: #698a21;">'Tests last ran '</span>, datetime.now()
 </pre>
 
 
 
 
+<pre class="example">
+None
+</pre>
 
 
 
-</li>
-</ul>
+<pre class="example">
+Tests last ran  2011-08-24 08:59:40.703111
+</pre>
+
+
+
+
+</div>
 </div>
 </div>
 </div>
@@ -816,7 +911,7 @@ doctest.testmod(claudia)
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="todo TODO"> TODO</span> Makefile </h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> <span class="todo TODO"> TODO</span> Makefile </h2>
 <div class="outline-text-2" id="text-2">
 
 

@@ -1,0 +1,129 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /Users/will/Work/Nahiely/proplyd-cloudy/doc/parse-cloudy-output.org
+
+* CANCELED Earlier musings					    :ARCHIVE:
+  CLOSED: [2011-08-24 Wed 08:16]
+  :LOGBOOK:
+    - State "CANCELED"   from ""           [2011-08-24 Wed 08:16] \\
+      Changed my mind about these
+  :END:
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2011-08-24 Wed 08:43
+  :ARCHIVE_FILE: ~/Work/Nahiely/proplyd-cloudy/doc/parse-cloudy-output.org
+  :ARCHIVE_OLPATH: Parse Cloudy Output: claudia.py/Tests
+  :ARCHIVE_CATEGORY: parse-cloudy-output
+  :ARCHIVE_TODO: CANCELED
+  :END:
+After looking further at the docs, it seems that nose might be better. 
+
+Will also combine with some doctest tests for illustration and testing the documentation. 
+
+Of these, py.test seems marginally simpler and has nicer-looking docs. So we will use that. /Now changed my mind/
+
+
+* CANCELED Nose tests						    :ARCHIVE:
+  CLOSED: [2011-08-24 Wed 08:21]
+  :LOGBOOK:
+    - State "CANCELED"   from ""           [2011-08-24 Wed 08:21] \\
+      Don't use these any more. Use unittest instead
+  CLOCK: [2011-06-28 Tue 13:16]--[2011-06-28 Tue 13:27] =>  0:11
+  :END:
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2011-08-24 Wed 08:43
+  :ARCHIVE_FILE: ~/Work/Nahiely/proplyd-cloudy/doc/parse-cloudy-output.org
+  :ARCHIVE_OLPATH: Parse Cloudy Output: claudia.py/Tests
+  :ARCHIVE_CATEGORY: parse-cloudy-output
+  :ARCHIVE_TODO: CANCELED
+  :END:
+
+** Notes on using nose
+   :LOGBOOK:
+     - Note taken on [2011-08-23 Tue 10:38] \\
+       It seems I still don't understand how to use the setup and teardown functions. The variables created there are not available in the individual tests. There must be a way round this.
+   :END:
+
+
+
+** Example nose tests
+   :LOGBOOK:
+     - Note taken on [2011-08-23 Tue 11:01] \\
+       Turned off tangling here aince we don't use this any more
+   :END:
+     :PROPERTIES:
+     :tangle:   ../src/test-claudia.py
+     :END:
+
+
+
+#+srcname: test-claudia-nose-examples
+#+begin_src python :tangle no
+  import nose
+  from nose.tools import with_setup
+  from claudia import CloudyModel
+  
+  def setup_func():
+      "set up test fixtures"
+      CloudyModel.indir = '../testdata'
+      model = CloudyModel('sample01')
+  
+  def teardown_func():
+      "tear down test fixtures"
+  
+  @with_setup(setup_func, teardown_func)
+  def test():
+      "test destined to fail"
+      assert False
+  
+  @with_setup(setup_func, teardown_func)
+  def infilepath_test():
+      "test destined to fail"
+      assert model.infilepath == '../testdata/sample01.in'
+  
+#+end_src
+
+
+** Run all the nose tests
+#+srcname: run-claudia-nosetests
+#+begin_src sh :tangle no :results output
+  echo "Running nose tests in $(pwd)"
+  nosetests 2>&1 
+  echo
+  echo "Tests last ran $(date)"
+#+end_src
+
+#+results: run-claudia-nosetests
+#+begin_example
+Running nose tests in /Users/will/Work/Nahiely/proplyd-cloudy/src
+FE
+======================================================================
+ERROR: test destined to fail
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/7.1/lib/python2.7/site-packages/nose-1.1.2-py2.7.egg/nose/case.py", line 197, in runTest
+    self.test(*self.arg)
+  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test-claudia.py", line 28, in infilepath_test
+    assert model.infilepath == '../testdata/sample01.in'
+NameError: global name 'model' is not defined
+
+======================================================================
+FAIL: test destined to fail
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/7.1/lib/python2.7/site-packages/nose-1.1.2-py2.7.egg/nose/case.py", line 197, in runTest
+    self.test(*self.arg)
+  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test-claudia.py", line 23, in test
+    assert False
+AssertionError
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.274s
+
+FAILED (errors=1, failures=1)
+
+Tests last ran Tue Aug 23 10:37:25 CDT 2011
+#+end_example
+
+
+

@@ -1,17 +1,4 @@
 
-# **** Example unittest tests
-#      :LOGBOOK:
-#      - Note taken on [2011-08-23 Tue 11:10] \\
-#        Note that we had to use test_claudia.py not test-claudia.py since the latter is not a valid module name.
-#      - Note taken on [2011-08-23 Tue 11:02] \\
-#        First version is a straight port of the nose tests I already had
-#      :END:
-#      :PROPERTIES:
-#      :tangle:   ../src/test_claudia.py
-#      :END:
-
-# #+srcname: unittest-claudia
-
 import unittest
 from claudia import CloudyModel
 
