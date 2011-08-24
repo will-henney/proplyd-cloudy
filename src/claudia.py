@@ -8,16 +8,20 @@ import argparse
 import string
 import os
 
-# ** The SmartDict class
+# ** [1/1] Some SmartDict classes
 
-# + Taken from the excellent [[http://code.activestate.com/recipes/577590-dictionary-whos-keys-act-like-attributes-as-well/][Python Recipe]] by [[http://code.activestate.com/recipes/users/4174115/][Sunjay Varma]]
-# + I will use this as a base class 
+# + Taken from the interesting [[http://code.activestate.com/recipes/577590-dictionary-whos-keys-act-like-attributes-as-well/][Python Recipe]] by [[http://code.activestate.com/recipes/users/4174115/][Sunjay Varma]]
+# + One problem with using this is that the tab completion does not work for the attributes
+# + [X] How can this be fixed?
+#   + We could do =self.__dict__[name] = value= in =__setattr__()=
+#   + Yes, this is now implemented in =WJHSmartDict= below. It turned out that I had to change the implementation a lot. I no longer need to define =__getattr__()=, since =__setattr__()= defines both the attribute and the dict item. Meanwhile, =__setitem==()= does exactly the same as =__setattr__()= . I also had to define =__init__()=, =__delattr__()= and =update*()= for completeness. 
+
 
 # #+srcname: claudia-smartdict
 
 class SmartDict(dict):
     """
-    Combines the best features of a class and a dict
+    Combines the features of a class and a dict
     """
     def __getattr__(self, name):
         try:
@@ -27,29 +31,83 @@ class SmartDict(dict):
     def __setattr__(self, name, value):
         self[name] = value
 
+class WJHSmartDict(dict):
+    """
+    Combines the features of a class and a dict in a different way
+
+    This has the advantage that tab completion works on attributes. 
+    Are there any disadvantages?
+
+    The attributes and the dict keys are views on the same data:
+
+    >>> d = WJHSmartDict(x=1, y=2)
+    >>> d.x
+    1
+    >>> d['x']
+    1
+    >>> d.y is d['y']
+    True
+    >>> d.update(dict(aa=[100, 200], bb=500))
+    >>> d.aa[1] += 10
+    >>> d['aa']
+    [100, 210]
+
+    """
+    def __init__(self, **kwdargs):
+        for k in kwdargs:
+            setattr(self, k, kwdargs[k])
+
+    def __setattr__(self, name, value):
+        dict.__setitem__(self, name, value)
+        self.__dict__[name] = value
+
+    def __delattr__(self, name):
+        self.__dict__.pop(name)
+        self.pop(name)
+
+    __setitem__ = __setattr__
+
+    def update(self, E):
+        """
+        Supplement dict update by also updating self.__dict__
+
+        This doesn't work for **kwdargs though.
+        """
+        dict.update(self.__dict__, E)
+        dict.update(self, E)
+
 # ** The class for a Cloudy model
 
 
 # #+srcname: claudia-model-class
+
+SAVETYPES_TWO_LINE_HEADER = [
+    "line emissivity",
+    ] 
 
 class CloudyModel(object):
     """
     A single Cloudy model
 
     >>> from claudia import CloudyModel
-    >>> modelname = 'sample'
-    >>> CloudyModel.indir = '.'
+    >>> modelname = 'sample01'
+    >>> CloudyModel.indir = '../testdata'
+    >>> CloudyModel.outdir = '../testdata'
     >>> m = CloudyModel(modelname)
-    >>> m.savecommands
     """
     indir, outdir = "in", "out"
     insuff, outsuff = ".in", ".out"
     # list of save types to skip (problematic to read with genfromtxt)
     skipsaves = ["continuum", "line emissivity"]
+
+
     def __init__(self, modelname, **kwargs):
         # Any optional keywords get set as attributes
         # We do this first in case indir or insuff are set
         self.__dict__.update(kwargs)
+
+        # "metadata" for each file implemented as a SmartDict of SmartDicts
+        self.metadata = SmartDict()
 
         # Read in the input script
         self.infilepath = os.path.join(self.indir, modelname + self.insuff)
@@ -61,39 +119,32 @@ class CloudyModel(object):
             savefilepath = os.path.join(self.outdir, modelname + savesuff)
             saveid = savesuff[1:]       # strip the leading dot to make the attribute name
             if not savetype in self.skipsaves:
-                setattr(self, saveid, parse_savefile(savetype, savefilepath))
+                skip = 0 if not savetype in SAVETYPES_TWO_LINE_HEADER else 1
+                setattr(self, saveid, recarray_from_savefile(savefilepath, skip))
+                self.metadata[saveid] = SmartDict(savetype=savetype, savefilepath=savefilepath)
 
 # ** Parsing the save files
 
-# It is almost impossible to do this cleanly with output from older versions of Cloudy. At the moment I am resorting to editing the header of the "line emissivity" file to put the header on two lines and delete the final tab and 
+# + It is almost impossible to do this cleanly with output from older versions of Cloudy. At the moment I am resorting to editing the header of the "line emissivity" file to put the header on two lines and delete the final tab. 
+
+# + [2011-08-23 Tue] Some design questions:
+
+#   + Recarray looks useful, since it gives you attribute access for free. But, if we make, for instance,  =model.ovr= actually /be/ a recarray, then it doesn't allow adding extra metadata to the instance. So, there are two possibilities:
+
+#     1. Use the composition pattern and have that =model.ovr.data= is the recarray, so we can have things like =model.ovr.savetype= as well.
+
+#     2. An alternative design would be to optimize for the most common use-case by making =model.ovr= be the recarray, and then putting the metadata somewhere else, such as =model.metadata.ovr.savetype=
+
+#   + For the moment, we are going to plump for the second option, even though it is a bit more work to implement. 
+
+
+
 
 # #+srcname: claudia-parse-save-file
 
-class CloudySave(object):
-    """
-    A dataset writen by a Cloudy 'save' command (formerly 'punch')
-    """
-    def __init__(self, longid, data):
-        self.longid = longid
-        self._data = data
-        # push all the columns up into the top-level namespace for easy access
-        for name in self._data.dtype.names:
-            setattr(self, name, self._data[name])
-
-SAVETYPES_TWO_LINE_HEADER = [
-    "line emissivity",
-    ] 
-def parse_savefile(savetype, filepath):
-    print "Trying to read ", filepath
-    if savetype in SAVETYPES_TWO_LINE_HEADER:
-        skip = 1
-    else:
-        skip = 0
-    return CloudySave(savetype, numpy.genfromtxt(filepath, 
-                                                 delimiter='\t', 
-                                                 skip_header=skip,
-                                                 invalid_raise=False,
-                                                 names=True))
+def recarray_from_savefile(filepath, skip=0):
+    return numpy.genfromtxt(filepath, delimiter='\t', skip_header=skip,
+                            invalid_raise=False, names=True).view(numpy.recarray)
 
 # *** List of possibilities for cloudy save files
 
