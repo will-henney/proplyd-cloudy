@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Parse Cloudy Output with claudia.py</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2011-08-24 08:59:48 CDT"/>
+<meta name="generated" content="2011-08-24 13:12:23 CDT"/>
 <meta name="author" content="William Henney"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -91,7 +91,7 @@ lang="en" xml:lang="en">
 <div id="content">
 <h1 class="title">Parse Cloudy Output with claudia.py</h1>
 
-<p><code>claudia</code> is a lightweight python library for parsing the output from the Cloudy plasma code. The design goal is to be as flexible as possible, and to present a simple interface to the user. The Cloudy save files (or "punch files" in Cloudy versions before 10) are identified automatically from the input script and each file is loaded into a numpy record array, so that the data columns are immediately available with the same names as in the output file: 
+<p>Claudia is a lightweight python library for parsing the output from the Cloudy plasma code. The design goal is to be as flexible as possible, and to present a simple interface to the user. The Cloudy save files (or "punch files" in Cloudy versions before 10) are identified automatically from the input script and each file is loaded into a numpy record array, so that the data columns are immediately available with the same names as in the output file: 
 </p>
 
 
@@ -110,17 +110,19 @@ ylabel(<span style="color: #698a21;">"log10 (Electron Density, pcc)"</span>)
 
 
 
-
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 Parse Cloudy Output: claudia.py </a>
+<li><a href="#sec-1">1 The source code for <code>claudia.py</code> </a>
 <ul>
 <li><a href="#sec-1-1">1.1 Imports </a></li>
-<li><a href="#sec-1-2">1.2 [1/1] Some SmartDict classes </a>
+<li><a href="#sec-1-2">1.2 Utility classes </a>
 <ul>
-<li><a href="#sec-1-2-1">1.2.1 Original description by Sunjay Varma from Python Recipes </a></li>
+<li><a href="#sec-1-2-1">1.2.1 [1/1] Some SmartDict classes </a>
+<ul>
+<li><a href="#sec-1-2-1-1">1.2.1.1 Original description by Sunjay Varma from Python Recipes </a></li>
+</ul></li>
 </ul>
 </li>
 <li><a href="#sec-1-3">1.3 The class for a Cloudy model </a></li>
@@ -129,34 +131,40 @@ ylabel(<span style="color: #698a21;">"log10 (Electron Density, pcc)"</span>)
 <ul>
 <li><a href="#sec-1-5-1">1.5.1 List of possibilities for cloudy save files </a></li>
 <li><a href="#sec-1-5-2">1.5.2 Find basic info about the run </a></li>
-<li><a href="#sec-1-5-3">1.5.3 Utility functions for input parsing </a></li>
+<li><a href="#sec-1-5-3">1.5.3 Find which save files were written </a></li>
+<li><a href="#sec-1-5-4">1.5.4 Utility functions for input parsing </a></li>
 </ul>
 </li>
 <li><a href="#sec-1-6">1.6 Mindlessly loading all the data from all the output files </a></li>
 <li><a href="#sec-1-7">1.7 Dealing with multiple iterations </a></li>
-<li><a href="#sec-1-8">1.8 Tests </a>
-<ul>
-<li><a href="#sec-1-8-1">1.8.1 Example data for tests </a></li>
-<li><a href="#sec-1-8-2">1.8.2 Unittest tests </a>
-<ul>
-<li><a href="#sec-1-8-2-1">1.8.2.1 Example unittest tests </a></li>
-<li><a href="#sec-1-8-2-2">1.8.2.2 Run all the unit tests </a></li>
 </ul>
 </li>
-<li><a href="#sec-1-8-3">1.8.3 Doctest tests </a>
+<li><a href="#sec-2">2 Tests for <code>claudia.py</code> </a>
 <ul>
-<li><a href="#sec-1-8-3-1">1.8.3.1 Run all the doctest tests in claudia.py </a></li>
-</ul></li>
+<li><a href="#sec-2-1">2.1 Example data for tests </a></li>
+<li><a href="#sec-2-2">2.2 Unittest tests </a>
+<ul>
+<li><a href="#sec-2-2-1">2.2.1 Example unittest tests </a></li>
+<li><a href="#sec-2-2-2">2.2.2 Run all the unit tests </a></li>
+</ul>
+</li>
+<li><a href="#sec-2-3">2.3 Doctest tests </a>
+<ul>
+<li><a href="#sec-2-3-1">2.3.1 Run all the doctest tests in claudia.py </a></li>
 </ul></li>
 </ul>
 </li>
-<li><a href="#sec-2">2 Makefile </a></li>
+<li><a href="#sec-3">3 Infrastructure for tangling the code and exporting HTML docs </a>
+<ul>
+<li><a href="#sec-3-1">3.1 How can we automate this better? </a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Parse Cloudy Output: claudia.py </h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> The source code for <code>claudia.py</code> </h2>
 <div class="outline-text-2" id="text-1">
 
 
@@ -186,11 +194,27 @@ ylabel(<span style="color: #698a21;">"log10 (Electron Density, pcc)"</span>)
 </div>
 
 <div id="outline-container-1-2" class="outline-3">
-<h3 id="sec-1-2"><span class="section-number-3">1.2</span> [1/1] Some SmartDict classes </h3>
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Utility classes </h3>
 <div class="outline-text-3" id="text-1-2">
 
 
+
+</div>
+
+<div id="outline-container-1-2-1" class="outline-4">
+<h4 id="sec-1-2-1"><span class="section-number-4">1.2.1</span> [1/1] Some SmartDict classes </h4>
+<div class="outline-text-4" id="text-1-2-1">
+
 <ul>
+<li><i>I am still not convinced that this is a good idea</i>
+<ul>
+<li>Currently I am using my modified version for the <code>metadata</code> attribute, where it can't do much harm.
+</li>
+<li>My main improvement over the original is that mine supports tab completion of attributes. 
+</li>
+</ul>
+
+</li>
 <li>Taken from the interesting <a href="http://code.activestate.com/recipes/577590-dictionary-whos-keys-act-like-attributes-as-well/">Python Recipe</a> by <a href="http://code.activestate.com/recipes/users/4174115/">Sunjay Varma</a>
 </li>
 <li>One problem with using this is that the tab completion does not work for the attributes
@@ -278,9 +302,9 @@ ylabel(<span style="color: #698a21;">"log10 (Electron Density, pcc)"</span>)
 
 </div>
 
-<div id="outline-container-1-2-1" class="outline-4">
-<h4 id="sec-1-2-1"><span class="section-number-4">1.2.1</span> Original description by Sunjay Varma from Python Recipes </h4>
-<div class="outline-text-4" id="text-1-2-1">
+<div id="outline-container-1-2-1-1" class="outline-5">
+<h5 id="sec-1-2-1-1"><span class="section-number-5">1.2.1.1</span> Original description by Sunjay Varma from Python Recipes </h5>
+<div class="outline-text-5" id="text-1-2-1-1">
 
 
 <p>
@@ -319,6 +343,7 @@ Note to Python 2.4 Users: You will need to change the <code>except KeyError as e
 
 </div>
 </div>
+</div>
 
 </div>
 
@@ -345,7 +370,7 @@ Note to Python 2.4 Users: You will need to change the <code>except KeyError as e
 <span style="color: #698a21;">    &gt;&gt;&gt; CloudyModel.outdir = '../testdata'</span>
 <span style="color: #698a21;">    &gt;&gt;&gt; m = CloudyModel(modelname)</span>
 <span style="color: #698a21;">    """</span>
-    indir, outdir = <span style="color: #698a21;">"in"</span>, <span style="color: #698a21;">"out"</span>
+    indir, outdir = <span style="color: #698a21;">"."</span>, <span style="color: #698a21;">"."</span>
     insuff, outsuff = <span style="color: #698a21;">".in"</span>, <span style="color: #698a21;">".out"</span>
     <span style="color: #473c8a;"># </span><span style="color: #473c8a;">list of save types to skip (problematic to read with genfromtxt)</span>
     skipsaves = [<span style="color: #698a21;">"continuum"</span>, <span style="color: #698a21;">"line emissivity"</span>]
@@ -357,7 +382,7 @@ Note to Python 2.4 Users: You will need to change the <code>except KeyError as e
         <span style="color: #008a00;">self</span>.__dict__.update(kwargs)
 
         <span style="color: #473c8a;"># </span><span style="color: #473c8a;">"metadata" for each file implemented as a SmartDict of SmartDicts</span>
-        <span style="color: #008a00;">self</span>.metadata = SmartDict()
+        <span style="color: #008a00;">self</span>.metadata = WJHSmartDict()
 
         <span style="color: #473c8a;"># </span><span style="color: #473c8a;">Read in the input script</span>
         <span style="color: #008a00;">self</span>.infilepath = os.path.join(<span style="color: #008a00;">self</span>.indir, modelname + <span style="color: #008a00;">self</span>.insuff)
@@ -371,7 +396,7 @@ Note to Python 2.4 Users: You will need to change the <code>except KeyError as e
             <span style="color: #008a00;">if</span> <span style="color: #008a00;">not</span> savetype <span style="color: #008a00;">in</span> <span style="color: #008a00;">self</span>.skipsaves:
                 skip = 0 <span style="color: #008a00;">if</span> <span style="color: #008a00;">not</span> savetype <span style="color: #008a00;">in</span> SAVETYPES_TWO_LINE_HEADER <span style="color: #008a00;">else</span> 1
                 <span style="color: #8a4688;">setattr</span>(<span style="color: #008a00;">self</span>, saveid, recarray_from_savefile(savefilepath, skip))
-                <span style="color: #008a00;">self</span>.metadata[saveid] = SmartDict(savetype=savetype, savefilepath=savefilepath)
+                <span style="color: #008a00;">self</span>.metadata[saveid] = WJHSmartDict(savetype=savetype, savefilepath=savefilepath)
 
 
 
@@ -512,35 +537,42 @@ Note to Python 2.4 Users: You will need to change the <code>except KeyError as e
 </div>
 
 <div id="outline-container-1-5-2" class="outline-4">
-<h4 id="sec-1-5-2"><span class="section-number-4">1.5.2</span> Find basic info about the run </h4>
+<h4 id="sec-1-5-2"><span class="section-number-4">1.5.2</span> <span class="todo TODO"> TODO</span> Find basic info about the run </h4>
 <div class="outline-text-4" id="text-1-5-2">
 
+<p>We should at least read the <code>title</code> and <code>save prefix</code> lines (currently we assume that the prefix is the same as for the input file). 
+</p>
+
+
+
+<pre class="src src-python"><span style="color: #008a00;">pass</span>
+
+</pre>
 
 
 
 
-<pre class="src src-python"><span style="color: #473c8a;">#</span><span style="color: #473c8a;">+END_SRC</span>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-5-3" class="outline-4">
+<h4 id="sec-1-5-3"><span class="section-number-4">1.5.3</span> Find which save files were written </h4>
+<div class="outline-text-4" id="text-1-5-3">
+
+
+<p>
+This originally seemed like a job for regular expressions, but that quickly got out of hand. 
+</p>
+<p>
+Instead of allowing any type of save file, we use a finite list <code>SAVETYPES</code> since that makes the parsing much simpler. The only problem is that Cloudy allows the names to be abbreviated to four letters. 
+</p>
 
 
 
-
-*** Find which save files were written
-    :LOGBOOK:
-    - Note taken on [2011-08-20 Sat 18:21] \\
-      OK, this <span style="color: #008a00;">is</span> just about working now, time to move on
-    - Note taken on [2011-08-20 Sat 14:16] \\
-      Not sure what we were doing here? What was the use-case of the cut_out function.
-    CLOCK: [2011-08-20 Sat 14:16]--[2011-08-20 Sat 18:24] =&gt;  4:08
-    CLOCK: [2011-06-28 Tue 13:14]--[2011-06-28 Tue 13:16] =&gt;  0:02
-    CLOCK: [2011-06-27 Mon 23:46]--[2011-06-27 Mon 23:46] =&gt;  0:00
-    :END:
-
-This originally seemed like a job <span style="color: #008a00;">for</span> regular expressions, but that quickly got out of hand. 
-
-Instead of allowing <span style="color: #8a4688;">any</span> type of save <span style="color: #8a4688;">file</span>, we use a finite <span style="color: #8a4688;">list</span> =SAVETYPES= since that makes the parsing much simpler. The only problem <span style="color: #008a00;">is</span> that Cloudy allows the names to be abbreviated to four letters. 
-
-<span style="color: #473c8a;">#</span><span style="color: #473c8a;">+BEGIN_SRC python </span>
-<span style="color: #008a00;">def</span> <span style="color: #00008a;">find_save_commands</span>(s):
+<pre class="src src-python"><span style="color: #008a00;">def</span> <span style="color: #00008a;">find_save_commands</span>(s):
     <span style="color: #698a21;">"""</span>
 <span style="color: #698a21;">    Find all save commands in a Cloudy input file and return a list of [type, file] pairs</span>
 
@@ -604,9 +636,9 @@ Instead of allowing <span style="color: #8a4688;">any</span> type of save <span 
 
 </div>
 
-<div id="outline-container-1-5-3" class="outline-4">
-<h4 id="sec-1-5-3"><span class="section-number-4">1.5.3</span> Utility functions for input parsing </h4>
-<div class="outline-text-4" id="text-1-5-3">
+<div id="outline-container-1-5-4" class="outline-4">
+<h4 id="sec-1-5-4"><span class="section-number-4">1.5.4</span> Utility functions for input parsing </h4>
+<div class="outline-text-4" id="text-1-5-4">
 
 
 
@@ -709,12 +741,13 @@ Which requires a more complicated structure to hold them.
 </p>
 
 </div>
+</div>
 
 </div>
 
-<div id="outline-container-1-8" class="outline-3">
-<h3 id="sec-1-8"><span class="section-number-3">1.8</span> <span class="todo STARTED"> STARTED</span> Tests </h3>
-<div class="outline-text-3" id="text-1-8">
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> <span class="todo STARTED"> STARTED</span> Tests for <code>claudia.py</code> </h2>
+<div class="outline-text-2" id="text-2">
 
 <p>The main choices for testing frameworks are 
 </p>
@@ -747,14 +780,14 @@ After trying each of these, I have decided to use unittest because
 I am also using <code>doctest</code> lines in the documentation strings, mainly to ensure that documentation of API is accurate. 
 </p>
 <p>
-Scripts for running all the tests are given below for <a href="#sec-1-8-2-2">unittest</a> and <a href="#sec-1-8-3-1">doctest</a>. 
+Scripts for running all the tests are given below for <a href="#sec-2-2-2">unittest</a> and <a href="#sec-2-3-1">doctest</a>. 
 </p>
 
 </div>
 
-<div id="outline-container-1-8-1" class="outline-4">
-<h4 id="sec-1-8-1"><span class="section-number-4">1.8.1</span> Example data for tests </h4>
-<div class="outline-text-4" id="text-1-8-1">
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Example data for tests </h3>
+<div class="outline-text-3" id="text-2-1">
 
 <p>Put some test data in a top-level directory <code>testdata</code> 
 </p>
@@ -762,9 +795,9 @@ Scripts for running all the tests are given below for <a href="#sec-1-8-2-2">uni
 
 </div>
 
-<div id="outline-container-1-8-2" class="outline-4">
-<h4 id="sec-1-8-2"><span class="section-number-4">1.8.2</span> Unittest tests </h4>
-<div class="outline-text-4" id="text-1-8-2">
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Unittest tests </h3>
+<div class="outline-text-3" id="text-2-2">
 
 
 
@@ -772,9 +805,9 @@ Scripts for running all the tests are given below for <a href="#sec-1-8-2-2">uni
 
 </div>
 
-<div id="outline-container-1-8-2-1" class="outline-5">
-<h5 id="sec-1-8-2-1"><span class="section-number-5">1.8.2.1</span> Example unittest tests </h5>
-<div class="outline-text-5" id="text-1-8-2-1">
+<div id="outline-container-2-2-1" class="outline-4">
+<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> Example unittest tests </h4>
+<div class="outline-text-4" id="text-2-2-1">
 
 
 
@@ -810,9 +843,9 @@ Scripts for running all the tests are given below for <a href="#sec-1-8-2-2">uni
 
 </div>
 
-<div id="outline-container-1-8-2-2" class="outline-5">
-<h5 id="sec-1-8-2-2"><a name="ID-6F33DE3F-2B88-4934-9A63-FA02441BB188" id="ID-6F33DE3F-2B88-4934-9A63-FA02441BB188"></a><span class="section-number-5">1.8.2.2</span> Run all the unit tests </h5>
-<div class="outline-text-5" id="text-1-8-2-2">
+<div id="outline-container-2-2-2" class="outline-4">
+<h4 id="sec-2-2-2"><a name="ID-6F33DE3F-2B88-4934-9A63-FA02441BB188" id="ID-6F33DE3F-2B88-4934-9A63-FA02441BB188"></a><span class="section-number-4">2.2.2</span> Run all the unit tests </h4>
+<div class="outline-text-4" id="text-2-2-2">
 
 
 
@@ -837,16 +870,16 @@ test_infilepath (test_claudia.ClaudiaTestSample01) ... ok
 FAIL: test_doomed_to_fail (test_claudia.ClaudiaTestSample01)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test_claudia.py", line 30, in test_doomed_to_fail
+  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test_claudia.py", line 17, in test_doomed_to_fail
     self.assertEquals(1, 2)
 AssertionError: 1 != 2
 
 ----------------------------------------------------------------------
-Ran 2 tests in 0.370s
+Ran 2 tests in 0.384s
 
 FAILED (failures=1)
 
-Tests last ran Wed Aug 24 08:59:31 CDT 2011
+Tests last ran Wed Aug 24 13:12:17 CDT 2011
 </pre>
 
 
@@ -859,9 +892,9 @@ Tests last ran Wed Aug 24 08:59:31 CDT 2011
 
 </div>
 
-<div id="outline-container-1-8-3" class="outline-4">
-<h4 id="sec-1-8-3"><span class="section-number-4">1.8.3</span> Doctest tests </h4>
-<div class="outline-text-4" id="text-1-8-3">
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Doctest tests </h3>
+<div class="outline-text-3" id="text-2-3">
 
 
 <p>
@@ -870,11 +903,11 @@ Doctest gets mixed reviews. It is the simplest of all to use and seems to be fin
 
 </div>
 
-<div id="outline-container-1-8-3-1" class="outline-5">
-<h5 id="sec-1-8-3-1"><a name="ID-929CD6C9-98BE-4698-A27C-78E7060AB4D1" id="ID-929CD6C9-98BE-4698-A27C-78E7060AB4D1"></a><span class="section-number-5">1.8.3.1</span> <span class="done DONE"> DONE</span> Run all the doctest tests in claudia.py </h5>
-<div class="outline-text-5" id="text-1-8-3-1">
+<div id="outline-container-2-3-1" class="outline-4">
+<h4 id="sec-2-3-1"><a name="ID-929CD6C9-98BE-4698-A27C-78E7060AB4D1" id="ID-929CD6C9-98BE-4698-A27C-78E7060AB4D1"></a><span class="section-number-4">2.3.1</span> <span class="done DONE"> DONE</span> Run all the doctest tests in claudia.py </h4>
+<div class="outline-text-4" id="text-2-3-1">
 
-<p>      <span class="timestamp-wrapper"><span class="timestamp-kwd">CLOSED: </span> <span class="timestamp">2011-06-28 Tue 14:24</span></span><br/>
+<p>     <span class="timestamp-wrapper"><span class="timestamp-kwd">CLOSED: </span> <span class="timestamp">2011-06-28 Tue 14:24</span></span><br/>
 </p>
 
 
@@ -897,7 +930,7 @@ None
 
 
 <pre class="example">
-Tests last ran  2011-08-24 08:59:40.703111
+Tests last ran  2011-08-24 13:12:18.902963
 </pre>
 
 
@@ -906,18 +939,41 @@ Tests last ran  2011-08-24 08:59:40.703111
 </div>
 </div>
 </div>
-</div>
 
 </div>
 
-<div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> <span class="todo TODO"> TODO</span> Makefile </h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Infrastructure for tangling the code and exporting HTML docs </h2>
+<div class="outline-text-2" id="text-3">
+
+
+<ul>
+<li>Tangle the source code with <code>C-c C-v t</code>
+</li>
+<li>Export to HTML with <code>C-c C-e h</code> (or <code>C-c C-e b</code> to also browse)
+</li>
+<li>Run the tests with <code>C-c C-c</code> in the relevent source code block
+<ul>
+<li>Tests are also run automatically when exporting to HTML
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+
+</div>
+
+<div id="outline-container-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> <span class="todo TODO"> TODO</span> How can we automate this better? </h3>
+<div class="outline-text-3" id="text-3-1">
 
 
 <p>
-How can we automate the tangling and generating the HTML docs?
+There was a post on the org mailing list a while back with something similar. 
 </p>
+</div>
 </div>
 </div>
 </div>

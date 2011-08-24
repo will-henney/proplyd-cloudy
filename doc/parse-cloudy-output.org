@@ -14,7 +14,6 @@ Claudia is a lightweight python library for parsing the output from the Cloudy p
   ylabel("log10 (Electron Density, pcc)")
 #+end_src
 
-
 * The source code for =claudia.py=
   :LOGBOOK:
   CLOCK: [2011-08-23 Tue 09:40]--[2011-08-23 Tue 10:50] =>  1:10
