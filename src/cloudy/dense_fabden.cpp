@@ -37,14 +37,13 @@ static double Utab [50] = {1.0, 1.0612244898, 1.12244897959, 1.18367346939, 1.24
 						   3.75510204082, 3.81632653061, 3.87755102041, 3.9387755102, 4.0};
 
 
-double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, double A)
+double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, double A, double x0)
 {
   
   /* New variables for interpolating velocity of globule flow 14 Jun 2011 */ 
   double R; /* Dimensionless globule radius */
   double U; /* Dimensionless velocity */
   double x=1.0;
-  static double x0=2.3;
   static double rho_m; /* Density at the sonic point, R=1 */
   static double c_m; /* Isothermal sound speed at sonic point, R=1*/
   double fabden_v;
@@ -69,6 +68,7 @@ double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, doub
 
   /* Calculamos R en funcion de la profundidad z del paso en el que vaya el modelo*/
   R = Rmax-((depth)/r0);
+  
 
   /* First time called, so set up spline interpolation for U vs R using the tables Utab and Rtab */
   if (nzone == 0) spline(Rtab, Utab, 50, 2e31, 2e31, Uspline);
@@ -317,7 +317,7 @@ double dense_fabden(double radius,
 	  fabden_v = dense_proplyd_LinealInterpol(depth,  dense.DensityLaw[1], dense.DensityLaw[2], dense.DensityLaw[3]); /* refactored into a separate function */
 	  break;		  
 	case 53:
-	  fabden_v = dense_proplyd(depth,  dense.DensityLaw[1], dense.DensityLaw[2], dense.DensityLaw[3], dense.DensityLaw[4]); /* refactored into a separate function */
+	  fabden_v = dense_proplyd(depth,  dense.DensityLaw[1], dense.DensityLaw[2], dense.DensityLaw[3], dense.DensityLaw[4], dense.DensityLaw[5]); /* refactored into a separate function */
 	  break;	  
 	}
 
