@@ -84,7 +84,7 @@ class WJHSmartDict(dict):
 # #+srcname: claudia-model-class
 
 SAVETYPES_TWO_LINE_HEADER = [
-    "line emissivity",
+    # "line emissivity",
     ] 
 
 class CloudyModel(object):
@@ -100,7 +100,7 @@ class CloudyModel(object):
     indir, outdir = ".", "."
     insuff, outsuff = ".in", ".out"
     # list of save types to skip (problematic to read with genfromtxt)
-    skipsaves = ["continuum", "line emissivity"]
+    skipsaves = ["grains physical", "transmitted continuum", "heating", "cooling"]
 
 
     def __init__(self, modelname, **kwargs):
@@ -181,6 +181,9 @@ SAVETYPES = [
     "element sulfur",
     "element silicon",
     "element iron",
+    "grain charge",
+    "grain drift velocity",
+    "grain temperature",
     "heating",
     "line emissivity",
     "line list", 

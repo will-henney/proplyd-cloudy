@@ -146,7 +146,7 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
 #+srcname: claudia-model-class
 #+begin_src python
   SAVETYPES_TWO_LINE_HEADER = [
-      "line emissivity",
+      # "line emissivity",
       ] 
   
   class CloudyModel(object):
@@ -162,7 +162,7 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
       indir, outdir = ".", "."
       insuff, outsuff = ".in", ".out"
       # list of save types to skip (problematic to read with genfromtxt)
-      skipsaves = ["continuum", "line emissivity"]
+      skipsaves = ["grains physical", "transmitted continuum", "heating", "cooling"]
   
   
       def __init__(self, modelname, **kwargs):
@@ -253,6 +253,9 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
       "element sulfur",
       "element silicon",
       "element iron",
+      "grain charge",
+      "grain drift velocity",
+      "grain temperature",
       "heating",
       "line emissivity",
       "line list", 
