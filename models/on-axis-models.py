@@ -36,7 +36,7 @@ cloudy_savefiles_input = \
 '''* Output options
 set save hash "return"
 set save flush
-save last overview file=".ovr"
+save last overview ".ovr"
 save last physical conditions ".phy"
 save last grain charge ".grc"
 save last grain drift velocity ".grv"
@@ -46,12 +46,12 @@ save last element oxygen ".ion_O"
 save last element nitrogen ".ion_N"
 save last element sulphur ".ion_S"
 save last element carbon ".ion_C"
-save last dr file=".dr"
+save last dr ".dr"
 save last continuum ".cont"
 save last pressure ".pre"
-save last heat file=".heat" 
-save last cool file=".cool" 
-save last lines, emissivity file=".em"
+save last heat ".heat" 
+save last cool ".cool" 
+save last lines, emissivity ".em"
 H  1  4861A 
 H  1  6563A 
 TOTr  5199A 
@@ -183,11 +183,15 @@ hden_Rmax = 1.e4
 log_PhiH = 14.54
 x0 = 10.8
 A = 174.0
-    
+
+
+# By hand adjustment to try and fix i-front
+beta_index = -4.5
+hden_Rmax *= 1.0121**beta_index
 
 Tstar_range = [
     3.8e4, 
-    3.9e4, 
+    # 3.9e4, 
     # 4.0e4,
     ]
 

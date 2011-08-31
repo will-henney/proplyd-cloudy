@@ -70,7 +70,7 @@ plt.plot(delta, U, 'k-', label='velocity')                  # cloudy version
 plt.plot(delta, T/1.e4, 'r-', label='T / 10^4 K')
 plt.plot(delta, eden/n0, 'k--', label='n_e / n_0')
 plt.plot(delta, sound/sound[i2], 'r--', label='c / c_m')
-plt.plot(delta, efrac, 'bo', label='n_e / n_H')
+plt.plot(delta, efrac, 'b-', label='n_e / n_H')
 plt.plot(delta, 5e-22*colden, 'b--', label='A_V')
 
 plt.xlabel('[r - r(x=0.5)] / %.0e cm' % (deltascale))
