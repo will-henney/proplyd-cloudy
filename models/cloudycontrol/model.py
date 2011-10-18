@@ -32,8 +32,9 @@ class Model(object):
     cloudy_cmd = ["time", "cloudy.exe"] 
     verbose = True
 
-    def __init__(self, prefix, **kwargs):
+    def __init__(self, prefix, dryrun=False, **kwargs):
         self.prefix = prefix
+        self.dryrun = dryrun
         # Any optional keywords get set as attributes
         self.__dict__.update(kwargs)
         self._create_dirs_as_necessary()
@@ -46,22 +47,29 @@ class Model(object):
         self._writeheader()
 
     def _create_dirs_as_necessary(self):
-        
-        
+        import os
+        for path in [self.indir, self.outdir]:
+            if not os.path.isdir(path):
+                os.makedirs(path)
 
     def run(self):
         self._write_input_script_to_file()
-        status = subprocess.Popen(self.cloudy_cmd, 
-                                  stdin=file(self.infilepath, "r"),
-                                  stdout=file(self.outfilepath, "w"),
-                                  stderr=subprocess.STDOUT,
-                                  cwd=self.outdir
-                                  ).wait()
-        if self.verbose:
-            try:
-                print multiprocessing.current_process().name, " finished with ", self.prefix
-            except:
-                pass
+        if self.dryrun:
+            # Dryrun - do nothing 
+            print "Dry run: writing input script only"
+            status = 0
+        else:
+            status = subprocess.Popen(self.cloudy_cmd, 
+                                      stdin=file(self.infilepath, "r"),
+                                      stdout=file(self.outfilepath, "w"),
+                                      stderr=subprocess.STDOUT,
+                                      cwd=self.outdir
+                                      ).wait()
+            if self.verbose:
+                try:
+                    print multiprocessing.current_process().name, " finished with ", self.prefix
+                except:
+                    pass
         return status
 
     def __call__(self):

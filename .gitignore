@@ -5,4 +5,5 @@ models/out
 models/in
 models/*.png
 models/*.in
-/models/.ropeproject
+models/.ropeproject
+models/proplyd-auto-models/*
