@@ -5,4 +5,4 @@ models/out
 models/in
 models/*.png
 models/*.in
-/models/.ropeproject/config.py
+/models/.ropeproject
