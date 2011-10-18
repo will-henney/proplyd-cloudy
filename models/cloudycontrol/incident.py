@@ -65,7 +65,7 @@ def star(log_phiH, Tstar, atmosphere='BB', log_g=4.0, log_Z=0.0):
 
 def background(crboost=1.0):
     """
-    Standard background radiation: diffuse interstellar + CMB + Csmic Rays
+    Standard background radiation: diffuse interstellar + CMB + Cosmic Rays
 
     Optionally boost the cosmic rays by linear factor of crboost
     """
