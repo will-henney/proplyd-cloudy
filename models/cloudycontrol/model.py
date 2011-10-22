@@ -43,7 +43,8 @@ class Model(object):
         self.input = _InputScript()
         # The following is necessary so that any changes to the class variable are remembered
         # when the instances are pickled for multiprocessing
-        self.cloudy_cmd = Model.cloudy_cmd
+        if not "cloudy_cmd" in self.__dict__:
+            self.cloudy_cmd = Model.cloudy_cmd
         self._writeheader()
 
     def _create_dirs_as_necessary(self):
