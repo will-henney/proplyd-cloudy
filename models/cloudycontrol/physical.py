@@ -16,13 +16,19 @@ def abundances(variant="Orion"):
                              grains PAH
                              set PAH "H" // Only have PAH in the neutral gas
                              """)
+    elif variant == "FastOrion":
+        abun_string = dedent("""\
+                             * Orion nebula abundances plus simplified Orion dust
+                             abundances H II region no grains
+                             grains Orion single
+                             """)
     else:
         raise NotImplementedError
     return abun_string
     
-def proplyd(r0, den_Rmax, Rmax=9.0, A=174.0, x0=10.8):
+def proplyd(r0, den_Rmax, Rmax=9.0, A=174.0, x0=10.8, dust="Orion"):
     prop_string = "* Proplyd density law from customized dense_fabden.cpp\n"
     prop_string += "dlaw 53 %.3e %.3f %.4f %.1f %.1f\n" % (r0, Rmax, den_Rmax, A, x0)
-    prop_string += abundances("Orion")
+    prop_string += abundances(dust)
     return prop_string
 
