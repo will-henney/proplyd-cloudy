@@ -49,6 +49,7 @@ def plot_vars(modelid):
     Tmax = T.max()
     i1 = T.argmax()
     i2 = len(R[R>=1.0])
+    print i2, len(hden)
     n0 = hden[i2]
     U = n0 / (R**2 * hden)
 

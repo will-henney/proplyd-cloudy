@@ -57,7 +57,7 @@ def plot_vars(modelid):
 
     # calculate the dimensionless ionization thickness in the approximate model
     rho_Rmax = hden[0]
-    dR = A/(r0*sigma*rho_Rmax*Rmax*Rmax*U[0])
+    dR = (0.5*W*x0)/(r0*sigma*rho_Rmax*Rmax*Rmax*U[0])
 
     # Approximate ionization fraction that we use in dense_fabden.cpp
     xapprox = ionfrac(R, dR)
@@ -74,7 +74,8 @@ def plot_vars(modelid):
     plt.plot(delta, sound/sound[i2], 'r--', label='c / c_m')
     plt.plot(delta, efrac, 'b-', label='n_e/n_H')
     plt.plot(delta, 5e-22*colden, 'b--', label='A_V')
-    plt.plot(delta, xapprox, '.', label='approx n+/n_H')
+    plt.plot(delta, xapprox, 'm-', label='approx n+/n_H')
+    plt.plot(delta, x0*(R - 1.0 + dR)/dR, 'g-', label='x, arg of tanh')
 
     plt.xlabel('[r - r(x=0.5)] / %.0e cm' % (deltascale))
     plt.ylabel('')
@@ -97,9 +98,9 @@ if __name__ == '__main__':
                         help='Name of Cloudy model')
     parser.add_argument("--x0", type=float, default=10.8,
                         help='I-front x0 parameter')
-    parser.add_argument("--A", type=float, default=174.0,
-                        help='I-front A parameter')
+    parser.add_argument("--W", type=float, default=30.0,
+                        help='I-front W parameter')
     args = parser.parse_args()
     
-    A, x0 = args.A, args.x0
+    W, x0 = args.W, args.x0
     plot_vars(args.id)
