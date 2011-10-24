@@ -102,7 +102,7 @@ def find_Rsonic_for_hden(hden_Rmax, args, anglepars):
     else:
         dust = "Orion"
     m.write(physical.proplyd(args.r0, hden_Rmax, Rmax=args.Rmax, 
-                             A=args.ifrontA, x0=args.ifrontx0, dust=dust))
+                             W=args.W, x0=args.x0, dust=dust))
     m.write(misc.optimize())
     m.write(misc.stopping())
     if args.fastcloudy:
@@ -155,10 +155,10 @@ if __name__ == '__main__':
                         help="Proplyd sonic radius (in cm)")
     parser.add_argument("--Rmax", type=float, default=9.0,
                         help="Dimensionless outer radius of Cloudy models")
-    parser.add_argument("--ifrontA", type=float, default=174.0,
-                        help="Ionization front thickness parameter A")
-    parser.add_argument("--ifrontx0", type=float, default=10.8,
-                        help="Ionization front thickness parameter x0")
+    parser.add_argument("--W", type=float, default=30.0,
+                        help="Thickness of i-front in units of mfp at 1 Rydberg")
+    parser.add_argument("--x0", type=float, default=10.8,
+                        help="Offset between sonic point and i-front in units of W/2")
     parser.add_argument("--diffuseBeta", type=float, default=0.004,
                         help="Diffuse EUV flux to stellar flux ratio")
     parser.add_argument("--logPhiH", type=float, default=14.54,

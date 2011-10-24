@@ -37,7 +37,7 @@ static double Utab [50] = {1.0, 1.0612244898, 1.12244897959, 1.18367346939, 1.24
 						   3.75510204082, 3.81632653061, 3.87755102041, 3.9387755102, 4.0};
 
 
-double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, double A, double x0)
+double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, double W, double x0)
 {
   
   /* New variables for interpolating velocity of globule flow 14 Jun 2011 */ 
@@ -50,7 +50,7 @@ double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, doub
   double ifrac=1.0;
   static double ifrac_m;
   static double U_Rmax;
-  static double dR; /* Dimension of the Ioniation Front*/
+  static double dR; /* Dimension of the Ionization Front*/
   static double sigma=6.3e-18;
   static double Uspline [50] ; 		// Coefficients for spline interpolation
   
@@ -79,7 +79,17 @@ double dense_proplyd(double depth, double r0, double Rmax, double rho_Rmax, doub
   if (nzone == 0) {
 	U_Rmax = U;
 	fabden_v = rho_Rmax;
-	dR = A/(r0*sigma*rho_Rmax*Rmax*Rmax*U_Rmax); // Approximation to i-front thickness
+	// Approximation to the offset between the i-front and the sonic point
+	dR = (0.5*W*x0)/(r0*sigma*rho_Rmax*Rmax*Rmax*U_Rmax); 
+	// 24 Oct 2011: We have switched the parameter from A to W, which
+	// is the dimensionless measure of the ionization front thickness
+	// (in terms of the mean free path at the Lyman limit).  This is
+	// because W is found to be pretty well constant with a value
+	// around 30, independent of the model parameters. The other
+	// parameter, x0, gives how many i-front half-widths (W/2) there
+	// are between the i-front and the sonic point.  This varies quite
+	// a bit between different models, between about 2 for low
+	// ionization parameter up to 10-20 for high ionization parameter
   }	else {
 	if (R > 1) {
 	  // Calculate density from continuity in spherical symmetry
