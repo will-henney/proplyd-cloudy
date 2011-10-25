@@ -47,7 +47,7 @@ def plot_vars(modelid):
 
     dz = z[1:] - z[:-1]
     dz = numpy.array(dz.tolist() + [dz[-1]])
-    colden = numpy.cumsum(hden*dz)
+    colden = numpy.cumsum(R**2 * hden*dz)
 
     linelist = [
         'H__1__6563A',
