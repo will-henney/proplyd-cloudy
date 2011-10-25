@@ -21,6 +21,7 @@ sys.path.append("../src"); import claudia
 scriptname = sys.argv[0]
 
 DEGREES = np.pi/180.0           # conversion from degrees to radians
+SIGMA0 = 6.30e-18               # Threshold photoionization x-section
 
 # Proplyd parameters for LV2
 
@@ -61,7 +62,6 @@ def calculate_hden_Rmax(Rmax, n0):
 
     """
     return n0 /  Rmax**2 / velocity_law_U_of_R(Rmax)
-    
 
 def find_max_sound(ccmodel, use_T_not_c=False):
     """
@@ -118,7 +118,7 @@ def find_x_at_y(ystar, x, y):
 def setup_and_run_cloudy_model(args, extras):
     cloudy_cmd = ["time", args.cloudyexec] 
     # files are simply named after iteration number and density
-    filename = "it%.2in%.3ex0%.2f" % (it, extras.hden, extras.x0)
+    filename = "it%.2in%.3ex0%.2f" % (extras.it, extras.hden, extras.x0)
     print "Calculating " + os.path.join(extras.datapath, filename)
     m = Model(filename, dryrun=False, indir=extras.datapath, outdir=extras.datapath, 
               verbose=True, cloudy_cmd=cloudy_cmd)
@@ -161,9 +161,11 @@ def find_Rsonic_for_hden(hden_Rmax, args, extras):
     it - problematic when called as part of root finding routine
     """
     extras.hden = hden_Rmax
+    extras.it += 1
+    print "Running cloudy with hden = %.3e" % (hden_Rmax)
     m = setup_and_run_cloudy_model(args, extras)
     # Assume that sonic point is at sound speed maximum (actually we use Te)
-    return find_max_sound(m)
+    return find_max_sound(m) - 1.0
 
 def find_Rif_for_x0(x0, args, extras):
     """
@@ -176,9 +178,14 @@ def find_Rif_for_x0(x0, args, extras):
     it - problematic when called as part of root finding routine
     """
     extras.x0 = x0
+    dR = (0.5*args.W*extras.x0) / \
+        (args.r0*SIGMA0*extras.hden*args.Rmax*args.Rmax*velocity_law_U_of_R(args.Rmax))
+    extras.it += 1
+    print "Running cloudy with x0 = %.2f, dR = %.5f" % (x0, dR)
     m = setup_and_run_cloudy_model(args, extras)
-    # Assume that sonic point is at sound speed maximum (actually we use Te)
-    return find_ifront(m)
+    Rif = find_ifront(m)
+    print "I-front radius = %.4f, target = %.4f" % (Rif, (1.0 - dR))
+    return Rif - (1.0 - dR)
 
 
 
@@ -195,6 +202,7 @@ class ExtraPars(object):
 if __name__ == '__main__':
     import warnings
     import argparse
+    import scipy.optimize
 
     warnings.filterwarnings("ignore") # we shouldn't really do this
 
@@ -257,38 +265,19 @@ if __name__ == '__main__':
         hden_Rmax = calculate_hden_Rmax(args.Rmax, n0) # first guess for outer density
         extras.x0 = args.initialx0                     # Fix x0 while we converge Rsonic
         converged = False
-        it = 0
-        # bestHi and bestLo represent the current brackets on the density
-        # Initially we take very generous brackets 
-        bestHi = 10.0*hden_Rmax
-        bestLo = 0.1*hden_Rmax
-        print "Initial brackets: [%.2e, %.2e]" % (bestLo, bestHi) 
-        while not converged:
-            it += 1
-            Rsonic = find_Rsonic_for_hden(hden_Rmax, args, extras)
-            # Update bounds on solution
-            # This assumes that d R / d hden is positive, which should always be the case
-            if Rsonic > 1.0:
-                bestHi = min(bestHi, hden_Rmax)
-            else:
-                bestLo = max(bestLo, hden_Rmax)
-            print "New brackets: [%.2e, %.2e]" % (bestLo, bestHi) 
-            if abs(Rsonic - 1.0) > args.tolerance:
-                print "Sonic point is in wrong place (R=%.4f) - adjust density and try again" % (Rsonic)
-                # IF NOT, FIND CORRECTED OUTER DENSITY
-                if it <= 2:
-                    # pivot the first couple of times
-                    hden_Rmax *= Rsonic**beta_index
-                    print "Pivoting ..."
-                else:
-                    # then use bisection
-                    hden_Rmax = 0.5*(bestHi + bestLo)
-                    print "Bisecting ..."
 
-            else:
-                converged = True
 
-        print "Angle %i converged in %i iteration%s" % (theta, it, "s" if it > 1 else "")
+        extras.it = 0
+        scipy.optimize.newton(find_Rsonic_for_hden, 
+                              hden_Rmax, tol=args.tolerance**2, args=(args, extras))
+        print "Angle %i converged Rsonic after %i iteration%s" \
+            % (theta, extras.it, "s" if extras.it > 1 else "")
+
+        scipy.optimize.newton(find_Rif_for_x0, 
+                              args.initialx0, tol=args.tolerance**2, args=(args, extras))
+        print "Angle %i converged Rif after %i iteration%s" \
+            % (theta, extras.it, "s" if extras.it > 1 else "")
+
 
     if args.multiprocess:
         # Clean up everything
