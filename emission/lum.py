@@ -13,7 +13,7 @@ sumR=0
 sumTheta=0
 sumPhi=0
 
-#La integral sobre r
+#La integral sobre r - edit por Will
 
 for j in range(NJ):
     for i in range(NI):
