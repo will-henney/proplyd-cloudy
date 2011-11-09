@@ -1,10 +1,19 @@
 import numpy as np
 import scipy
+import sys
 
-Phi = scipy.linspace(0, 90, num=100) #Lista de angulos en Phi
-Theta = scipy.linspace(0, 90, num=100) #Lista de angulos en Theta
-Radi = scipy.linspace(0, 9, num=1000) #Lista de pasos en z de cada modelo de Cloudy
-Emissivity = scipy.linspace(0.1, 1, num=100) #Lista de las emisividades de las lineas de Cloudy
+try: 
+    # Read the number of points from the command line if we can
+    N = sys.argv[1]  
+except IndexError: 
+    # Otherwise use a default value
+    N = 50
+
+
+Phi = np.linspace(0.0, 90.0, num=N) #Lista de angulos en Phi
+Theta = np.linspace(0.0, 90.0, num=N) #Lista de angulos en Theta
+Radi = np.logspace(0.0, np.log10(9.0), num=N) #Lista de pasos en z de cada modelo de Cloudy
+Emissivity = np.linspace(0.1, 1.0, num=N) #Lista de las emisividades de las lineas de Cloudy
 
 NK = len(Phi)
 NJ = len(Theta)
@@ -27,8 +36,11 @@ for k in range(NK):
             DVol =  DPhi * DMu * (Radi[i]**2) * DR
             sumEmiss += DVol
 
+Volume = (4.*np.pi/3.) * (Radi[-1]**3 - Radi[0]**3) * 0.5 * 0.25
 print "sumEmiss =", sumEmiss
-print "Volume = ",  (4.*np.pi/3.) * (Radi[-1]**3 - Radi[0]**3) * 0.5 * 0.25
+print "Volume = ",  Volume
+print "Relative error = ", (sumEmiss - Volume)/Volume
+
 
 
 
