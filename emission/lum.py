@@ -1,9 +1,10 @@
 import numpy as np
+import scipy
 
-Phi = [0,10,20,30,40,50,60,70,80,90] #Lista de angulos en Phi
-Theta = [0,10,20,30,40,50,60,70,80,90] #Lista de angulos en Theta
-Radi = [0,1,2,3,4,5,6,7,8,9] #Lista de pasos en z de cada modelo de Cloudy
-Emissivity = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,10.] #Lista de las emisividades de las lineas de Cloudy
+Phi = scipy.linspace(0, 90, num=100) #Lista de angulos en Phi
+Theta = scipy.linspace(0, 90, num=100) #Lista de angulos en Theta
+Radi = scipy.linspace(0, 9, num=1000) #Lista de pasos en z de cada modelo de Cloudy
+Emissivity = scipy.linspace(0.1, 1, num=100) #Lista de las emisividades de las lineas de Cloudy
 
 NK = len(Phi)
 NJ = len(Theta)
@@ -29,19 +30,6 @@ for k in range(NK):
 print "sumEmiss =", sumEmiss
 print "Volume = ",  (4.*np.pi/3.) * (Radi[-1]**3 - Radi[0]**3) * 0.5 * 0.25
 
-# #La integral sobre Theta
 
-# for j in range(NJ):
-#     sumTheta = sumTheta + DTheta
-#     print "sumTheta =", sumTheta
-
-# #La integral sobre Phi
-
-# for k in range(NK):
-#     kneg = max(0, k - 1)
-#     kpos = min(NK-1, k + 1)
-#     DPhi = 0.5*(Phi[kpos] - Phi[kneg])
-#     sumPhi = sumPhi + DPhi
-#     print "sumPhi =", sumPhi
 
 
