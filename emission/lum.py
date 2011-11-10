@@ -8,12 +8,30 @@ try:
 except IndexError: 
     # Otherwise use a default value
     N = 50
+try: 
+    # Read the number of bins from the command line if we can
+    NU = sys.argv[2]  
+except IndexError: 
+    # Otherwise use a default value
+    NU = 50
 
 
 Phi = np.linspace(0.0, 90.0, num=N) #Lista de angulos en Phi
 Theta = np.linspace(0.0, 90.0, num=N) #Lista de angulos en Theta
 Radi = np.logspace(0.0, np.log10(9.0), num=N) #Lista de pasos en z de cada modelo de Cloudy
 Emissivity = np.linspace(0.1, 1.0, num=N) #Lista de las emisividades de las lineas de Cloudy
+Velocity = 20*(np.ones(N))
+
+# Define the velocity bins
+umax = max(Velocity)
+umin = -min(Velocity)
+
+DU = (umax - umin)/NU
+
+for ii in 
+u_izq = umin + iiDU
+
+Perfil=np.zeros(NU)
 
 NK = len(Phi)
 NJ = len(Theta)
