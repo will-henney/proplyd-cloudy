@@ -4,25 +4,25 @@ import sys
 
 try: 
     # Read the number of points from the command line if we can
-    N = sys.argv[1]  
+    N = int(sys.argv[1])
 except IndexError: 
     # Otherwise use a default value
     N = 50
 try: 
     # Read the number of bins from the command line if we can
-    NU = sys.argv[2]  
+    NU = int(sys.argv[2])
 except IndexError: 
     # Otherwise use a default value
     NU = 50
 try: 
-    # Read the projection angle if we can
-    inc = sys.argv[3]  
+    # Read the projection angle (convert from degrees to radians)
+    inc_degrees = float(sys.argv[3])
 except IndexError:
     # Otherwise use a default value
-    inc = 0
+    inc_degrees = 0
     
-cosi = np.cos(inc)
-sini = np.sin(inc)
+cosi = np.cos(np.radians(inc_degrees))
+sini = np.sin(np.radians(inc_degrees))
 
 # All arrays begin with capital letters
 phimin, phimax = 0.0, np.radians(360.0)
@@ -36,12 +36,12 @@ NJ = len(Theta)
 NI = len(Radius)
 
 Velocity = 20*(np.ones(NI))
-Emisivity = np.ones(NI)
+Emissivity = np.ones(NI)
 
 # Define the velocity bins
 umax = max(abs(Velocity))
 umin = -umax
-DU = (umax - umin)/NU
+du = (umax - umin)/NU
 Perfil=np.zeros(NU)
 
 sumEmiss = 0.0
@@ -63,17 +63,24 @@ for k in range(NK):
             ipos = min(NI-1, i + 1)
             dr = 0.5*(Radius[ipos] - Radius[ineg])
             dvol =  dphi * dmu * (Radius[i]**2) * dr
-            sumEmiss += dvol
+            sumEmiss += dvol * Emissivity[i]
             u = -Velocity[i]*(sini*stheta*cphi + cosi*ctheta)
-            x = (u-umin)/DU
-            I = int(x)
+            x = (u-umin)/du
+            iu = int(x)
+            assert iu >= 0 and iu < NU, "Index (%i) out of bounds [%i:%i] of velocity array" % (iu, 0, NU-1)
+            Perfil[iu] += dvol * Emissivity[i]
 
 Volume = (4.*np.pi/3.) * (Radius[-1]**3 - Radius[0]**3) * 0.5
 print "sumEmiss =", sumEmiss
 print "Volume = ",  Volume
 print "Relative error = ", (sumEmiss - Volume)/Volume
 
+print "Sum of line profile (should be same as sumEmiss): ", Perfil.sum()
+print Perfil
 
+PerfilU = np.linspace(umin, umax, NU)
+savefile = "lum-perfil-N%(N)i-NU%(NU)i-inc%(inc_degrees)i.dat" % (locals())
+np.savetxt(savefile, (PerfilU, Perfil))
 
 
 
