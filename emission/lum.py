@@ -16,10 +16,10 @@ except IndexError:
     NU = 50
 try: 
     # Read the projection angle if we can
-    i = sys.argv[3]  
+    inc = sys.argv[3]  
 except IndexError:
     # Otherwise use a default value
-    i = 0
+    inc = 0
 
 
 Ph = np.linspace(0.0, 90.0, num=N) #Lista de angulos en Phi
@@ -56,7 +56,7 @@ for k in range(NK):
             DR = 0.5*(Radi[ipos] - Radi[ineg])
             DVol =  DPhi * DMu * (Radi[i]**2) * DR
             sumEmiss += DVol
-            u = -Velocity[i]*((np.sin(np.radians(Th))+np.cos(np.radians(i)))*(np.cos(np.radians(Th))+np.sin(np.radians(Th))*np.cos(np.radians(Ph)))+(np.sin(np.radians(Th))*np.sin(np.radians(Ph))))
+            u = -Velocity[i]*((np.sin(np.radians(Th[j]))+np.cos(np.radians(inc)))*(np.cos(np.radians(Th[j]))+np.sin(np.radians(Th[j]))*np.cos(np.radians(Ph[k])))+(np.sin(np.radians(Th[k]))*np.sin(np.radians(Ph[k]))))
             x = (u-umin)/DU
             I = int(x)
 
