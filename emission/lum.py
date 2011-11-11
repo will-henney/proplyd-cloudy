@@ -20,43 +20,51 @@ try:
 except IndexError:
     # Otherwise use a default value
     inc = 0
+    
+cosi = np.cos(inc)
+sini = np.sin(inc)
 
+# All arrays begin with capital letters
+phimin, phimax = 0.0, np.radians(360.0)
+thetamin, thetamax = 0.0, np.radians(90.0)
 
-Ph = np.linspace(0.0, 90.0, num=N) #Lista de angulos en Phi
-Th = np.linspace(0.0, 90.0, num=N) #Lista de angulos en Theta
-Radi = np.logspace(0.0, np.log10(9.0), num=N) #Lista de pasos en z de cada modelo de Cloudy
-Emissivity = np.linspace(0.1, 1.0, num=N) #Lista de las emisividades de las lineas de Cloudy
-Velocity = 20*(np.ones(N))
+Phi = np.linspace(phimin, phimax, num=4*N) #Lista de angulos en Phi
+Theta = np.linspace(thetamin, thetamax, num=N) #Lista de angulos en Theta
+Radius = np.logspace(0.0, np.log10(9.0), num=N) #Lista de pasos en z de cada modelo de Cloudy
+NK = len(Phi)
+NJ = len(Theta)
+NI = len(Radius)
+
+Velocity = 20*(np.ones(NI))
+Emisivity = np.ones(NI)
 
 # Define the velocity bins
 umax = max(Velocity)
 umin = -min(Velocity)
-
 DU = (umax - umin)/NU
-
 Perfil=np.zeros(NU)
-
-NK = len(Ph)
-NJ = len(Th)
-NI = len(Radi)
 
 sumEmiss = 0.0
 #La integral sobre r, th, ph
 for k in range(NK):
+    cphi = np.cos(Phi[k])
+    sphi = np.sin(Phi[k])
     kneg = max(0, k - 1)
     kpos = min(NK-1, k + 1)
-    DPhi = 0.5*np.radians(Ph[kpos] - Ph[kneg])
+    dphi = 0.5*(Phi[kpos] - Phi[kneg])
     for j in range(NJ):
+        ctheta = np.cos(Theta[j])
+        stheta = np.sin(Theta[j])
         jneg = max(0, j - 1)
         jpos = min(NJ-1, j + 1)
-        DMu = -0.5*(np.cos(np.radians(Th[jpos])) - np.cos(np.radians(Th[jneg])))
+        dmu = -0.5*(np.cos(Theta[jpos]) - np.cos(Theta[jneg]))
         for i in range(NI):
             ineg = max(0, i - 1)
             ipos = min(NI-1, i + 1)
-            DR = 0.5*(Radi[ipos] - Radi[ineg])
-            DVol =  DPhi * DMu * (Radi[i]**2) * DR
-            sumEmiss += DVol
-            u = -Velocity[i]*((np.sin(np.radians(Th[j]))+np.cos(np.radians(inc)))*(np.cos(np.radians(Th[j]))+np.sin(np.radians(Th[j]))*np.cos(np.radians(Ph[k])))+(np.sin(np.radians(Th[k]))*np.sin(np.radians(Ph[k]))))
+            dr = 0.5*(Radi[ipos] - Radi[ineg])
+            dvol =  dphi * dmu * (Radi[i]**2) * dr
+            sumEmiss += dvol
+            u = -Velocity[i]*(stheta + cosi*(costheta + sintheta*cosphi) + sini*sintheta*cosphi)
             x = (u-umin)/DU
             I = int(x)
 
