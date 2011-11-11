@@ -39,8 +39,8 @@ Velocity = 20*(np.ones(NI))
 Emisivity = np.ones(NI)
 
 # Define the velocity bins
-umax = max(Velocity)
-umin = -min(Velocity)
+umax = max(abs(Velocity))
+umin = -umax
 DU = (umax - umin)/NU
 Perfil=np.zeros(NU)
 
@@ -61,14 +61,14 @@ for k in range(NK):
         for i in range(NI):
             ineg = max(0, i - 1)
             ipos = min(NI-1, i + 1)
-            dr = 0.5*(Radi[ipos] - Radi[ineg])
-            dvol =  dphi * dmu * (Radi[i]**2) * dr
+            dr = 0.5*(Radius[ipos] - Radius[ineg])
+            dvol =  dphi * dmu * (Radius[i]**2) * dr
             sumEmiss += dvol
-            u = -Velocity[i]*(stheta + cosi*(costheta + sintheta*cosphi) + sini*sintheta*cosphi)
+            u = -Velocity[i]*(sini*stheta*cphi + cosi*ctheta)
             x = (u-umin)/DU
             I = int(x)
 
-Volume = (4.*np.pi/3.) * (Radi[-1]**3 - Radi[0]**3) * 0.5 * 0.25
+Volume = (4.*np.pi/3.) * (Radius[-1]**3 - Radius[0]**3) * 0.5
 print "sumEmiss =", sumEmiss
 print "Volume = ",  Volume
 print "Relative error = ", (sumEmiss - Volume)/Volume
