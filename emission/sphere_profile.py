@@ -1,26 +1,47 @@
 import numpy as np
-import ../src/claudia
 import scipy
-import sys
+import sys, os
+import argparse
 
-try: 
-    # Read the number of points from the command line if we can
-    N = int(sys.argv[1])
-except IndexError: 
-    # Otherwise use a default value
-    N = 50
-try: 
-    # Read the number of bins from the command line if we can
-    NU = int(sys.argv[2])
-except IndexError: 
-    # Otherwise use a default value
-    NU = 50
-try: 
-    # Read the projection angle (convert from degrees to radians)
-    inc_degrees = float(sys.argv[3])
-except IndexError:
-    # Otherwise use a default value
-    inc_degrees = 0
+sys.path.append("../src")       # make sure we can find claudia.py
+import claudia
+
+
+# Parse command line arguments
+parser = argparse.ArgumentParser(
+    description="Calculate line profile of spherical Cloudy model")
+
+parser.add_argument(
+    "modelpath", type=str,
+    help='Path to Cloudy model (assumes input and output in same directory)')
+parser.add_argument(
+    "--ntheta", type=int, default=50,
+    help='Number of angles theta')
+parser.add_argument(
+    "--nphi", type=int, default=200,
+    help='Number of angles phi')
+parser.add_argument(
+    "--nvel", type=int, default=50,
+    help='Number of velocity bins')
+parser.add_argument(
+    "--inc", type=float, default=0.0,
+    help='Inclination in degrees')
+
+cmd_args = parser.parse_args()
+
+# Set some local variables from the command line arguments
+NU = cmd_args.nvel
+inc_degrees = cmd_args.inc
+modeldir, modelname = os.path.split(cmd_args.modelpath)
+
+# Read in Cloudy model
+if modeldir != '':
+    claudia.CloudyModel.indir = modeldir
+    claudia.CloudyModel.outdir = modeldir
+else:
+    claudia.CloudyModel.indir = '.'
+    claudia.CloudyModel.outdir = '.'
+m = claudia.CloudyModel(modelname) 
     
 cosi = np.cos(np.radians(inc_degrees))
 sini = np.sin(np.radians(inc_degrees))
@@ -29,8 +50,8 @@ sini = np.sin(np.radians(inc_degrees))
 phimin, phimax = 0.0, np.radians(360.0)
 thetamin, thetamax = 0.0, np.radians(90.0)
 
-Phi = np.linspace(phimin, phimax, num=4*N) #Lista de angulos en Phi
-Theta = np.linspace(thetamin, thetamax, num=N) #Lista de angulos en Theta
+Phi = np.linspace(phimin, phimax, num=cmd_args.nphi) #Lista de angulos en Phi
+Theta = np.linspace(thetamin, thetamax, num=cmd_args.ntheta) #Lista de angulos en Theta
 Radius = m.ovr.depth #Lista de pasos en z de cada modelo de Cloudy
 NK = len(Phi)
 NJ = len(Theta)
@@ -80,5 +101,5 @@ print "Sum of line profile (should be same as sumEmiss): ", Perfil.sum()
 print Perfil
 
 PerfilU = np.linspace(umin, umax, NU)
-savefile = "lum-perfil-N%(N)i-NU%(NU)i-inc%(inc_degrees)i.dat" % (locals())
+savefile = "%(modelname)s-perfil-N%(N)i-NU%(NU)i-inc%(inc_degrees)i.dat" % (locals())
 np.savetxt(savefile, (PerfilU, Perfil))
