@@ -7,3 +7,5 @@ models/*.png
 models/*.in
 models/.ropeproject
 models/proplyd-auto-models/*
+/models/proplyd-adjust.py
+/models/proplyd-model.py

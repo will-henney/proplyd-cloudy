@@ -43,30 +43,31 @@ def plot_vars(modelid):
     nfrac = 10**m.ovr.HI
     T = 10**m.ovr.Te
     R = Rmax - z/r0
-    sound = m.pre.cadwind_kms
+    sound = numpy.sqrt(3./5.)*m.pre.cadwind_kms
 
-    dz = z[1:] - z[:-1]
-    dz = numpy.array(dz.tolist() + [dz[-1]])
-    colden = numpy.cumsum(R**2 * hden*dz)
+    # Now get the delta z's directly from the ".dr" file
+    # We need to skip the values marked as zone 0 since they are spurious
+    dz = m.dr.dr[m.dr.zone != 0] 
+    assert len(dz) == len(z)    # check we got it right
+    colden = numpy.cumsum(hden*dz)
 
     linelist = [
+        'O__3__5007A',
+        'TOTL__4363A',
+        'C__3__1910A',
         'H__1__6563A',
         'N__2__6584A',
-        'O__1__6300A',
         'O_II__3726A',
-        'TOTL__4363A',
-        'O__3__5007A',
         'S_II__6731A',
-        'HE_1__5876A',
-        'NE_2_1281m',
-        'NE_3_1555m',
-        'C__3__1910A',
+        'O__1__6300A',
         ]
 
     emlines = dict()
+    emsum = dict()
     for id in linelist:
         emissivity = 10**m.em[id]
-        cumemiss = numpy.cumsum(emissivity*dz)
+        cumemiss = numpy.cumsum(R**2 * emissivity*dz)
+        emsum[id] = cumemiss.max()
         emlines[id] = cumemiss/cumemiss.max()
 
     Tmax = T.max()
@@ -99,18 +100,23 @@ def plot_vars(modelid):
     rho_Rmax = hden[0]
     dR = A/(r0*sigma*rho_Rmax*Rmax*Rmax*U[0])
 
-    # Approximate ionization fraction that we use in dense_fabden.cpp
-    xapprox = ionfrac(R, dR)
-
     print "-"*72
-    print "model %s: Tmax at R = %.4f, ifrac = %.4f" % (modelid, R[i1], ifrac[i1])
-    print "@ R = 1.0: T/Tmax = %.4f, ifrac = %.4f, U = %.4f" % (T[i2]/Tmax, ifrac[i2], U[i2])
-    print "I-front thickness in approx model: dR = %.4f" % (dR)
-
+    
     delta = (z[i5] - z)/deltascale
 
-    for emid, em in emlines.items():
-        plt.plot(delta, em, label=emid)
+    v = U*sound
+    centiles = [10, 25, 50, 75, 90]
+    for emid in linelist:
+        radii = [R[emlines[emid] > 0.01*cent].max() for cent in centiles]
+        formatted_radii = ["R(%.2i)=%5.3f" % (cent, rad) for cent, rad in zip(centiles, radii)]
+        print "%s:" % (emid), "Flux = %.2e," % (emsum[emid]), ", ".join(formatted_radii)
+        velocities = [v[emlines[emid] > 0.01*cent].max() for cent in centiles]
+        formatted_velocities = ["V(%.2i)=%5.2f" % (cent, vel) for cent, vel in zip(centiles, velocities)]
+        print "           :", "  F/Ha = %.4f," % (emsum[emid]/emsum['H__1__6563A']), ", ".join(formatted_velocities)
+
+    
+    for emid in linelist:
+        plt.plot(delta, emlines[emid], label=emid)
 
     plt.xlabel('[r - r(x=0.5)] / %.0e cm' % (deltascale))
     plt.ylabel('')
