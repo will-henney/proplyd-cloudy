@@ -57,8 +57,8 @@ NK = len(Phi)
 NJ = len(Theta)
 NI = len(Radius)
 
-Velocity = 20*(np.ones(NI))
-Emissivity = np.ones(NI)
+Velocity = m.pre.cadwind_kms
+Emissivity = m.str
 
 # Define the velocity bins
 umax = max(abs(Velocity))
@@ -101,5 +101,6 @@ print "Sum of line profile (should be same as sumEmiss): ", Perfil.sum()
 print Perfil
 
 PerfilU = np.linspace(umin, umax, NU)
-savefile = "%(modelname)s-perfil-N%(N)i-NU%(NU)i-inc%(inc_degrees)i.dat" % (locals())
+savefile = "%(modelname)s-perfil-NU%(NU)i-inc%(inc_degrees)i.dat" % (locals())
+# savefile = "%(modelname)s-perfil-N%(N)i-NU%(NU)i-inc%(inc_degrees)i.dat" % (locals())
 np.savetxt(savefile, (PerfilU, Perfil))
