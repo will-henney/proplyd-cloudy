@@ -1,5 +1,5 @@
 
-# ** Imports
+# Imports
 
 # #+srcname: claudia-imports
 
@@ -8,7 +8,7 @@ import argparse
 import string
 import os
 
-# *** [1/1] Some SmartDict classes
+# [1/1] Some SmartDict classes
 # + /I am still not convinced that this is a good idea/
 #   + Currently I am using my modified version for the =metadata= attribute, where it can't do much harm.
 #   + My main improvement over the original is that mine supports tab completion of attributes. 
@@ -78,7 +78,7 @@ class WJHSmartDict(dict):
         dict.update(self.__dict__, E)
         dict.update(self, E)
 
-# ** The class for a Cloudy model
+# The class for a Cloudy model
 
 
 # #+srcname: claudia-model-class
@@ -118,14 +118,24 @@ class CloudyModel(object):
 
         # Now read in from all the save files
         for savetype, savesuff in find_save_commands(self._inscript):
-            savefilepath = os.path.join(self.outdir, modelname + savesuff)
+            if savesuff.startswith(modelname):
+                savefile = savesuff # deal with case where outfile is written in full
+            else:
+                savefile = modelname + savesuff
+            savefilepath = os.path.join(self.outdir, savefile)
             saveid = savesuff[1:]       # strip the leading dot to make the attribute name
             if not savetype in self.skipsaves:
                 skip = 0 if not savetype in SAVETYPES_TWO_LINE_HEADER else 1
-                setattr(self, saveid, recarray_from_savefile(savefilepath, skip))
+                try:
+                    setattr(self, saveid, recarray_from_savefile(savefilepath, skip))
+                except IOError:
+                    print "Failed to read from %s" % (savefilepath)
                 self.metadata[saveid] = WJHSmartDict(savetype=savetype, savefilepath=savefilepath)
 
-# ** Parsing the save files
+  
+  
+
+# Parsing the save files
 
 # + It is almost impossible to do this cleanly with output from older versions of Cloudy. At the moment I am resorting to editing the header of the "line emissivity" file to put the header on two lines and delete the final tab. 
 
@@ -148,7 +158,7 @@ def recarray_from_savefile(filepath, skip=0):
     return numpy.genfromtxt(filepath, delimiter='\t', skip_header=skip,
                             invalid_raise=False, names=True).view(numpy.recarray)
 
-# *** List of possibilities for cloudy save files
+# List of possibilities for cloudy save files
 
 # + Taken from Hazy1 C10 version 2011/08/14
 # + This is nowhere near exhaustive
@@ -196,7 +206,7 @@ SAVETYPES = [
     "source function, depth",
     ]
 
-# *** TODO Find basic info about the run
+# TODO Find basic info about the run
 #     :LOGBOOK:
 #     CLOCK: [2011-08-20 Sat 18:24]--[2011-08-21 Sun 00:04] =>  5:40
 #     :END:
@@ -206,7 +216,7 @@ SAVETYPES = [
 
 pass
 
-# *** Find which save files were written
+# Find which save files were written
 #     :LOGBOOK:
 #     - Note taken on [2011-08-20 Sat 18:21] \\
 #       OK, this is just about working now, time to move on
@@ -268,6 +278,8 @@ def find_single_save_command(line):
         elif "'" in line:
             delim = "'"
         firstpart, savefile = line.split(delim)[:2]
+        if not savefile.startswith("."):
+            savefile = "." + savefile.split(".")[1]
         for savetype in SAVETYPES:
             if look4stringinline(savetype, firstpart):
                 return savetype, savefile
@@ -276,7 +288,7 @@ def find_single_save_command(line):
     else:
         return None
 
-# *** Utility functions for input parsing 
+# Utility functions for input parsing 
 # #+srcname: claudia-input-parse-utilities
 
 def cut_out(s, phrase):
