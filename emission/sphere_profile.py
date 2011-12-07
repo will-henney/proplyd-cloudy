@@ -6,6 +6,9 @@ import argparse
 sys.path.append("../src")       # make sure we can find claudia.py
 import claudia
 
+if __name__ == '__main__':
+    import warnings, argparse
+    warnings.filterwarnings("ignore")
 
 # Parse command line arguments
 parser = argparse.ArgumentParser(
@@ -15,7 +18,7 @@ parser.add_argument(
     "modelpath", type=str,
     help='Path to Cloudy model (assumes input and output in same directory)')
 parser.add_argument(
-    "--ntheta", type=int, default=50,
+    "--ntheta", type=int, default=100,
     help='Number of angles theta')
 parser.add_argument(
     "--nphi", type=int, default=200,
@@ -41,6 +44,14 @@ if modeldir != '':
 else:
     claudia.CloudyModel.indir = '.'
     claudia.CloudyModel.outdir = '.'
+
+#set de variables of the model that are defined in *.in
+
+r0 = 8.0e14
+Rmax = 9.0
+
+#The model
+
 m = claudia.CloudyModel(modelname) 
     
 cosi = np.cos(np.radians(inc_degrees))
@@ -57,14 +68,21 @@ NK = len(Phi)
 NJ = len(Theta)
 NI = len(Radius)
 
-Velocity = m.pre.cadwind_kms
-Emissivity = m.str
+R = Rmax - Radius/r0
+i2 = len(R[R>=1.0])
+
+Density = 10**(m.ovr.hden)
+Emissivity = 10**(m.em.H__1__6563A)
+
+n0 = Density[i2]
+
+Velocity = n0 / (R**2 * Density)
 
 # Define the velocity bins
 umax = max(abs(Velocity))
 umin = -umax
 du = (umax - umin)/NU
-Perfil=np.zeros(NU)
+Perfil = np.zeros(NU)
 
 sumEmiss = 0.0
 #La integral sobre r, th, ph
