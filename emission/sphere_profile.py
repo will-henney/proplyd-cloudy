@@ -85,30 +85,38 @@ du = (umax - umin)/NU
 Perfil = np.zeros(NU)
 
 sumEmiss = 0.0
-#La integral sobre r, th, ph
-for k in range(NK):
-    cphi = np.cos(Phi[k])
-    sphi = np.sin(Phi[k])
-    kneg = max(0, k - 1)
-    kpos = min(NK-1, k + 1)
-    dphi = 0.5*(Phi[kpos] - Phi[kneg])
-    for j in range(NJ):
-        ctheta = np.cos(Theta[j])
-        stheta = np.sin(Theta[j])
-        jneg = max(0, j - 1)
-        jpos = min(NJ-1, j + 1)
-        dmu = -0.5*(np.cos(Theta[jpos]) - np.cos(Theta[jneg]))
-        for i in range(NI):
-            ineg = max(0, i - 1)
-            ipos = min(NI-1, i + 1)
-            dr = 0.5*(Radius[ipos] - Radius[ineg])
-            dvol =  dphi * dmu * (Radius[i]**2) * dr
-            sumEmiss += dvol * Emissivity[i]
-            u = -Velocity[i]*(sini*stheta*cphi + cosi*ctheta)
-            x = (u-umin)/du
-            iu = int(x)
-            assert iu >= 0 and iu < NU, "Index (%i) out of bounds [%i:%i] of velocity array" % (iu, 0, NU-1)
-            Perfil[iu] += dvol * Emissivity[i]
+
+#Line profile
+
+for line in m.em.dtype.names:
+    print line
+    for k in range(NK):
+        cphi = np.cos(Phi[k])
+        sphi = np.sin(Phi[k])
+        kneg = max(0, k - 1)
+        kpos = min(NK-1, k + 1)
+        dphi = 0.5*(Phi[kpos] - Phi[kneg])
+        for j in range(NJ):
+            ctheta = np.cos(Theta[j])
+            stheta = np.sin(Theta[j])
+            jneg = max(0, j - 1)
+            jpos = min(NJ-1, j + 1)
+            dmu = -0.5*(np.cos(Theta[jpos]) - np.cos(Theta[jneg]))
+            for i in range(NI):
+                ineg = max(0, i - 1)
+                ipos = min(NI-1, i + 1)
+                dr = 0.5*(Radius[ipos] - Radius[ineg])
+                dvol =  dphi * dmu * (Radius[i]**2) * dr
+                sumEmiss += dvol * Emissivity[i]
+                u = -Velocity[i]*(sini*stheta*cphi + cosi*ctheta)
+                x = (u-umin)/du
+                iu = int(x)
+                assert iu >= 0 and iu < NU, "Index (%i) out of bounds [%i:%i] of velocity array" % (iu, 0, NU-1)
+                Perfil[iu] += dvol * Emissivity[i]
+    PerfilU = np.linspace(umin, umax, NU)
+    savefile = "%(modelname)s-perfil-NU%(NU)i-inc%(inc_degrees)i-%(line)s.dat" % (locals())
+# savefile = "%(modelname)s-perfil-N%(N)i-NU%(NU)i-inc%(inc_degrees)i.dat" % (locals())
+    np.savetxt(savefile, (PerfilU, Perfil))
 
 Volume = (4.*np.pi/3.) * (Radius[-1]**3 - Radius[0]**3) * 0.5
 print "sumEmiss =", sumEmiss
@@ -118,7 +126,4 @@ print "Relative error = ", (sumEmiss - Volume)/Volume
 print "Sum of line profile (should be same as sumEmiss): ", Perfil.sum()
 print Perfil
 
-PerfilU = np.linspace(umin, umax, NU)
-savefile = "%(modelname)s-perfil-NU%(NU)i-inc%(inc_degrees)i.dat" % (locals())
-# savefile = "%(modelname)s-perfil-N%(N)i-NU%(NU)i-inc%(inc_degrees)i.dat" % (locals())
-np.savetxt(savefile, (PerfilU, Perfil))
+
