@@ -89,7 +89,7 @@ sound_speed = np.sqrt(3./5.)*m.pre.cadwind_kms # isothermal sound speed
 n0 = Density[i2]
 
 
-Velocity = sound_speed[i2] * n0 / (R**2 * Density) 
+Velocity = sound_speed[i2] * n0 / (R**2 * Density)
 
 # Define the velocity bins
 umax = max(abs(Velocity))
@@ -135,5 +135,3 @@ print "Relative error = ", (sumEmiss - Volume)/Volume
 
 print "Sum of line profile (should be same as sumEmiss): ", Perfil.sum()
 print Perfil
-
-
