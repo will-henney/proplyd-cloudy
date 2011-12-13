@@ -52,7 +52,10 @@ inc_degrees = cmd_args.inc
 r0 = cmd_args.r0
 Rmax = cmd_args.Rmax
 
-thetadirs =  glob.glob(os.path.join(cmd_args.modeldir, "th??"))
+thetadirs =  [
+    os.path.basename(p) for p in 
+    glob.glob(os.path.join(cmd_args.modeldir, "th??"))
+    ]
 
 # The following arrays are defined for each angle:
 # Radius, Velocity, Emissivity
@@ -64,7 +67,11 @@ for thetadir in thetadirs:
     claudia.CloudyModel.indir = os.path.join(cmd_args.modeldir, thetadir)
     claudia.CloudyModel.outdir = claudia.CloudyModel.indir
     # find the last iteration
-    modelname = glob.glob(os.path.join(claudia.CloudyModel.indir, "*.in"))[-1]
+    modelinputpath = glob.glob(os.path.join(claudia.CloudyModel.indir, "*.in"))[-1]
+    # extract only the basename of the file, without .in extension
+    modelname = os.path.splitext(os.path.basename(modelinputpath))[0]
+    print "Indir: ", claudia.CloudyModel.indir
+    print "Modelname: ", modelname
     m = claudia.CloudyModel(modelname) 
     Radius = m.ovr.depth #Lista de pasos en z de cada modelo de Cloudy
     R = Rmax - Radius/r0            # array of dimensionless radius
@@ -95,7 +102,8 @@ thetamin, thetamax = 0.0, np.radians(90.0)
 
 Phi = np.linspace(phimin, phimax, num=cmd_args.nphi) #Lista de angulos en Phi
 # For the moment, we use the existing thetas with no interpolation
-Theta = np.array([float(s[2:]) for s in thetadirs])
+Theta = np.array([np.radians(float(s[2:])) for s in thetadirs])
+print "Theta: ", Theta
 # Theta = np.linspace(thetamin, thetamax, num=cmd_args.ntheta) #Lista de angulos en Theta
 NK = len(Phi)
 NJ = len(Theta)
@@ -141,7 +149,7 @@ for k in range(NK):
             assert iu >= 0 and iu < NU, "Index (%i) out of bounds [%i:%i] of velocity array" % (iu, 0, NU-1)
             Perfil[iu] += dvol * Emissivity[i]
 PerfilU = np.linspace(umin, umax, NU)
-savefile = "%(modelname)s-perfil-ntheta%(ntheta)i-nphi%(nphi)i-nvel%(nvel)i-inc%(inc)i-%(emline)s.dat" % (vars(cmd_args))
+savefile = "model_profile-nphi%(nphi)i-nvel%(nvel)i-inc%(inc)i-%(emline)s.dat" % (vars(cmd_args))
 np.savetxt(savefile, (PerfilU, Perfil))
 
 Volume = (4.*np.pi/3.) * (Radius[-1]**3 - Radius[0]**3) * 0.5
