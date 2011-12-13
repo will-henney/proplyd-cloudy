@@ -37,10 +37,6 @@ parser.add_argument(
     "--Rmax", type=float, default=9.0,
     help='Radius of outer face of cloudy model in units of r0')
 
-parser.add_argument(
-    "--emline", type=str, default="H__1__6563A",
-    help="Which emission line to use from the Cloudy model")
-
 cmd_args = parser.parse_args()
 
 # Set some local variables from the command line arguments
@@ -61,7 +57,9 @@ thetadirs =  [
 # Radius, Velocity, Emissivity
 Radius_vectors = []
 Velocity_vectors = []
-Emissivity_vectors = []
+Emissivities_vectors = []
+# List of names of emission lines
+emlines = None
 for thetadir in thetadirs:
     # Read in the Cloudy model for each angle
     claudia.CloudyModel.indir = os.path.join(cmd_args.modeldir, thetadir)
@@ -77,9 +75,15 @@ for thetadir in thetadirs:
     R = Rmax - Radius/r0            # array of dimensionless radius
     i2 = len(R[R>=1.0])             # find index where R = 1
 
+    # Find the list of emission lines if necesssary
+    if emlines is None:
+        emlines = m.em.dtype.names[1:] # miss off "depth"
+
     # Calculate physical variables as function of radius for this theta
     Density = 10**(m.ovr.hden)
-    Emissivity = 10**(m.em[cmd_args.emline])
+    Emissivities = dict()
+    for emline in emlines:
+        Emissivities[emline] = 10**(m.em[emline])
     sound_speed = np.sqrt(3./5.)*m.pre.cadwind_kms # isothermal sound speed
     n0 = Density[i2]
     Velocity = sound_speed[i2] * n0 / (R**2 * Density) 
@@ -87,7 +91,7 @@ for thetadir in thetadirs:
     # Add them to the lists of vectors 
     Radius_vectors.append(Radius)
     Velocity_vectors.append(Velocity)
-    Emissivity_vectors.append(Emissivity)
+    Emissivities_vectors.append(Emissivities)
     
 
 #The model
@@ -113,9 +117,13 @@ NJ = len(Theta)
 umax = max(abs(Velocity_vectors[0]))
 umin = -umax
 du = (umax - umin)/NU
-Perfil = np.zeros(NU)
-
-sumEmiss = 0.0
+Perfiles = dict()
+Fluxes = dict()
+for emline in emlines:
+    # Line profile as function of velocity
+    Perfiles[emline] = np.zeros(NU)
+    # Total line flux (integral of line profile)
+    Fluxes[emline] = 0.0
 
 #Line profile
 
@@ -129,7 +137,7 @@ for k in range(NK):
         # for each angle
         Radius = Radius_vectors[j]
         Velocity = Velocity_vectors[j]
-        Emissivity = Emissivity_vectors[j]
+        Emissivities = Emissivities_vectors[j]
 
         ctheta = np.cos(Theta[j])
         stheta = np.sin(Theta[j])
@@ -142,22 +150,32 @@ for k in range(NK):
             ipos = min(NI-1, i + 1)
             dr = 0.5*(Radius[ipos] - Radius[ineg])
             dvol =  dphi * dmu * (Radius[i]**2) * dr
-            sumEmiss += dvol * Emissivity[i]
             u = -Velocity[i]*(sini*stheta*cphi + cosi*ctheta)
             x = (u-umin)/du
             iu = int(x)
             assert iu >= 0 and iu < NU, "Index (%i) out of bounds [%i:%i] of velocity array" % (iu, 0, NU-1)
-            Perfil[iu] += dvol * Emissivity[i]
+            # for each emission lines
+            for emline in emlines:
+                # add in to line profile
+                Perfiles[emline][iu] += dvol * Emissivities[emline][i]
+                # and add in to total flux
+                Fluxes[emline] += dvol * Emissivities[emline][i]
+
+
 PerfilU = np.linspace(umin, umax, NU)
-savefile = "model_profile-nphi%(nphi)i-nvel%(nvel)i-inc%(inc)i-%(emline)s.dat" % (vars(cmd_args))
-np.savetxt(savefile, (PerfilU, Perfil))
+savefile = "model_profile-nphi%(nphi)i-nvel%(nvel)i-inc%(inc)i.dat" % (vars(cmd_args))
 
-Volume = (4.*np.pi/3.) * (Radius[-1]**3 - Radius[0]**3) * 0.5
-print "sumEmiss =", sumEmiss
-print "Volume = ",  Volume
-print "Relative error = ", (sumEmiss - Volume)/Volume
+import matplotlib.mlab as mlab
+datatable = np.rec.fromarrays([PerfilU] + Perfiles.values(), 
+                              names=','.join(['U'] + Perfiles.keys()))
+mlab.rec2csv(datatable, savefile, delimiter="\t")
 
-print "Sum of line profile (should be same as sumEmiss): ", Perfil.sum()
-print Perfil
+
+hbeta = Fluxes["H__1__4861A"]
+print "H beta line flux: "
+print "Line fluxes relative to H beta = 100:"
+for emline, flux in Fluxes.items():
+    print emline, 100.0*flux/hbeta
+
 
 
