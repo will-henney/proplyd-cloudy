@@ -18,19 +18,23 @@ _BLACKBODY_RADIATION = """\
 black body, T=%(Tstar).0f K 
 """ 
 _WMBASIC_RADIATION = """\
-* WMBasic (Pauldrach et al. 2001) non-LTE, line-blanketed, and wind-blanketed hot stars
+* WMBasic (Pauldrach et al. 2001) non-LTE, line-blanketed, 
+*  and wind-blanketed hot stars
 table star wmbasic %(Tstar).0f %(log_g).3f %(log_Z).3f 
 """
 _ATLAS_RADIATION = """\
-* Atlas (Castelli & Kurucz 2004) LTE, plane-parallel, hydrostatic model atmospheres
+* Atlas (Castelli & Kurucz 2004) LTE, plane-parallel, 
+*  hydrostatic model atmospheres
 table star atlas odfnew Z+%(log_Z).0f %(Tstar).3f %(log_g).3f
 """
 _TLUSTY_RADIATION = """\
-* Tlusty (Lanz & Hubeny 2003) non-LTE, line-blanketed, plane-parallel, hydrostatic O and B star SED
+* Tlusty (Lanz & Hubeny 2003) non-LTE, line-blanketed, 
+*  plane-parallel, hydrostatic O and B star SED
 table star tlusty OBstar 3-dim %(Tstar).0f %(log_g).3f %(log_Z).3f
 """
 _KURUCZ_RADIATION = """\
-* Kurucz (1979) similar to Atlas but obsolete - used only for comparison with Baldwin (1991)
+* Kurucz (1979) similar to Atlas but obsolete 
+* - used only for comparison with Baldwin (1991)
 table star kurucz %(Tstar).0f
 """
 
