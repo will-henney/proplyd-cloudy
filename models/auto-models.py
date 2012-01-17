@@ -141,6 +141,15 @@ def setup_and_run_cloudy_model(cmdargs, extras, monitor):
         m.write("""\
 save every last ionizing continuum 1.0 0 ".icont"
 """)
+    # Option for small adjustments to Cloudy script via file "cloudy-extras.in" in the input dir
+    if cmdargs.read_extra_cloudy_commands_from_file:
+        file_with_extra_cloudy_commands = os.path.join(extras.datapath, "cloudy-extras.in")
+        try:
+            with open(file_with_extra_cloudy_commands) as f:
+                m.write(f.read())
+        except IOError:
+            warnings.warn("Failed to read extra commands from %s" % (file_with_extra_cloudy_commands))
+
     m.run()
     return m
     
@@ -297,6 +306,8 @@ if __name__ == '__main__':
                         help="Whether to make cloudy run faster (at the expense of accuracy)")
     parser.add_argument("--savecont", "-s", type=bool, default=False,
                         help="Whether to make cloudy save the continuum for every zone")
+    parser.add_argument("--read-extra-cloudy-commands-from-file", type=bool, default=False,
+                        help="Whether take extra cloudy commands from cloudy-extra.in")
 
     
     cmdargs = parser.parse_args()
