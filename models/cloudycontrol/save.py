@@ -41,5 +41,10 @@ Ne 3 15.55m
 O  2 4651A
 C  3 1910A
 C  3 1907A
+N  2  5755A
+Fe 3  5271A
+Fe 3  4988A
+Fe 3  4881A
+Fe 3  4659A
 end of lines
 """

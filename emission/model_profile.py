@@ -3,7 +3,7 @@ import scipy
 import sys, os, glob
 import argparse
 
-sys.path.append("../src")       # make sure we can find claudia.py
+sys.path.append("../../../src")       # make sure we can find claudia.py
 import claudia
 
 # Avoid verbose error messages from numpy during the reading of the Cloudy files
