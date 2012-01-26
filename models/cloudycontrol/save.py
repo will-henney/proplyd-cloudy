@@ -23,28 +23,49 @@ save last pressure ".pre"
 save last heat ".heat" 
 save last cool ".cool" 
 save last lines, emissivity ".em"
-H  1  4861A 
-H  1  6563A 
-TOTr  5199A 
-N  2  6584A 
-O  1  6300A 
-O II  3726A 
-TOTL  4363A 
-O  3  4959A 
-O  3  5007A 
-S II  6731A 
-S II  6716A 
-S  3  6312A
-He 1  5876A
-Ne 2 12.81m
-Ne 3 15.55m
-O  2 4651A
-C  3 1910A
-C  3 1907A
-N  2  5755A
+* Hydrogen Balmer lines
+H  1  4861A  // H beta
+H  1  6563A  // H alpha
+* Helium recombination lines (WARNING: some may be optically thick)
+He 1  6678A  // 6678.15
+He 1  5876A  // 5875.64
+He 1  4471A
+* Collisionally excited optical diagnostic lines
+N  2  6584A  // [N II] nebular line 6583.41
+N  2  5755A  // [N II] auroral line 5754.64
+TOTL  4363A  // [O III] auroral line
+O  3  4959A  // [O III] nebular line
+O  3  5007A  // ditto
+S II  6731A  // [S II] nebular line 
+S II  6716A  // ditto
+* COMMENTED S  2  4074A  // [S II] auroral lines (sum of 4068+4076) 
+S II  4070A  // [S II] auroral line (4068A in Mesa-Delgado)
+S II  4078A  // [S II] auroral line (4076A in Mesa-Delgado)
+O  1  6300A  // [O I] 6300.3
+S  3  6312A  // [S III] 6312.10
+Ar 3  7135A  // [Ar III] 7135.78
+O II  3729A  // [O II] 
+O II  3726A  // [O II]
+Ne 3  3869A  // [Ne III] 
+* Metal recombination lines
+O  2  4651A   // O II 
+C  2  4267A   // C II
+* Fluorescent lines
+TOTr  5199A  // [N I] line
+* Iron lines for comparison with Mesa-Delgado
 Fe 3  5271A
 Fe 3  4988A
-Fe 3  4881A
-Fe 3  4659A
+Fe 3  4881A  // 4881.00
+Fe 3  4755A  // 4754.83
+Fe 3  4734A  // 4733.93
+Fe 3  4702A  // 4701.62
+Fe 3  4659A  // 4658.10 Strongest line
+Fe 3  4608A  // 4607.13 
+* NUV lines
+C  3 1910A   // C II] Semi-forbidden
+C  3 1907A   // [C II] forbidden
+* FIR lines
+Ne 2 12.81m
+Ne 3 15.55m
 end of lines
 """
