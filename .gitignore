@@ -9,3 +9,11 @@ models/.ropeproject
 models/proplyd-auto-models/*
 emission/*.dat
 emission/*.png
+*.aux
+*.auxlock
+*.synctex.gz
+papers/*.log
+papers/*.dep
+papers/*.dpth
+papers/auto
+
