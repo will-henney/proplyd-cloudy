@@ -9,3 +9,12 @@ models/.ropeproject
 models/proplyd-auto-models/*
 /models/proplyd-adjust.py
 /models/proplyd-model.py
+emission/*.dat
+emission/*.png
+*.aux
+*.auxlock
+*.synctex.gz
+papers/*.log
+papers/*.dep
+papers/*.dpth
+papers/auto
