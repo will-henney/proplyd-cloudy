@@ -11,6 +11,10 @@
 \hypersetup{colorlinks=True, linkcolor=blue!50!black, citecolor=black,
   urlcolor=blue!50!black}
 
+\usepackage[greek,english]{babel} 
+\newcommand{\texttheta}{\greektext j\latintext}
+\newcommand\thC{\texttheta\textsuperscript{1}\,Ori~C}
+
 \begin{document}
 
 %% Skip over the parts that are already written
@@ -54,13 +58,12 @@ Second, whereas published models used ad hoc fitting functions to the emissivity
   \end{tabular}
   \label{tab:model:pars}
 \end{table}
-\newcommand\thC{\(\theta^1\)~Ori~C}
 
 Preliminary results of the emission line spectrum of such a model applied to 177-341 are shown in Figure~\ref{fig:model}.  
 The input parameters for the model (values given in Table~\ref{tab:model:pars}) are the radius of the ionization front at the proplyd cusp (assumed hemispherical), the intensity and spectral shape of the illuminating stellar radiation, and the composition (gas-phase elemental mix and dust grain populations) of the proplyd material.  
-For all these parameters, we simply took best-determined values from the literature, rather than trying to adjust them to fit the current observations.  
+For all these parameters, we simply took values from the literature, rather than trying to adjust them to fit the current observations.  
 The stellar spectrum is that determined for \thC{} by spectroscopic analysis \citep{2006AandA...448..351S}. 
-The ionization front radius is the value determined by fitting to \textit{HST} emission line images \citep{1999AJ....118.2350H}, while the ionizing flux 
+The ionization front radius is the value determined by fitting to \textit{HST} emission line images \citep{1999AJ....118.2350H}, while the separation of the proplyd from the ionizing star is taken to be 
 
     
 
