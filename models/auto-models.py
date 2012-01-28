@@ -117,17 +117,26 @@ def find_x_at_y(ystar, x, y):
 
 def setup_and_run_cloudy_model(cmdargs, extras, monitor):
     cloudy_cmd = ["time", cmdargs.cloudyexec] 
+    if cmdargs.fastcloudy:
+        if cmdargs.composition != "FastOrion":
+            warnings.warn("Overwriting abundance set with FastOrion")
+            cmdargs.composition = "FastOrion"
+    if cmdargs.composition == "Tsamis":
+        Zstring = "-ZT"
+    elif cmdargs.composition == "Esteban":
+        Zstring = "-ZE"
+    elif cmdargs.composition == "FastOrion":
+        Zstring = "-ZF"
+    else:
+        Zstring = ""
     # files are simply named after iteration number and density
-    filename = "it%.2in%.3ex0%.2f" % (monitor.it, extras.hden, extras.x0)
+    filename = "it%.2in%.3ex0%.2f%s" % (monitor.it, extras.hden, extras.x0, Zstring)
     print "Calculating " + os.path.join(extras.datapath, filename)
     m = Model(filename, dryrun=False, indir=extras.datapath, outdir=extras.datapath, 
               verbose=True, cloudy_cmd=cloudy_cmd)
-    if cmdargs.fastcloudy:
-        dust = "FastOrion"
-    else:
-        dust = "Orion"
     m.write(physical.proplyd(cmdargs.r0, extras.hden, Rmax=cmdargs.Rmax, 
-                             W=cmdargs.W, x0=extras.x0, dust=dust))
+                             W=cmdargs.W, x0=extras.x0, 
+                             composition=cmdargs.composition))
     m.write(misc.optimize())
     m.write(misc.stopping())
     if cmdargs.fastcloudy:
@@ -298,6 +307,8 @@ if __name__ == '__main__':
                         help="Log10 of stellar EUV flux")
     parser.add_argument("--atmosphere", type=str, default="WM", choices=["WM", "BB", "TL"],
                         help="Type of stellar atmosphere model")
+    parser.add_argument("--composition", type=str, default="Orion", choices=["Orion", "FastOrion", "Esteban", "Tsamis"],
+                        help="Gas-phase abundance set to use")
     parser.add_argument("--Tstar", type=float, default=3.7e4,
                         help="Stellar effective temperature in K")
     parser.add_argument("--multiprocess", "-m", type=bool, default=False,
