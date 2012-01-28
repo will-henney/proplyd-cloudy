@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{txfonts}
+\usepackage{pgfplots}
+
+\usepgfplotslibrary{external}
+\tikzset{external/force remake}
+\tikzexternalize
+
+\pgfplotsset{
+  compat=1.5.1, % most current version as of writing (27 Jan 2012)
+  % compat=newest, % select to always use latest version (may cause minor appearance changes)
+  width=\textwidth,
+}
+\begin{document}
+\begin{tikzpicture}
+  \begin{loglogaxis}[
+    xlabel={Observed Intensity, \(100 \times I_{\lambda}/I(\mathrm{H}\beta)\)}, 
+    ylabel={Model Intensity, \(100 \times I_{\lambda}/I(\mathrm{H}\beta)\)},
+    log ticks with fixed point,
+    legend columns=2,
+    legend pos=north west,
+    transpose legend,
+    ]
+    \addplot [
+    scatter/classes={
+      Ne3={mark=square*,blue},%
+      S2={mark=triangle*,red},% 
+      S3={mark=square*,red},% 
+      C2={mark=triangle*,black},% 
+      O1={mark=*,orange},% 
+      O3={mark=square*,orange},%
+      He1={mark=*,green},%
+      Fe3={mark=square*,yellow},%
+      H1={mark=*,brown},%
+      N2={mark=triangle*,cyan},%
+      Ar3={mark=square*,magenta}%
+    },
+    only marks, scatter, 
+    scatter src=explicit symbolic,
+    point meta=explicit symbolic,
+    nodes near coords*={\tiny\pgfmathprintnumber[set thousands separator={}]\LAMBDA\,\AA},
+    visualization depends on={\thisrow{lambda} \as \LAMBDA},
+    error bars/.cd,
+    x dir=both,
+    x explicit,
+    y dir=none,
+    ] table [
+    x=Observed, 
+    y=Model, 
+    x error=Error,
+    meta=El
+    ] {ratios-177341.dat};
+    \label[Ne3]{marker:Ne3}
+
+    \legend{
+      Ne3,
+      S2,
+      S3,
+      C2,
+      O1,
+      O3,
+      He1,
+      Fe3,
+      H1,
+      N2,
+      Ar3
+    }
+    \addplot [gray,domain=0.2:300] {x};
+  \end{loglogaxis}
+\end{tikzpicture}
+
+% The marker for [Ne III] is \ref{marker:Ne3}
+
+\end{document}
