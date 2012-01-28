@@ -117,20 +117,8 @@ def find_x_at_y(ystar, x, y):
 
 def setup_and_run_cloudy_model(cmdargs, extras, monitor):
     cloudy_cmd = ["time", cmdargs.cloudyexec] 
-    if cmdargs.fastcloudy:
-        if cmdargs.composition != "FastOrion":
-            warnings.warn("Overwriting abundance set with FastOrion")
-            cmdargs.composition = "FastOrion"
-    if cmdargs.composition == "Tsamis":
-        Zstring = "-ZT"
-    elif cmdargs.composition == "Esteban":
-        Zstring = "-ZE"
-    elif cmdargs.composition == "FastOrion":
-        Zstring = "-ZF"
-    else:
-        Zstring = ""
     # files are simply named after iteration number and density
-    filename = "it%.2in%.3ex0%.2f%s" % (monitor.it, extras.hden, extras.x0, Zstring)
+    filename = "it%.2in%.3ex0%.2f" % (monitor.it, extras.hden, extras.x0)
     print "Calculating " + os.path.join(extras.datapath, filename)
     m = Model(filename, dryrun=False, indir=extras.datapath, outdir=extras.datapath, 
               verbose=True, cloudy_cmd=cloudy_cmd)
@@ -329,9 +317,26 @@ if __name__ == '__main__':
         raise NotImplementedError # Delete this when it is implemented properly
         pool = multiprocessing.Pool() # by default makes one process per core
 
+
+    if cmdargs.fastcloudy:
+        if cmdargs.composition != "FastOrion":
+            warnings.warn("Overwriting abundance set with FastOrion")
+            cmdargs.composition = "FastOrion"
+
+    if cmdargs.composition == "Tsamis":
+        Zstring = "-ZT"
+    elif cmdargs.composition == "Esteban":
+        Zstring = "-ZE"
+    elif cmdargs.composition == "FastOrion":
+        Zstring = "-ZF"
+    else:
+        Zstring = ""
+
     # ID for this proplyd model
-    modelid = "%s%.6i-phi%.2f-r%.2f" % (cmdargs.atmosphere, cmdargs.Tstar, 
-                                        cmdargs.logPhiH, np.log10(cmdargs.r0))
+    modelid = "%s%.6i-phi%.2f-r%.2f%s" % (cmdargs.atmosphere, cmdargs.Tstar, 
+                                          cmdargs.logPhiH, np.log10(cmdargs.r0),
+                                          Zstring
+                                          )
     # the ID may have to be refined by adding more parameters later
 
     thetas = np.linspace(0.0, 90.0, cmdargs.ntheta)
