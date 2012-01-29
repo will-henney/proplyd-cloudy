@@ -32,6 +32,8 @@ parser.add_argument(
 
 linesets = dict(
     SNO = ["S II  6731A", "N  2  6584A", "O  3  5007A"],
+    SNOa = ["S II  4070A", "N  2  5755A", "TOTL  4363A"],
+    ONO = ["O  1  6300A", "N  2  6584A", "O  3  5007A"],
     NHO = ["N  2  6584A", "H  1  6563A", "O  3  5007A"],
     SSS = ["S II  6716A", "S II  6731A", "S II  4070A"],
     )
@@ -111,7 +113,7 @@ pyx.text.set(mode="latex")
 bivar.printextra = 0
 bivar.Graph.figwidth = 6
 bivar.Graph.figheight = 6
-bivar.PlotVariable.n = 50                               # size of pdf images
+bivar.PlotVariable.n = 20                               # size of pdf images
 
 Eden_var = bivar.PlotVariable(np.log10(Eden_arr))
 Eden_var.setminmaxn(min=3.0, max=6.0)
@@ -121,7 +123,7 @@ Te_var = bivar.PlotVariable(Te_arr)
 Te_var.setminmaxn(min=5000.0, max=12000.)
 Te_var.settitle(r'Gas temperature, \(T\), K', 'Te')
 
-g = bivar.Graph(Eden_var, Te_var, weights=weights, gamma=4.0, statslevel=1)
+g = bivar.Graph(Eden_var, Te_var, weights=weights, gamma=3.0, statslevel=1)
 
 
 g.writePDFfile('NT-plane-%s' % (cmd_args.lineset))

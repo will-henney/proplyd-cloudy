@@ -56,7 +56,16 @@ Run in the model directory
 python ../../../emission/model_profile.py  --nphi 200 --nvel 31 --inc 75 --r0 1.91e15
 #+END_SRC
 
-*** Comparison of our line ratios with the observed ones
+*** New comparison of our line ratios with the observed ones
+
+This time we will try and get it right
+
+
+
+*** Original comparison of our line ratios with the observed ones
+
+This is not right since we had a mistake with the volume element. 
+
 | Cloudy | El  | lambda |          Model | Observed | Error |  M/O | (M - O)/E |
 |--------+-----+--------+----------------+----------+-------+------+-----------|
 | NE_3   | Ne3 | 3869A  |  8.17686723274 |    10.80 |   1.4 | 0.76 |     -1.87 |
@@ -101,6 +110,29 @@ python ../../../emission/model_profile.py  --nphi 200 --nvel 31 --inc 75 --r0 1.
 
 
 *** Model variants
+
+| Model                       | Comment                     | Status |
+|-----------------------------+-----------------------------+--------|
+| WM039000-phi13.50-r15.28    | Baseline                    | Done   |
+| WM039000-phi13.20-r15.28    | Lower flux                  | Done   |
+| WM039000-phi13.50-r15.28-ZE | Esteban Abundances          | Done   |
+| WM039000-phi13.50-r15.28-ZT | Tsamis LV2 Abundances       |        |
+| TL039000-phi13.50-r15.28    | Tlusty atmosphere           |        |
+| WM039000-phi13.20-r15.28-ZE | Esteban + Lower flux        |        |
+| WM039000-phi13.35-r15.28-ZE | Esteban + Intermediate flux |        |
+
+Most of these change only one parameter, although the last two change two of them. 
+
+**** Screenshot of ne-Te plots
+
+#+ATTR_HTML: width=800px
+[[file:ScreenShot-ne-Te-multimodels-annotated.png]]
+
+
+The badly drawn lines on the bottom right figure show the diagnostic curves from Adal Fig 7 (blue [O III], orange [N II], red [S II]). 
+
+This shows that the assumption of a unique (ne, Te) combination for all the lines is probably not a good one.  The intersection of the 3 curves is at a higher density and lower T than the models.  But the model can still be consistent with the observations by crossing the curves individually where they are fanning out above and to left of intersection point.
+
 
 **** Two times smaller flux
 

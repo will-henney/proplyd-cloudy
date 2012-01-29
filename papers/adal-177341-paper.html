@@ -99,7 +99,47 @@
  }
 /*]]>*///-->
 </script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
 
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
 </head>
 <body>
 
@@ -128,9 +168,11 @@
 <li><a href="#sec-3-1">3.1 First model</a>
 <ul>
 <li><a href="#sec-3-1-1">3.1.1 Parameters</a></li>
-<li><a href="#sec-3-1-2">3.1.2 Comparison of our line ratios with the observed ones</a></li>
-<li><a href="#sec-3-1-3">3.1.3 Abundances</a></li>
-<li><a href="#sec-3-1-4">3.1.4 Sample region</a></li>
+<li><a href="#sec-3-1-2">3.1.2 Calculating line ratios</a></li>
+<li><a href="#sec-3-1-3">3.1.3 Comparison of our line ratios with the observed ones</a></li>
+<li><a href="#sec-3-1-4">3.1.4 Model variants</a></li>
+<li><a href="#sec-3-1-5">3.1.5 Abundances</a></li>
+<li><a href="#sec-3-1-6">3.1.6 Sample region</a></li>
 </ul>
 </li>
 </ul>
@@ -243,8 +285,25 @@
 </div>
 
 <div id="outline-container-3-1-2" class="outline-4">
-<h4 id="sec-3-1-2"><span class="section-number-4">3.1.2</span> Comparison of our line ratios with the observed ones</h4>
+<h4 id="sec-3-1-2"><span class="section-number-4">3.1.2</span> Calculating line ratios</h4>
 <div class="outline-text-4" id="text-3-1-2">
+
+<p>Run in the model directory 
+</p>
+
+
+
+<pre class="example">python ../../../emission/model_profile.py  --nphi 200 --nvel 31 --inc 75 --r0 1.91e15
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3-1-3" class="outline-4">
+<h4 id="sec-3-1-3"><span class="section-number-4">3.1.3</span> Comparison of our line ratios with the observed ones</h4>
+<div class="outline-text-4" id="text-3-1-3">
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption></caption>
@@ -309,9 +368,270 @@
 
 </div>
 
-<div id="outline-container-3-1-3" class="outline-4">
-<h4 id="sec-3-1-3"><span class="section-number-4">3.1.3</span> Abundances</h4>
-<div class="outline-text-4" id="text-3-1-3">
+<div id="outline-container-3-1-4" class="outline-4">
+<h4 id="sec-3-1-4"><span class="section-number-4">3.1.4</span> Model variants</h4>
+<div class="outline-text-4" id="text-3-1-4">
+
+
+<ul>
+<li id="sec-3-1-4-1">Screenshot of ne-Te plots<br/>
+
+<p>
+<img src="ScreenShot-ne-Te-multimodels-annotated.png" width=800px alt="ScreenShot-ne-Te-multimodels-annotated.png" />
+</p>
+
+<p>
+The badly drawn lines on the bottom right figure show the diagnostic curves from Adal Fig 7 (blue [O III], orange [N II], red [S II]). 
+</p>
+<p>
+This shows that the assumption of a unique (ne, Te) combination for all the lines is probably not a good one
+</p>
+
+</li>
+</ul>
+<ul>
+<li id="sec-3-1-4-2">Two times smaller flux<br/>
+
+<ul>
+<li>WM039000-phi13.20-r15.28
+</li>
+<li>This might be relevant if the true distance were higher
+<ul>
+<li>or if there were intervening absorption (unlikely).
+</li>
+</ul>
+
+</li>
+<li>Which lines go up (&gt; 20%)?
+<ul>
+<li>Low ionization lines:
+<ul>
+<li>[S II], [O II], [N II], [O I]
+</li>
+<li>Some [Fe III] lines (4881, 4988)
+</li>
+</ul>
+
+</li>
+<li>Nebular more than auroral lines
+<ul>
+<li>1.7 vs 1.3 for [S II]
+</li>
+<li>1.5 vs 1.0 for [N II]
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li>Which lines go down (&gt; 10%)?
+<ul>
+<li>High ionization lines
+<ul>
+<li>[O III], [Ne III], C III], [S III]
+</li>
+</ul>
+
+</li>
+<li>Auroral more than nebular lines
+<ul>
+<li>0.7 vs 0.85 for [O III]
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li>Which lines stay the same?
+<ul>
+<li>H and He recomb lines
+</li>
+<li>Most [Fe III] lines (4659, 4755, 5271, 4734, 4608, 4702)
+</li>
+<li>[N II] 5755, and [Ar III] 7135
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+
+<ul>
+<li id="sec-3-1-4-2-1">Table ordered by wavelength<br/>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="right" /><col class="right" /><col class="right" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">Ion</th><th scope="col" class="left">Line</th><th scope="col" class="right">Original</th><th scope="col" class="right">Lower flux</th><th scope="col" class="right">Ratio</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">C  3</td><td class="left">1907A</td><td class="right">7.93332427132</td><td class="right">8.55795829873</td><td class="right">1.08</td></tr>
+<tr><td class="left">C  3</td><td class="left">1910A</td><td class="right">43.3734088204</td><td class="right">34.8275988647</td><td class="right">0.80</td></tr>
+<tr><td class="left">O II</td><td class="left">3726A</td><td class="right">11.0093482515</td><td class="right">16.1260976732</td><td class="right">1.46</td></tr>
+<tr><td class="left">O II</td><td class="left">3729A</td><td class="right">4.20174031745</td><td class="right">6.18066093444</td><td class="right">1.47</td></tr>
+<tr><td class="left">NE 3</td><td class="left">3869A</td><td class="right">8.17686723274</td><td class="right">6.34357454535</td><td class="right">0.78</td></tr>
+<tr><td class="left">S II</td><td class="left">4070A</td><td class="right">10.4475816855</td><td class="right">13.2592267827</td><td class="right">1.27</td></tr>
+<tr><td class="left">S II</td><td class="left">4078A</td><td class="right">2.99580775427</td><td class="right">3.92201567734</td><td class="right">1.31</td></tr>
+<tr><td class="left">C  2</td><td class="left">4267A</td><td class="right">0.207606269471</td><td class="right">0.189433359999</td><td class="right">0.91</td></tr>
+<tr><td class="left">TOTL</td><td class="left">4363A</td><td class="right">2.37236800689</td><td class="right">1.67044218231</td><td class="right">0.70</td></tr>
+<tr><td class="left">HE 1</td><td class="left">4471A</td><td class="right">4.65171605379</td><td class="right">4.55858248773</td><td class="right">0.98</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4608A</td><td class="right">0.247094541475</td><td class="right">0.249619453645</td><td class="right">1.01</td></tr>
+<tr><td class="left">O  2</td><td class="left">4651A</td><td class="right">1.06161720282e-19</td><td class="right">2.04371126802e-19</td><td class="right">1.93</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4659A</td><td class="right">2.60331622015</td><td class="right">2.67475388287</td><td class="right">1.03</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4702A</td><td class="right">1.44123467401</td><td class="right">1.45599328383</td><td class="right">1.01</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4734A</td><td class="right">0.756129700232</td><td class="right">0.771368776435</td><td class="right">1.02</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4755A</td><td class="right">0.47606006097</td><td class="right">0.489142101465</td><td class="right">1.03</td></tr>
+<tr><td class="left">H  1</td><td class="left">4861A</td><td class="right">100.0</td><td class="right">100.0</td><td class="right">1.00</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4881A</td><td class="right">0.636804217428</td><td class="right">0.811547647614</td><td class="right">1.27</td></tr>
+<tr><td class="left">O  3</td><td class="left">4959A</td><td class="right">85.6877662453</td><td class="right">72.7482506915</td><td class="right">0.85</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4988A</td><td class="right">0.10934017033</td><td class="right">0.139341266403</td><td class="right">1.27</td></tr>
+<tr><td class="left">O  3</td><td class="left">5007A</td><td class="right">257.917681537</td><td class="right">218.974735354</td><td class="right">0.85</td></tr>
+<tr><td class="left">TOTR</td><td class="left">5199A</td><td class="right">3.38756080326e-05</td><td class="right">5.68272919719e-05</td><td class="right">1.68</td></tr>
+<tr><td class="left">FE 3</td><td class="left">5271A</td><td class="right">1.58580914749</td><td class="right">1.63603284432</td><td class="right">1.03</td></tr>
+<tr><td class="left">N  2</td><td class="left">5755A</td><td class="right">8.17735206821</td><td class="right">8.37378041706</td><td class="right">1.02</td></tr>
+<tr><td class="left">HE 1</td><td class="left">5876A</td><td class="right">14.5187752486</td><td class="right">14.2056398326</td><td class="right">0.98</td></tr>
+<tr><td class="left">O  1</td><td class="left">6300A</td><td class="right">5.4711813156</td><td class="right">7.4733468355</td><td class="right">1.37</td></tr>
+<tr><td class="left">S  3</td><td class="left">6312A</td><td class="right">5.1304323418</td><td class="right">4.55072902872</td><td class="right">0.89</td></tr>
+<tr><td class="left">H  1</td><td class="left">6563A</td><td class="right">280.747361832</td><td class="right">281.546881447</td><td class="right">1.00</td></tr>
+<tr><td class="left">N  2</td><td class="left">6584A</td><td class="right">33.6017794459</td><td class="right">48.9856825497</td><td class="right">1.46</td></tr>
+<tr><td class="left">HE 1</td><td class="left">6678A</td><td class="right">3.78215599287</td><td class="right">3.72565915025</td><td class="right">0.99</td></tr>
+<tr><td class="left">S II</td><td class="left">6716A</td><td class="right">0.277357326781</td><td class="right">0.476077678717</td><td class="right">1.72</td></tr>
+<tr><td class="left">S II</td><td class="left">6731A</td><td class="right">0.637016569893</td><td class="right">1.09129965062</td><td class="right">1.71</td></tr>
+<tr><td class="left">AR 3</td><td class="left">7135A</td><td class="right">26.2075170797</td><td class="right">25.6031242347</td><td class="right">0.98</td></tr>
+<tr><td class="left">NE 2</td><td class="left">1281m</td><td class="right">22.876453429</td><td class="right">26.6950708217</td><td class="right">1.17</td></tr>
+<tr><td class="left">NE 3</td><td class="left">1555m</td><td class="right">6.75155251275</td><td class="right">6.24680533374</td><td class="right">0.93</td></tr>
+</tbody>
+</table>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-3-1-4-2-2">Table ordered by relative change<br/>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="right" /><col class="right" /><col class="right" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">Ion</th><th scope="col" class="left">Line</th><th scope="col" class="right">Original</th><th scope="col" class="right">Lower flux</th><th scope="col" class="right">Ratio</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">O  2</td><td class="left">4651A</td><td class="right">1.06161720282e-19</td><td class="right">2.04371126802e-19</td><td class="right">1.93</td></tr>
+<tr><td class="left">S II</td><td class="left">6716A</td><td class="right">0.277357326781</td><td class="right">0.476077678717</td><td class="right">1.72</td></tr>
+<tr><td class="left">S II</td><td class="left">6731A</td><td class="right">0.637016569893</td><td class="right">1.09129965062</td><td class="right">1.71</td></tr>
+<tr><td class="left">TOTR</td><td class="left">5199A</td><td class="right">3.38756080326e-05</td><td class="right">5.68272919719e-05</td><td class="right">1.68</td></tr>
+<tr><td class="left">O II</td><td class="left">3729A</td><td class="right">4.20174031745</td><td class="right">6.18066093444</td><td class="right">1.47</td></tr>
+<tr><td class="left">O II</td><td class="left">3726A</td><td class="right">11.0093482515</td><td class="right">16.1260976732</td><td class="right">1.46</td></tr>
+<tr><td class="left">N  2</td><td class="left">6584A</td><td class="right">33.6017794459</td><td class="right">48.9856825497</td><td class="right">1.46</td></tr>
+<tr><td class="left">O  1</td><td class="left">6300A</td><td class="right">5.4711813156</td><td class="right">7.4733468355</td><td class="right">1.37</td></tr>
+<tr><td class="left">S II</td><td class="left">4078A</td><td class="right">2.99580775427</td><td class="right">3.92201567734</td><td class="right">1.31</td></tr>
+<tr><td class="left">S II</td><td class="left">4070A</td><td class="right">10.4475816855</td><td class="right">13.2592267827</td><td class="right">1.27</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4881A</td><td class="right">0.636804217428</td><td class="right">0.811547647614</td><td class="right">1.27</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4988A</td><td class="right">0.10934017033</td><td class="right">0.139341266403</td><td class="right">1.27</td></tr>
+<tr><td class="left">NE 2</td><td class="left">1281m</td><td class="right">22.876453429</td><td class="right">26.6950708217</td><td class="right">1.17</td></tr>
+<tr><td class="left">C  3</td><td class="left">1907A</td><td class="right">7.93332427132</td><td class="right">8.55795829873</td><td class="right">1.08</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4659A</td><td class="right">2.60331622015</td><td class="right">2.67475388287</td><td class="right">1.03</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4755A</td><td class="right">0.47606006097</td><td class="right">0.489142101465</td><td class="right">1.03</td></tr>
+<tr><td class="left">FE 3</td><td class="left">5271A</td><td class="right">1.58580914749</td><td class="right">1.63603284432</td><td class="right">1.03</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4734A</td><td class="right">0.756129700232</td><td class="right">0.771368776435</td><td class="right">1.02</td></tr>
+<tr><td class="left">N  2</td><td class="left">5755A</td><td class="right">8.17735206821</td><td class="right">8.37378041706</td><td class="right">1.02</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4608A</td><td class="right">0.247094541475</td><td class="right">0.249619453645</td><td class="right">1.01</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4702A</td><td class="right">1.44123467401</td><td class="right">1.45599328383</td><td class="right">1.01</td></tr>
+<tr><td class="left">H  1</td><td class="left">4861A</td><td class="right">100.0</td><td class="right">100.0</td><td class="right">1.00</td></tr>
+<tr><td class="left">H  1</td><td class="left">6563A</td><td class="right">280.747361832</td><td class="right">281.546881447</td><td class="right">1.00</td></tr>
+<tr><td class="left">HE 1</td><td class="left">6678A</td><td class="right">3.78215599287</td><td class="right">3.72565915025</td><td class="right">0.99</td></tr>
+<tr><td class="left">HE 1</td><td class="left">4471A</td><td class="right">4.65171605379</td><td class="right">4.55858248773</td><td class="right">0.98</td></tr>
+<tr><td class="left">HE 1</td><td class="left">5876A</td><td class="right">14.5187752486</td><td class="right">14.2056398326</td><td class="right">0.98</td></tr>
+<tr><td class="left">AR 3</td><td class="left">7135A</td><td class="right">26.2075170797</td><td class="right">25.6031242347</td><td class="right">0.98</td></tr>
+<tr><td class="left">NE 3</td><td class="left">1555m</td><td class="right">6.75155251275</td><td class="right">6.24680533374</td><td class="right">0.93</td></tr>
+<tr><td class="left">C  2</td><td class="left">4267A</td><td class="right">0.207606269471</td><td class="right">0.189433359999</td><td class="right">0.91</td></tr>
+<tr><td class="left">S  3</td><td class="left">6312A</td><td class="right">5.1304323418</td><td class="right">4.55072902872</td><td class="right">0.89</td></tr>
+<tr><td class="left">O  3</td><td class="left">4959A</td><td class="right">85.6877662453</td><td class="right">72.7482506915</td><td class="right">0.85</td></tr>
+<tr><td class="left">O  3</td><td class="left">5007A</td><td class="right">257.917681537</td><td class="right">218.974735354</td><td class="right">0.85</td></tr>
+<tr><td class="left">C  3</td><td class="left">1910A</td><td class="right">43.3734088204</td><td class="right">34.8275988647</td><td class="right">0.80</td></tr>
+<tr><td class="left">NE 3</td><td class="left">3869A</td><td class="right">8.17686723274</td><td class="right">6.34357454535</td><td class="right">0.78</td></tr>
+<tr><td class="left">TOTL</td><td class="left">4363A</td><td class="right">2.37236800689</td><td class="right">1.67044218231</td><td class="right">0.70</td></tr>
+</tbody>
+</table>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-3-1-4-2-3">New corrected version<br/>
+
+<ul>
+<li>It turns out that we had the radius inside out in model_profile.py
+</li>
+<li>This is now fixed
+</li>
+<li>The new version gives higher intensities for the higher ionization lines 
+</li>
+</ul>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="right" /><col class="right" /><col class="right" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">Ion</th><th scope="col" class="left">Line</th><th scope="col" class="right">New</th><th scope="col" class="right">Old</th><th scope="col" class="right">N/O</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">C  3</td><td class="left">1907A</td><td class="right">9.94567</td><td class="right">8.55795829873</td><td class="right">1.16</td></tr>
+<tr><td class="left">C  3</td><td class="left">1910A</td><td class="right">27.6655</td><td class="right">34.8275988647</td><td class="right">0.79</td></tr>
+<tr><td class="left">O II</td><td class="left">3726A</td><td class="right">12.0032</td><td class="right">16.1260976732</td><td class="right">0.74</td></tr>
+<tr><td class="left">O II</td><td class="left">3729A</td><td class="right">4.6803</td><td class="right">6.18066093444</td><td class="right">0.76</td></tr>
+<tr><td class="left">NE 3</td><td class="left">3869A</td><td class="right">10.7972</td><td class="right">6.34357454535</td><td class="right">1.70</td></tr>
+<tr><td class="left">S II</td><td class="left">4070A</td><td class="right">7.23381</td><td class="right">13.2592267827</td><td class="right">0.55</td></tr>
+<tr><td class="left">S II</td><td class="left">4078A</td><td class="right">2.15071</td><td class="right">3.92201567734</td><td class="right">0.55</td></tr>
+<tr><td class="left">C  2</td><td class="left">4267A</td><td class="right">0.230659</td><td class="right">0.189433359999</td><td class="right">1.22</td></tr>
+<tr><td class="left">TOTL</td><td class="left">4363A</td><td class="right">1.9087</td><td class="right">1.67044218231</td><td class="right">1.14</td></tr>
+<tr><td class="left">HE 1</td><td class="left">4471A</td><td class="right">4.62188</td><td class="right">4.55858248773</td><td class="right">1.01</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4608A</td><td class="right">0.158247</td><td class="right">0.249619453645</td><td class="right">0.63</td></tr>
+<tr><td class="left">O  2</td><td class="left">4651A</td><td class="right">9.26191e-18</td><td class="right">2.04371126802e-19</td><td class="right">45.32</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4659A</td><td class="right">1.71774</td><td class="right">2.67475388287</td><td class="right">0.64</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4702A</td><td class="right">0.92303</td><td class="right">1.45599328383</td><td class="right">0.63</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4734A</td><td class="right">0.487041</td><td class="right">0.771368776435</td><td class="right">0.63</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4755A</td><td class="right">0.31413</td><td class="right">0.489142101465</td><td class="right">0.64</td></tr>
+<tr><td class="left">H  1</td><td class="left">4861A</td><td class="right">100</td><td class="right">100.0</td><td class="right">1.00</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4881A</td><td class="right">0.560984</td><td class="right">0.811547647614</td><td class="right">0.69</td></tr>
+<tr><td class="left">O  3</td><td class="left">4959A</td><td class="right">109.591</td><td class="right">72.7482506915</td><td class="right">1.51</td></tr>
+<tr><td class="left">FE 3</td><td class="left">4988A</td><td class="right">0.0963204</td><td class="right">0.139341266403</td><td class="right">0.69</td></tr>
+<tr><td class="left">O  3</td><td class="left">5007A</td><td class="right">329.875</td><td class="right">218.974735354</td><td class="right">1.51</td></tr>
+<tr><td class="left">TOTR</td><td class="left">5199A</td><td class="right">4.21996e-05</td><td class="right">5.68272919719e-05</td><td class="right">0.74</td></tr>
+<tr><td class="left">FE 3</td><td class="left">5271A</td><td class="right">1.05517</td><td class="right">1.63603284432</td><td class="right">0.64</td></tr>
+<tr><td class="left">N  2</td><td class="left">5755A</td><td class="right">4.64493</td><td class="right">8.37378041706</td><td class="right">0.55</td></tr>
+<tr><td class="left">HE 1</td><td class="left">5876A</td><td class="right">14.3011</td><td class="right">14.2056398326</td><td class="right">1.01</td></tr>
+<tr><td class="left">O  1</td><td class="left">6300A</td><td class="right">3.69911</td><td class="right">7.4733468355</td><td class="right">0.49</td></tr>
+<tr><td class="left">S  3</td><td class="left">6312A</td><td class="right">3.46033</td><td class="right">4.55072902872</td><td class="right">0.76</td></tr>
+<tr><td class="left">H  1</td><td class="left">6563A</td><td class="right">280.998</td><td class="right">281.546881447</td><td class="right">1.00</td></tr>
+<tr><td class="left">N  2</td><td class="left">6584A</td><td class="right">30.2994</td><td class="right">48.9856825497</td><td class="right">0.62</td></tr>
+<tr><td class="left">HE 1</td><td class="left">6678A</td><td class="right">3.7857</td><td class="right">3.72565915025</td><td class="right">1.02</td></tr>
+<tr><td class="left">S II</td><td class="left">6716A</td><td class="right">0.304885</td><td class="right">0.476077678717</td><td class="right">0.64</td></tr>
+<tr><td class="left">S II</td><td class="left">6731A</td><td class="right">0.692943</td><td class="right">1.09129965062</td><td class="right">0.63</td></tr>
+<tr><td class="left">AR 3</td><td class="left">7135A</td><td class="right">23.2348</td><td class="right">25.6031242347</td><td class="right">0.91</td></tr>
+<tr><td class="left">NE 2</td><td class="left">1281m</td><td class="right">21.8344</td><td class="right">26.6950708217</td><td class="right">0.82</td></tr>
+<tr><td class="left">NE 3</td><td class="left">1555m</td><td class="right">17.1869</td><td class="right">6.24680533374</td><td class="right">2.75</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="right"></td><td class="right"></td><td class="right">0/0</td></tr>
+</tbody>
+</table>
+
+
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-3-1-5" class="outline-4">
+<h4 id="sec-3-1-5"><span class="section-number-4">3.1.5</span> Abundances</h4>
+<div class="outline-text-4" id="text-3-1-5">
 
 
 <dl>
@@ -333,21 +653,21 @@
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption></caption>
-<colgroup><col class="left" /><col class="right" /><col class="right" /><col class="right" /><col class="right" />
+<colgroup><col class="left" /><col class="right" /><col class="right" /><col class="right" /><col class="right" /><col class="right" /><col class="right" />
 </colgroup>
 <thead>
-<tr><th scope="col" class="left">Element</th><th scope="col" class="right">Cloudy Orion</th><th scope="col" class="right">Esteban Orion</th><th scope="col" class="right">Tsamis LV2</th><th scope="col" class="right">Est/Cloudy</th></tr>
+<tr><th scope="col" class="left">Element</th><th scope="col" class="right">Cloudy M42</th><th scope="col" class="right">Esteban M42</th><th scope="col" class="right">Tsamis LV2</th><th scope="col" class="right">Est/Clou</th><th scope="col" class="right">Tsam/Est</th><th scope="col" class="right">Tsam/Clou</th></tr>
 </thead>
 <tbody>
-<tr><td class="left">He</td><td class="right">10.98</td><td class="right">10.988</td><td class="right">11.017</td><td class="right">1.02</td></tr>
-<tr><td class="left">C</td><td class="right">8.48</td><td class="right">8.42</td><td class="right">8.82</td><td class="right">0.87</td></tr>
-<tr><td class="left">N</td><td class="right">7.85</td><td class="right">7.73</td><td class="right">7.86</td><td class="right">0.76</td></tr>
-<tr><td class="left">O</td><td class="right">8.6</td><td class="right">8.65</td><td class="right">8.995</td><td class="right">1.12</td></tr>
-<tr><td class="left">Ne</td><td class="right">7.78</td><td class="right">8.05</td><td class="right">8.28</td><td class="right">1.86</td></tr>
-<tr><td class="left">S</td><td class="right">7.0</td><td class="right">7.22</td><td class="right">6.83</td><td class="right">1.66</td></tr>
-<tr><td class="left">Cl</td><td class="right">5.0</td><td class="right">5.46</td><td class="right">5.36</td><td class="right">2.88</td></tr>
-<tr><td class="left">Ar</td><td class="right">6.48</td><td class="right">6.62</td><td class="right">6.59</td><td class="right">1.38</td></tr>
-<tr><td class="left">Fe</td><td class="right">6.47</td><td class="right">5.99</td><td class="right">4.96</td><td class="right">0.33</td></tr>
+<tr><td class="left">He</td><td class="right">10.98</td><td class="right">10.988</td><td class="right">11.017</td><td class="right">1.02</td><td class="right">1.07</td><td class="right">1.09</td></tr>
+<tr><td class="left">C</td><td class="right">8.48</td><td class="right">8.42</td><td class="right">8.82</td><td class="right">0.87</td><td class="right">2.51</td><td class="right">2.19</td></tr>
+<tr><td class="left">N</td><td class="right">7.85</td><td class="right">7.73</td><td class="right">7.86</td><td class="right">0.76</td><td class="right">1.35</td><td class="right">1.02</td></tr>
+<tr><td class="left">O</td><td class="right">8.6</td><td class="right">8.65</td><td class="right">8.995</td><td class="right">1.12</td><td class="right">2.21</td><td class="right">2.48</td></tr>
+<tr><td class="left">Ne</td><td class="right">7.78</td><td class="right">8.05</td><td class="right">8.28</td><td class="right">1.86</td><td class="right">1.70</td><td class="right">3.16</td></tr>
+<tr><td class="left">S</td><td class="right">7.0</td><td class="right">7.22</td><td class="right">6.83</td><td class="right">1.66</td><td class="right">0.41</td><td class="right">0.68</td></tr>
+<tr><td class="left">Cl</td><td class="right">5.0</td><td class="right">5.46</td><td class="right">5.36</td><td class="right">2.88</td><td class="right">0.79</td><td class="right">2.29</td></tr>
+<tr><td class="left">Ar</td><td class="right">6.48</td><td class="right">6.62</td><td class="right">6.59</td><td class="right">1.38</td><td class="right">0.93</td><td class="right">1.29</td></tr>
+<tr><td class="left">Fe</td><td class="right">6.47</td><td class="right">5.99</td><td class="right">4.96</td><td class="right">0.33</td><td class="right">0.09</td><td class="right">0.03</td></tr>
 </tbody>
 </table>
 
@@ -357,9 +677,9 @@
 
 </div>
 
-<div id="outline-container-3-1-4" class="outline-4">
-<h4 id="sec-3-1-4"><span class="section-number-4">3.1.4</span> Sample region</h4>
-<div class="outline-text-4" id="text-3-1-4">
+<div id="outline-container-3-1-6" class="outline-4">
+<h4 id="sec-3-1-6"><span class="section-number-4">3.1.6</span> Sample region</h4>
+<div class="outline-text-4" id="text-3-1-6">
 
 
 <ul>
@@ -373,7 +693,7 @@
 
 
 <ul>
-<li id="sec-3-1-4-1"><span class="todo TODO"> TODO</span> Add aperture effects to model_profile.py<br/>
+<li id="sec-3-1-6-1"><span class="todo TODO"> TODO</span> Add aperture effects to model_profile.py<br/>
 </li>
 </ul>
 </div>
