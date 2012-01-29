@@ -1,0 +1,50 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{{Baldwin} {et~al}\mbox{.}(1991){Baldwin}, {Ferland}, {Martin},
+  {Corbin}, {Cota}, {Peterson}, \& {Slettebak}}]{1991ApJ...374..580B}
+{Baldwin} J.~A., {Ferland} G.~J., {Martin} P.~G., {Corbin} M.~R., {Cota} S.~A.,
+  {Peterson} B.~M., {Slettebak} A., 1991, \apj, 374, 580
+
+\bibitem[{{Esteban} {et~al}\mbox{.}(2004){Esteban}, {Peimbert},
+  {Garc{\'{\i}}a-Rojas}, {Ruiz}, {Peimbert}, \&
+  {Rodr{\'{\i}}guez}}]{2004MNRAS.355..229E}
+{Esteban} C., {Peimbert} M., {Garc{\'{\i}}a-Rojas} J., {Ruiz} M.~T., {Peimbert}
+  A., {Rodr{\'{\i}}guez} M., 2004, \mnras, 355, 229
+
+\bibitem[{{Ferland} {et~al}\mbox{.}(1998){Ferland}, {Korista}, {Verner},
+  {Ferguson}, {Kingdon}, \& {Verner}}]{1998PASP..110..761F}
+{Ferland} G.~J., {Korista} K.~T., {Verner} D.~A., {Ferguson} J.~W., {Kingdon}
+  J.~B., {Verner} E.~M., 1998, \pasp, 110, 761
+
+\bibitem[{{Graham} {et~al}\mbox{.}(2002){Graham}, {Meaburn}, {Garrington},
+  {O'Brien}, {Henney}, \& {O'Dell}}]{2002ApJ...570..222G}
+{Graham} M.~F., {Meaburn} J., {Garrington} S.~T., {O'Brien} T.~J., {Henney}
+  W.~J., {O'Dell} C.~R., 2002, \apj, 570, 222
+
+\bibitem[{{Henney} \& {Arthur}(1998)}]{1998AJ....116..322H}
+{Henney} W.~J., {Arthur} S.~J., 1998, \aj, 116, 322
+
+\bibitem[{{Henney} {et~al}\mbox{.}(2005){Henney}, {Arthur}, {Williams}, \&
+  {Ferland}}]{2005ApJ...621..328H}
+{Henney} W.~J., {Arthur} S.~J., {Williams} R.~J.~R., {Ferland} G.~J., 2005,
+  \apj, 621, 328
+
+\bibitem[{{Henney} \& {O'Dell}(1999)}]{1999AJ....118.2350H}
+{Henney} W.~J., {O'Dell} C.~R., 1999, \aj, 118, 2350
+
+\bibitem[{{Henney} {et~al}\mbox{.}(2002){Henney}, {O'Dell}, {Meaburn},
+  {Garrington}, \& {L{\'o}pez}}]{2002ApJ...566..315H}
+{Henney} W.~J., {O'Dell} C.~R., {Meaburn} J., {Garrington} S.~T., {L{\'o}pez}
+  J.~A., 2002, \apj, 566, 315
+
+\bibitem[{{Johnstone} {et~al}\mbox{.}(1998){Johnstone}, {Hollenbach}, \&
+  {Bally}}]{1998ApJ...499..758J}
+{Johnstone} D., {Hollenbach} D., {Bally} J., 1998, \apj, 499, 758
+
+\bibitem[{{Sim{\'o}n-D{\'{\i}}az} {et~al}\mbox{.}(2006){Sim{\'o}n-D{\'{\i}}az},
+  {Herrero}, {Esteban}, \& {Najarro}}]{2006AandA...448..351S}
+{Sim{\'o}n-D{\'{\i}}az} S., {Herrero} A., {Esteban} C., {Najarro} F., 2006,
+  \aap, 448, 351
+
+\end{thebibliography}

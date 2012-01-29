@@ -122,12 +122,9 @@ def setup_and_run_cloudy_model(cmdargs, extras, monitor):
     print "Calculating " + os.path.join(extras.datapath, filename)
     m = Model(filename, dryrun=False, indir=extras.datapath, outdir=extras.datapath, 
               verbose=True, cloudy_cmd=cloudy_cmd)
-    if cmdargs.fastcloudy:
-        dust = "FastOrion"
-    else:
-        dust = "Orion"
     m.write(physical.proplyd(cmdargs.r0, extras.hden, Rmax=cmdargs.Rmax, 
-                             W=cmdargs.W, x0=extras.x0, dust=dust))
+                             W=cmdargs.W, x0=extras.x0, 
+                             composition=cmdargs.composition))
     m.write(misc.optimize())
     m.write(misc.stopping())
     if cmdargs.fastcloudy:
@@ -298,6 +295,8 @@ if __name__ == '__main__':
                         help="Log10 of stellar EUV flux")
     parser.add_argument("--atmosphere", type=str, default="WM", choices=["WM", "BB", "TL"],
                         help="Type of stellar atmosphere model")
+    parser.add_argument("--composition", type=str, default="Orion", choices=["Orion", "FastOrion", "Esteban", "Tsamis"],
+                        help="Gas-phase abundance set to use")
     parser.add_argument("--Tstar", type=float, default=3.7e4,
                         help="Stellar effective temperature in K")
     parser.add_argument("--multiprocess", "-m", type=bool, default=False,
@@ -318,9 +317,26 @@ if __name__ == '__main__':
         raise NotImplementedError # Delete this when it is implemented properly
         pool = multiprocessing.Pool() # by default makes one process per core
 
+
+    if cmdargs.fastcloudy:
+        if cmdargs.composition != "FastOrion":
+            warnings.warn("Overwriting abundance set with FastOrion")
+            cmdargs.composition = "FastOrion"
+
+    if cmdargs.composition == "Tsamis":
+        Zstring = "-ZT"
+    elif cmdargs.composition == "Esteban":
+        Zstring = "-ZE"
+    elif cmdargs.composition == "FastOrion":
+        Zstring = "-ZF"
+    else:
+        Zstring = ""
+
     # ID for this proplyd model
-    modelid = "%s%.6i-phi%.2f-r%.2f" % (cmdargs.atmosphere, cmdargs.Tstar, 
-                                        cmdargs.logPhiH, np.log10(cmdargs.r0))
+    modelid = "%s%.6i-phi%.2f-r%.2f%s" % (cmdargs.atmosphere, cmdargs.Tstar, 
+                                          cmdargs.logPhiH, np.log10(cmdargs.r0),
+                                          Zstring
+                                          )
     # the ID may have to be refined by adding more parameters later
 
     thetas = np.linspace(0.0, 90.0, cmdargs.ntheta)

@@ -5,13 +5,13 @@ Claudia is a lightweight python library for parsing the output from the Cloudy p
 
 #+srcname: usage-example
 #+begin_src python
-  import claudia
-  m = claudia.CloudyModel("mymodel")
-  
-  import pylab
-  plot(m.ovr.depth, m.ovr.eden)
-  xlabel("Depth, cm")
-  ylabel("log10 (Electron Density, pcc)")
+import claudia
+m = claudia.CloudyModel("mymodel")
+
+import pylab
+plot(m.ovr.depth, m.ovr.eden)
+xlabel("Depth, cm")
+ylabel("log10 (Electron Density, pcc)")
 #+end_src
 
 * The source code for =claudia.py=
@@ -31,10 +31,10 @@ Claudia is a lightweight python library for parsing the output from the Cloudy p
 
 #+srcname: claudia-imports
 #+begin_src python
-  import numpy
-  import argparse
-  import string
-  import os
+import numpy
+import argparse
+import string
+import os
 #+end_src
 
 ** Utility classes
@@ -52,64 +52,64 @@ Claudia is a lightweight python library for parsing the output from the Cloudy p
 
 #+srcname: claudia-smartdict
 #+begin_src python
-  class SmartDict(dict):
-      """
-      Combines the features of a class and a dict
-      """
-      def __getattr__(self, name):
-          try:
-              return self[name]
-          except KeyError as e:
-              raise AttributeError(e)
-      def __setattr__(self, name, value):
-          self[name] = value
-  
-  class WJHSmartDict(dict):
-      """
-      Combines the features of a class and a dict in a different way
-  
-      This has the advantage that tab completion works on attributes. 
-      Are there any disadvantages?
-  
-      The attributes and the dict keys are views on the same data:
-  
-      >>> d = WJHSmartDict(x=1, y=2)
-      >>> d.x
-      1
-      >>> d['x']
-      1
-      >>> d.y is d['y']
-      True
-      >>> d.update(dict(aa=[100, 200], bb=500))
-      >>> d.aa[1] += 10
-      >>> d['aa']
-      [100, 210]
-  
-      """
-      def __init__(self, **kwdargs):
-          for k in kwdargs:
-              setattr(self, k, kwdargs[k])
-  
-      def __setattr__(self, name, value):
-          dict.__setitem__(self, name, value)
-          self.__dict__[name] = value
-  
-      def __delattr__(self, name):
-          self.__dict__.pop(name)
-          self.pop(name)
-  
-      __setitem__ = __setattr__
-  
-      def update(self, E):
-          """
-          Supplement dict update by also updating self.__dict__
-  
-          This doesn't work for **kwdargs though.
-          """
-          dict.update(self.__dict__, E)
-          dict.update(self, E)
-  
-  
+class SmartDict(dict):
+    """
+    Combines the features of a class and a dict
+    """
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError as e:
+            raise AttributeError(e)
+    def __setattr__(self, name, value):
+        self[name] = value
+
+class WJHSmartDict(dict):
+    """
+    Combines the features of a class and a dict in a different way
+
+    This has the advantage that tab completion works on attributes. 
+    Are there any disadvantages?
+
+    The attributes and the dict keys are views on the same data:
+
+    >>> d = WJHSmartDict(x=1, y=2)
+    >>> d.x
+    1
+    >>> d['x']
+    1
+    >>> d.y is d['y']
+    True
+    >>> d.update(dict(aa=[100, 200], bb=500))
+    >>> d.aa[1] += 10
+    >>> d['aa']
+    [100, 210]
+
+    """
+    def __init__(self, **kwdargs):
+        for k in kwdargs:
+            setattr(self, k, kwdargs[k])
+
+    def __setattr__(self, name, value):
+        dict.__setitem__(self, name, value)
+        self.__dict__[name] = value
+
+    def __delattr__(self, name):
+        self.__dict__.pop(name)
+        self.pop(name)
+
+    __setitem__ = __setattr__
+
+    def update(self, E):
+        """
+        Supplement dict update by also updating self.__dict__
+
+        This doesn't work for **kwdargs though.
+        """
+        dict.update(self.__dict__, E)
+        dict.update(self, E)
+
+
 #+end_src
 
 **** Original description by Sunjay Varma from Python Recipes
@@ -145,48 +145,55 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
 
 #+srcname: claudia-model-class
 #+begin_src python
-  SAVETYPES_TWO_LINE_HEADER = [
-      # "line emissivity",
-      ] 
-  
-  class CloudyModel(object):
-      """
-      A single Cloudy model
-  
-      >>> from claudia import CloudyModel
-      >>> modelname = 'sample01'
-      >>> CloudyModel.indir = '../testdata'
-      >>> CloudyModel.outdir = '../testdata'
-      >>> m = CloudyModel(modelname)
-      """
-      indir, outdir = ".", "."
-      insuff, outsuff = ".in", ".out"
-      # list of save types to skip (problematic to read with genfromtxt)
-      skipsaves = ["grains physical", "transmitted continuum", "heating", "cooling"]
-  
-  
-      def __init__(self, modelname, **kwargs):
-          # Any optional keywords get set as attributes
-          # We do this first in case indir or insuff are set
-          self.__dict__.update(kwargs)
-  
-          # "metadata" for each file implemented as a SmartDict of SmartDicts
-          self.metadata = WJHSmartDict()
-  
-          # Read in the input script
-          self.infilepath = os.path.join(self.indir, modelname + self.insuff)
-          with open(self.infilepath) as f:
-              self._inscript = f.read() 
-  
-          # Now read in from all the save files
-          for savetype, savesuff in find_save_commands(self._inscript):
-              savefilepath = os.path.join(self.outdir, modelname + savesuff)
-              saveid = savesuff[1:]       # strip the leading dot to make the attribute name
-              if not savetype in self.skipsaves:
-                  skip = 0 if not savetype in SAVETYPES_TWO_LINE_HEADER else 1
-                  setattr(self, saveid, recarray_from_savefile(savefilepath, skip))
-                  self.metadata[saveid] = WJHSmartDict(savetype=savetype, savefilepath=savefilepath)
-  
+SAVETYPES_TWO_LINE_HEADER = [
+    # "line emissivity",
+    ] 
+
+class CloudyModel(object):
+    """
+    A single Cloudy model
+
+    >>> from claudia import CloudyModel
+    >>> modelname = 'sample01'
+    >>> CloudyModel.indir = '../testdata'
+    >>> CloudyModel.outdir = '../testdata'
+    >>> m = CloudyModel(modelname)
+    """
+    indir, outdir = ".", "."
+    insuff, outsuff = ".in", ".out"
+    # list of save types to skip (problematic to read with genfromtxt)
+    skipsaves = ["grains physical", "transmitted continuum", "heating", "cooling"]
+
+
+    def __init__(self, modelname, **kwargs):
+        # Any optional keywords get set as attributes
+        # We do this first in case indir or insuff are set
+        self.__dict__.update(kwargs)
+
+        # "metadata" for each file implemented as a SmartDict of SmartDicts
+        self.metadata = WJHSmartDict()
+
+        # Read in the input script
+        self.infilepath = os.path.join(self.indir, modelname + self.insuff)
+        with open(self.infilepath) as f:
+            self._inscript = f.read() 
+
+        # Now read in from all the save files
+        for savetype, savesuff in find_save_commands(self._inscript):
+            if savesuff.startswith(modelname):
+                savefile = savesuff # deal with case where outfile is written in full
+            else:
+                savefile = modelname + savesuff
+            savefilepath = os.path.join(self.outdir, savefile)
+            saveid = savesuff[1:]       # strip the leading dot to make the attribute name
+            if not savetype in self.skipsaves:
+                skip = 0 if not savetype in SAVETYPES_TWO_LINE_HEADER else 1
+                try:
+                    setattr(self, saveid, recarray_from_savefile(savefilepath, skip))
+                except IOError:
+                    print "Failed to read from %s" % (savefilepath)
+                self.metadata[saveid] = WJHSmartDict(savetype=savetype, savefilepath=savefilepath)
+
   
   
 #+end_src
@@ -210,10 +217,10 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
 
 #+srcname: claudia-parse-save-file
 #+begin_src python
-  def recarray_from_savefile(filepath, skip=0):
-      return numpy.genfromtxt(filepath, delimiter='\t', skip_header=skip,
-                              invalid_raise=False, names=True).view(numpy.recarray)
-  
+def recarray_from_savefile(filepath, skip=0):
+    return numpy.genfromtxt(filepath, delimiter='\t', skip_header=skip,
+                            invalid_raise=False, names=True).view(numpy.recarray)
+
 #+end_src
 
 
@@ -228,45 +235,45 @@ Note to Python 2.4 Users: You will need to change the =except KeyError as e:= li
 
 #+srcname: claudia-types-of-cloudy-save-files
 #+begin_src python
-  SAVETYPES = [
-      "diffuse continuum", 
-      "emitted continuum", 
-      "fine continuum", 
-      "grain continuum", 
-      "incident continuum", 
-      "interactive continuum", 
-      "ionizing continuum", 
-      "outward continuum", 
-      "raw continuum", 
-      "reflected continuum", 
-      "transmitted continuum", 
-      "two photon continuum", 
-      "continuum", 
-      "cooling",
-      "dr",
-      "dynamics",
-      "element hydrogen",
-      "element helium",
-      "element carbon",
-      "element nitrogen",
-      "element oxygen",
-      "element sulfur",
-      "element silicon",
-      "element iron",
-      "grain charge",
-      "grain drift velocity",
-      "grain temperature",
-      "heating",
-      "line emissivity",
-      "line list", 
-      "overview",
-      "PDR",
-      "physical conditions",
-      "pressure",
-      "radius",
-      "source function, spectrum",
-      "source function, depth",
-      ]
+SAVETYPES = [
+    "diffuse continuum", 
+    "emitted continuum", 
+    "fine continuum", 
+    "grain continuum", 
+    "incident continuum", 
+    "interactive continuum", 
+    "ionizing continuum", 
+    "outward continuum", 
+    "raw continuum", 
+    "reflected continuum", 
+    "transmitted continuum", 
+    "two photon continuum", 
+    "continuum", 
+    "cooling",
+    "dr",
+    "dynamics",
+    "element hydrogen",
+    "element helium",
+    "element carbon",
+    "element nitrogen",
+    "element oxygen",
+    "element sulfur",
+    "element silicon",
+    "element iron",
+    "grain charge",
+    "grain drift velocity",
+    "grain temperature",
+    "heating",
+    "line emissivity",
+    "line list", 
+    "overview",
+    "PDR",
+    "physical conditions",
+    "pressure",
+    "radius",
+    "source function, spectrum",
+    "source function, depth",
+    ]
 #+end_src
 
 *** TODO Find basic info about the run
@@ -277,8 +284,8 @@ We should at least read the =title= and =save prefix= lines (currently we assume
 
 #+srcname: claudia-input-parse-basic-info
 #+begin_src python
-  pass
-  
+pass
+
 #+end_src
 
 
@@ -299,108 +306,110 @@ Instead of allowing any type of save file, we use a finite list =SAVETYPES= sinc
 
 #+srcname: claudia-get-list-of-save-files
 #+begin_src python
-  def find_save_commands(s):
-      """
-      Find all save commands in a Cloudy input file and return a list of [type, file] pairs
-  
-      >>> find_save_commands('save heating last ".heat"\\nsave cooling last ".cool"')
-      [('heating', '.heat'), ('cooling', '.cool')]
-      """
-      save_commands = [] 
-      for line in s.split("\n"):
-          found = find_single_save_command(line)
-          if found: save_commands.append(found)
-      return save_commands or None
-      
-  
-  def find_single_save_command(line):
-      """
-      Parse single line of a Cloudy input file, looking for a save command
-  
-      It should work both with C08-style (punch) and C10-style (save) commands:
-  
-      >>> find_single_save_command('save overview last ".ovr"')
-      ('overview', '.ovr')
-      >>> find_single_save_command('PUNCH LAST OVERVIEW ".ovr"')
-      ('overview', '.ovr')
-      >>> find_single_save_command('save over no buffering, last, file=".ovr"')
-      ('overview', '.ovr')
-      >>> find_single_save_command('save madeupname file=".xyz"')
-      (None, '.xyz')
-      >>> find_single_save_command('this is not the right command')
-  
-      Note that the last command prints nothing since it returns None
-     
-      """
-      line = line.lower()
-      if line.startswith("save") or line.startswith("punch"):
-          assert '"' in line or "'" in line, "No filename given in save/punch command"
-          line = cut_out(line, "save")
-          line = cut_out(line, "punch")
-          if "last" in line:
-              line = cut_out(line, "last")
-          if '"' in line:
-              delim = '"'
-          elif "'" in line:
-              delim = "'"
-          firstpart, savefile = line.split(delim)[:2]
-          for savetype in SAVETYPES:
-              if look4stringinline(savetype, firstpart):
-                  return savetype, savefile
-          # failed to find anything
-          return None, savefile
-      else:
-          return None
-  
-  
+def find_save_commands(s):
+    """
+    Find all save commands in a Cloudy input file and return a list of [type, file] pairs
+
+    >>> find_save_commands('save heating last ".heat"\\nsave cooling last ".cool"')
+    [('heating', '.heat'), ('cooling', '.cool')]
+    """
+    save_commands = [] 
+    for line in s.split("\n"):
+        found = find_single_save_command(line)
+        if found: save_commands.append(found)
+    return save_commands or None
+    
+
+def find_single_save_command(line):
+    """
+    Parse single line of a Cloudy input file, looking for a save command
+
+    It should work both with C08-style (punch) and C10-style (save) commands:
+
+    >>> find_single_save_command('save overview last ".ovr"')
+    ('overview', '.ovr')
+    >>> find_single_save_command('PUNCH LAST OVERVIEW ".ovr"')
+    ('overview', '.ovr')
+    >>> find_single_save_command('save over no buffering, last, file=".ovr"')
+    ('overview', '.ovr')
+    >>> find_single_save_command('save madeupname file=".xyz"')
+    (None, '.xyz')
+    >>> find_single_save_command('this is not the right command')
+
+    Note that the last command prints nothing since it returns None
+   
+    """
+    line = line.lower()
+    if line.startswith("save") or line.startswith("punch"):
+        assert '"' in line or "'" in line, "No filename given in save/punch command"
+        line = cut_out(line, "save")
+        line = cut_out(line, "punch")
+        if "last" in line:
+            line = cut_out(line, "last")
+        if '"' in line:
+            delim = '"'
+        elif "'" in line:
+            delim = "'"
+        firstpart, savefile = line.split(delim)[:2]
+        if not savefile.startswith("."):
+            savefile = "." + savefile.split(".")[1]
+        for savetype in SAVETYPES:
+            if look4stringinline(savetype, firstpart):
+                return savetype, savefile
+        # failed to find anything
+        return None, savefile
+    else:
+        return None
+
+
 #+end_src
 
 *** Utility functions for input parsing 
 #+srcname: claudia-input-parse-utilities
 #+begin_src python
-  def cut_out(s, phrase):
-      """
-      Returns the input string <s> but with all occurrences of <phrase> deleted
-  
-      <phrase> should be one or more words, separated by whitespace. Effort is made
-      to preserve one space between words, which makes it better than s.replace(phrase, '')
-  
-      >>> s = 'the quick brown fox, which is the brownest ever, jumped over the lazy dog'
-      >>> cut_out(s, 'the')
-      'quick brown fox, which is brownest ever, jumped over lazy dog'
-      >>> s.replace('the', '')
-      ' quick brown fox, which is  brownest ever, jumped over  lazy dog'
-  
-      Note the extra spaces in the s.replace version
-      """
-      return ' '.join(map(string.strip, s.split(phrase))).strip()
-  
-  def look4stringinline(string, line):
-      """
-      Look for string in line, only comparing the first 4 characters of each word
-  
-      This is because cloudy does the same.
-  
-      Case should not matter: 
-      >>> look4stringinline('punch pressure', 'PUNC FINAL PRES')
-      True
-  
-      And it is OK to have strings with less than 4 characters:
-      >>> look4stringinline('PDR', 'save pdr')
-      True
-  
-      And here is an example that should fail:
-      >>> look4stringinline('save whatever', 'save foobar')
-      False
-  
-      """
-      words = string.split()
-      for word in words:
-          if len(word) > 4: word = word[:4] 
-          if not word.upper() in line.upper():
-              return False
-      return True
-  
+def cut_out(s, phrase):
+    """
+    Returns the input string <s> but with all occurrences of <phrase> deleted
+
+    <phrase> should be one or more words, separated by whitespace. Effort is made
+    to preserve one space between words, which makes it better than s.replace(phrase, '')
+
+    >>> s = 'the quick brown fox, which is the brownest ever, jumped over the lazy dog'
+    >>> cut_out(s, 'the')
+    'quick brown fox, which is brownest ever, jumped over lazy dog'
+    >>> s.replace('the', '')
+    ' quick brown fox, which is  brownest ever, jumped over  lazy dog'
+
+    Note the extra spaces in the s.replace version
+    """
+    return ' '.join(map(string.strip, s.split(phrase))).strip()
+
+def look4stringinline(string, line):
+    """
+    Look for string in line, only comparing the first 4 characters of each word
+
+    This is because cloudy does the same.
+
+    Case should not matter: 
+    >>> look4stringinline('punch pressure', 'PUNC FINAL PRES')
+    True
+
+    And it is OK to have strings with less than 4 characters:
+    >>> look4stringinline('PDR', 'save pdr')
+    True
+
+    And here is an example that should fail:
+    >>> look4stringinline('save whatever', 'save foobar')
+    False
+
+    """
+    words = string.split()
+    for word in words:
+        if len(word) > 4: word = word[:4] 
+        if not word.upper() in line.upper():
+            return False
+    return True
+
 #+end_src
 
 ** Mindlessly loading all the data from all the output files
@@ -473,26 +482,26 @@ Put some test data in a top-level directory =testdata=
 
 #+srcname: unittest-claudia
 #+begin_src python
-  import unittest
-  from claudia import CloudyModel
-  
-  class ClaudiaTestSample01(unittest.TestCase):
-      def setUp(self):
-          "set up test fixtures"
-          self.model = CloudyModel('sample01', 
-                                   indir='../testdata', 
-                                   outdir='../testdata',
-                                   skipsaves=[])
-  
-      # def teardown_func():
-      #     "tear down test fixtures"
-  
-      def test_doomed_to_fail(self):
-          self.assertEquals(1, 2)
-  
-      def test_infilepath(self):
-          self.assertEquals(self.model.infilepath, '../testdata/sample01.in')
-  
+import unittest
+from claudia import CloudyModel
+
+class ClaudiaTestSample01(unittest.TestCase):
+    def setUp(self):
+        "set up test fixtures"
+        self.model = CloudyModel('sample01', 
+                                 indir='../testdata', 
+                                 outdir='../testdata',
+                                 skipsaves=[])
+
+    # def teardown_func():
+    #     "tear down test fixtures"
+
+    def test_doomed_to_fail(self):
+        self.assertEquals(1, 2)
+
+    def test_infilepath(self):
+        self.assertEquals(self.model.infilepath, '../testdata/sample01.in')
+
 #+end_src
 
 *** Run all the unit tests
@@ -502,10 +511,10 @@ Put some test data in a top-level directory =testdata=
     :END:
 #+srcname: run-claudia-unitttests
 #+begin_src sh :tangle no :results output
-  echo "Running unit tests in $(pwd)"
-  python -m unittest discover -v 2>&1 
-  echo
-  echo "Tests last ran $(date)"
+echo "Running unit tests in $(pwd)"
+python -m unittest discover -v 2>&1 
+echo
+echo "Tests last ran $(date)"
 #+end_src
 
 #+results: run-claudia-unitttests
@@ -556,11 +565,11 @@ Doctest gets mixed reviews. It is the simplest of all to use and seems to be fin
 
 #+srcname: claudia-doctests
 #+begin_src python :tangle no :results output
-  import doctest
-  import claudia
-  from datetime import datetime
-  doctest.testmod(claudia)
-  print 'Tests last ran ', datetime.now()
+import doctest
+import claudia
+from datetime import datetime
+doctest.testmod(claudia)
+print 'Tests last ran ', datetime.now()
 #+end_src
 
 #+results: claudia-doctests
@@ -605,14 +614,14 @@ No it can't - which is obvious really.
 
 #+srcname: def-before-use
 #+begin_src python :results output
-  
-   
-  class A(object):
-      def __init__(self):
-          print "Initialized"
-  
-  a = A()
-  
+
+ 
+class A(object):
+    def __init__(self):
+	print "Initialized"
+
+a = A()
+
 #+end_src
 
 #+results: def-before-use
@@ -620,13 +629,13 @@ No it can't - which is obvious really.
 
 #+srcname: use-before-def
 #+begin_src python :results output
-  a = A()
-   
-  class A(object):
-      def __init__(self):
-          print "Initialized"
-  
-  
+a = A()
+ 
+class A(object):
+    def __init__(self):
+	print "Initialized"
+
+
 #+end_src
 
 #+stderr: use-before-def
