@@ -71,8 +71,8 @@ for thetadir in thetadirs:
     print "Indir: ", claudia.CloudyModel.indir
     print "Modelname: ", modelname
     m = claudia.CloudyModel(modelname) 
-    Radius = m.ovr.depth #Lista de pasos en z de cada modelo de Cloudy
-    R = Rmax - Radius/r0            # array of dimensionless radius
+    Radius = Rmax*r0 - m.ovr.depth # physical radia from proplyd center
+    R = Radius/r0            # array of dimensionless radius
     i2 = len(R[R>=1.0])             # find index where R = 1
 
     # Find the list of emission lines if necesssary
@@ -174,8 +174,27 @@ mlab.rec2csv(datatable, savefile, delimiter="\t")
 hbeta = Fluxes["H__1__4861A"]
 print "H beta line flux: "
 print "Line fluxes relative to H beta = 100:"
-for emline, flux in Fluxes.items():
-    print emline, 100.0*flux/hbeta
+
+def sortkey(cloudy_line):
+    """
+    Key for sorting the lines by wavelength
+    """
+    cloudy_line = cloudy_line.replace('_', ' ')
+    wav_s = cloudy_line[4:]
+    unit = wav_s[-1]
+    wav = float(wav_s[:-1])
+    if unit == 'A':
+        wav *= 1.e-8
+    elif unit == 'm':
+        wav *= 1.e-4
+    else:
+        raise ValueError, "%s is neither A nor m" % (unit)
+    return wav
+
+for emline in sorted(emlines, key=sortkey):
+    flux = Fluxes[emline]
+    em = emline.replace('_', ' ')
+    print '|'.join(['', em[:-5], em[-5:], "%g" % (100.0*flux/hbeta), ''])
 
 
 
