@@ -11,9 +11,9 @@
   \setcounter{ionstage}{#2}%
   \Ion{#1}{\Roman{ionstage}}}
 
-% \usepgfplotslibrary{external}
-% \tikzset{external/force remake}
-% \tikzexternalize
+\usepgfplotslibrary{external}
+\tikzset{external/force remake}
+\tikzexternalize
 
 \pgfplotsset{
   compat=1.5.1, % most current version as of writing (27 Jan 2012)
@@ -188,7 +188,44 @@
 \end{description}
 \bigskip
 \RatioPlot{G}
+\newpage
 
+
+\section{Model H: Cooler star}
+\begin{description}
+\item[Spectrum] WMBasic, \SI{38000}{K}
+\item[Flux] \(\log_{10} \Phi = 13.50\)
+\item[Abundance set] Cloudy Orion
+\end{description}
+\bigskip
+\RatioPlot{H}
+\clearpage
+
+\section{Model I: Bespoke abundances and lower flux}
+\begin{description}
+\item[Spectrum] WMBasic, \SI{39000}{K}
+\item[Flux] \(\log_{10} \Phi = 13.20\)
+\item[Abundance set] Tweaked
+\end{description}
+\bigskip
+\RatioPlot{I}
+
+\begin{itemize}
+\item This is the best one!  Nearly everything is OK, except\dots
+\item \dots the nebular [\ion{O}{3}] lines are 20--30\% too strong (about \(3 \sigma\))
+\item \dots and [\ion{O}{1}] is too weak, but that does not matter, since there will be a contribution from OH dissociation in the neutral disk wind, which is not include in the model
+\end{itemize}
+
+\clearpage
+
+\section{Model J: Bespoke abundances (50\% Oxygen) and lower flux}
+\begin{description}
+\item[Spectrum] WMBasic, \SI{39000}{K}
+\item[Flux] \(\log_{10} \Phi = 13.20\)
+\item[Abundance set] Tweaked
+\end{description}
+\bigskip
+\RatioPlot{J}
 
 
 % The marker for [\ion{Ne}{3}] is \ref{marker:Ne3}
