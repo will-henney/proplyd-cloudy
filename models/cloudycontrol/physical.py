@@ -56,6 +56,23 @@ def abundances(variant="Orion"):
                              grains PAH
                              set PAH "H" // Only have PAH in the neutral gas
                              """)
+    elif variant == "Fiddle":
+        abun_string = dedent("""\
+                             * Fiddled abundances to try and improve fit
+                             abundances H II region no grains
+                             element scale factor helium 1.0
+                             element scale factor carbon 0.85
+                             element scale factor nitrogen 1.1
+                             element scale factor oxygen 0.8
+                             element scale factor neon 1.0
+                             element scale factor sulphur 1.1
+                             element scale factor chlorine 2.0
+                             element scale factor argon 0.7
+                             element scale factor iron 0.2
+                             grains Orion
+                             grains PAH
+                             set PAH "H" // Only have PAH in the neutral gas
+                             """)
     else:
         raise NotImplementedError
     return abun_string
