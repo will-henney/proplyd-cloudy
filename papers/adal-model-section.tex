@@ -55,8 +55,8 @@ Second, whereas published models used ad hoc fitting functions to the emissivity
     \(r_0 = \SI{1.91e15}{cm}\)
     \\
     Gas-phase abundances: & 
-    He 10.98, C 8.41, N 7.89, O 8.50, Ne 7.78,\\
-    & S 7.04, Cl 5.30, Ar 6.33, Fe 5.77
+    He 10.98, C 8.41, N 7.89, O 8.50, \\
+    & Ne 7.78, S 7.04, Ar 6.33, Fe 5.77
     % Orion Nebula  \citep{2004MNRAS.355..229E}
     \\
     Dust composition: & Standard Orion \citep{1991ApJ...374..580B}\\
@@ -75,8 +75,9 @@ Second, whereas published models used ad hoc fitting functions to the emissivity
 
 \begin{figure*}
   \centering
-  \includegraphics{ratios-figure-figure8}
-  \caption{Comparison of model and observed line intensities for 177-341}
+  \includegraphics{ratios-figure-figure10}
+  \caption{Comparison of model and observed line intensities for 177-341.  
+  }
   \label{fig:model}
 \end{figure*}
 
@@ -86,11 +87,30 @@ The input parameters for the model (values given in Table~\ref{tab:model:pars}) 
 For most of these parameters, we have taken values from the literature, whereas the gas-phase abundances and incident ionizing flux have been adjusted slightly in an attempt to reproduce the observed emission line intensities. 
 The stellar spectrum is that determined for the ionizing star \thC{} by spectroscopic analysis \citep{2006AandA...448..351S}. 
 The ionization front radius is the value determined by fitting to \textit{HST} emission line images \citep{1999AJ....118.2350H}, while the adopted ionizing flux at the proplyd position corresponds to a physical separation of the proplyd from the ionizing star of \SI{2.13e17}{cm} if there is no intervening absorption.
-Given the observed angular separation of \(25.84''\) \citep{1998AJ....116..293B}, and assuming a distance to the Orion Nebula of 440~pc (\citealp{2008AJ....136.1566O}, Appendix~A)
+Given the observed angular separation of \(25.84''\) \citep{1998AJ....116..293B}, and assuming a distance to the Orion Nebula of 440~pc (\citealp{2008AJ....136.1566O}, Appendix~A), the projected separation is \SI{1.70e17}{cm}, implying an inclination angle of \(\simeq 55^\circ\). 
+The diffuse radiation field and the proplyd tail are ignored in this model, since the observational aperture (\S~2.2) only covers the head of the proplyd. 
 
-    
+Figure~\ref{fig:model} shows that the model generally reproduces very well the observed relative line intensities for 177-341.  
 
-The diffuse radiation field and the proplyd tail are ignored in this model, since the observational aperture (\S~2.2) only covers the proplyd head. 
+{\bfseries\boldmath\color{red!50!black}
+\subsection*{STILL TODO}
+  \begin{itemize}
+  \item Replace figures with model with lower O abundance
+  \item Discuss failure to reproduce [\ion{O}{1}] -- possible dissociation component that is not include in model
+  \item Discuss marginal problem with [\ion{S}{3}] -- details of stellar atmosphere spectrum, WMBasic vs Tlusty
+  \item Discuss Figure~\ref{fig:model:nT} vs Figure~7a.  Fact that the intersection of the three curves in Figure~7 is not the correct solution (according to our model) since the three ions [\oiii], [\nii], and [\sii] come from different regions with different \(n\elec\), \(T\elec\). 
+  \item Discuss fact that model is only representative and abundance values are not necessarily reliable (especially where only one ion stage is observed)
+    \begin{itemize}
+    \item should take into account aperture more carefully
+    \item need to investigate effects of varying dust properties
+    \item internal extinction within the proplyd flow
+    \item need to constrain with additional existing observations (HST imaging; velocity profiles; mid-IR emission)
+    \end{itemize}
+  \end{itemize}
+}
+
+
+
 
 \bibliographystyle{mn2e}
 \bibliography{BibdeskLibrary}

@@ -1,4 +1,4 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{11}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 
 \bibitem[{{Baldwin} {et~al}\mbox{.}(1991){Baldwin}, {Ferland}, {Martin},
@@ -6,11 +6,10 @@
 {Baldwin} J.~A., {Ferland} G.~J., {Martin} P.~G., {Corbin} M.~R., {Cota} S.~A.,
   {Peterson} B.~M., {Slettebak} A., 1991, \apj, 374, 580
 
-\bibitem[{{Esteban} {et~al}\mbox{.}(2004){Esteban}, {Peimbert},
-  {Garc{\'{\i}}a-Rojas}, {Ruiz}, {Peimbert}, \&
-  {Rodr{\'{\i}}guez}}]{2004MNRAS.355..229E}
-{Esteban} C., {Peimbert} M., {Garc{\'{\i}}a-Rojas} J., {Ruiz} M.~T., {Peimbert}
-  A., {Rodr{\'{\i}}guez} M., 2004, \mnras, 355, 229
+\bibitem[{{Bally} {et~al}\mbox{.}(1998){Bally}, {Sutherland}, {Devine}, \&
+  {Johnstone}}]{1998AJ....116..293B}
+{Bally} J., {Sutherland} R.~S., {Devine} D., {Johnstone} D., 1998, \aj, 116,
+  293
 
 \bibitem[{{Ferland} {et~al}\mbox{.}(1998){Ferland}, {Korista}, {Verner},
   {Ferguson}, {Kingdon}, \& {Verner}}]{1998PASP..110..761F}
@@ -41,6 +40,9 @@
 \bibitem[{{Johnstone} {et~al}\mbox{.}(1998){Johnstone}, {Hollenbach}, \&
   {Bally}}]{1998ApJ...499..758J}
 {Johnstone} D., {Hollenbach} D., {Bally} J., 1998, \apj, 499, 758
+
+\bibitem[{{O'Dell} \& {Henney}(2008)}]{2008AJ....136.1566O}
+{O'Dell} C.~R., {Henney} W.~J., 2008, \aj, 136, 1566
 
 \bibitem[{{Sim{\'o}n-D{\'{\i}}az} {et~al}\mbox{.}(2006){Sim{\'o}n-D{\'{\i}}az},
   {Herrero}, {Esteban}, \& {Najarro}}]{2006AandA...448..351S}

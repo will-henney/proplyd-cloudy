@@ -98,7 +98,7 @@ def abundances(variant="Orion"):
                              element scale factor carbon 0.85
                              element scale factor nitrogen 1.0
                              element scale factor oxygen 0.5
-                             element scale factor neon 0.77
+                             element scale factor neon 0.6
                              element scale factor sulphur 0.95
                              element scale factor chlorine 2.0
                              element scale factor argon 0.6
