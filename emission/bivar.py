@@ -8,8 +8,9 @@ Creates images of two-dimensional joint probability density functions
 import numpy as N
 import scipy as S
 import scipy.stats as stats
-from PIL import Image
+from PIL import Image, ImageChops
 import pyx
+import sys
 
 printextra = 0
 
@@ -62,7 +63,12 @@ class Graph(pyx.graph.graphxy):
     figwidth = 10
     figheight = 10
 
-    def __init__(self, xvar, yvar, weights=[None, None, None], gamma=1.0, statslevel=1):
+    def __init__(self, xvar, yvar, weights=[None, None, None], 
+                 gamma=1.0, statslevel=1,
+                 composition_mode='RGB', # or 'felt tips' or 'oil paints'
+                 pen_colors=['red', 'green', 'blue'], # or, e.g., '#f37' 
+                 channel_order=[0,1,2],               # only important for 'oil paints'
+                 ):
 	"""
 	Create an individual pyx graph of one variable vs another
 
@@ -141,8 +147,33 @@ class Graph(pyx.graph.graphxy):
             # note that transpose does not work in-place!
             channels.append(im.transpose(Image.ROTATE_90))
 
-        ## Now combine the 3 RGB channels
-        rgbim = Image.merge('RGB', channels)
+        ## Now combine the 3 channels
+        if composition_mode == 'RGB':
+            # simple RGB composition
+            rgbim = Image.merge('RGB', channels)
+        elif composition_mode == 'felt tips':
+            # Translucent colors overlaid on a white background
+            # 
+            # First, the white background
+            rgbim = Image.new("RGB", channels[0].size, "white")
+            for chan, pen in zip(channels, pen_colors):
+                # for each channel, overlay the color image on the background
+                fg = Image.new("RGB", chan.size, pen)
+                bg = Image.new("RGB", chan.size, "white")
+                rgbim = ImageChops.multiply(rgbim, Image.composite(fg, bg, chan))
+        elif composition_mode == 'oil paints':
+            # Opaque colors overlaid on a white background
+            # 
+            # First, the white background
+            rgbim = Image.new("RGB", channels[0].size, "white")
+            for ichan in channel_order: # allow user-specified order for painting
+                chan = channels[ichan]
+                pen = pen_colors[ichan]
+                # for each channel, overlay the color image on the background
+                fg = Image.new("RGB", chan.size, pen)
+                rgbim = Image.composite(fg, rgbim, chan)
+        else:
+            sys.exit("Unknown composition_mode: %s" % (composition_mode))
 
 
 	# Now make a graph to return

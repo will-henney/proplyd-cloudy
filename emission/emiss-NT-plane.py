@@ -123,7 +123,13 @@ Te_var = bivar.PlotVariable(Te_arr)
 Te_var.setminmaxn(min=5000.0, max=12000.)
 Te_var.settitle(r'Gas temperature, \(T\), K', 'Te')
 
-g = bivar.Graph(Eden_var, Te_var, weights=weights, gamma=3.0, statslevel=1)
+g = bivar.Graph(Eden_var, Te_var, weights=weights, gamma=1.7, 
+                statslevel=1, composition_mode='felt tips', 
+                pen_colors = ['#f06', '#5f5', '#18f'],
+                channel_order = [2, 0, 1] # blue, red, green
+                # channel_order = [2, 1, 0] # blue, green, red
+                )
+
 
 
 g.writePDFfile('NT-plane-%s' % (cmd_args.lineset))
