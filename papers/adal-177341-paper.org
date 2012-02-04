@@ -66,6 +66,39 @@ Nota que aún dentro de la zona de emisión de cada ion, hay un rango de condici
 
 A ver cómo te parece esta explicación.  Voy a escribir una versión en inglés para la sección del artículo.
 
+** Distributions in the ne-Te plane
+
+*** Color mixing modes
+On-screen, these look best in RGB, but that doesn't always print out very well.  So for the Adal paper we have experimented with some pigment-mixing methods: 
+
++ felt tips :: This is simple mixing of inks.  Unfortunately, it tends to make the important bits look dark and muddy
++ oil paints :: This has the opacity proportional to the value, so the dark bits are more colorful.  But, the results depend on the order in which the three colors are applied.  With the SNO and SNOa sets, the best results are using the order red, blue, green since the [N II] emission (green) has the most compact distribution and the [S II] (red) the most extended one.  
+
+*** Best model 
++ WM039000-phi13.20-r15.28-ZZ03
+**** SNOa distribution 
+This is the auroral lines of [S II], [N II] and [O III].  It is the version that we are using in the Adal paper. 
+#+BEGIN_SRC sh
+python ../../../emission/emiss-NT-plane.py  \
+    --r0 1.91e15 --lineset SNOa --N 200 \
+    --gamma 3 --mode "oil paints" \
+    --bluepen blue --redpen red --greenpen "#5f5"
+#+END_SRC
+
+**** Sanitizing the PDF file
+     The LaTeX-produced PDF files do not show up well in Vector Designer.  But ghostscript can convert the fonts to outlines easily enough.  The trick is to stop it from lossily recompressing the images.  
+
+***** Best solution: epstopdf
+Although you are starting with a PDF file, you can still use epstopdf.  It complains about a missing bounding box, but that is harmless.  The important thing is to use the =--nocompress= option: 
+#+BEGIN_SRC sh
+epstopdf --nocompress --outfile=NT-plane-SNO-oil-paints-GS.pdf  NT-plane-SNO-oil-paints.pdf
+#+END_SRC
+
+This produces a pdf that is editable in vector graphics apps (e.g., Illustrator), but still has a reasonable looking 
+image. 
+
+Previously I had complicated solutions using =gs= command line arguments, but these are no longer necessary.  This is tested using version 2.16 of =epstopdf= in TeXLive 2011. 
+
 ** First model
 
 *** Parameters

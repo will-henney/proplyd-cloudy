@@ -65,17 +65,27 @@ Second, whereas published models used ad hoc fitting functions to the emissivity
   \label{tab:model:pars}
 \end{table}
 
-\begin{figure}
+\begin{figure*}
   \centering
-  \includegraphics{NT-plane-SNOa-oil-paints.pdf}
+  \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} ll}
+    (\textit{a}) & (\textit{b}) \\
+    \includegraphics[width=0.45\linewidth]{NT-plane-SNO-RGB} &
+    \includegraphics[width=0.465\linewidth]{Ne-Te-overlay}
+  \end{tabular*}
   \caption[]{Emission structure in the \(n\elec\)--\(T\elec\) plane for the example physical model of 177-341.  
-    The colored image show three emission lines: [\sii] \SI{4070}{\AA} (red), [\nii] \SI{5755}{\AA} (green), and [\oiii] \SI{4363}{\AA} (blue), with brightness proportional to the fraction of the model luminosity in each line that comes from gas with that particular combination of density and temperature.}
+    (\textit{a})~Positive-colored image of the three emission lines: [\sii] \SI{6731}{\AA} (red), [\nii] \SI{6584}{\AA} (green), and [\oiii] \SI{5007}{\AA} (blue), with brightness proportional to the fraction of the model luminosity in each line that comes from gas with that particular combination of density and temperature.  
+The variations in density and temperature within the model are principally a function of radius within the proplyd, with a secondary variation as a function of angle between the ``nose'' and the ``ears'' of the proplyd crescent due to the increasing obliqueness of the illumination angle.  
+The outer zones of the model are at low density and are highly ionized, emitting principally in [\oiii], as seen in the blue horizontal branch at \(\simeq \SI{9700}{K}\) in the upper left part of the figure.  
+As one approaches the proplyd ionization front (direction of increasing density), the [\nii] and then [\sii] emission become relatively stronger (color changes to yellow) and the temperature increases, reaching a maximum of \(\simeq \SI{11000}{K}\).  
+In the ionization front itself, the temperature drops while the electron density climbs to a peak of about \SI{3e5}{cm^{-3}} and then also falls.  At the same time, the [\sii] emission comes to dominate over [\nii], giving rise to the orange-red branch that curves down and to the left.  
+(\textit{b})~Negative-colored image of the same data as in \textit{a} overlayed with the observational diagnostic curves from Fig.~7\textit{a}.  The white star shows the solution for \(n\elec, T\elec\) obtained in \S~XX under the assumption that the emission in all three ions is co-extensive at a single density and temperature.  
+}
   \label{fig:model:nT}
-\end{figure}
+\end{figure*}
 
 \begin{figure*}
   \centering
-  \includegraphics{ratios-figure-figure10}
+  \includegraphics[width=\linewidth]{ratios-figure-figure10}
   \caption{Comparison of model and observed line intensities for 177-341.  
   }
   \label{fig:model}

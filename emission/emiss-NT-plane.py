@@ -30,6 +30,7 @@ linesets = dict(
     ONO = ["O  1  6300A", "N  2  6584A", "O  3  5007A"],
     NHO = ["N  2  6584A", "H  1  6563A", "O  3  5007A"],
     SSS = ["S II  6716A", "S II  6731A", "S II  4070A"],
+    SONe = ["S  3  6312A", "O  3  5007A", "Ne 3  3869A"],
     )
 parser.add_argument(
     "--lineset", type=str, default="SNO", choices=linesets.keys(),
