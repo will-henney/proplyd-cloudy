@@ -23,6 +23,7 @@ Nebular properties of three protoplanetary discs in the Orion Nebula and the eff
 #+END_QUOTE
 
 
+
 * Existing paper
 ** Observed line ratios
 
@@ -31,6 +32,39 @@ Should cite \citep{Rost:2008}
 
 
 * Our models
+
+** Explaining the models
+*** Test of predictive completion 
+
+    I have installed predictive completion mode and am trying it out.  I have customised it so that it will accept the current word when I type a space or punctuation mark.  So the main trouble is that I have to look down if I want to accept any but the main suggestion, which I find a little difficult.  The other problem is that I keep wanting to type a double space to get a full stop.  A third problem is that I get too used to typing the space bar and even do it at the end of a sentence so I then have to backtrack.  
+
+What happened then? Somehow I seem to have caused that previous paragraph to indent itself.  For some reason the dictionary does not recognise the word "indent".  Not sure why that should be the case.   
+
+So, do I like this feature or not?  Hard to tell really.  It would be better if a double tap of the space bar did really do a period.
+
+*** English version 
+
+    The figure shows the values of (ne,Te) that exist in our model.  The colors represent the two-dimensional PDF (probability distribution function) of the emission in the different lines in (ne,Te) space. 
+
+    The hook shape seen in the Figure reflects principally the variations with radius in the proplyd (there are also variations with angle but these are more minor).  If one starts at the left, then the blue horizontal branch is the outer, highly ionized part that emits predominantly [O III] and that covers a broad range in density but with little variation in temperature.   
+
+*** Spanish version that I sent to Adal
+
+Creo que no explicamos las cosas bien....
+
+Si son "tus" curvas - simplemente las tracé de tu figura 7a
+
+Pero tus curvas son curvas diagnósticas que muestran las posibles valores de (ne,Te) de un medio uniforme que son consistentes con las intensidades de líneas observadas.
+
+Nuestra figura muestra algo muy diferente, son los valores de (ne,Te) que existen en nuestro modelo (un modelo solamente).  Y los colores representan el PDF (función de distribución) bidimensional de la emisión de las diferentes líneas en el espacio ne-Te.  No sé si me explico bien, avísame si todavía no está claro.
+
+La forma de gancho que tiene nuestra figura refleja principalmente las variaciones con radio en el proplyd (también hay una variación con ángulo, pero es menor).  Si empiezas a la izquierda, entonces la rama horizontal azul es la parte exterior, altamente ionizada, que emite principalmente [O III] (por eso es azul), y que cubre un rango amplio de densidad con poca variación de temperatura.  A partir de 10^5 pcc, desvía hacía arriba (temperaturas mayores) mientras la ionización baja - por eso en esta parte se ve emisión de [N II].  La temperatura máxima se alcanza justo antes del frente de ionización, que es donde el verde es más intenso (el rojo también, pero eso no se ve en la nueva versión de la figura porque el verde lo tapa).  Luego, la temperatura baja en la rama roja, que corresponde a gas parcialmente ionizada en el frente mismo.  La densidad máxima se alcanza cuando la fracción de ionización es ~75%.  Toda esta rama emite más [S II] que [N II] y por eso se ve rojo.
+
+Entonces, como que nuestro modelo reproduce bien las intensidades observadas, es de esperarse que tus curvas diagnósticas deben de intersectar nuestra curva en un punto representativo para cada ion, que representa las condiciones promedias en la zona de emisión de cada uno.  Anexo otra versión de la figura que ilustra este hecho.  La estrella blanca es la (ne,Te) deducida de tu modelo homogéneo, mientras que las estrellas azul, verde, y rojo serían los valores (ne,Te) que son típicos de las zonas de emisión de [O III], [N II], y [S II], respectivamente, en nuestro modelo.
+
+Nota que aún dentro de la zona de emisión de cada ion, hay un rango de condiciones.  Por ejemplo, una variación enorme de densidad para [O III] (1.e3 a 1.e5), y una variación de temperatura para [S II] (7000 a 11000).  El [N II] no muestra tanta variación, pero todavía es un delta T ~ 1500 K y un factor de ~5 variación en densidad.
+
+A ver cómo te parece esta explicación.  Voy a escribir una versión en inglés para la sección del artículo.
 
 ** First model
 
