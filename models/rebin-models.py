@@ -125,6 +125,7 @@ fitsdir = os.path.join(cmd_args.modeldir,
                        'rebin-%s-%i' % (cmd_args.method, cmd_args.nangles))
 if not os.path.isdir(fitsdir): 
     os.makedirs(fitsdir)
+
 def write_fits(data, fileid):
     """Save array DATA to file FITSDIR/FILEID.fits"""
     hdu = pyfits.PrimaryHDU(data)
