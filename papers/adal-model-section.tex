@@ -55,8 +55,8 @@ Second, whereas published models used ad hoc fitting functions to the emissivity
     \(r_0 = \SI{1.91e15}{cm}\)
     \\
     Gas-phase abundances: & 
-    He 10.98, C 8.41, N 7.89, O 8.50, \\
-    & Ne 7.78, S 7.04, Ar 6.33, Fe 5.77
+    He 10.98, C 8.41, N 7.85, O 8.30, \\
+    (\(12 + \log_{10} z/\mathrm{H}\)) & Ne 7.56, S 6.98, Ar 6.26, Fe 5.65
     % Orion Nebula  \citep{2004MNRAS.355..229E}
     \\
     Dust composition: & Standard Orion \citep{1991ApJ...374..580B}\\
@@ -78,7 +78,11 @@ The variations in density and temperature within the model are principally a fun
 The outer zones of the model are at low density and are highly ionized, emitting principally in [\oiii], as seen in the blue horizontal branch at \(\simeq \SI{9700}{K}\) in the upper left part of the figure.  
 As one approaches the proplyd ionization front (direction of increasing density), the [\nii] and then [\sii] emission become relatively stronger (color changes to yellow) and the temperature increases, reaching a maximum of \(\simeq \SI{11000}{K}\).  
 In the ionization front itself, the temperature drops while the electron density climbs to a peak of about \SI{3e5}{cm^{-3}} and then also falls.  At the same time, the [\sii] emission comes to dominate over [\nii], giving rise to the orange-red branch that curves down and to the left.  
-(\textit{b})~Negative-colored image of the same data as in \textit{a} overlayed with the observational diagnostic curves from Fig.~7\textit{a}.  The white star shows the solution for \(n\elec, T\elec\) obtained in \S~XX under the assumption that the emission in all three ions is co-extensive at a single density and temperature.  
+(\textit{b})~Negative-colored image of the same data as in \textit{a} overlayed with the observational diagnostic curves from Fig.~7\textit{a} ([\sii] in red, [\nii] in green, [\oiii] in blue).  
+The white star shows the solution for \(n\elec, T\elec\) obtained in \S~4.2 under the assumption that the emission in all three ions is co-extensive at a single density and temperature.   
+This solution lies well outside the locus of densities and temperatures seen in the model, even though the model \emph{does} reproduce the observed line ratios. 
+Instead, the model satisfies the constraints of the three diagnostic curves separately in three different regions, which are indicated schematically by the colored stars.  
+Note, however that even within the emission region of each ion there is considerable variation in the physical conditions.
 }
   \label{fig:model:nT}
 \end{figure*}
@@ -100,21 +104,29 @@ The ionization front radius is the value determined by fitting to \textit{HST} e
 Given the observed angular separation of \(25.84''\) \citep{1998AJ....116..293B}, and assuming a distance to the Orion Nebula of 440~pc (\citealp{2008AJ....136.1566O}, Appendix~A), the projected separation is \SI{1.70e17}{cm}, implying an inclination angle of \(\simeq 55^\circ\). 
 The diffuse radiation field and the proplyd tail are ignored in this model, since the observational aperture (\S~2.2) only covers the head of the proplyd. 
 
-Figure~\ref{fig:model} shows that the model generally reproduces very well the observed relative line intensities for 177-341.  
+Figure~\ref{fig:model} shows that the model generally reproduces very well the observed relative line intensities for 177-341 with the notable exception of the [\ion{O}{1}] \SI{6300}{\AA} line, which has a predicted intensity of only half the observed value.
+This discrepancy may be explained if a significant fraction of the observed [\ion{O}{1}] emission comes from dissociation of OH at the surface of the proplyd's circumstellar disk \citep{1998ApJ...502L..71S}, which is not included in our model.
+The only other disagreement is with the [\ion{S}{3}] \SI{6312}{\AA} line, which is roughly 25\% too high in the model (roughly 1.5 times the observational uncertainty). 
+This may be an indication that the details of the stellar spectrum around \SI{23}{eV} are not correctly modeled, although the disagreement is only marginal. 
+
+Given that the stellar spectrum is very well constrained, the only way to vary the model temperature by a significant amount is by changing the gas-phase metal abundances and thus the gas cooling rate.  
+In particular, the temperature in the highly ionized outer regions of the proplyd is very sensitive to the oxygen abundance since the [\oiii] \SI{5007}{\AA} line is the major coolant there. 
+In order to reproduce the observed line intensities (particularly the [\oiii] \SI{4363}{\AA}/\SI{5007}{\AA} ratio), we find it necessary to reduce the oxygen abundance to less than 50\% of the value that has been measured for the surrounding nebula (e.g., \citealp{2004MNRAS.355..229E}), which leads to a temperature of around \SI{9500}{K} in the [\ion{O}{3}] emission zone. 
+Using the standard Orion gas-phase abundances gives temperatures of about \SI{8500}{K} for the same zone and predicts [\ion{O}{3}]/H\(\beta\) ratios that are considerably higher than observed for the nebular \SI{5007}{\AA} and \SI{4959}{\AA} lines, but lower than observed for the auroral \SI{4363}{\AA} line. 
+Using the even higher abundances derived by \citet{Tsamis:2011} for the proplyd LV2 implies temperatures as low as \SI{7700}{K} and exacerbates the disagreement with the observations still further. 
+For comparison, both varying the stellar effective temperature by \(\pm \SI{1000}{K}\) (the uncertainty in the analysis of \citealp{2006AandA...448..351S}) or varying the ionizing flux by a factor of two (corresponding to the uncertainty in the inclination angle of the proplyd) only change the gas temperature by \(<\SI{200}{K}\), while varying the stellar atmosphere model between WMBasic \citep{2001A&A...375..161P} and TLUSTY \citep{2003ApJS..146..417L} produces a larger change of \(\simeq \SI{400}{K}\).  
+
 
 {\bfseries\boldmath\color{red!50!black}
 \subsection*{STILL TODO}
   \begin{itemize}
-  \item Replace figures with model with lower O abundance
-  \item Discuss failure to reproduce [\ion{O}{1}] -- possible dissociation component that is not include in model
-  \item Discuss marginal problem with [\ion{S}{3}] -- details of stellar atmosphere spectrum, WMBasic vs Tlusty
-  \item Discuss Figure~\ref{fig:model:nT} vs Figure~7a.  Fact that the intersection of the three curves in Figure~7 is not the correct solution (according to our model) since the three ions [\oiii], [\nii], and [\sii] come from different regions with different \(n\elec\), \(T\elec\). 
   \item Discuss fact that model is only representative and abundance values are not necessarily reliable (especially where only one ion stage is observed)
     \begin{itemize}
     \item should take into account aperture more carefully
     \item need to investigate effects of varying dust properties
     \item internal extinction within the proplyd flow
     \item need to constrain with additional existing observations (HST imaging; velocity profiles; mid-IR emission)
+    \item Especially need [\ion{O}{2}] observations
     \end{itemize}
   \end{itemize}
 }

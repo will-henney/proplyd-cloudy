@@ -275,19 +275,20 @@ This is not right since we had a mistake with the volume element.
 
 *** Model variants
 
-|   | Model                         | Comment                      | Status |
-|---+-------------------------------+------------------------------+--------|
-| A | WM039000-phi13.50-r15.28      | Baseline                     | Done   |
-| B | WM039000-phi13.20-r15.28      | Lower flux                   | Done   |
-| C | WM039000-phi13.50-r15.28-ZE   | Esteban Abundances           | Done   |
-| D | WM039000-phi13.50-r15.28-ZT   | Tsamis LV2 Abundances        | Done   |
-| E | TL039000-phi13.50-r15.28      | Tlusty atmosphere            | Done   |
-| F | WM039000-phi13.20-r15.28-ZE   | Esteban + Lower flux         | Done   |
-| G | WM039000-phi13.35-r15.28-ZE   | Esteban + Intermediate flux  | Done   |
-| H | WM038000-phi13.50-r15.28      | Cooler star                  | Done   |
-| I | WM039000-phi13.20-r15.28-ZZ   | Tweak01 (0.8 O) + Lower Flux | Done   |
-| J | WM039000-phi13.20-r15.28-ZZ02 | Tweak02 (0.5 O) + Lower Flux | Done   |
-| K | WM039000-phi13.20-r15.28-ZZ03 | Tweak03 (0.5 O) + Lower Flux | Done   |
+|   | Model                         | Comment                      | Status | T                       | log Ne            |
+|---+-------------------------------+------------------------------+--------+-------------------------+-------------------|
+| A | WM039000-phi13.50-r15.28      | Baseline                     | Done   | 8823.1289 +/- 1147.8517 | 4.7097 +/- 0.7354 |
+| B | WM039000-phi13.20-r15.28      | Lower flux                   | Done   | 8691.0840 +/- 1114.1340 | 4.6002 +/- 0.7127 |
+| C | WM039000-phi13.50-r15.28-ZE   | Esteban Abundances           | Done   | 8637.6687 +/- 1138.5702 | 4.7304 +/- 0.7677 |
+| D | WM039000-phi13.50-r15.28-ZT   | Tsamis LV2 Abundances        | Done   | 7738.9668 +/- 1258.5955 | 4.6587 +/- 0.7340 |
+| E | TL039000-phi13.50-r15.28      | Tlusty atmosphere            | Done   | 9247.3746 +/- 1063.8601 | 4.7516 +/- 0.7763 |
+| F | WM039000-phi13.20-r15.28-ZE   | Esteban + Lower flux         | Done   | 8545.5756 +/- 1148.3822 | 4.6257 +/- 0.7393 |
+| G | WM039000-phi13.35-r15.28-ZE   | Esteban + Intermediate flux  | Done   | 8436.2395 +/- 1170.0774 | 4.6355 +/- 0.7366 |
+| H | WM038000-phi13.50-r15.28      | Cooler star                  | Done   | 8888.5844 +/- 1108.0291 | 4.7480 +/- 0.7453 |
+| I | WM039000-phi13.20-r15.28-ZZ   | Tweak01 (0.8 O) + Lower Flux | Done   | 9021.3427 +/- 981.6339  | 4.6355 +/- 0.7366 |
+| J | WM039000-phi13.20-r15.28-ZZ02 | Tweak02 (0.5 O) + Lower Flux | Done   | 9408.3561 +/- 935.3983  | 4.6471 +/- 0.7437 |
+| K | WM039000-phi13.20-r15.28-ZZ03 | Tweak03 (0.5 O) + Lower Flux | Done   | 9468.6648 +/- 1034.3894 | 4.6254 +/- 0.7264 |
+|   |                               |                              |        |                         |                   |
 
 Most of these change only one parameter, although some change two of them, since the lower flux seems best. 
 
