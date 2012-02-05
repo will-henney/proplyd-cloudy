@@ -3,6 +3,7 @@
 \usepackage{txfonts}
 \usepackage{pgfplots}
 \usepackage{siunitx}
+\usepackage{graphicx}
 \setcounter{secnumdepth}{0}
 
 \newcommand\Ion[2]{\ensuremath{\mathrm{#1\,\scriptstyle #2}}}
@@ -11,9 +12,9 @@
   \setcounter{ionstage}{#2}%
   \Ion{#1}{\Roman{ionstage}}}
 
-\usepgfplotslibrary{external}
-\tikzset{external/force remake}
-\tikzexternalize
+% \usepgfplotslibrary{external}
+% \tikzset{external/force remake}
+% \tikzexternalize
 
 \pgfplotsset{
   compat=1.5.1, % most current version as of writing (27 Jan 2012)
@@ -238,6 +239,35 @@
 \end{description}
 \bigskip
 \RatioPlot{K}
+
+\clearpage
+
+\newlength\figwidth
+\setlength\figwidth{0.3\linewidth}
+\setkeys{Gin}{width=\linewidth}
+\newcommand\NTfig[2]{%
+  Model #1 -- \texttt{#2}\par\medskip
+  \includegraphics{../models/proplyd-auto-models/#2/NT-plane-ONO}
+}
+\renewcommand\arraystretch{2.5}\scriptsize
+\begin{tabular*}{\linewidth}{
+    @{\extracolsep{\fill}}
+    p{\figwidth} 
+    p{\figwidth} 
+    p{\figwidth} 
+  }
+  \NTfig{A}{WM039000-phi13.50-r15.28} & 
+  \NTfig{B}{WM039000-phi13.20-r15.28} & 
+  \NTfig{C}{WM039000-phi13.50-r15.28-ZE} \\ 
+  \NTfig{D}{WM039000-phi13.50-r15.28-ZT} & 
+  \NTfig{E}{TL039000-phi13.50-r15.28} & 
+  \NTfig{F}{WM039000-phi13.20-r15.28-ZE} \\ 
+  \NTfig{G}{WM039000-phi13.35-r15.28-ZE} & 
+  \NTfig{H}{WM038000-phi13.50-r15.28} & 
+  \NTfig{I}{WM039000-phi13.20-r15.28-ZZ} \\ 
+  \NTfig{J}{WM039000-phi13.20-r15.28-ZZ02} & 
+  \NTfig{K}{WM039000-phi13.20-r15.28-ZZ03} & 
+\end{tabular*}
 
 
 % The marker for [\ion{Ne}{3}] is \ref{marker:Ne3}
