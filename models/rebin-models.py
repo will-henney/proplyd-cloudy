@@ -34,7 +34,7 @@ parser.add_argument(
     help='Number of interpolation angles to use (interpolation is actually in mu = cos theta)')
 parser.add_argument(
     "--method", type=str, default='linear', choices=['nearest', 'linear', 'cubic'],
-    help='Number of interpolation angles to use (interpolation is actually in mu = cos theta)')
+    help='The interpolation method could be linear, cubic or nearest neighbour')
 
 cmd_args = parser.parse_args()
 
