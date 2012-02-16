@@ -47,6 +47,14 @@ Ar 3  7135A  // [Ar III] 7135.78
 O II  3729A  // [O II] 
 O II  3726A  // [O II]
 Ne 3  3869A  // [Ne III] 
+O II  7323A  // [O II] (7320 in Tsamis)
+O II  7332A  // [O II] (7330 in Tsamis)
+Ar 3  5192A  // [Ar III]
+Ar 4  4740A  // [Ar IV]
+O  1  5577A  // [O I]
+Cl 3  5518A  // [Cl III]
+Ar 4  4740A  // [Ar IV]
+Ar 4  4711A  // [Ar IV]
 * Metal recombination lines
 O  2  4651A   // O II 
 C  2  4267A   // C II
@@ -62,8 +70,10 @@ Fe 3  4702A  // 4701.62
 Fe 3  4659A  // 4658.10 Strongest line
 Fe 3  4608A  // 4607.13 
 * NUV lines
+TOTL  2326A  // C II] Semi-forbidden
 C  3 1910A   // C II] Semi-forbidden
 C  3 1907A   // [C II] forbidden
+O II  2471A  // [O II] forbidden (2470 in Tsamis)
 * FIR lines
 Ne 2 12.81m
 Ne 3 15.55m
