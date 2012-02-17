@@ -153,11 +153,12 @@ for k in range(NK):
             u = -Velocity[i]*(sini*stheta*cphi + cosi*ctheta)
             x = (u-umin)/du
             iu = int(x)
-            assert iu >= 0 and iu < NU, "Index (%i) out of bounds [%i:%i] of velocity array" % (iu, 0, NU-1)
+            # assert iu >= 0 and iu < NU, "Index (%i) out of bounds [%i:%i] of velocity array. u = %.3g, umin, umax = %.3g, %.3g" % (iu, 0, NU-1, u, umin, umax)
             # for each emission lines
             for emline in emlines:
                 # add in to line profile
-                Perfiles[emline][iu] += dvol * Emissivities[emline][i]
+                if iu >= 0 and iu < NU: 
+                    Perfiles[emline][iu] += dvol * Emissivities[emline][i]
                 # and add in to total flux
                 Fluxes[emline] += dvol * Emissivities[emline][i]
 
