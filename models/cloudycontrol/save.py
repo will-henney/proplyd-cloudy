@@ -70,9 +70,9 @@ Fe 3  4702A  // 4701.62
 Fe 3  4659A  // 4658.10 Strongest line
 Fe 3  4608A  // 4607.13 
 * NUV lines
-TOTL  2326A  // C II] Semi-forbidden
-C  3 1910A   // C II] Semi-forbidden
-C  3 1907A   // [C II] forbidden
+TOTL  2326A  // C II] Semi-forbidden 2324 - 2329 multiplet (5 lines)
+C  3 1910A   // C III] Semi-forbidden
+C  3 1907A   // [C III] forbidden
 O II  2471A  // [O II] forbidden (2470 in Tsamis)
 * FIR lines, just in case
 Ne 2 12.81m
