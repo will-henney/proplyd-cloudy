@@ -181,7 +181,8 @@ def sortkey(cloudy_line):
     Key for sorting the lines by wavelength
     """
     cloudy_line = cloudy_line.replace('_', ' ')
-    wav_s = cloudy_line[4:]
+    # strip off first 4 characters and then only keep the first word
+    wav_s = cloudy_line[4:].split()[0]
     unit = wav_s[-1]
     wav = float(wav_s[:-1])
     if unit == 'A':
