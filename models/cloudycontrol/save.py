@@ -51,7 +51,6 @@ Ne 3  3869A  // [Ne III]
 Ar 3  5192A  // [Ar III]
 Ar 3  7135A  // [Ar III] 7135.78
 Ar 4  4740A  // [Ar IV]
-Ar 4  4740A  // [Ar IV]
 Ar 4  4711A  // [Ar IV]
 Cl 3  5518A  // [Cl III]
 Cl 3  5538A  // [Cl III] given as 5539A in Tsamis et al 2011
