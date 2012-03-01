@@ -11,6 +11,8 @@
 \hypersetup{colorlinks=True, linkcolor=blue!50!black, citecolor=black,
   urlcolor=blue!50!black}
 
+\usepackage{color}
+
 \usepackage[greek,english]{babel} 
 \newcommand{\texttheta}{\greektext j\latintext}
 \newcommand\thC{\texttheta\textsuperscript{1}\,Ori~C}
@@ -38,7 +40,8 @@ As an alternative to the purely empirical analysis presented in the previous sec
 Such models have previously been applied to the ensemble properties of large numbers of proplyds \citep*{1998ApJ...499..758J, 1998AJ....116..322H} and in detail to individual objects such as 177-341 \citep{1999AJ....118.2350H}, LV2 \citep{2002ApJ...566..315H}, and LV1 \citep{2002ApJ...570..222G}. 
 We have improved on these models in two significant ways.
 First, whereas published models have considered only emission from regions where hydrogen is fully ionized and the flow is supersonic, we now use a detailed analytic model of gas acceleration in the ionization front \citep{2005ApJ...621..328H} to extend the treatment to cover partially ionized emission zones where the gas moves subsonically. 
-Second, whereas published models used ad hoc fitting functions to the emissivity structure, specifically tailored to only the brightest emission lines, we now use the plasma micropysics code Cloudy \citep{1998PASP..110..761F} to self-consistently calculate the full physical structure and emission spectrum of the proplyd flow. 
+Second, whereas published models used ad hoc fitting functions to the emissivity structure, specifically tailored to only the brightest emission lines, we now use the plasma microphysics code Cloudy \citep{1998PASP..110..761F} to self-consistently calculate the full physical structure and emission spectrum of the proplyd flow. 
+
 
 \begin{table}
   \centering
@@ -73,16 +76,8 @@ Second, whereas published models used ad hoc fitting functions to the emissivity
     \includegraphics[width=0.465\linewidth]{ne-Te-overlay}
   \end{tabular*}
   \caption[]{Emission structure in the \(n\elec\)--\(T\elec\) plane for the example physical model of 177-341.  
-    (\textit{a})~Positive-colored image of the three emission lines: [\sii] \SI{6731}{\AA} (red), [\nii] \SI{6584}{\AA} (green), and [\oiii] \SI{5007}{\AA} (blue), with brightness proportional to the fraction of the model luminosity in each line that comes from gas with that particular combination of density and temperature.  
-The variations in density and temperature within the model are principally a function of radius within the proplyd, with a secondary variation as a function of angle between the ``nose'' and the ``ears'' of the proplyd crescent due to the increasing obliqueness of the illumination angle.  
-The outer zones of the model are at low density and are highly ionized, emitting principally in [\oiii], as seen in the blue horizontal branch at \(\simeq \SI{9700}{K}\) in the upper left part of the figure.  
-As one approaches the proplyd ionization front (direction of increasing density), the [\nii] and then [\sii] emission become relatively stronger (color changes to yellow) and the temperature increases, reaching a maximum of \(\simeq \SI{11000}{K}\).  
-In the ionization front itself, the temperature drops while the electron density climbs to a peak of about \SI{3e5}{cm^{-3}} and then also falls.  At the same time, the [\sii] emission comes to dominate over [\nii], giving rise to the orange-red branch that curves down and to the left.  
+    (\textit{a})~Positive-colored image of the three emission lines: [\sii] \SI{6731}{\AA} (red), [\nii] \SI{6584}{\AA} (green), and [\oiii] \SI{5007}{\AA} (blue), with brightness proportional to the fraction of the model luminosity in each line. 
 (\textit{b})~Negative-colored image of the same data as in \textit{a} overlayed with the observational diagnostic curves from Fig.~7\textit{a} ([\sii] in red, [\nii] in green, [\oiii] in blue).  
-The white star shows the solution for \(n\elec, T\elec\) obtained in \S~4.2 under the assumption that the emission in all three ions is co-extensive at a single density and temperature.   
-This solution lies well outside the locus of densities and temperatures seen in the model, even though the model \emph{does} reproduce the observed line ratios. 
-Instead, the model satisfies the constraints of the three diagnostic curves separately in three different regions, which are indicated schematically by the colored stars.  
-Note, however that even within the emission region of each ion there is considerable variation in the physical conditions.  
 }
   \label{fig:model:nT}
 \end{figure*}
@@ -97,13 +92,27 @@ Observed intensities correspond to the \(c(\mathrm{H}\beta) = 0\) background-sub
 \end{figure*}
 
 
-Preliminary results of the emission line spectrum of such a model applied to 177-341 are shown in Figures~\ref{fig:model:nT} and \ref{fig:model}.  
 The input parameters for the model (values given in Table~\ref{tab:model:pars}) are the radius of the ionization front at the proplyd cusp (assumed hemispherical), the intensity and spectral shape of the illuminating stellar radiation, and the composition (gas-phase elemental mix and dust grain populations) of the proplyd material.
 For most of these parameters, we have taken values from the literature, whereas the gas-phase abundances and incident ionizing flux have been adjusted slightly in an attempt to reproduce the observed emission line intensities. 
 The stellar spectrum is that determined for the ionizing star \thC{} by spectroscopic analysis \citep{2006AandA...448..351S}. 
 The ionization front radius is the value determined by fitting to \textit{HST} emission line images \citep{1999AJ....118.2350H}, while the adopted ionizing flux at the proplyd position corresponds to a physical separation of the proplyd from the ionizing star of \SI{2.13e17}{cm} if there is no intervening absorption.
 Given the observed angular separation of \(25.84''\) \citep{1998AJ....116..293B}, and assuming a distance to the Orion Nebula of 440~pc (\citealp{2008AJ....136.1566O}, Appendix~A), the projected separation is \SI{1.70e17}{cm}, implying an inclination angle of \(\simeq 55^\circ\). 
 The diffuse radiation field and the proplyd tail are ignored in this model, since the observational aperture (\S~2.2) only covers the head of the proplyd. 
+
+{\color{blue}
+
+The basic structure of the model is that the radiation arrives the outer zones of the proplyd. These zones are at low gas density (\SI{1e3}{cm^{-3}}) and consequently have a high ionization parameter. As one go inside the proplyd (less radius), the gas density and temperature increase. Aprroaching the ionization front the temperature reach a maximum of \(\simeq \SI{11000}{K}\). In the ionization front itself, the temperature drops while the electron density climbs to a peak of about \SI{3e5}{cm^{-3}} and then also falls. This is equivalent to say that each radius within the proplyd have a particular combination of temperature and density.
+
+Figures~\ref{fig:model:nT} and \ref{fig:model} show preliminary results of the emission line spectrum of such a model applied to 177-341. Figure~\ref{fig:model:nT} (\textit{a}) shows the emission estructure of [\sii] \SI{6731}{\AA} (red), [\nii] \SI{6584}{\AA} (green), and [\oiii] \SI{5007}{\AA} (blue).
+The outer zones of the model at low density are highly ionized, emitting principally in [\oiii], as seen in the blue horizontal branch at \(\simeq \SI{9700}{K}\) in the upper left part of the figure.  
+As one approaches the proplyd ionization front (direction of increasing density), the [\nii] and then [\sii] emission become relatively stronger (color changes to yellow) and the temperature increases, reaching a maximum of \(\simeq \SI{11000}{K}\).  
+In the ionization front itself, where the recombination gas happends, the [\sii] emission comes to dominate over [\nii], giving rise to the orange-red branch that curves down and to the left. 
+Figure~\ref{fig:model:nT} (\textit{b}) shows the negative-colored  of the same data as in \textit{a} overlayed with the observational diagnostic curves from Fig.~7\textit{a} ([\sii] in red, [\nii] in green, [\oiii] in blue). The white star shows the solution for \(n\elec, T\elec\) obtained in \S~4.2. under the assumption that the emission in all three ions is co-extensive at a single density and temperature.   
+This solution lies well outside the locus of densities and temperatures seen in the model, even though the model \emph{does} reproduce the observed line ratios. 
+Instead, the model satisfies the constraints of the three diagnostic curves separately in three different regions, which are indicated schematically by the colored stars.  
+Note, however that even within the emission region of each ion there is considerable variation in the physical conditions. 
+
+}
 
 Figure~\ref{fig:model} shows that the model generally reproduces very well the observed relative line intensities for 177-341 with the notable exception of the [\ion{O}{1}] \SI{6300}{\AA} line, which has a predicted intensity of only half the observed value.
 This discrepancy may be explained if a significant fraction of the observed [\ion{O}{1}] emission comes from dissociation of OH at the surface of the proplyd's circumstellar disk \citep{1998ApJ...502L..71S}, which is not included in our model.
