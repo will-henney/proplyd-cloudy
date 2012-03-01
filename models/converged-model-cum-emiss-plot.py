@@ -1,5 +1,5 @@
 import numpy, sys, os
-sys.path.append("/Users/will/Work/Nahiely/proplyd-cloudy/src")
+sys.path.append("../src")
 import claudia
 import matplotlib.pyplot as plt
   
@@ -51,15 +51,53 @@ def plot_vars(modelid):
     assert len(dz) == len(z)    # check we got it right
     colden = numpy.cumsum(hden*dz)
 
+    # We need all the lines that Tsamis used to calculate the ion abundances
+    # It is not useful in the graphics but in the quartiles they are
+
     linelist = [
-        'O__3__5007A',
-        'TOTL__4363A',
+        'C__3__1907A',
         'C__3__1910A',
+        'TOTL__2326A',
+        'O_II__2471A',
+        'O_II__3726A',
+        'O_II__3729A',
+        'Ne_3__3869A',
+        'S_II__4070A',
+        'S_II__4078A',
+        'C__2__4267A',
+        'TOTL__4363A',
+        'He_1__4471A',
+        'Fe_3__4608A',
+        'O_2r__4651A',
+        'Fe_3__4659A',
+        'Fe_3__4702A',
+        'Ar_4__4711A',
+        'Fe_3__4734A',
+        'Ar_4__4740A',
+        'Fe_3__4755A',
+        'H__1__4861A',
+        'Fe_3__4881A',
+        'O__3__4959A',
+        'Fe_3__4988A',
+        'O__3__5007A',
+        'Ar_3__5192A',
+        'TOTL__5199A',
+        'Fe_3__5271A',
+        'Cl_3__5518A',
+        'Cl_3__5538A',
+        'O__1__5577A',
+        'N__2__5755A',
+        'He_1__5876A',
+        'O__1__6300A',
+        'S__3__6312A',
         'H__1__6563A',
         'N__2__6584A',
-        'O_II__3726A',
+        'He_1__6678A',
+        'S_II__6716A',
         'S_II__6731A',
-        'O__1__6300A',
+        'Ar_3__7135A',
+        'O_II__7323A',
+        'O_II__7332A',
         ]
 
     emlines = dict()
