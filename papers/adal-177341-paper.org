@@ -74,8 +74,48 @@ On-screen, these look best in RGB, but that doesn't always print out very well. 
 + felt tips :: This is simple mixing of inks.  Unfortunately, it tends to make the important bits look dark and muddy
 + oil paints :: This has the opacity proportional to the value, so the dark bits are more colorful.  But, the results depend on the order in which the three colors are applied.  With the SNO and SNOa sets, the best results are using the order red, blue, green since the [N II] emission (green) has the most compact distribution and the [S II] (red) the most extended one.  
 
-*** Best model 
+*** Best model
+    :PROPERTIES:
+    :dir:      ~/Work/Nahiely/proplyd-cloudy/models/proplyd-auto-models/OLD-WM039000-phi13.20-r15.28-ZZ03
+    :END: 
+
 + WM039000-phi13.20-r15.28-ZZ03
+
+**** New version of SNO distribution with lower-case n_e
+     :LOGBOOK:
+     CLOCK: [2012-05-01 Tue 12:05]--[2012-05-01 Tue 12:45] =>  0:40
+     :END:
+This is the nebular lines of [S II], [N II] and [O III].  It is the version that we are using in the Adal paper. 
+#+BEGIN_SRC sh
+python ../../../emission/emiss-NT-plane.py  \
+    --r0 1.91e15 --lineset SNO --N 200 \
+    --gamma 3 --mode "oil paints" \
+    --bluepen blue --redpen red --greenpen "#5f5"
+mv NT-plane-SNO.pdf NT-plane-SNO-oil-paints.pdf
+python ../../../emission/emiss-NT-plane.py  \
+    --r0 1.91e15 --lineset SNO --N 200 \
+    --gamma 4 --mode "RGB" 
+mv NT-plane-SNO.pdf NT-plane-SNO-RGB.pdf
+#+END_SRC
+
+#+RESULTS:
+
+And repeat the sanitizing
+#+BEGIN_SRC sh
+epstopdf --nocompress --outfile=NT-plane-SNO-oil-paints-GS.pdf  NT-plane-SNO-oil-paints.pdf
+#+END_SRC
+
+#+RESULTS:
+
+
+***** And sanitize the VectorDesigner PDF file
+
+#+BEGIN_SRC sh :dir ~/Work/Nahiely/proplyd-cloudy/papers
+epstopdf --nocompress --outfile=ne-Te-overlay-GS.pdf  ne-Te-overlay.pdf
+#+END_SRC
+
+#+RESULTS:
+
 **** SNOa distribution 
 This is the auroral lines of [S II], [N II] and [O III].  It is the version that we are using in the Adal paper. 
 #+BEGIN_SRC sh

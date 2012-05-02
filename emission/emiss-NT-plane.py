@@ -104,7 +104,7 @@ bivar.PlotVariable.n = cmd_args.N # size of pdf images
 
 Eden_var = bivar.PlotVariable(np.log10(Eden))
 Eden_var.setminmaxn(min=3.0, max=6.0)
-Eden_var.settitle(r'Electron density, \(\log_{10} (N_\mathrm{e}/\mathrm{cm}^{-3})\)', 'Eden')
+Eden_var.settitle(r'Electron density, \(\log_{10} (n_\mathrm{e}/\mathrm{cm}^{-3})\)', 'Eden')
 
 Te_var = bivar.PlotVariable(Te)
 Te_var.setminmaxn(min=5000.0, max=12000.)

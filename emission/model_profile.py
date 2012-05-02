@@ -12,7 +12,12 @@ warnings.filterwarnings("ignore")
 
 # Parse command line arguments
 parser = argparse.ArgumentParser(
-    description="Calculate line profile of Cloudy proplyd model")
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    description="""
+Calculate 1-d line profile of Cloudy proplyd model. 
+If the --window option is used, 
+also calculate the 3-d position-position-velocity cube.
+""")
 
 parser.add_argument(
     "--modeldir", type=str, default=".",  
@@ -36,6 +41,14 @@ parser.add_argument(
 parser.add_argument(
     "--Rmax", type=float, default=9.0,
     help='Radius of outer face of cloudy model in units of r0')
+
+parser.add_argument(
+    "--window", type=float, nargs=4, default=argparse.SUPPRESS,
+    metavar=("X1", "Y1", "X2", "Y2"),
+    help='If present, bounding box of view window (in units of r0) for the position-position-velocity cube')
+parser.add_argument(
+    "--pixel-size", type=float, default=0.1, 
+    help='Size of pixels (in units of r0) for the PPV cube')
 
 cmd_args = parser.parse_args()
 
@@ -151,8 +164,7 @@ for k in range(NK):
             dr = 0.5*(Radius[ipos] - Radius[ineg])
             dvol =  dphi * dmu * (Radius[i]**2) * dr
             u = -Velocity[i]*(sini*stheta*cphi + cosi*ctheta)
-            x = (u-umin)/du
-            iu = int(x)
+            iu = int((u-umin)/du)
             # assert iu >= 0 and iu < NU, "Index (%i) out of bounds [%i:%i] of velocity array. u = %.3g, umin, umax = %.3g, %.3g" % (iu, 0, NU-1, u, umin, umax)
             # for each emission lines
             for emline in emlines:
