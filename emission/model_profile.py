@@ -2,6 +2,7 @@ import numpy as np
 import scipy
 import sys, os, glob
 import argparse
+import pyfits
 
 sys.path.append("../../../src")       # make sure we can find claudia.py
 import claudia
@@ -47,7 +48,7 @@ parser.add_argument(
     metavar=("X1", "Y1", "X2", "Y2"),
     help='If present, bounding box of view window (in units of r0) for the position-position-velocity cube')
 parser.add_argument(
-    "--pixel-size", type=float, default=0.1, 
+    "--pixelsize", type=float, default=0.1, 
     help='Size of pixels (in units of r0) for the PPV cube')
 
 cmd_args = parser.parse_args()
@@ -60,6 +61,14 @@ inc_degrees = cmd_args.inc
 
 r0 = cmd_args.r0
 Rmax = cmd_args.Rmax
+hasDataCube = "window" in vars(cmd_args) # do we want a data cube or not?
+if hasDataCube:
+    xmin, ymin, xmax, ymax = cmd_args.window
+    dy = dx = cmd_args.pixelsize
+    # Note that xmin is the left border of the first cell
+    # while xmax is the right border of the last cell
+    NX = int((xmax - xmin)/dx)
+    NY = int((ymax - ymin)/dy)
 
 thetadirs =  [
     os.path.basename(p) for p in 
@@ -132,11 +141,15 @@ umin = -umax
 du = (umax - umin)/NU
 Perfiles = dict()
 Fluxes = dict()
+if hasDataCube: 
+    DataCubes = dict()
 for emline in emlines:
     # Line profile as function of velocity
     Perfiles[emline] = np.zeros(NU)
     # Total line flux (integral of line profile)
     Fluxes[emline] = 0.0
+    if hasDataCube:
+        DataCubes[emline] = np.zeros(NY, NX, NU)
 
 #Line profile
 
@@ -164,7 +177,14 @@ for k in range(NK):
             dr = 0.5*(Radius[ipos] - Radius[ineg])
             dvol =  dphi * dmu * (Radius[i]**2) * dr
             u = -Velocity[i]*(sini*stheta*cphi + cosi*ctheta)
-            iu = int((u-umin)/du)
+            iu = int(np.floor((u-umin)/du))
+            if hasDataCube:
+                # Coordinates in plane of sky
+                x = Radius[i]*(cosi*stheta*cphi + sini*ctheta)
+                y = Radius[i]*sini*stheta
+                ix = int(np.floor((x-xmin)/dx))
+                iy = int(np.floor((y-ymin)/dy))
+
             # assert iu >= 0 and iu < NU, "Index (%i) out of bounds [%i:%i] of velocity array. u = %.3g, umin, umax = %.3g, %.3g" % (iu, 0, NU-1, u, umin, umax)
             # for each emission lines
             for emline in emlines:
@@ -173,10 +193,16 @@ for k in range(NK):
                     Perfiles[emline][iu] += dvol * Emissivities[emline][i]
                 # and add in to total flux
                 Fluxes[emline] += dvol * Emissivities[emline][i]
+                # ... and add in to datacube if required
+                if hasDataCube and ix >= 0 and ix < NX and iy >= 0 and iy < NY:
+                    DataCubes[emline][iy, ix, iu] += dvol * Emissivities[emline][i]
+                    
 
 
 PerfilU = np.linspace(umin, umax, NU)
-savefile = "model_profile-nphi%(nphi)i-nvel%(nvel)i-inc%(inc)i.dat" % (vars(cmd_args))
+idstring = "nphi%(nphi)i-nvel%(nvel)i-inc%(inc)i" % (vars(cmd_args))
+savefile = "model_profile-%s.dat" % (idstring)
+
 
 import matplotlib.mlab as mlab
 datatable = np.rec.fromarrays([PerfilU] + Perfiles.values(), 
@@ -211,4 +237,20 @@ for emline in sorted(emlines, key=sortkey):
     print '|'.join(['', em[:-5], em[-5:], "%g" % (100.0*flux/hbeta), ''])
 
 
-
+if hasDataCube:
+    # write the data cubes as FITS files
+    for emline, cube in DataCubes.items():
+        fitsfilename = "cube-{}-{}.fits".format(emline, idstring)
+        # write datacube to the HDU
+        hdu = pyfits.PrimaryHDU(cube)
+        # write WCS headers to the HDU
+        hdu.header.update("crpix1", 0)
+        hdu.header.update("crpix2", 0)
+        hdu.header.update("crpix3", 0)
+        hdu.header.update("crval1", umin)
+        hdu.header.update("crval2", ymin)
+        hdu.header.update("crval3", xmin)
+        hdu.header.update("cdelt1", du)
+        hdu.header.update("cdelt2", dy)
+        hdu.header.update("cdelt3", dx)
+        hdu.writeto(fitsfilename)
