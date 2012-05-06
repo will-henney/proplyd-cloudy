@@ -69,6 +69,7 @@ if hasDataCube:
     # while xmax is the right border of the last cell
     NX = int((xmax - xmin)/dx)
     NY = int((ymax - ymin)/dy)
+    print "Datacube size: (NU, NY, NX) = ({}, {}, {})".format(NU, NY, NX)
 
 thetadirs =  [
     os.path.basename(p) for p in 
@@ -93,7 +94,7 @@ for thetadir in thetadirs:
     print "Indir: ", claudia.CloudyModel.indir
     print "Modelname: ", modelname
     m = claudia.CloudyModel(modelname) 
-    Radius = Rmax*r0 - m.ovr.depth # physical radia from proplyd center
+    Radius = Rmax*r0 - m.ovr.depth # physical radius from proplyd center
     R = Radius/r0            # array of dimensionless radius
     i2 = len(R[R>=1.0])             # find index where R = 1
 
@@ -149,7 +150,7 @@ for emline in emlines:
     # Total line flux (integral of line profile)
     Fluxes[emline] = 0.0
     if hasDataCube:
-        DataCubes[emline] = np.zeros(NY, NX, NU)
+        DataCubes[emline] = np.zeros((NU, NY, NX))
 
 #Line profile
 
@@ -175,15 +176,16 @@ for k in range(NK):
             ineg = max(0, i - 1)
             ipos = min(NI-1, i + 1)
             dr = 0.5*(Radius[ipos] - Radius[ineg])
-            dvol =  dphi * dmu * (Radius[i]**2) * dr
+            dvol =  abs(dphi * dmu * (Radius[i]**2) * dr)
             u = -Velocity[i]*(sini*stheta*cphi + cosi*ctheta)
             iu = int(np.floor((u-umin)/du))
             if hasDataCube:
                 # Coordinates in plane of sky
-                x = Radius[i]*(cosi*stheta*cphi + sini*ctheta)
-                y = Radius[i]*sini*stheta
+                x = (Radius[i]/r0)*(cosi*stheta*cphi + sini*ctheta)
+                y = (Radius[i]/r0)*stheta*sphi
                 ix = int(np.floor((x-xmin)/dx))
                 iy = int(np.floor((y-ymin)/dy))
+                # print "(iy, ix, iu) = ({}, {}, {})".format(iy, ix, iu)
 
             # assert iu >= 0 and iu < NU, "Index (%i) out of bounds [%i:%i] of velocity array. u = %.3g, umin, umax = %.3g, %.3g" % (iu, 0, NU-1, u, umin, umax)
             # for each emission lines
@@ -194,9 +196,11 @@ for k in range(NK):
                 # and add in to total flux
                 Fluxes[emline] += dvol * Emissivities[emline][i]
                 # ... and add in to datacube if required
-                if hasDataCube and ix >= 0 and ix < NX and iy >= 0 and iy < NY:
-                    DataCubes[emline][iy, ix, iu] += dvol * Emissivities[emline][i]
-                    
+                if ( hasDataCube
+                     and iu >= 0 and iu < NU 
+                     and ix >= 0 and ix < NX 
+                     and iy >= 0 and iy < NY ):
+                    DataCubes[emline][iu, iy, ix] += dvol * Emissivities[emline][i]
 
 
 PerfilU = np.linspace(umin, umax, NU)
@@ -237,6 +241,12 @@ for emline in sorted(emlines, key=sortkey):
     print '|'.join(['', em[:-5], em[-5:], "%g" % (100.0*flux/hbeta), ''])
 
 
+def add_WCS_keyvals(iaxis, keyvaldict):
+    """Add in a whole load of keywords for the same axis"""
+    for k, v in keyvaldict.items():
+        hdu.header.update(k+str(iaxis), v)
+        
+
 if hasDataCube:
     # write the data cubes as FITS files
     for emline, cube in DataCubes.items():
@@ -244,13 +254,10 @@ if hasDataCube:
         # write datacube to the HDU
         hdu = pyfits.PrimaryHDU(cube)
         # write WCS headers to the HDU
-        hdu.header.update("crpix1", 0)
-        hdu.header.update("crpix2", 0)
-        hdu.header.update("crpix3", 0)
-        hdu.header.update("crval1", umin)
-        hdu.header.update("crval2", ymin)
-        hdu.header.update("crval3", xmin)
-        hdu.header.update("cdelt1", du)
-        hdu.header.update("cdelt2", dy)
-        hdu.header.update("cdelt3", dx)
-        hdu.writeto(fitsfilename)
+        add_WCS_keyvals(3, dict(crpix=1, crval=umin+0.5*du, cdelt=du, 
+                                ctype="VELOCITY", cunit="km/s    ") )
+        add_WCS_keyvals(2, dict(crpix=1, crval=ymin+0.5*dy, cdelt=dy, 
+                                ctype="YOFFSET ", cunit="r0      ") )
+        add_WCS_keyvals(1, dict(crpix=1, crval=xmin+0.5*dx, cdelt=dx, 
+                                ctype="XOFFSET ", cunit="r0      ") )
+        hdu.writeto(fitsfilename, clobber=True)
