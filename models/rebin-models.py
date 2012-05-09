@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore")
 
 # Parse command line arguments
 parser = argparse.ArgumentParser(
-    description="Interpolate proplyd models to finaer angle grid (and uniform z grid)")
+    description="Interpolate proplyd models to finer angle grid (and uniform z grid)")
 
 parser.add_argument(
     "--modeldir", type=str, default=".",  
