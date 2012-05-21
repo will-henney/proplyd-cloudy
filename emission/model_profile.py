@@ -124,6 +124,10 @@ def read_rebinned_models():
         os.path.basename(p) for p in 
         glob.glob(os.path.join(cmd_args.modeldir, "rebin-*"))
         ]
+    Theta = read_fits("mu")
+    R = read_fits("R")
+    Emissivities = [10**read_fits("em-%s" % (emline)) for emline in emlines]
+    return emlines, Theta, Radius_vectors, Velocity_vectors, Emissivities_vectors
     raise NotImplementeError
 
 
