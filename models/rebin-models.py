@@ -71,7 +71,7 @@ template_model = get_cloudy_model(thetadirs[0])
 ##
 
 # Which cloudy save files to grab the data columns from
-tablenames = ["ovr", "em", "ion_c", "ion_n", "ion_o", "ion_s", "phy", "pdr"]
+tablenames = ["ovr", "em", "ion_c", "ion_n", "ion_o", "ion_s", "phy", "pdr", "pre"]
 
 # datatables is a dictionary of tables, with each item corresponding
 # to a Cloudy save file (e.g., ovr, em, pre, etc)

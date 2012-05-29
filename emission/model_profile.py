@@ -119,16 +119,58 @@ def read_original_models():
     return emlines, Theta, Radius_vectors, Velocity_vectors, Emissivities_vectors
 
 def read_rebinned_models():
+    """
+    Read the models that are written with models/rebin-models.py
+    """
+    def read_fits(varid):
+        """
+        Read variable VARID from fits file of interpolated model structure
+        """
+        fitsname = os.path.join(
+            cmd_args.modeldir,
+            "rebin-%s" % (cmd_args.rebin),
+            "%s.fits" % (varid)
+            )
+        return pyfits.open(fitsname)[0].data
+
     # Find list of rebinned models that can be used
     rebindirs = [
         os.path.basename(p) for p in 
         glob.glob(os.path.join(cmd_args.modeldir, "rebin-*"))
         ]
-    Theta = read_fits("mu")
-    R = read_fits("R")
-    Emissivities = [10**read_fits("em-%s" % (emline)) for emline in emlines]
+    Theta = np.arccos(read_fits("mu")[:,0])
+    R = read_fits("R")[0,:]
+    i2 = len(R[R<1.0])             # find index where R = 1
+    Density2D = 10**read_fits("ovr-hden")
+    sound_speed2D = np.sqrt(3./5.)*read_fits("pre-cadwind_kms")
+    emfiles = [
+        os.path.basename(p) for p in 
+        glob.glob(
+            os.path.join(
+                cmd_args.modeldir,
+                "rebin-%s" % (cmd_args.rebin),
+                "em-*.fits"
+                )
+            )
+        ]
+
+    print emfiles
+    emlines = [ s.split("-")[1].split(".")[0] for s in emfiles ]
+    print emlines
+    Emissivities2D = [10**read_fits("em-%s" % (emline)) for emline in emlines]
+    Radius_vectors = []
+    Velocity_vectors = []
+    Emissivities_vectors = []
+    for j, th in enumerate(Theta):
+        n0 = Density2D[j, i2]
+        Velocity = sound_speed2D[j, i2] * n0 / (R**2 * Density2D[j, :])
+        Radius_vectors.append(R)
+        Velocity_vectors.append(Velocity)
+        Emissivities_vectors.append(
+            [Emissivity2D[j, :] for Emissivity2D in Emissivities2D]
+            )
+
     return emlines, Theta, Radius_vectors, Velocity_vectors, Emissivities_vectors
-    raise NotImplementeError
 
 
 
