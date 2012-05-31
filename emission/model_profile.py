@@ -154,10 +154,8 @@ def read_rebinned_models():
             )
         ]
 
-    print emfiles
     emlines = [ s.split("-")[1].split(".")[0] for s in emfiles ]
-    print emlines
-    Emissivities2D = [10**read_fits("em-%s" % (emline)) for emline in emlines]
+    Emissivities2D = dict([(emline, 10**read_fits("em-%s" % (emline))) for emline in emlines])
     Radius_vectors = []
     Velocity_vectors = []
     Emissivities_vectors = []
@@ -166,10 +164,12 @@ def read_rebinned_models():
         Velocity = sound_speed2D[j, i2] * n0 / (R**2 * Density2D[j, :])
         Radius_vectors.append(R)
         Velocity_vectors.append(Velocity)
-        Emissivities_vectors.append(
-            [Emissivity2D[j, :] for Emissivity2D in Emissivities2D]
+        Emissivities = dict(
+            [(emline, Emissivities2D[emline][j,:]) for emline in emlines]
             )
+        Emissivities_vectors.append(Emissivities)
 
+    print  Velocity_vectors
     return emlines, Theta, Radius_vectors, Velocity_vectors, Emissivities_vectors
 
 
@@ -272,6 +272,8 @@ def calculate_profiles():
             dmu = -0.5*(np.cos(Theta[jpos]) - np.cos(Theta[jneg]))
             NI = len(Radius)
             for i in range(NI):
+                if Velocity[i] == -1.0:
+                    continue    # Velocity = -1 indicates invalid radii 
                 ineg = max(0, i - 1)
                 ipos = min(NI-1, i + 1)
                 dr = 0.5*(Radius[ipos] - Radius[ineg])

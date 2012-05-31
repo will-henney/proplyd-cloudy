@@ -126,9 +126,15 @@ fitsdir = os.path.join(cmd_args.modeldir,
 if not os.path.isdir(fitsdir): 
     os.makedirs(fitsdir)
 
+def fix_nans(array, replace=-1.0):
+    """Replace all NaNs with something more innocuous"""
+    fixed_array = array.copy()
+    fixed_array[np.isnan(array)] = replace
+    return fixed_array
+    
 def write_fits(data, fileid):
     """Save array DATA to file FITSDIR/FILEID.fits"""
-    hdu = pyfits.PrimaryHDU(data)
+    hdu = pyfits.PrimaryHDU(fix_nans(data))
     hdu.writeto(os.path.join(fitsdir, fileid + '.fits'), clobber=True)
 
 # Save each independent variable grid to a file
