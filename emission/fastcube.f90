@@ -45,6 +45,11 @@ contains
     integer :: jneg, jpos, ineg, ipos
     integer :: iu, ix, iy
     logical :: is_outside_V, is_outside_X, is_outside_Y
+    character(len=*), parameter :: interpolation = "linear"
+    ! Variables for linear iterpolation
+    real :: uu, xx, yy, au, ax, ay, bu, bx, by
+    real :: c000, c001, c010, c011, c100, c101, c110, c111
+    
 
     allocate( Phi(NK) )
     cubes = 0.0
@@ -70,21 +75,68 @@ contains
              dr = 0.5*(R(ipos) - R(ineg))
              dvol =  abs(dphi * dmu * (R(i)**2) * dr)
              u = -V(j,i)*(sini*stheta*cphi + cosi*ctheta)
-             iu = int(floor((u-umin)/du))
              x = R(i)*(cosi*stheta*cphi + sini*ctheta)
              y = R(i)*stheta*sphi
-             ix = int(floor((x-xmin)/dx))
-             iy = int(floor((y-ymin)/dy))
 
-
-             is_outside_V = iu < 1 .or. iu > NU
-             is_outside_X = ix < 1 .or. ix > NX
-             is_outside_Y = iy < 1 .or. iy > NY
-             ! Skip this volume element if we are outside the box
-             if (is_outside_V .or. is_outside_X .or. is_outside_Y) cycle radiusloop
-
-             ! Otherwise, add the emissions into the cubes
-             cubes(:, iu, iy, ix) = cubes(:, iu, iy, ix) + dvol*Ems(:, j, i)
+             if (interpolation == "nearest") then
+                iu = 1 + int(floor((u-umin)/du))
+                ix = 1 + int(floor((x-xmin)/dx))
+                iy = 1 + int(floor((y-ymin)/dy))
+                is_outside_V = iu < 1 .or. iu > NU
+                is_outside_X = ix < 1 .or. ix > NX
+                is_outside_Y = iy < 1 .or. iy > NY
+                ! Skip this volume element if we are outside the box
+                if (is_outside_V .or. is_outside_X .or. is_outside_Y) cycle radiusloop
+                ! Otherwise, add the emissions into the cubes
+                cubes(:, iu, iy, ix) = cubes(:, iu, iy, ix) + dvol*Ems(:, j, i)
+             else if (interpolation == "linear") then
+                ! Linear interpolation on 3D
+                !
+                ! map to real scale from 0.0 -> N
+                uu = (u-umin)/du
+                xx = (x-xmin)/dx
+                yy = (y-ymin)/dy
+                ! nint gives the "left" cell 
+                iu = nint(uu)
+                ix = nint(xx)
+                iy = nint(yy)
+                ! have to be slightly more picky in this case
+                is_outside_V = iu < 1 .or. iu + 1 > NU
+                is_outside_X = ix < 1 .or. ix + 1 > NX
+                is_outside_Y = iy < 1 .or. iy + 1 > NY
+                ! Skip this volume element if we are outside the box
+                if (is_outside_V .or. is_outside_X .or. is_outside_Y) cycle radiusloop
+                ! find distance in fractional cell widths from center of left cell
+                au = uu - real(iu) + 0.5
+                ax = xx - real(ix) + 0.5
+                ay = yy - real(iy) + 0.5
+                ! same for distance from center of right cell
+                bu = 1.0 - au
+                bx = 1.0 - ax
+                by = 1.0 - ay
+                ! the eight interpolation coefficients
+                c000 = bu*bx*by
+                c001 = bu*bx*ay
+                c010 = bu*ax*by
+                c011 = bu*ax*ay
+                c100 = au*bx*by
+                c101 = au*bx*ay
+                c110 = au*ax*by
+                c111 = au*ax*ay
+                ! add into the eight cells
+                cubes(:, iu  , iy  , ix  ) = cubes(:, iu  , iy  , ix  ) + c000*dvol*Ems(:, j, i)
+                cubes(:, iu  , iy  , ix+1) = cubes(:, iu  , iy  , ix+1) + c001*dvol*Ems(:, j, i)
+                cubes(:, iu  , iy+1, ix  ) = cubes(:, iu  , iy+1, ix  ) + c010*dvol*Ems(:, j, i)
+                cubes(:, iu  , iy+1, ix+1) = cubes(:, iu  , iy+1, ix+1) + c011*dvol*Ems(:, j, i)
+                cubes(:, iu+1, iy  , ix  ) = cubes(:, iu+1, iy  , ix  ) + c100*dvol*Ems(:, j, i)
+                cubes(:, iu+1, iy  , ix+1) = cubes(:, iu+1, iy  , ix+1) + c101*dvol*Ems(:, j, i)
+                cubes(:, iu+1, iy+1, ix  ) = cubes(:, iu+1, iy+1, ix  ) + c110*dvol*Ems(:, j, i)
+                cubes(:, iu+1, iy+1, ix+1) = cubes(:, iu+1, iy+1, ix+1) + c111*dvol*Ems(:, j, i)
+             else
+                print '(2a)', "Unknown interpolation method: ", interpolation
+                stop
+             end if
+             
 
           end do radiusloop
        end do thetaloop
