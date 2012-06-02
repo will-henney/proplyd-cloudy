@@ -61,7 +61,7 @@ contains
     philoop: do k = 1, NK
        cphi = cos(Phi(k))
        sphi = sin(Phi(k))
-       thetaloop: do j = 1, NJ
+       thetaloop: do j = 2, NJ  ! miss out mu=1 to see if it helps
           ctheta = Mu(j)
           stheta = sqrt(1.0 - ctheta**2)
           ! Trapezium rule requires half-sized dmu at end points
@@ -75,7 +75,7 @@ contains
              dr = 0.5*(R(ipos) - R(ineg))
              dvol =  abs(dphi * dmu * (R(i)**2) * dr)
              u = -V(j,i)*(sini*stheta*cphi + cosi*ctheta)
-             x = R(i)*(cosi*stheta*cphi + sini*ctheta)
+             x = R(i)*(-cosi*stheta*cphi + sini*ctheta)
              y = R(i)*stheta*sphi
 
              if (interpolation == "nearest") then
@@ -90,7 +90,7 @@ contains
                 ! Otherwise, add the emissions into the cubes
                 cubes(:, iu, iy, ix) = cubes(:, iu, iy, ix) + dvol*Ems(:, j, i)
              else if (interpolation == "linear") then
-                ! Linear interpolation on 3D
+                ! Linear interpolation in 3D
                 !
                 ! map to real scale from 0.0 -> N
                 uu = (u-umin)/du
