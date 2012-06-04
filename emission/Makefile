@@ -1,5 +1,5 @@
 F2PYC=f2py
-F2PYFLAGS=--fcompiler=gnu95
+F2PYFLAGS=--fcompiler=gnu95 --f90flags="-fopenmp -lgomp"
 FC=gfortran
 FFLAGS=-g # instrument for debugging
 FFLAGS+=-Wall 	# turn on all warnings 

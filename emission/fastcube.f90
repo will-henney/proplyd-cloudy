@@ -41,15 +41,18 @@ contains
     real, allocatable, dimension(:) :: Phi
     integer :: i, j, k
     real :: dphi, dmu, dr, dvol
-    real :: cphi, sphi, ctheta, stheta, cosi, sini
-    integer :: jneg, jpos, ineg, ipos
-    integer :: iu, ix, iy
-    logical :: is_outside_V, is_outside_X, is_outside_Y
+    real, save :: cphi, sphi, ctheta, stheta, cosi, sini
+    integer, save :: jneg, jpos, ineg, ipos
+    !$OMP THREADPRIVATE(cphi, sphi, ctheta, stheta, jneg, jpos, ineg, ipos)
+    integer, save :: iu, ix, iy
+    logical, save :: is_outside_V, is_outside_X, is_outside_Y
+    !$OMP THREADPRIVATE(iu, ix, iy, is_outside_V, is_outside_X, is_outside_Y)
     character(len=*), parameter :: interpolation = "linear"
     ! Variables for linear iterpolation
-    real :: uu, xx, yy, au, ax, ay, bu, bx, by
-    real :: c000, c001, c010, c011, c100, c101, c110, c111
-    
+    real, save :: uu, xx, yy, au, ax, ay, bu, bx, by
+    !$OMP THREADPRIVATE(uu, xx, yy, au, ax, ay, bu, bx, by)
+    real, save :: c000, c001, c010, c011, c100, c101, c110, c111
+    !$OMP THREADPRIVATE(c000, c001, c010, c011, c100, c101, c110, c111)
 
     allocate( Phi(NK) )
     cubes = 0.0
@@ -58,6 +61,8 @@ contains
     cosi = cos(inc_degrees*PI/180.0)
     sini = sin(inc_degrees*PI/180.0)
 
+    !$OMP PARALLEL
+    !$OMP DO
     philoop: do k = 1, NK
        cphi = cos(Phi(k))
        sphi = sin(Phi(k))
@@ -141,6 +146,8 @@ contains
           end do radiusloop
        end do thetaloop
     end do philoop
+    !$OMP END DO
+    !$OMP END PARALLEL
 
     print *, "sum(cubes) = ", sum(cubes)
   end subroutine calculate_cubes_internal
