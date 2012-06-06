@@ -8,12 +8,15 @@ FFLAGS+=-ffpe-trap=invalid,zero,overflow # trap "serious" FP exceptions
 
 
 %.so: %.f90
-	$(F2PYC) $(F2PYFLAGS) -c -m $* $<    
+	$(F2PYC) $(F2PYFLAGS) --f90flags="$(FFLAGS)" -c -m $* $<    
 
-all: fastcube.so
-
-check: fastcube.f90
+%.o: %.f90
 	$(FC) $(FFLAGS) -c $<
+
+all: fastcube.so fastcube_gauss.so
+
+check: fastcube.o fastcube_gauss.o
+	rm *.o
 
 clean: 
 	rm *.so

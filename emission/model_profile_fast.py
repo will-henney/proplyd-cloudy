@@ -4,6 +4,7 @@ import sys, os, glob
 import argparse
 import pyfits
 import fastcube
+import fastcube_gauss
 
 sys.path.append("../../../src")       # make sure we can find claudia.py
 import claudia
@@ -54,7 +55,34 @@ def parse_command_args():
         "--rebin", type=str, default="linear-101",
         help='Load rebinned model from "rebin-REBIN"')
 
+    parser.add_argument(
+        "--onlylinesin", type=str, default=None,
+        help='Only create cubes for lines listed in this file (one per line)')
+
+    parser.add_argument(
+        "--gauss", action="store_true",  
+        help='Calculate thermal broadening of lines (MAY BE SLOW!)')
+
+
     return parser.parse_args()
+
+
+
+def find_awt(emline):
+    "Find the atomic weight from the Cloudy emission line label"
+    symbol_dict = dict(
+        H=1.0, HE=4.0, C=12.0, N=14.0, O=16.0, NE=20.2, MG=24.3,
+        SI=28.1, S=32.1, CL=35.5, AR=40.0, CA=40.1, FE=55.8, CO=58.9, NI=58.7
+        )
+    special_dict = dict(TOTL__4363A="O", TOTL__2326A="O", TOTL__5199A="N")
+    if emline in special_dict.keys():
+        element = special_dict[emline]
+    else:
+        element = emline.split("_")[0]
+
+    return symbol_dict[element]
+
+        
 
 
 def read_rebinned_models():
@@ -80,13 +108,17 @@ def read_rebinned_models():
     Mu = read_fits("mu")[:,0]
     R = read_fits("R")[0,:]
     i2 = len(R[R<1.0])             # find index where R = 1
-    Density2D = 10**read_fits("ovr-hden")
+    Density2D = read_fits("ovr-hden")
+    validmask = Density2D != -1.0
+    Density2D = 10**Density2D
     sound_speed2D = np.sqrt(3./5.)*read_fits("pre-cadwind_kms")
     n0 = Density2D[:, i2:i2+1]
     c0 = sound_speed2D[:, i2:i2+1] 
     V = c0 * n0 / (R**2 * Density2D) # V should be 2-dimensional
 
-    emfiles = [
+    T = 10**read_fits("ovr-Te")
+
+    emfiles_found = [
         os.path.basename(p) for p in 
         glob.glob(
             os.path.join(
@@ -96,14 +128,39 @@ def read_rebinned_models():
                 )
             )
         ]
-    emlines = [ s.split("-")[1].split(".")[0] for s in emfiles ]
+    emlines_found = [ s.split("-")[1].split(".")[0] for s in emfiles_found ]
+
+    if cmd_args.onlylinesin:
+        # Read list of selected emission lines if asked for
+        with open(cmd_args.onlylinesin) as f:
+            selectedlines = f.read().split('\n')
+        # But make sure that H beta is in the list
+        if not "H__1__4861A" in selectedlines:
+            selectedlines.append("H__1__4861A")
+        print "Selected lines: ", selectedlines
+        # Only calculate lines that are not in the selected list
+        emlines = list()
+        emfiles = list()
+        for emline, emfile in zip(emlines_found, emfiles_found):
+            if emline in selectedlines:
+                emlines.append(emline)
+                emfiles.append(emfile)
+        print "Lines to be used: ", emlines
+    else:
+        # Otherwise, use all the lines whose emissivity files can be found
+        emlines = emlines_found
+        emfiles = emfiles_found
+        
 
     # list of emissivity arrays
     Emissivities = [10**read_fits("em-%s" % (emline)) for emline in emlines]
     # convert in 3D array:
     Ems = np.concatenate( [arr[None,:,:] for arr in Emissivities] )
 
-    return emlines, Mu, R, V, Ems
+    # find atomic weights
+    awt = [find_awt(emline) for emline in emlines]
+
+    return emlines, Mu, R, V, T, Ems, awt, validmask
 
 
 
@@ -180,15 +237,20 @@ def calculate_profiles():
     Fluxes = dict()
     DataCubes = dict()
 
-    # R is already in units of i-front radius
-    cubes = fastcube.calculate_cubes(R, Mu, V, Ems, NU, NY, NX, NK, inc_degrees, xmin, ymin, umin, dx, dy, du)
+    if cmd_args.gauss:
+        cubes = fastcube_gauss.calculate_cubes(R, Mu, V, T, Ems, awt, validmask, NU, NY, NX, NK, inc_degrees, xmin, ymin, umin, dx, dy, du)
+    else:
+        cubes = fastcube.calculate_cubes(R, Mu, V, Ems, validmask, NU, NY, NX, NK, inc_degrees, xmin, ymin, umin, dx, dy, du)
+
+    print "Summing datacubes to find total fluxes...."
     for iline, emline in enumerate(emlines):
         # Put the physical units into the volume element
-        DataCubes[emline] = cubes[iline,:,:,:] * r0**3
+        DataCubes[emline] = cubes[iline,:,:,:]  * r0**3 
         # 1-D line profile as function of velocity
         Profiles[emline] =  DataCubes[emline].sum(axis=-1).sum(axis=-1)
         # Total line flux (integral of line profile)
         Fluxes[emline] = DataCubes[emline].sum()
+    print ".... finished"
 
 
     return Fluxes, Profiles, DataCubes
@@ -220,7 +282,7 @@ if __name__ == "__main__":
 
 
     if isRebinned:
-        emlines, Mu, R, V, Ems = read_rebinned_models()
+        emlines, Mu, R, V, T, Ems, awt, validmask = read_rebinned_models()
     else:
         raise NotImplementedError
 
