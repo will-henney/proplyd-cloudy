@@ -3,7 +3,7 @@
 ! Even though it is a subroutine, it appears a function in python
 ! 
 ! Note that R must be sent in dimensionless form (units of i-front radius)
-subroutine calculate_cubes(R, Mu, V, Ems, NI, NJ, NL, cubes, NU, NY, NX,&
+subroutine calculate_cubes(R, Mu, V, Ems, validmask, NI, NJ, NL, cubes, NU, NY, NX,&
      & NK, inc_degrees, xmin, ymin, umin, dx, dy, du)
   implicit none
 !!! Input Arguments
@@ -14,6 +14,8 @@ subroutine calculate_cubes(R, Mu, V, Ems, NI, NJ, NL, cubes, NU, NY, NX,&
   real, intent(in), dimension(NJ) :: Mu ! Input angle (cosine) array
   real, intent(in), dimension(NJ, NI) :: V ! Input velocity field
   real, intent(in), dimension(NL, NJ, NI) :: Ems ! Input line emissivities
+  ! which combinations of R and mu have valid data
+  logical, intent(in), dimension(NJ, NI) :: validmask 
   integer, intent(in) :: NX, NY, NU ! Dimensions of output cubes
 !!! Output Argument
   real, intent(out), dimension(NL, NU, NY, NX) :: cubes
@@ -46,7 +48,7 @@ contains
     integer :: iu, ix, iy
     logical :: is_outside_V, is_outside_X, is_outside_Y
     character(len=*), parameter :: interpolation = "linear"
-    ! Variables for linear iterpolation
+    ! Variables for linear interpolation
     real :: uu, xx, yy, au, ax, ay, bu, bx, by
     real :: c000, c001, c010, c011, c100, c101, c110, c111
     
@@ -61,7 +63,7 @@ contains
     philoop: do k = 1, NK
        cphi = cos(Phi(k))
        sphi = sin(Phi(k))
-       thetaloop: do j = 2, NJ  ! miss out mu=1 to see if it helps
+       thetaloop: do j = 1, NJ-1  
           ctheta = Mu(j)
           stheta = sqrt(1.0 - ctheta**2)
           ! Trapezium rule requires half-sized dmu at end points
@@ -69,7 +71,7 @@ contains
           jpos = min(NJ, j + 1)
           dmu = -0.5*(mu(jpos) - mu(jneg))
           radiusloop: do i = 1, NI
-             if (V(j,i) == -1.0) cycle radiusloop
+             if (.not. validmask(j,i)) cycle radiusloop ! invalid radius for this mu
              ineg = max(1, i - 1)
              ipos = min(NI, i + 1)
              dr = 0.5*(R(ipos) - R(ineg))
@@ -136,6 +138,17 @@ contains
                 print '(2a)', "Unknown interpolation method: ", interpolation
                 stop
              end if
+
+             if (dvol*Ems(1, j, i) >= 1.e-12) then
+                print *, "Large value warning:"
+                print *, "iu, iy, ix, cubes(1, iu, iy, ix )"
+                print *, iu, iy, ix, cubes(1, iu, iy, ix )
+                print *, "j, i, dvol, Ems(1, j, i)"
+                print *, j, i, dvol, Ems(1, j, i)
+                print *, "interpolation coefficients:"
+                print *, au, bu, ay, by, ax, bx
+             end if
+
              
 
           end do radiusloop
