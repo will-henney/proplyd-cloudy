@@ -17,5 +17,5 @@ papers/*.dep
 papers/*.dpth
 papers/auto
 /emission/fastcube-orig.f90
-/emission/fastcube.so
+emission/*.so
 /emission/fastcubewrap.f90

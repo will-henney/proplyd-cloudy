@@ -36,6 +36,16 @@ subroutine calculate_cubes(R, Mu, V, T, Ems, awt, validmask, NI, NJ, NL, cubes, 
 
 contains
 
+  subroutine progress_update(i, N)
+    integer, intent(in) :: i, N
+
+    if (mod(i, int(0.01*N)) == 0) then
+       print "(i0,a)", i/int(0.01*N), "% complete"
+    end if
+    
+  end subroutine progress_update
+  
+
   subroutine calculate_cubes_internal
     ! Actually do the work
     real, parameter :: PI = 3.1415926535897932385
@@ -64,6 +74,7 @@ contains
     philoop: do k = 1, NK
        cphi = cos(Phi(k))
        sphi = sin(Phi(k))
+       call progress_update(k, NK)
        thetaloop: do j = 1, NJ-1  
           ctheta = Mu(j)
           stheta = sqrt(1.0 - ctheta**2)
