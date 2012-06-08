@@ -50,17 +50,22 @@ contains
     ! Actually do the work
     real, parameter :: PI = 3.1415926535897932385
     ! Local variables
-    real :: u0, x, y
-    real, allocatable, dimension(:) :: Phi, Ugrid, Doppler
+    real, save :: u0, x, y
+    !$OMP THREADPRIVATE(u0, x, y)
+    real, save, allocatable, dimension(:) :: Phi, Ugrid, Doppler
+    !$OMP THREADPRIVATE(Ugrid, Doppler)
     integer :: i, j, k
     real :: dphi, dmu, dr, dvol
-    real :: cphi, sphi, ctheta, stheta, cosi, sini
-    integer :: jneg, jpos, ineg, ipos
-    integer :: ix, iy
-    logical :: is_outside_X, is_outside_Y
+    real, save  :: cphi, sphi, ctheta, stheta, cosi, sini
+    integer, save  :: jneg, jpos, ineg, ipos
+    !$OMP THREADPRIVATE(cphi, sphi, ctheta, stheta, jneg, jpos, ineg, ipos)
+    integer, save  :: ix, iy
+    logical, save :: is_outside_X, is_outside_Y
+    !$OMP THREADPRIVATE(ix, iy, is_outside_X, is_outside_Y)
     real, parameter :: xi0 = 0.128486646972 ! Doppler broadening parameter for H at 1 K
-    integer :: iline
-    real :: xi
+    integer, save :: iline
+    real, save  :: xi
+    !$OMP THREADPRIVATE(iline, xi)
 
     allocate( Phi(NK), Ugrid(NU), Doppler(NU) )
     cubes = 0.0
@@ -71,10 +76,13 @@ contains
 
     Ugrid = (/(umin + real(i-1)*du, i = 1, NU)/)
 
+    !$OMP PARALLEL
+    !$OMP DO
     philoop: do k = 1, NK
        cphi = cos(Phi(k))
        sphi = sin(Phi(k))
-       call progress_update(k, NK)
+       ! Problematic to print stuff in a parallel section
+       ! call progress_update(k, NK)
        thetaloop: do j = 1, NJ-1  
           ctheta = Mu(j)
           stheta = sqrt(1.0 - ctheta**2)
@@ -103,7 +111,7 @@ contains
                 ! Calculate Doppler broadening parameter
                 xi = xi0 * sqrt(T(j, i)/awt(iline))
                 ! calculate the Doppler profile
-                doppler = exp( -((Ugrid-u0)/xi)**2 )
+                Doppler = exp( -((Ugrid-u0)/xi)**2 )
                 ! Note that this should really be integrated over the width of the velocity bin
                 ! Normalize the profile
                 Doppler = Doppler / sum(Doppler)
@@ -113,6 +121,8 @@ contains
           end do radiusloop
        end do thetaloop
     end do philoop
+    !$OMP END DO
+    !$OMP END PARALLEL
 
     print *, "sum(cubes) = ", sum(cubes)
   end subroutine calculate_cubes_internal
