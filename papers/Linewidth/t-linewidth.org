@@ -1,0 +1,31 @@
+
+* Empirical temperature diagnostics by the linewidth method
+  CLOCK: [2012-06-07 Thu 21:39]--[2012-06-07 Thu 21:47] =>  0:08
+
+** Plan for paper
+
+*** Title
+Ionized gas temperatures in the Orion proplyds
+
+
+** [0/3] Verification of method by using the models
+   CLOCK: [2012-06-07 Thu 21:47]--[2012-06-07 Thu 22:05] =>  0:18
+
++ [-] Calculate T from velocity moments
+  + [X] Do maps - [[file:~/Work/Nahiely/proplyd-cloudy/emission/linewidth-T.py][linewidth-T.py]]
+  + [ ] Do for general aperture
+  + [ ] Run for many models
+    + [ ] different inclinations
+    + [ ] different metallicities
++ [ ] Calculate "real" mean T map
+  + [ ] Weighted by Ha emission
+  + [ ] Compare with empirically derived T 
++ [ ] More realistic fake observations
+  + [ ] Add a constant nebular background
+  + [ ] Convolve with PSF and/or seeing
+  + [ ] Add noise
+  + [ ] Add a real nebular background
+    + [ ] Superimose the proplyd on a random bit of nebula
+    + [ ] Extinction of the nebula by the proplyd
+    + [ ] Try to interpolate and remove the nebula
+
