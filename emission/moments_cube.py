@@ -14,12 +14,40 @@ parser.add_argument(
     "--suffix", type=str, default="nphi400-nvel200-inc60",  
     help='Last part of cube file names')
 
+parser.add_argument(
+    "--onlylinesin", type=str, default=None,
+    help='Only process cubes for lines listed in this file (one per line)')
+
 cmd_args = parser.parse_args()
 
-files = glob.glob("cube-*-{}.fits".format(cmd_args.suffix))
+cubefiles_found = glob.glob("cube-*-{}.fits".format(cmd_args.suffix))
+
+emlines_found = [ s.split("-")[1].split(".")[0] for s in cubefiles_found ]
+
+if cmd_args.onlylinesin:
+    # Read list of selected emission lines if asked for
+    with open(cmd_args.onlylinesin) as f:
+        selectedlines = f.read().split('\n')
+    # But make sure that H beta is in the list
+    if not "H__1__4861A" in selectedlines:
+        selectedlines.append("H__1__4861A")
+    print "Selected lines: ", selectedlines
+    # Only calculate lines that are not in the selected list
+    emlines = list()
+    cubefiles = list()
+    for emline, cubefile in zip(emlines_found, cubefiles_found):
+        if emline in selectedlines:
+            emlines.append(emline)
+            cubefiles.append(cubefile)
+    print "Lines to be used: ", emlines
+else:
+    # Otherwise, use all the lines whose emissivity files can be found
+    emlines = emlines_found
+    cubefiles = cubefiles_found
 
 
-for file in files:
+
+for file in cubefiles:
     hdu, = pyfits.open(file)
     # construct velocity array
     i0, u0, du, n = [hdu.header[kwd] for kwd in "CRPIX3", "CRVAL3", "CDELT3", "NAXIS3"]
