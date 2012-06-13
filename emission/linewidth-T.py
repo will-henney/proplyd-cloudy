@@ -57,8 +57,8 @@ for lineset in linesets:
         )
 
     # First calculate naive T
-    T = 1.e4*(sig["ha"]**2 - sig["oiii"]**2)/77.34
-    savemap(T, "Naive-T")
+    T0 = 1.e4*(sig["ha"]**2 - sig["oiii"]**2)/77.34
+    savemap(T0, "Naive-T")
 
     # Second, calculate the correction factors
     
@@ -87,7 +87,7 @@ for lineset in linesets:
         savemap(xi, "xi-{}".format(fname))
 
         # Finally, calculate the corrected temperature
-        T = eta*T + 1.e4*(epsilon - zeta - xi)
+        T = eta*T0 + 1.e4*(epsilon - zeta - xi)
         savemap(T, "Corrected-T-{}".format(fname))
 
 
