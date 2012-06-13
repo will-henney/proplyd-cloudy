@@ -1,5 +1,6 @@
 *.pyc
 *.o
+*.mod
 local.mk
 models/out
 models/in
@@ -20,3 +21,4 @@ papers/auto
 emission/*.so
 /emission/fastcubewrap.f90
 /emission/config.mk
+/emission/test_fastcube

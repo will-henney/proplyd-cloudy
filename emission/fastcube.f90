@@ -26,11 +26,16 @@ subroutine calculate_cubes(R, Mu, V, Ems, validmask, NI, NJ, NL, cubes, NU, NY, 
   real :: xmin, ymin, umin
   ! Note that [xyu]max are not used
   real :: dx, dy, du
+  ! local vars
+  integer :: idebug = 1
 
-  print '(a)',  "NK, inc_degrees, xmin, ymin, umin, dx, dy, du"
-  print *,  NK, inc_degrees, xmin, ymin, umin, dx, dy, du
-  print *, "sum(Ems) = ", sum(Ems)
 
+  if (idebug >= 1) then
+     print '(a)',  "NK, inc_degrees, xmin, ymin, umin, dx, dy, du"
+     print *,  NK, inc_degrees, xmin, ymin, umin, dx, dy, du
+     print *, "sum(Ems) = ", sum(Ems)
+  end if
+  
   call calculate_cubes_internal
 
 contains
@@ -43,15 +48,20 @@ contains
     real, allocatable, dimension(:) :: Phi
     integer :: i, j, k
     real :: dphi, dmu, dr, dvol
-    real :: cphi, sphi, ctheta, stheta, cosi, sini
-    integer :: jneg, jpos, ineg, ipos
-    integer :: iu, ix, iy
-    logical :: is_outside_V, is_outside_X, is_outside_Y
+    real, save :: cphi, sphi, ctheta, stheta, cosi, sini
+    integer, save :: jneg, jpos, ineg, ipos
+    integer, save :: iu, ix, iy
+    logical, save :: is_outside_V, is_outside_X, is_outside_Y
     character(len=*), parameter :: interpolation = "linear"
     ! Variables for linear interpolation
-    real :: uu, xx, yy, au, ax, ay, bu, bx, by
-    real :: c000, c001, c010, c011, c100, c101, c110, c111
-    
+    real, save :: uu, xx, yy, au, ax, ay, bu, bx, by
+    real, save :: c000, c001, c010, c011, c100, c101, c110, c111
+    !$OMP THREADPRIVATE(cphi, sphi, ctheta, stheta, jneg, jpos, ineg, ipos)
+    !$OMP THREADPRIVATE(iu, ix, iy, is_outside_V, is_outside_X, is_outside_Y)
+    !$OMP THREADPRIVATE(uu, xx, yy, au, ax, ay, bu, bx, by)
+    !$OMP THREADPRIVATE(c000, c001, c010, c011, c100, c101, c110, c111)
+
+
 
     allocate( Phi(NK) )
     cubes = 0.0
@@ -60,6 +70,7 @@ contains
     cosi = cos(inc_degrees*PI/180.0)
     sini = sin(inc_degrees*PI/180.0)
 
+    !$OMP PARALLEL DO
     philoop: do k = 1, NK
        cphi = cos(Phi(k))
        sphi = sin(Phi(k))
@@ -139,7 +150,7 @@ contains
                 stop
              end if
 
-             if (dvol*Ems(1, j, i) >= 1.e-12) then
+             if (dvol*Ems(1, j, i) >= 1.e-12 .and. idebug >= 2) then
                 print *, "Large value warning:"
                 print *, "iu, iy, ix, cubes(1, iu, iy, ix )"
                 print *, iu, iy, ix, cubes(1, iu, iy, ix )
@@ -154,6 +165,7 @@ contains
           end do radiusloop
        end do thetaloop
     end do philoop
+    !$OMP END PARALLEL DO
 
     print *, "sum(cubes) = ", sum(cubes)
   end subroutine calculate_cubes_internal

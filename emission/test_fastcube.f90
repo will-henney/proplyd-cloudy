@@ -35,29 +35,36 @@ program test_fastcube
   ! Pure Fortran test of routines in fastcube.f90
   use fastcube_mod, only: calculate_cubes
   implicit none
-  integer, parameter :: N = 50       ! All arrays the same size
-  integer, parameter :: NI = N   ! Size of input radius array
-  integer, parameter :: NJ = N   ! Size of input angle array
-  integer, parameter :: NL = 5   ! Number of emission lines
-  real, dimension(NI) :: R ! Input radius array
-  real, dimension(NJ) :: Mu ! Input angle (cosine) array
-  real, dimension(NJ, NI) :: V ! Input velocity field
-  real, dimension(NL, NJ, NI) :: Ems ! Input line emissivities
+  integer :: N, M        ! All arrays the same size
+  integer :: NI  ! Size of input radius array
+  integer :: NJ  ! Size of input angle array
+  integer :: NL = 5   ! Number of emission lines
+  real, allocatable, dimension(:) :: R ! Input radius array
+  real, allocatable, dimension(:) :: Mu ! Input angle (cosine) array
+  real, allocatable, dimension(:, :) :: V ! Input velocity field
+  real, allocatable, dimension(:, :, :) :: Ems ! Input line emissivities
   ! which combinations of R and mu have valid data
-  logical, dimension(NJ, NI) :: validmask 
-  integer, parameter :: NX = N, NY = N, NU = N ! Dimensions of output cubes
+  logical, allocatable, dimension(:, :) :: validmask 
+  integer :: NX, NY, NU ! Dimensions of output cubes
 !!! Output Argument
-  real, dimension(NL, NU, NY, NX) :: cubes
+  real, allocatable, dimension(:, :, :, :) :: cubes
 !!! Auxiliary input arguments
-  integer :: NK = N                ! Number of phi values to use
+  integer :: NK                ! Number of phi values to use
   real :: inc_degrees = 30.0           ! Inclination of proplyd axis to line of sight
-  real, parameter :: Rmax = 9.0
+  real :: Rmax = 9.0
   ! Limits of PPV cube
   real :: xmin = -1.0, ymin = -1.0, umin = -1.0
   ! Note that [xyu]max are not used
   real :: dx = 0.01, dy = 0.01, du = 0.01
-  integer :: i, j, k
-  
+  integer :: i, j
+
+  print '(a)', "Enter linear dimension of input, output arrays: N, M"
+  read *, N, M
+  NI = N; NJ = N                ! Emissivity array sizes
+  allocate(R(NI), Mu(NJ), V(NJ, NI), Ems(NL, NJ, NI), validmask(NJ, NI))
+  NX = M; NY = M; NU = M        ! Output cube sizes
+  allocate(cubes(NL, NU, NY, NX))
+  NK = N                        ! number of phi values
 
   R = (/(1.0 + (Rmax - 1.0)*real(i-1)/real(NI), i = 1, NI)/)
   Mu = (/(real(j-1)/real(NJ), j = 1, NJ)/)
