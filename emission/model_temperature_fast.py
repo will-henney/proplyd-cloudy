@@ -30,9 +30,6 @@ def parse_command_args():
         "--nphi", type=int, default=400,
         help='Number of angles phi')
     parser.add_argument(
-        "--nvel", type=int, default=50,
-        help='Number of velocity bins')
-    parser.add_argument(
         "--inc", type=float, default=0.0,
         help='Inclination in degrees')
 
@@ -59,30 +56,8 @@ def parse_command_args():
         "--onlylinesin", type=str, default=None,
         help='Only create cubes for lines listed in this file (one per line)')
 
-    parser.add_argument(
-        "--gauss", action="store_true",  
-        help='Calculate thermal broadening of lines (MAY BE SLOW!)')
-
-
     return parser.parse_args()
 
-
-
-def find_awt(emline):
-    "Find the atomic weight from the Cloudy emission line label"
-    symbol_dict = dict(
-        H=1.0, HE=4.0, C=12.0, N=14.0, O=16.0, NE=20.2, MG=24.3,
-        SI=28.1, S=32.1, CL=35.5, AR=40.0, CA=40.1, FE=55.8, CO=58.9, NI=58.7
-        )
-    special_dict = dict(TOTL__4363A="O", TOTL__2326A="O", TOTL__5199A="N")
-    if emline in special_dict.keys():
-        element = special_dict[emline]
-    else:
-        element = emline.split("_")[0]
-
-    return symbol_dict[element]
-
-        
 
 
 def read_rebinned_models():
@@ -158,29 +133,22 @@ def read_rebinned_models():
     Ems = np.concatenate( [arr[None,:,:] for arr in Emissivities] )
 
     # find atomic weights
-    awt = [find_awt(emline) for emline in emlines]
-
-    return emlines, Mu, R, V, T, Ems, awt, validmask
+    return emlines, Mu, R, V, T, Ems, validmask
 
 
 
-
-
-
-def write_datacubes():
+def write_Tmaps():
     """Write each datacube to a FITS file """
     def add_WCS_keyvals(iaxis, keyvaldict):
         """Add in a whole load of keywords for the same axis"""
         for k, v in keyvaldict.items():
             hdu.header.update(k+str(iaxis), v)
     # write the data cubes as FITS files
-    for emline, cube in DataCubes.items():
-        fitsfilename = "cube-{}-{}.fits".format(emline, idstring)
+    for emline, Tmap in Tmaps.items():
+        fitsfilename = "Tmap-{}-{}.fits".format(emline, idstring)
         # write datacube to the HDU
-        hdu = pyfits.PrimaryHDU(cube)
+        hdu = pyfits.PrimaryHDU(Tmap)
         # write WCS headers to the HDU
-        add_WCS_keyvals(3, dict(crpix=1, crval=umin+0.5*du, cdelt=du, 
-                                ctype="VELOCITY", cunit="km/s    ") )
         add_WCS_keyvals(2, dict(crpix=1, crval=ymin+0.5*dy, cdelt=dy, 
                                 ctype="YOFFSET ", cunit="r0      ") )
         add_WCS_keyvals(1, dict(crpix=1, crval=xmin+0.5*dx, cdelt=dx, 
@@ -188,43 +156,8 @@ def write_datacubes():
         hdu.writeto(fitsfilename, clobber=True)
 
 
-def write_lineprofile_table():
-    import matplotlib.mlab as mlab
-    datatable = np.rec.fromarrays([PerfilU] + Profiles.values(), 
-                                  names=','.join(['U'] + Profiles.keys()))
-    mlab.rec2csv(datatable, savefile, delimiter="\t")
 
-
-def print_total_fluxes():
-    hbeta = Fluxes["H__1__4861A"]
-    print "H beta line flux: "
-    print "Line fluxes relative to H beta = 100:"
-
-    def sortkey(cloudy_line):
-        """
-        Key for sorting the lines by wavelength
-        """
-        cloudy_line = cloudy_line.replace('_', ' ')
-        # strip off first 4 characters and then only keep the first word
-        wav_s = cloudy_line[4:].split()[0]
-        unit = wav_s[-1]
-        wav = float(wav_s[:-1])
-        if unit == 'A':
-            wav *= 1.e-8
-        elif unit == 'm':
-            wav *= 1.e-4
-        else:
-            raise ValueError, "%s is neither A nor m" % (unit)
-        return wav
-
-    for emline in sorted(emlines, key=sortkey):
-        flux = Fluxes[emline]
-        em = emline.replace('_', ' ')
-        print '|'.join(['', em[:-5], em[-5:], "%g" % (100.0*flux/hbeta), ''])
-
-
-
-def calculate_profiles():
+def calculate_Tmaps():
     """
     Returns 3 dicts (each keyed by line ID): 
 
@@ -233,27 +166,12 @@ def calculate_profiles():
     DataCubes : 3D position-position-velocity cube of each line
 
     """
-    Profiles = dict()
-    Fluxes = dict()
-    DataCubes = dict()
+    # Lower-case tlines is a 3-d numpy array
+    tmaps = fastcube.weighted_temperature(R, Mu, T, Ems, validmask, NY, NX, NK, inc_degrees, xmin, ymin, dx, dy)
 
-    if cmd_args.gauss:
-        cubes = fastcube_gauss.calculate_cubes(R, Mu, V, T, Ems, awt, validmask, NU, NY, NX, NK, inc_degrees, xmin, ymin, umin, dx, dy, du)
-    else:
-        cubes = fastcube.calculate_cubes(R, Mu, V, Ems, validmask, NU, NY, NX, NK, inc_degrees, xmin, ymin, umin, dx, dy, du)
-
-    print "Summing datacubes to find total fluxes...."
-    for iline, emline in enumerate(emlines):
-        # Put the physical units into the volume element
-        DataCubes[emline] = cubes[iline,:,:,:]  * r0**3 
-        # 1-D line profile as function of velocity
-        Profiles[emline] =  DataCubes[emline].sum(axis=-1).sum(axis=-1)
-        # Total line flux (integral of line profile)
-        Fluxes[emline] = DataCubes[emline].sum()
-    print ".... finished"
-
-
-    return Fluxes, Profiles, DataCubes
+    # Convert to a dictionary of 2-d numpy arrays, indexed by the emission line name
+    Tmaps = dict([(emline, tmaps[iline,:,:]) for iline, emline in enumerate(emlines)])
+    return Tmaps
 
 
 
@@ -264,7 +182,6 @@ if __name__ == "__main__":
     cmd_args = parse_command_args()
 
     # Set some local variables from the command line arguments
-    NU = cmd_args.nvel
     inc_degrees = cmd_args.inc
     r0 = cmd_args.r0
     Rmax = cmd_args.Rmax
@@ -276,11 +193,9 @@ if __name__ == "__main__":
     # while xmax is the right border of the last cell
     NX = int((xmax - xmin)/dx)
     NY = int((ymax - ymin)/dy)
-    print "Datacube size: (NU, NY, NX) = ({}, {}, {})".format(NU, NY, NX)
-
 
     if isRebinned:
-        emlines, Mu, R, V, T, Ems, awt, validmask = read_rebinned_models()
+        emlines, Mu, R, V, T, Ems, validmask = read_rebinned_models()
     else:
         raise NotImplementedError
 
@@ -299,24 +214,12 @@ if __name__ == "__main__":
     NJ = len(Mu)
 
 
-    # Define the velocity bins
-    umax = 50.0
-    umin = -umax
-    du = (umax - umin)/NU
-
     print "NI = {}, NJ = {}".format(len(R), len(Mu))
     print "Ems.shape = {}".format(Ems.shape)
 
-    Fluxes, Profiles, DataCubes = calculate_profiles()
+    Tmaps = calculate_Tmaps()
 
-    PerfilU = np.linspace(umin, umax, NU)
-    idstring = "nphi%(nphi)i-nvel%(nvel)i-inc%(inc)i" % (vars(cmd_args))
-    savefile = "model_profile-%s.dat" % (idstring)
+    idstring = "nphi%(nphi)i-inc%(inc)i" % (vars(cmd_args))
 
-
-    write_lineprofile_table()
-
-    print_total_fluxes()
-
-    write_datacubes()
+    write_Tmaps()
 
