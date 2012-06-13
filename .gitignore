@@ -22,3 +22,4 @@ emission/*.so
 /emission/fastcubewrap.f90
 /emission/config.mk
 /emission/test_fastcube
+emission/test_data/cube*.fits
