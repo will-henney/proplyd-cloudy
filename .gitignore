@@ -19,3 +19,4 @@ papers/auto
 /emission/fastcube-orig.f90
 emission/*.so
 /emission/fastcubewrap.f90
+/emission/config.mk
