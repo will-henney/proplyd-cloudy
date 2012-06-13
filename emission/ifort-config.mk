@@ -3,8 +3,8 @@ F2PYFLAGS=--fcompiler=intelem
 FC=ifort
 
 FAST_FFLAGS=-O3
-FAST_FLAGS+=-no-prec-div -xHost -ipo
-FAST_FLAGS+=-fp-model fast=2 -fp-speculation=fast # potentially unsafe optimizations
+FAST_FFLAGS+=-no-prec-div -xHost -ipo
+FAST_FFLAGS+=-fp-model fast=2 -fp-speculation=fast # potentially unsafe optimizations
 
 DEBUG_FLAGS=-g # instrument for debugging
 DEBUG_FFLAGS+=-C 		# check array bounds
