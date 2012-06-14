@@ -83,7 +83,7 @@ contains
        sphi = sin(Phi(k))
        ! Problematic to print stuff in a parallel section
        ! call progress_update(k, NK)
-       thetaloop: do j = 1, NJ-1  
+       thetaloop: do j = 1, NJ 
           ctheta = Mu(j)
           stheta = sqrt(1.0 - ctheta**2)
           ! Trapezium rule requires half-sized dmu at end points

@@ -23,3 +23,9 @@ emission/*.so
 /emission/config.mk
 /emission/test_fastcube
 emission/test_data/cube*.fits
+emission/test_data/LW-*.fits
+emission/test_data/M[01234]-*.fits
+emission/test_data/Tmap-*.fits
+emission/test_data/pv-cube-*.fits
+emission/test_data/*.bck*
+

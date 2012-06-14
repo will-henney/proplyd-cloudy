@@ -20,12 +20,16 @@ cmd_args = parser.parse_args()
 # Options to use either the nebular or auroral linesets
 linesets = [
     dict(name="nebular", ha="H__1__6563A", oiii="O__3__5007A", nii="N__2__6584A"),
-    dict(name="auroral", ha="H__1__6563A", oiii="TOTL__4363A", nii="N__2__5755A")
+    dict(name="auroral", ha="H__1__6563A", oiii="TOTL__4363A", nii="N__2__5755A"),
+    dict(name="recomb", ha="H__1__6563A", oiii="O_2r__4651A", nii="O_II__7323A"),
+    dict(name="fake", ha="H__1__6563A", oiii="O__3__0000A", nii="N__2__0000A")
     ]
 
 nii_ha_emiss_coeff_ratio = dict(
     nebular=0.5,
-    auroral=0.1
+    auroral=0.1,
+    fake=0.1,
+    recomb=0.1,
     )
 dT = 1.e3                       # T difference between N+ and O++ zones
 
@@ -61,7 +65,11 @@ for lineset in linesets:
     savemap(T0, "Naive-T")
 
     # Second, calculate the correction factors
-    
+
+    if lineset["name"] == "fake":
+        # But skip this part if we have the fake lines
+        continue
+
     # Fraction of O++ - Method 1: surface brightness
     f1 = 1.0 - (S["nii"]/S["ha"]) / nii_ha_emiss_coeff_ratio[lineset["name"]] 
     savemap(f1, "f1")
