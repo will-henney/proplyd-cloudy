@@ -1,6 +1,8 @@
 *.pyc
 *.o
 *.mod
+*__genmod.f90
+*~
 local.mk
 models/out
 models/in
