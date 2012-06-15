@@ -25,10 +25,9 @@ parser.add_argument(
 
 
 cmd_args = parser.parse_args()
-
 cubefiles_found = glob.glob("cube-*-{}.fits".format(cmd_args.suffix))
-
 emlines_found = [ s.split("-")[1].split(".")[0] for s in cubefiles_found ]
+
 
 xi, yi, xf, yf = cmd_args.slit
 
@@ -54,34 +53,61 @@ else:
     emlines = emlines_found
     cubefiles = cubefiles_found
 
-print "H beta line flux: "
-print "Line fluxes relative to H beta = 100:"
+yv_slit_map = dict()
+slit_profile = dict()
+total_slit_flux = dict()
 
 for line, cube in zip(emlines, cubefiles):
+
     hdu, = pyfits.open(cube)
 
-    i0, u0, du, n = [hdu.header[kwd] for kwd in "CRPIX3", "CRVAL3", "CDELT3", "NAXIS3"]
-    u = u0 + du*(np.arange(n) - (i0 - 1))
-    u = u.reshape((-1, 1, 1))
+    i0, u0, du, nu = [hdu.header[kwd] for kwd in "CRPIX3", "CRVAL3", "CDELT3", "NAXIS3"]
 
-    # construct x-axis slit array
+    # construct x-axis slit index
     j0, x0, dx, nx = [hdu.header[kwd] for kwd in "CRPIX1", "CRVAL1", "CDELT1", "NAXIS1"]
     x = x0 + dx*(np.arange(nx) - (j0 - 1))
     xslit = np.where(( x >= xi ) & ( xf >= x))[0]
-    x = x[:,xslit]
-    x = x.reshape((-1, 1, 1))   # make 3D to allow broadcasting with hdu.data
+    XI = min(xslit)
+    XF = max(xslit)
+    NX = len(xslit)
 
-    # construct y-axis slit array
+    # construct y-axis slit index
     k0, y0, dy, ny = [hdu.header[kwd] for kwd in "CRPIX2", "CRVAL2", "CDELT2", "NAXIS2"]
     y = y0 + dy*(np.arange(ny) - (k0 - 1))
     yslit = np.where(( y >= yi ) & ( yf >= y))[0]
-    y = y[:,yslit]
-    y = y.reshape((-1, 1, 1))   # make 3D to allow broadcasting with hdu.data
+    YI = min(yslit)
+    YF = max(yslit)
+    NY = len(yslit)
 
     cubo = hdu.data
-    cubito = cubo[:,xslit]
+    # select the data cube restricted to the slit 
+    cubito = cubo[:,XI:XF,YI:YF]
 
-    print cubo.shape, cubito.shape, type(cubo), cubo.sum() 
+    
+    yv_slit_map[line] = np.zeros((nu,NY))
+    slit_profile[line] = np.zeros(nu)
+    total_slit_flux[line] = 0.0
+
+
+    # add in to a pv map
+    yv_slit_map[line] = np.sum(cubito, axis=1)
+    # add add in to a profile
+    slit_profile[line] = np.sum(yv_slit_map[line], axis=-1)
+    # add add add in to a total flux
+    total_slit_flux[line] = cubito.sum()
+
+    print yv_slit_map[line].shape, slit_profile[line].shape, total_slit_flux[line].shape
+
+hbeta = total_slit_flux["H__1__4861A"]
+print "H beta line flux: "
+print "Line fluxes relative to H beta = 100:"
+
+for line in emlines:
+    flux = total_slit_flux[line]
+    em = line.replace('_', ' ')
+    print '|'.join(['', em[:-5], em[-5:], "%g" % (100.0*flux/hbeta), ''])
+    
+    
 
     
  
