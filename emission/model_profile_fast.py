@@ -71,8 +71,8 @@ def parse_command_args():
 def find_awt(emline):
     "Find the atomic weight from the Cloudy emission line label"
     symbol_dict = dict(
-        H=1.0, HE=4.0, C=12.0, N=14.0, O=16.0, NE=20.2, MG=24.3,
-        SI=28.1, S=32.1, CL=35.5, AR=40.0, CA=40.1, FE=55.8, CO=58.9, NI=58.7
+        H=1.0, He=4.0, C=12.0, N=14.0, O=16.0, Ne=20.2, Mg=24.3,
+        Si=28.1, S=32.1, Cl=35.5, Ar=40.0, Ca=40.1, Fe=55.8, Co=58.9, Ni=58.7
         )
     special_dict = dict(TOTL__4363A="O", TOTL__2326A="O", TOTL__5199A="N")
     if emline in special_dict.keys():
