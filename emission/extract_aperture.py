@@ -7,7 +7,7 @@ import argparse
 parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     description="""
-Calculate fluxes maps and total emission for a slit from PPV cubes
+Calculate line intensities through an aperture (all dimensions are in units of r0)
     """)
 
 parser.add_argument(
@@ -16,12 +16,16 @@ parser.add_argument(
 
 parser.add_argument(
     "--onlylinesin", type=str, default=None,
-    help='Only process cubes for lines listed in this file (one per line)')
+    help='Give intensities for only those lines listed in this file (one per line)')
 
 parser.add_argument(
-    "--slit", type=float, nargs=4, default=(-1.0, -2.0, 3.0, 2.0),
-    metavar=("xi", "yi", "xf", "yf"),
-    help='If present, bounding box of view slit (in units of r0) for the position-position-velocity cube')
+    "--center", type=float, nargs=2, default=(1.0, 0.0),
+    metavar=("x", "y"),
+    help='Coordinates of the center of the aperture')
+
+parser.add_argument(
+    "--size", type=float, nargs=2, default=(1.0, 1.0), metavar=("w", "h"),
+    help='Size of aperture (width, height)')
 
 
 cmd_args = parser.parse_args()
@@ -29,8 +33,9 @@ cubefiles_found = glob.glob("cube-*-{}.fits".format(cmd_args.suffix))
 emlines_found = [ s.split("-")[1].split(".")[0] for s in cubefiles_found ]
 
 
-xi, yi, xf, yf = cmd_args.slit
-
+xc, yc = cmd_args.center
+w, h =  cmd_args.size
+xi, yi, xf, yf = xc - 0.5*w, yc - 0.5*h, xc + 0.5*w, yc+0.5*h
 
 if cmd_args.onlylinesin:
     # Read list of selected emission lines if asked for
@@ -61,42 +66,39 @@ for line, cube in zip(emlines, cubefiles):
 
     hdu, = pyfits.open(cube)
 
-    i0, u0, du, nu = [hdu.header[kwd] for kwd in "CRPIX3", "CRVAL3", "CDELT3", "NAXIS3"]
+    k0, u0, du, nu = [hdu.header[kwd] for kwd in "CRPIX3", "CRVAL3", "CDELT3", "NAXIS3"]
 
     # construct x-axis slit index
-    j0, x0, dx, nx = [hdu.header[kwd] for kwd in "CRPIX1", "CRVAL1", "CDELT1", "NAXIS1"]
-    x = x0 + dx*(np.arange(nx) - (j0 - 1))
-    xslit = np.where(( x >= xi ) & ( xf >= x))[0]
-    XI = min(xslit)
-    XF = max(xslit)
-    NX = len(xslit)
+    i0, x0, dx, nx = [hdu.header[kwd] for kwd in "CRPIX1", "CRVAL1", "CDELT1", "NAXIS1"]
+    # find indices that correspond to the limits xi and xf
+    i1 = i0 + int((xi - x0)/dx)
+    i2 = i0 + int((xf - x0)/dx)
+    # ensure that we do neot exceed the array bounds
+    i1 = max(min(i1, nx), 0)
+    i2 = max(min(i2, nx), 0)
+
 
     # construct y-axis slit index
-    k0, y0, dy, ny = [hdu.header[kwd] for kwd in "CRPIX2", "CRVAL2", "CDELT2", "NAXIS2"]
-    y = y0 + dy*(np.arange(ny) - (k0 - 1))
-    yslit = np.where(( y >= yi ) & ( yf >= y))[0]
-    YI = min(yslit)
-    YF = max(yslit)
-    NY = len(yslit)
+    j0, y0, dy, ny = [hdu.header[kwd] for kwd in "CRPIX2", "CRVAL2", "CDELT2", "NAXIS2"]
+    j1 = j0 + int((yi - y0)/dy)
+    j2 = j0 + int((yf - y0)/dy)
+    j1 = max(min(j1, ny), 0)
+    j2 = max(min(j2, ny), 0)
 
     cubo = hdu.data
     # select the data cube restricted to the slit 
-    cubito = cubo[:,XI:XF,YI:YF]
+    cubito = cubo[:,j1:j2,i1:i2]
 
     
-    yv_slit_map[line] = np.zeros((nu,NY))
     slit_profile[line] = np.zeros(nu)
     total_slit_flux[line] = 0.0
 
 
-    # add in to a pv map
-    yv_slit_map[line] = np.sum(cubito, axis=1)
     # add add in to a profile
-    slit_profile[line] = np.sum(yv_slit_map[line], axis=-1)
+    slit_profile[line] = np.sum(np.sum(cubito, axis=-1), axis=-1)
     # add add add in to a total flux
     total_slit_flux[line] = cubito.sum()
 
-    print yv_slit_map[line].shape, slit_profile[line].shape, total_slit_flux[line].shape
 
 hbeta = total_slit_flux["H__1__4861A"]
 print "H beta line flux: "
