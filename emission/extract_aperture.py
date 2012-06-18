@@ -2,6 +2,7 @@ import pyfits
 import glob
 import numpy as np
 import argparse
+import os
 
 # Parse command line arguments
 parser = argparse.ArgumentParser(
@@ -32,10 +33,33 @@ cmd_args = parser.parse_args()
 cubefiles_found = glob.glob("cube-*-{}.fits".format(cmd_args.suffix))
 emlines_found = [ s.split("-")[1].split(".")[0] for s in cubefiles_found ]
 
-
 xc, yc = cmd_args.center
 w, h =  cmd_args.size
 xi, yi, xf, yf = xc - 0.5*w, yc - 0.5*h, xc + 0.5*w, yc+0.5*h
+
+
+# Create the folder, if not exist, where the profiles will be
+fitsdir = os.path.join(os.getcwd(), 
+                       'aperture-xc{}-yc{}-w{}-h{}-{}'.format(xc, yc, w, h, cmd_args.suffix))
+if not os.path.isdir(fitsdir): 
+    os.makedirs(fitsdir)
+
+def saveprofile():
+    """
+    Save each profile in a FITS file
+    """
+    def add_WCS_keyvals(iaxis, keyvaldict):
+        """Add in a whole load of keywords for the same axis"""
+        for k, v in keyvaldict.items():
+            hdu.header.update(k+str(iaxis), v)
+    # write each profile in a FITS file
+    # write datacube to the HDU
+    hdu = pyfits.PrimaryHDU()
+    # write WCS headers to the HDU
+    add_WCS_keyvals(2, dict(crpix=k0, crval=u0, cdelt=du,
+                              ctype="XOFFSET ", cunit="r0      ") )
+    hdu.writeto(os.path.join(fitsdir, "profile-{}.fits".format(line)), clobber=True)
+
 
 if cmd_args.onlylinesin:
     # Read list of selected emission lines if asked for
@@ -58,9 +82,8 @@ else:
     emlines = emlines_found
     cubefiles = cubefiles_found
 
-yv_slit_map = dict()
-slit_profile = dict()
-total_slit_flux = dict()
+aperture_profile = dict()
+total_aperture_flux = dict()
 
 for line, cube in zip(emlines, cubefiles):
 
@@ -87,25 +110,31 @@ for line, cube in zip(emlines, cubefiles):
 
     cubo = hdu.data
     # select the data cube restricted to the slit 
-    cubito = cubo[:,j1:j2,i1:i2]
+    aperture_cube = cubo[:,j1:j2,i1:i2]
 
-    
-    slit_profile[line] = np.zeros(nu)
-    total_slit_flux[line] = 0.0
 
+    aperture_profile[line] = np.zeros(nu)
+    total_aperture_flux[line] = 0.0
 
     # add add in to a profile
-    slit_profile[line] = np.sum(np.sum(cubito, axis=-1), axis=-1)
+    aperture_profile[line] = np.sum(np.sum(aperture_cube, axis=-1), axis=-1)
+
+    hdu = pyfits.PrimaryHDU()
+    hdu.header.update('NAXIS',1)
+    hdu.header.update('CRPIX',"{}".format(k0))
+    hdu.header.update('CRVAL',"{}".format(u0))
+    hdu.writeto(os.path.join(fitsdir, "profile-{}.fits".format(line)), clobber=True)
+
     # add add add in to a total flux
-    total_slit_flux[line] = cubito.sum()
+    total_aperture_flux[line] = aperture_cube.sum()
 
 
-hbeta = total_slit_flux["H__1__4861A"]
+hbeta = total_aperture_flux["H__1__4861A"]
 print "H beta line flux: "
 print "Line fluxes relative to H beta = 100:"
 
 for line in emlines:
-    flux = total_slit_flux[line]
+    flux = total_aperture_flux[line]
     em = line.replace('_', ' ')
     print '|'.join(['', em[:-5], em[-5:], "%g" % (100.0*flux/hbeta), ''])
     
