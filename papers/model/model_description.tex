@@ -1,0 +1,147 @@
+%\documentclass{report}
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{txfonts}
+\usepackage{rotating}
+\usepackage{amssymb}
+\usepackage{natbib}
+\usepackage{varioref}
+%
+
+\begin{document}
+
+
+
+%\vskip1cm
+\include{Article_macro}
+
+%--------------------------------------------------------
+\section{Model description}
+\label{cap:description}
+%--------------------------------------------------------
+
+We follow the analytic model of a photoevaporated wind described in \citet{1998AJ....116..322H} ``Accelerating divergent photoevaporation flow (applied to proplyds)''.
+ 
+The simplest assumpion is that there is a static spherical distribution of gas about the central lowmass star. This gas is being evaporated and ionizing by the radiation coming from $\theta_1 C$
+
+
+%--------------------------------------------------------
+\subsection{Geometry}
+\label{cap:geometry}
+%--------------------------------------------------------
+
+\begin{itemize}
+\item{Radiacion ionizante que incide de manera paralela al proplyd.}
+\item{Se asume una geometria cilindrica con simetría en la coordenada $\Phi$}
+\item{Frontera de ionizacion semiesferica}
+\item{El gas fotoionizado fluye de manera radial de la frontera de ionizacion}
+\end{itemize}
+
+
+El flujo no es isotermico
+Las desexcitaciones colisionaes no son despreciables
+
+The Figure1 shows the sketched model, geometry and physical conditions.
+
+Si tomamos un marco de referencia cuyo cero se encuentre en el centro
+del proplyd, podemos definir una coordenada espacial adimensional $\rm
+R = r / r_0$ donde $\rm r_0$ es la distancia medida observacionalmente
+del centro del proplyd a la frontera de ionizacion
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=8.5 cm]{./graf_model_3D/geometry_model.jpg}
+  \caption{} \label{fig:geometry}
+\end{figure}
+
+%-------------------------------------------------------
+\subsection{Physical properties}
+\label{cap:density}
+%-------------------------------------------------------
+
+We divide the proplyd flow into two zones:
+
+\begin{itemize}
+  \item{$\rm r > r_0$: An outer, fully ionized, supersonic flow.}
+    \item{$\rm r < r_0$: A thin, partially ionized, subsonic ionization front.}
+\end{itemize}
+
+This is equivalent to say that the physical properties are diferent in both zones. The boundary between them are exactly the sonic point. The conditions there, and in every point of the proplyd, are fixed by continuity.
+
+In particular, the density that we use is divide into two functions: 
+
+\begin{equation}
+  \rm n_e(X) = \left\lbrace
+    \begin{array}{l}
+      f_1(X) \;\;\;\;\; 1 \ge X \ge 0.98 \\
+      f_2(X) \;\;\;\;\;  X \le 0.98 \\
+    \end{array}
+  \right.
+\end{equation}
+
+%-------------------------------------------------------
+\subsubsection{The outer zone}
+\label{cap:outer}
+%-------------------------------------------------------
+
+In the outer zone we assume an isothermal, supersonic, complite ionized flow. From mass conservation, in spherical geometry and In the steady state, radial velocity of the ionized gas, v(r),
+satisfies the equation
+
+
+\begin{equation}
+  \rm \rho v r^2 = cte
+\end{equation}
+
+%-------------------------------------------------------
+\subsubsection{The boundary}
+\label{cap:boundary}
+%-------------------------------------------------------
+
+The ionization front (I-front) is exactly were the , the Stromgren criterium for a density bounded region:
+
+\begin{equation}
+  \rm \phi(H) = \frac{Q(H)}{4\pi D^2} =\alpha_B \int^{\infty}_{r_0}n^2(r) dr
+\end{equation}
+
+%-------------------------------------------------------
+\subsubsection{The inner zone}
+\label{cap:inner}
+%-------------------------------------------------------
+
+Partially ionized region: Density is function of sound speed
+
+La ley de densidad usada para el gas completamente ionizado como funcion de la velocidad es
+
+\begin{equation}
+  \rm R = U^{(-1/2)} exp (\frac{1}{4} (U^2 -1))
+\end{equation}
+
+donde $\rm U(R) = v / c_0$ con $\rm v(R)$ la velocidad del gas y $\rm c_0(R)$ la velocidad del sonido.
+
+
+
+Y dentro de la frontera de ionización:
+
+\begin{equation}
+  \rm \rho(c_m)
+\end{equation}
+
+En cada punto la ecuacion de continuidad, permite calcular la densidad:
+
+\begin{equation}
+  \rm \rho (R) v(R) R^2 = \rho (R_{max}) v(R_{max}) R_{max}^2
+\end{equation}
+
+%--------------------------------------------------------
+\subsection{Calculation}
+\label{cap:calculation}
+%--------------------------------------------------------
+
+We will construct Cloudy models of a series of individual radial cuts from the center of the proplyd, at different angles $\theta$ from the proplyd axis.
+
+\bibliographystyle{t}
+
+\bibliography{model}
+
+\end{document}
