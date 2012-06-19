@@ -40,15 +40,17 @@ xi, yi, xf, yf = xc - 0.5*w, yc - 0.5*h, xc + 0.5*w, yc+0.5*h
 
 # Create the folder, if not exist, where the profiles will be
 fitsdir = os.path.join(os.getcwd(), 
-                       'aperture-xc{}-yc{}-w{}-h{}-{}'.format(xc, yc, w, h, cmd_args.suffix))
+                       'aperture-xc{:02}-yc{:02}-w{:02}-h{:02}-{}'.format(
+        int(10*xc), int(10*yc), int(10*w), int(10*h), cmd_args.suffix))
+
 if not os.path.isdir(fitsdir): 
     os.makedirs(fitsdir)
 
-def saveprofile(data, name):
+def saveprofile(data, name, hdr):
     """
     Save a map of some variable to a FITS file
     """
-    newhdu = pyfits.PrimaryHDU(data)
+    newhdu = pyfits.PrimaryHDU(data, hdr)
     newhdu.writeto(os.path.join(fitsdir, "profile-{}.fits".format(name)), clobber=True)
 
 
@@ -109,7 +111,13 @@ for line, cube in zip(emlines, cubefiles):
     # add add in to a profile
     aperture_profile[line] = np.sum(np.sum(aperture_cube, axis=-1), axis=-1)
     print line, aperture_profile[line]
-    saveprofile(aperture_profile[line], line)
+
+    hdr = pyfits.Header()       # make a new header for the spectrum
+    for prefix in ["CRPIX", "CRVAL", "CDELT", "CUNIT", "CTYPE"]:
+        # and set the kwds for the first axis from the third axis of the cube
+        hdr.update(prefix + "1", hdu.header[prefix + "3"])
+    # write the spectrum to a 1D fits image file
+    saveprofile(aperture_profile[line], line, hdr)
 
     # add add add in to a total flux
     total_aperture_flux[line] = aperture_cube.sum()

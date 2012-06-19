@@ -30,4 +30,4 @@ emission/test_data/M[01234]-*.fits
 emission/test_data/Tmap-*.fits
 emission/test_data/pv-cube-*.fits
 emission/test_data/*.bck*
-
+emission/test_data/aperture-*
