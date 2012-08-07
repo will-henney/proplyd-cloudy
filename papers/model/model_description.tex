@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[aaspp]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage{txfonts}
@@ -6,7 +6,9 @@
 \usepackage{amssymb}
 \usepackage{natbib}
 \usepackage{varioref}
+\usepackage{xspace}
 
+\input{my_commands}
 
 \begin{document}
 
@@ -23,35 +25,63 @@
 \label{sec:model}
 %--------------------------------------------------------
 
+Due that the proplyds cusp is the only part that is directly exposed
+to the radiation field of \tc this is the brigthest part of
+the proplyd at least in Ha and ions of high and medium ionization. The
+difuse radiation of the nebulae is negligible in comparation with
+the \tc in the cusp at least between $0^{\circ}\le \theta \le
+60^{\circ}$ where the flux is reduced in 50\% of the total flux. In this first step of the model we contructed a model for only
+the proplyd cusp with the influence of the main radiation field.
+
 We follow the analytic model of a photoevaporated wind described in \citet{1998AJ....116..322H}.
  
-The simplest assumpion is that there is a static spherical distribution of gas about the central lowmass star. This gas is being evaporated and ionizing by the radiation coming from $\theta_1 C$
+The simplest assumpion is that there is a static spherical distribution of gas about the central lowmass star. This gas is being evaporated and ionizing by the radiation coming from \tc
 
 \begin{itemize}
-\item{Radiacion ionizante que incide de manera paralela al proplyd.}
-\item{Se asume una geometria cilindrica con simetría en la coordenada $\Phi$}
-\item{Frontera de ionizacion semiesferica}
-\item{El gas fotoionizado fluye de manera radial de la frontera de ionizacion}
+\item{Ionizing radiation incident parallel to the proplyd.}
+\item{Assuming a cylindrical geometry with symmetry in the coordinate $\Phi$}
+\item{Semi-spheric ionization front.}
+\item{The photoionized gas flows radially from the border of
+    ionization}
+\item{The gas flow is not isotermic}
+\item{Collisional deexitation are not negligibles}
 \end{itemize}
 
-El flujo no es isotermico
-Las desexcitaciones colisionaes no son despreciables
+We construct Cloudy models of a series of individual radial cuts from
+the center of the proplyd, at different angles $\theta$ from the
+proplyd axis. For each angle we reduce the flux by a factor of $\rm
+cos \theta$.
 
 %--------------------------------------------------------
 \subsection{Geometry}
 \label{sec:geometry}
 %--------------------------------------------------------
 
-Si tomamos un marco de referencia cuyo cero se encuentre en el centro
-del proplyd, podemos definir una coordenada espacial adimensional $\rm
-R = r / r_0$ donde $\rm r_0$ es la distancia medida observacionalmente
-del centro del proplyd a la frontera de ionizacion
+$\Delta$ is the ionization front width in terms of the mean free path
+at 1 Rydberg. That is, $\rm \Delta \, = \, W \, / \, n_0 \,
+\sigma_0$ where $n_0$ is the density at the sonic point, $\sigma_0$
+is the H cross section and $\rm W$ is the number of the mean free
+paths.
+
+For simplicity and clarity of the model we chose to use a
+dimenssionless radial coordinate $\rm R \, r\,/\,r_0$ where $\rm r$ is
+the radial coordinate in $\rm cm$ starting in the low-mass star inside
+the proplyd and $\rm r_0$ is the distance between the proplyd center
+and the sonic point.
+
+\begin{figure}[h]
+\centering
+  \includegraphics[width=8.5 cm]{Foto0221.jpg}
+  \caption{A sketched geometry of the 1D Cloudy modell.} \label{fig:1Dgeom}
+\end{figure}
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=8.5 cm]{./graf_model_3D/geometry_model.jpg}
-  \caption{A sketched geometry of the model.} \label{fig:geometry}
+  \caption{A sketched geometry of the semi-3D model.} \label{fig:3Dgeom}
 \end{figure}
+
+
 
 %-------------------------------------------------------
 \subsection{Radial Density Structure}
@@ -83,12 +113,29 @@ This is equivalent to say that the behavior of the physical conditions are difer
 \label{sec:outer}
 %-------------------------------------------------------
 
-In the outer zone we assume an isothermal, supersonic, complite ionized flow. From mass conservation, in spherical geometry and In the steady state, radial velocity of the ionized gas, v(r),
-satisfies the equation
+\citep{2002ApJ...566..315H}
 
+In the outer zone we assume an isothermal, supersonic, complite
+ionized flow. From mass conservation, in spherical geometry and In the
+steady state, radial velocity of the ionized gas, $v(r)$
+
+Gas velocity is given by Dyson solution \citep{1968Ap&SS...1..388D}
 
 \begin{equation}
-  \rm \rho v r^2 = cte
+  \rm R = U^{(-1/2)} exp (\frac{1}{4} (U^2 -1))
+\end{equation}
+
+where $\rm U(R) = v / c_0$ with $v(R)$ is the gas velocity and
+$\rm c(R)$ is the sound speed wich is calculated {\it in situ} by Cloudy
+for each step.
+Due we can not have an analytic solution for U as a function of R,
+from this equation generate a table of values for U and R and
+interpolate this table for each R that is necesary in the Cloudy model.
+
+At each point the density is calculated by the continuity equation:
+
+\begin{equation}
+  \rm \rho (R) = \rho (R_{max}) (\frac{U(R_{max})}{U (R)}) (\frac{R_{max}}{R})^2
 \end{equation}
 
 %-------------------------------------------------------
@@ -106,6 +153,14 @@ broken and the recombination start to overcome the photoinization.
 
 INSERTAR LA ECUACION
 
+$\rm r = r_0$
+
+$\rm X_H \simeq 0.99$
+
+$u = c$ by definition of the boundary
+
+$c = c_{max}$ at least a local maximum 
+
 %-------------------------------------------------------
 \subsubsection{The inner zone}
 \label{sec:inner}
@@ -113,27 +168,13 @@ INSERTAR LA ECUACION
 
 Partially ionized region: Density is function of sound speed
 
-La ley de densidad usada para el gas completamente ionizado como funcion de la velocidad es
-
-\begin{equation}
-  \rm R = U^{(-1/2)} exp (\frac{1}{4} (U^2 -1))
-\end{equation}
-
-donde $\rm U(R) = v / c_0$ con $\rm v(R)$ la velocidad del gas y $\rm c_0(R)$ la velocidad del sonido.
+Density law used to completely ionized gas as a function of the speed is
 
 
 
-Y dentro de la frontera de ionización:
 
-\begin{equation}
-  \rm \rho(c_m)
-\end{equation}
 
-En cada punto la ecuacion de continuidad, permite calcular la densidad:
 
-\begin{equation}
-  \rm \rho (R) v(R) R^2 = \rho (R_{max}) v(R_{max}) R_{max}^2
-\end{equation}
 
 %--------------------------------------------------------
 \section{Results and Predictions}
@@ -153,12 +194,11 @@ En cada punto la ecuacion de continuidad, permite calcular la densidad:
       ionized. In this zone, the electron density reach the critical
       electron density for some ions, making the collisional
       deexitation a process that need to take into account.\\
-    This is not important in the outer parts of the flow since they
-    are highly ionized, which means that [O III] is the dominant
+    This could be negligible in the outer parts of the flow since they
+    are highly ionized, which means that \oiii is the dominant
     coolant. The critical density of this ion is about 1e6 cm-3, which
-  is reached just near of the sonic point, that is, where the [O III]
-  emission is less than the 10\% of the total [O III] emission. (See
-  % Sect.~\ref{\sec:emi}).
+  is reached just near of the sonic point, that is, where the \oiii
+  emission is less than the 10\% of the total \oiii emission. (See Sect.~\ref{sec:emi}).
 }
   \item{Temperature: The electron temperature is almost constant in
       the outer zone. As we approache to the He recombination front
@@ -170,7 +210,8 @@ En cada punto la ecuacion de continuidad, permite calcular la densidad:
     field increasing the mean electron kinetic energy. That is,
     increasing the photoelectric heating per recombination. The second
   one is the electron density increase. It causes collisional
-  deexcitation of the main cooling lines.}
+  deexcitation of the main cooling lines.
+}
 \end{itemize}
 
 %--------------------------------------------------------
@@ -187,12 +228,12 @@ En cada punto la ecuacion de continuidad, permite calcular la densidad:
 
 All the high ionization lines are all wholly outside the sonic point.
 
-[Ne II], Ha, [N II] and [O II] have almost the 90\% of their emission
+\neii, \ha, \nii and \oii have almost the 90\% of their emission
 in the supersonic zone and the 10\% in the sub-sonic zone.
 
-[S II] is about 70\% outside the sonic point and 30\% inside.
+\sii is about 70\% outside the sonic point and 30\% inside.
 
-[O I] is about 20\% outside and 80\% inside the sonic point.
+\oi is about 20\% outside and 80\% inside the sonic point.
 
 So if we take into account the full emission of the proplyd, and the
 sub-sonic zone is not well modelated, the efect of this should be not
@@ -203,10 +244,10 @@ is near of the center (near the i-front), the sub-sonic zone will be
 very important.
 
 There are a clear separation of 3 km/s (about 15\%) between the median
-velocity of the [O III] 5007 and 4363 lines.
+velocity of the \oiii 5007 and 4363 lines.
 
 Discutir tambien la diferencia que hay entre la linea auroral y la
-nebular de [NII] para ver la importancia de las desexitaciones
+nebular de \nii para ver la importancia de las desexitaciones
 colisionales. Una es mas afectada que la otra y por lo tanto conforme
 vamos a las zonas de mayor densidad la razon entre ellas debe ir
 cambiando, aumentando de hecho.
