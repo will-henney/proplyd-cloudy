@@ -10,6 +10,8 @@
 
 \input{my_commands}
 
+\newcommand{\R}{$\mathrm{R}$\xspace}
+
 \begin{document}
 
 \include{Article_macro}
@@ -113,7 +115,7 @@ This is equivalent to say that the behavior of the physical conditions are difer
 \label{sec:outer}
 %-------------------------------------------------------
 
-\citep{2002ApJ...566..315H}
+This is similar to what Will did in \citep{2002ApJ...566..315H}
 
 In the outer zone we assume an isothermal, supersonic, complite
 ionized flow. From mass conservation, in spherical geometry and In the
@@ -122,7 +124,8 @@ steady state, radial velocity of the ionized gas, $v(r)$
 Gas velocity is given by Dyson solution \citep{1968Ap&SS...1..388D}
 
 \begin{equation}
-  \rm R = U^{(-1/2)} exp (\frac{1}{4} (U^2 -1))
+  R = U^{(-1/2)} exp \left [ \frac{1}{4} \left (U^2 -1 \right )
+  \right ]
 \end{equation}
 
 where $\rm U(R) = v / c_0$ with $v(R)$ is the gas velocity and
@@ -135,7 +138,8 @@ interpolate this table for each R that is necesary in the Cloudy model.
 At each point the density is calculated by the continuity equation:
 
 \begin{equation}
-  \rm \rho (R) = \rho (R_{max}) (\frac{U(R_{max})}{U (R)}) (\frac{R_{max}}{R})^2
+  \rho (R) = \rho (R_{max}) \left ( \frac{U(R_{max})}{U (R)} \right )
+    \left ( \frac{R_{max}}{R} \right ) ^2
 \end{equation}
 
 %-------------------------------------------------------
@@ -168,13 +172,49 @@ $c = c_{max}$ at least a local maximum
 
 Partially ionized region: Density is function of sound speed
 
-Density law used to completely ionized gas as a function of the speed is
+In this zone, we follow the simplified analytic model for weak--D
+ionization front described in Appendix of the
+\citet{2005ApJ...621..328H} paper. Even when this model is for a
+plane-parallel ionization front (the momentum conservation assumes
+plane parallel geometry) and this is not our case (we have an
+divergent geometry) this is an aproximation that could give us a good idea
+of the advection effects on the I-front.
 
+Following the A8 equation, 
+\begin{equation}
+  c(X) = c_m \left [ \frac{T(X)}{T_m} \frac{1+X}{1+X_m}\right]^{1/2}
+\end{equation}
+If we see the electronic temperature behavior for the waek--D
+solutions, Fig.18 from \citet{2005ApJ...621..328H}, we can see that
+the temperature could be assume constant in first aproximation, at
+least in $0.25 \le X \le 1.0$. This is our case, then the sound speed
+will be:
+\begin{equation}
+  c(X) = c_m \left [ \frac{1+X}{1+X_m}\right]^{1/2}
+\end{equation}
 
+As in the Cloudy models the temperature is one of the physical
+quantities that are calculated in each zone, we can not use
+it for calculate the sound speed in each zone. Then, we made
+an aproximation for the behavior of $X$ in the recombination zone, for
+calculate the sound speed. We aproximate the H ionization fraction by
+a function of \R:
 
+\begin{equation}
+  \rm ifrac = 0.5 (tan h (x) + 1.0)
+\end{equation}
 
+where $x = x_0 \frac{R + dR -1.0}{dR}$. $x_0$ is where the H
+ionization fraction is 0.99, i.e. in the sonic point where $R = 1$ ($ifrac_m = 0.5
+(tan h (x_0) + 1.0)$).
 
-
+Making use of the Mach number $M = v/c$ and the fact of $c_m/c =
+\frac{1}{2} \left ( M + M^{-1} \right)$. Then, once more by
+continuity, the electronic density in this zone is:
+\begin{equation}
+  \rho = \rho_m / 1.0 - \sqrt{ 1.0 - \left [ \frac{1+X}{1+X_m} \right ]}
+\end{equation}
+in contrast to the static case where the density is: $\rho \sim 1/c^2$
 
 %--------------------------------------------------------
 \section{Results and Predictions}

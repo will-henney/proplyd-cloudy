@@ -295,7 +295,7 @@ if __name__ == '__main__':
                         help="Log10 of stellar EUV flux")
     parser.add_argument("--atmosphere", type=str, default="WM", choices=["WM", "BB", "TL"],
                         help="Type of stellar atmosphere model")
-    parser.add_argument("--composition", type=str, default="Orion", choices=["Orion", "FastOrion", "Esteban", "Tsamis", "Tweak01", "Tweak02", "Tweak03", "Tweak04"],
+    parser.add_argument("--composition", type=str, default="Orion", choices=["Orion", "FastOrion", "Esteban", "Tsamis", "Tweak01", "Tweak02", "Tweak03", "Tweak04", "TsamisHST10"],
                         help="Gas-phase abundance set to use")
     parser.add_argument("--Tstar", type=float, default=3.7e4,
                         help="Stellar effective temperature in K")
@@ -331,6 +331,8 @@ if __name__ == '__main__':
         Zstring = "-ZF"
     elif cmdargs.composition.startswith("Tweak"):
         Zstring = "-ZZ%s" % (cmdargs.composition[-2:])
+    elif cmdargs.composition == "tsamisHST10":
+        Zstring = "-ZT10"
     else:
         Zstring = ""
 
