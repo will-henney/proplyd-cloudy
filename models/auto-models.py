@@ -295,8 +295,21 @@ if __name__ == '__main__':
                         help="Log10 of stellar EUV flux")
     parser.add_argument("--atmosphere", type=str, default="WM", choices=["WM", "BB", "TL"],
                         help="Type of stellar atmosphere model")
-    parser.add_argument("--composition", type=str, default="Orion", choices=["Orion", "FastOrion", "Esteban", "Tsamis", "Tweak01", "Tweak02", "Tweak03", "Tweak04", "TsamisHST10"],
-                        help="Gas-phase abundance set to use")
+    parser.add_argument("--composition", type=str, default="Orion",
+                        choices=["Orion", "FastOrion", "Esteban",
+                                 "Tsamis", "Tweak01", "Tweak02", "Tweak03",
+                                 "Tweak04", "TsamisHST10", "file"],
+                        help="""Gas-phase abundance set to use.
+                        Either a presestablished set, or 'file'.  In
+                        the second case, use the option
+                        '--composition-file' to specify the actual Cloudy commands.
+                        """)
+    parser.add_argument("--composition-file", type=file, default=None,
+                        help="""File name containing Cloudy commands
+                        for a custom abundance set.  The file prefix
+                        (before the first '.')  will be used in the
+                        output file names.
+                        """)
     parser.add_argument("--Tstar", type=float, default=3.7e4,
                         help="Stellar effective temperature in K")
     parser.add_argument("--multiprocess", "-m", type=bool, default=False,
@@ -331,8 +344,10 @@ if __name__ == '__main__':
         Zstring = "-ZF"
     elif cmdargs.composition.startswith("Tweak"):
         Zstring = "-ZZ%s" % (cmdargs.composition[-2:])
-    elif cmdargs.composition == "tsamisHST10":
+    elif cmdargs.composition == "TsamisHST10":
         Zstring = "-ZT10"
+    elif cmdargs.composition == "file":
+        Zstring = cmdargs.composition_file.split(".")[0]
     else:
         Zstring = ""
 
