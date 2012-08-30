@@ -27,13 +27,9 @@
 \label{sec:model}
 %--------------------------------------------------------
 
-Due that the proplyds cusp is the only part that is directly exposed
-to the radiation field of \tc this is the brigthest part of
-the proplyd at least in Ha and ions of high and medium ionization. The
-difuse radiation of the nebulae is negligible in comparation with
-the \tc in the cusp at least between $0^{\circ}\le \theta \le
-60^{\circ}$ where the flux is reduced in 50\% of the total flux. In this first step of the model we contructed a model for only
-the proplyd cusp with the influence of the main radiation field.
+Due that the proplyds cusp is the only part that is directly exposed to the radiation field of \tc this is the brigthest part of the proplyd at least in Ha and ions of high and medium ionization. The diffuse radiation of the nebulae is negligible in comparation with the \tc in the cusp at least for those proplyds that are very close to \tc. For those far from \tc, we take into account the diffuse radiation as a fraction of the main radiation field.
+
+In this first step of the model we contructed a model for only the proplyd cusp with the influence of the main radiation field, \tc, and the diffuse radiation as a \tc fraction.
 
 We follow the analytic model of a photoevaporated wind described in \citet{1998AJ....116..322H}.
  
@@ -42,38 +38,26 @@ The simplest assumpion is that there is a static spherical distribution of gas a
 \begin{itemize}
 \item{Ionizing radiation incident parallel to the proplyd.}
 \item{Assuming a cylindrical geometry with symmetry in the coordinate $\Phi$}
-\item{Semi-spheric ionization front.}
-\item{The photoionized gas flows radially from the border of
-    ionization}
+\item{Semi-spheric ionization front. $S_{\theta} \, = \, S_0 (cos \, \theta)$}
+\item{The photoionized gas flows radially from the border of ionization}
 \item{The gas flow is not isotermic}
-\item{Collisional deexitation are not negligibles}
+\item{Collisional deexitation are not negligibles -- mas que una suposicion es una consecuencia, cierto?}
 \end{itemize}
 
-We construct Cloudy models of a series of individual radial cuts from
-the center of the proplyd, at different angles $\theta$ from the
-proplyd axis. For each angle we reduce the flux by a factor of $\rm
-cos \theta$.
+We construct Cloudy models of a series of individual radial cuts from the center of the proplyd, at different angles $\theta$ from the proplyd axis. For each angle we reduce the flux by a factor of $\rm cos \theta$.
 
 %--------------------------------------------------------
 \subsection{Geometry}
 \label{sec:geometry}
 %--------------------------------------------------------
 
-$\Delta$ is the ionization front width in terms of the mean free path
-at 1 Rydberg. That is, $\rm \Delta \, = \, W \, / \, n_0 \,
-\sigma_0$ where $n_0$ is the density at the sonic point, $\sigma_0$
-is the H cross section and $\rm W$ is the number of the mean free
-paths.
+$\Delta$ is the ionization front width in terms of the mean free path at 1 Rydberg. That is, $\rm \Delta \, = \, W \, / \, n_0 \, \sigma_0$ where $n_0$ is the density at the sonic point, $\sigma_0$ is the H cross section and $\rm W$ is the number of the mean free paths.
 
-For simplicity and clarity of the model we chose to use a
-dimenssionless radial coordinate $\rm R \, r\,/\,r_0$ where $\rm r$ is
-the radial coordinate in $\rm cm$ starting in the low-mass star inside
-the proplyd and $\rm r_0$ is the distance between the proplyd center
-and the sonic point.
+For simplicity and clarity of the model we chose to use a dimenssionless radial coordinate $\rm R \, r\,/\,r_0$ where $\rm r$ is the radial coordinate in $\rm cm$ starting in the low-mass star inside the proplyd and $\rm r_0$ is the distance between the proplyd center and the sonic point.
 
 \begin{figure}[h]
 \centering
-  \includegraphics[width=8.5 cm]{Foto0221.jpg}
+  \includegraphics[width=8.5 cm]{./IFront/ifront.png}
   \caption{A sketched geometry of the 1D Cloudy modell.} \label{fig:1Dgeom}
 \end{figure}
 
@@ -117,9 +101,7 @@ This is equivalent to say that the behavior of the physical conditions are difer
 
 This is similar to what Will did in \citep{2002ApJ...566..315H}
 
-In the outer zone we assume an isothermal, supersonic, complite
-ionized flow. From mass conservation, in spherical geometry and In the
-steady state, radial velocity of the ionized gas, $v(r)$
+In the outer zone we assume an isothermal, supersonic, complite ionized flow. From mass conservation, in spherical geometry and In the steady state, radial velocity of the ionized gas, $v(r)$
 
 Gas velocity is given by Dyson solution \citep{1968Ap&SS...1..388D}
 
@@ -128,12 +110,7 @@ Gas velocity is given by Dyson solution \citep{1968Ap&SS...1..388D}
   \right ]
 \end{equation}
 
-where $\rm U(R) = v / c_0$ with $v(R)$ is the gas velocity and
-$\rm c(R)$ is the sound speed wich is calculated {\it in situ} by Cloudy
-for each step.
-Due we can not have an analytic solution for U as a function of R,
-from this equation generate a table of values for U and R and
-interpolate this table for each R that is necesary in the Cloudy model.
+where $\rm U(R) = v / c_0$ with $v(R)$ is the gas velocity and $\rm c(R)$ is the sound speed wich is calculated {\it in situ} by Cloudy for each step. Due we can not have an analytic solution for U as a function of R, from this equation generate a table of values for U and R and interpolate this table for each R that is necesary in the Cloudy model.
 
 At each point the density is calculated by the continuity equation:
 
@@ -147,13 +124,9 @@ At each point the density is calculated by the continuity equation:
 \label{sec:boundary}
 %-------------------------------------------------------
 
-Because the gas velocity is the property that determines the behavior
-of other physical properties of the proplyd, the logical boundary
-between the regions is exactly the sonic point.
+Because the gas velocity is the property that determines the behavior of other physical properties of the proplyd, the logical boundary between the regions is exactly the sonic point.
 
-This point is also where the criterion of Stromgren for a density
-bounded region is met. That is, where the photoionization balance is
-broken and the recombination start to overcome the photoinization.
+This point is also where the criterion of Stromgren for a density bounded region is met. That is, where the photoionization balance is broken and the recombination start to overcome the photoinization.
 
 INSERTAR LA ECUACION
 
@@ -161,9 +134,9 @@ $\rm r = r_0$
 
 $\rm X_H \simeq 0.99$
 
-$u = c$ by definition of the boundary
+$u_0 = c_0$ by definition of the boundary
 
-$c = c_{max}$ at least a local maximum 
+$c_0 = c_{max}$ at least a local maximum 
 
 %-------------------------------------------------------
 \subsubsection{The inner zone}
@@ -172,47 +145,28 @@ $c = c_{max}$ at least a local maximum
 
 Partially ionized region: Density is function of sound speed
 
-In this zone, we follow the simplified analytic model for weak--D
-ionization front described in Appendix of the
-\citet{2005ApJ...621..328H} paper. Even when this model is for a
-plane-parallel ionization front (the momentum conservation assumes
-plane parallel geometry) and this is not our case (we have an
-divergent geometry) this is an aproximation that could give us a good idea
-of the advection effects on the I-front.
+In this zone, we follow the simplified analytic model for weak--D ionization front described in Appendix of the \citet{2005ApJ...621..328H} paper. Even when this model is for a plane-parallel ionization front (the momentum conservation assumes plane parallel geometry) and this is not our case (we have an divergent geometry) this is an aproximation that could give us a good idea of the advection effects on the I-front.
 
 Following the A8 equation, 
 \begin{equation}
-  c(X) = c_m \left [ \frac{T(X)}{T_m} \frac{1+X}{1+X_m}\right]^{1/2}
+  c(X) = c_0 \left [ \frac{T(X)}{T_0} \frac{1+X}{1+X_0}\right]^{1/2}
 \end{equation}
-If we see the electronic temperature behavior for the waek--D
-solutions, Fig.18 from \citet{2005ApJ...621..328H}, we can see that
-the temperature could be assume constant in first aproximation, at
-least in $0.25 \le X \le 1.0$. This is our case, then the sound speed
-will be:
+If we see the electronic temperature behavior for the weak--D solutions, Fig.18 from \citet{2005ApJ...621..328H}, we can see that the temperature could be assume constant in first aproximation, at least in $0.25 \le X \le 1.0$. This is our case, then the sound speed will be:
 \begin{equation}
-  c(X) = c_m \left [ \frac{1+X}{1+X_m}\right]^{1/2}
+  c(X) = c_0 \left [ \frac{1+X}{1+X_0}\right]^{1/2}
 \end{equation}
 
-As in the Cloudy models the temperature is one of the physical
-quantities that are calculated in each zone, we can not use
-it for calculate the sound speed in each zone. Then, we made
-an aproximation for the behavior of $X$ in the recombination zone, for
-calculate the sound speed. We aproximate the H ionization fraction by
-a function of \R:
+As in the Cloudy models the temperature is one of the physical quantities that are calculated in each zone, we can not use it for calculate the sound speed in each zone. Then, we made an aproximation for the behavior of $X$ in the recombination zone, for calculate the sound speed. We aproximate the H ionization fraction by a function of \R:
 
 \begin{equation}
-  \rm ifrac = 0.5 (tan h (x) + 1.0)
+  ifrac = 0.5 (tan h (x) + 1.0)
 \end{equation}
 
-where $x = x_0 \frac{R + dR -1.0}{dR}$. $x_0$ is where the H
-ionization fraction is 0.99, i.e. in the sonic point where $R = 1$ ($ifrac_m = 0.5
-(tan h (x_0) + 1.0)$).
+where $x = x_0 \frac{R + dR -1.0}{dR}$. $x_0$ is where the H ionization fraction is 0.99, i.e. in the sonic point where $R = 1$ ($ifrac_0 = 0.5 (tan h (x_0) + 1.0)$).
 
-Making use of the Mach number $M = v/c$ and the fact of $c_m/c =
-\frac{1}{2} \left ( M + M^{-1} \right)$. Then, once more by
-continuity, the electronic density in this zone is:
+Making use of the Mach number $M = v/c$ and the fact of $c_0/c = \frac{1}{2} \left ( M + M^{-1} \right)$. Then, once more by continuity, the electronic density in this zone is:
 \begin{equation}
-  \rho = \rho_m / 1.0 - \sqrt{ 1.0 - \left [ \frac{1+X}{1+X_m} \right ]}
+  \rho = \rho_0 / 1.0 - \sqrt{ 1.0 - \left [ \frac{1+X}{1+X_0} \right ]}
 \end{equation}
 in contrast to the static case where the density is: $\rho \sim 1/c^2$
 
@@ -229,30 +183,17 @@ in contrast to the static case where the density is: $\rho \sim 1/c^2$
 %--------------------------------------------------------
 
 \begin{itemize}
-  \item{Electron Density: It has an almost constant increase reaching
-      the maximum value in the i-front (after the sonic point) where the H is partially
-      ionized. In this zone, the electron density reach the critical
-      electron density for some ions, making the collisional
-      deexitation a process that need to take into account.\\
-    This could be negligible in the outer parts of the flow since they
-    are highly ionized, which means that \oiii is the dominant
-    coolant. The critical density of this ion is about 1e6 cm-3, which
-  is reached just near of the sonic point, that is, where the \oiii
-  emission is less than the 10\% of the total \oiii emission. (See Sect.~\ref{sec:emi}).
-}
-  \item{Temperature: The electron temperature is almost constant in
-      the outer zone. As we approache to the He recombination front
-      the Te increase reaching the maximum value just before the
-      i-front, where the He is neutral and the H still fully ionized. \\
-    It is due for two reasons: The first one is that as the radiation
-    field goes into the gas-phase of the proplyd, the less energy
-    photons are absorved. This cause a hardening of the radiation
-    field increasing the mean electron kinetic energy. That is,
-    increasing the photoelectric heating per recombination. The second
-  one is the electron density increase. It causes collisional
-  deexcitation of the main cooling lines.
-}
+  \item{Electron Density: It has an almost constant increase reaching the maximum value in the i-front (after the sonic point) where the H is partially ionized. In this zone, the electron density reach the critical electron density for some ions, making the collisional deexitation a process that need to take into account.\\ 
+This could be negligible in the outer parts of the flow since they are highly ionized, which means that \oiii is the dominant coolant. The critical density of this ion is about $\rm 1e6 cm{-3}$, which is reached just near of the sonic point, that is, where the \oiii emission is less than the 10\% of the total \oiii emission. (See Sect.~\ref{sec:emi}).}
+  \item{Temperature: The electron temperature is almost constant in the outer zone. As we approache to the He recombination front the Te increase reaching the maximum value just before the i-front, where the He is neutral and the H still fully ionized. \\
+It is due for two reasons: The first one is that as the radiation field goes into the gas-phase of the proplyd, the less energy photons are absorved. This cause a hardening of the radiation field increasing the mean electron kinetic energy. That is, increasing the photoelectric heating per recombination. The second one is the electron density increase. It causes collisional deexcitation of the main cooling lines.}
 \end{itemize}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=8.5 cm]{ifrac-vs-Rlog.png}
+  \caption{1D model structure.} \label{fig:ifrac}
+\end{figure}
 
 %--------------------------------------------------------
 \subsection{Ionization structure}
@@ -268,29 +209,17 @@ in contrast to the static case where the density is: $\rho \sim 1/c^2$
 
 All the high ionization lines are all wholly outside the sonic point.
 
-\neii, \ha, \nii and \oii have almost the 90\% of their emission
-in the supersonic zone and the 10\% in the sub-sonic zone.
+\neii, \ha, \nii and \oii have almost the 90\% of their emission in the supersonic zone and the 10\% in the sub-sonic zone.
 
 \sii is about 70\% outside the sonic point and 30\% inside.
 
 \oi is about 20\% outside and 80\% inside the sonic point.
 
-So if we take into account the full emission of the proplyd, and the
-sub-sonic zone is not well modelated, the efect of this should be not
-very important since it is only going to affect two
-lines. Nevertheless, if we want to compare the model predictions with
-observations that takes only a little aperture of the proplyd and it
-is near of the center (near the i-front), the sub-sonic zone will be
-very important.
+So if we take into account the full emission of the proplyd, and the sub-sonic zone is not well modelated, the efect of this should be not very important since it is only going to affect two lines. Nevertheless, if we want to compare the model predictions with observations that takes only a little aperture of the proplyd and it is near of the center (near the i-front), the sub-sonic zone will be very important.
 
-There are a clear separation of 3 km/s (about 15\%) between the median
-velocity of the \oiii 5007 and 4363 lines.
+There are a clear separation of 3 km/s (about 15\%) between the median velocity of the \oiii 5007 and 4363 lines.
 
-Discutir tambien la diferencia que hay entre la linea auroral y la
-nebular de \nii para ver la importancia de las desexitaciones
-colisionales. Una es mas afectada que la otra y por lo tanto conforme
-vamos a las zonas de mayor densidad la razon entre ellas debe ir
-cambiando, aumentando de hecho.
+Discutir tambien la diferencia que hay entre la linea auroral y la nebular de \nii para ver la importancia de las desexitaciones colisionales. Una es mas afectada que la otra y por lo tanto conforme vamos a las zonas de mayor densidad la razon entre ellas debe ir cambiando, aumentando de hecho.
 
 %--------------------------------------------------------
 \section{Conclusion}
