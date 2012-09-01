@@ -1,0 +1,183 @@
+#+OPTIONS:   H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+TITLE: Modelos para HST-10
+
+** Proplyd observational properties
+
+"...also has a jet that may partially affect the shape of its ionization front..."
+Bally et al. 2005
+
+*** O'Dell 1998
+
+F(Halpha) = 0.82 cm-2 s-1
+Phi = 1.19"
+Theta = 57.3
+C(Hbeta) = 0.64
+<S(Halpha)> = 3.1e10 ph cm-2 s-1 sr-1
+log <S(Halpha)> = 10.96
+
+*** Henney y O'Dell 1999
+
+tau (Halpha) = 1.09
+r0 = 3.69e15 cm
+n0 = 0.153e6 cm-3
+i = 0-30 ; 150-180 deg
+
+*** Yiannis preliminary results for chemical abundances (VLT/FLAMES data:
+
+O = 8.77 +- 0.1
+S = 6.9 +- 0.04
+Fe = 5.78
+
+
+** Observations
+
+*** QUOTE Yiannis comunication
+
+Hi Nahiely, Will,
+
+for your feedback, I have attached a tar with some pretty HST10 maps that I am including in the paper (North is directly up with East to the left). All contours shown are those from "scHa" - Halpha map, except those on the C II 4267 map which are Hdelta contours.
+
+Except where noted below the fluxes are not dereddened. The maps have been corrected for differential atmos refraction and are properly aligned.
+
+scHa - Halpha flux (x 1E-15 erg/s/cm2/spaxel)
+
+map3970 - H I 3970-A (x 1E-15)
+
+rub_s2dens.eps - [S II] el. density. Note the high density area to the East of the proplyd. I think this is probing material escaping from HST10 as per my previous email on the velocity dispersion of this line.
+
+map_o3temprev.eps - [O III] 4363/4959 el. temp (adopting [S II] density)
+
+map_n2temps2new.eps - [N II] 5755/6584 el. temp (adopting [S II] density). Max T is 16,000K. Are we seeing evidence for shock heating here? Ideas?
+
+map_o2dens.eps - [O II] 3729/3726 el. density.
+
+rub6312_L5sc.eps - [S III] 6312 flux (x 1E-15)
+
+der6312_6731rat.eps - The dereddened intensity ratio. The low ionization zone is in the tail of HST10 and in the bridge of material to the East.
+
+rub6584sc.eps - x 1E-15. The low ionization "bridge" is evident here too.
+
+rub5755_L5sc.eps x 1E-15.
+
+der4959_6584rat.eps - The dereddened line ratio.
+
+rub5577_OI_L4.eps x 1E-15. The auroral [O I] line which peaks at the precise position of the embedded silhouette disk seen in HST images. Is this due to fluorescence mostly?
+
+rub6300_OI_L5sc.eps x 1E-15 - The nebular [O I] line which is predominantly col excited. I am working on a density map using the [O I] lines but have yet to finish it.
+
+rub4959cubezero.eps x 1E-15 - The [O III] 4959 line.
+
+rub6731sc.eps x 1E-15 - The [S II] 6731 line.
+
+map4267.eps x 1e-15. The C II 4267 RL.
+
+map4101_L2.eps x 1E-15. Hdelta 4101
+
+der4959_3729rat.eps - the dereddened [O III] 4959/[O II] 3729 ratio. The easternmost area of the map may be affected by an ill-defined feature (scattered light?) affecting the LR1 grating observation of the [O II] 3729 line. The proplyd area seems to be OK.
+
+The proplyd is overall of lower excitation state than LV2. I also have some abundance maps, along with numbers for dereddened fluxes etc. to constrain the models. I can send those in a next email.
+
+We are going on holiday in Italy tomorrow for 2 weeks, but I will be on email access and I will keep working on this. I definitely want to submit a paper in early Sept as I am working on funding applications..
+Are you available for a Skype session later today?
+
+cheers and thanks!
+Yiannis
+
+** Models
+
+*** Angulo de inclinacion
+
+Por la forma del proplyd parece que i > 90 deg, pero...
+
+| proplyd |     r0 |    n0 | d   | i  | Q(H) |  Phi(H) |
+|---------+--------+-------+-----+----+------+---------|
+| HST-1   | 1.9e15 | 6.4e5 | 25" | 55 | 9e48 | 1.58e13 |
+| HST-10  | 3.7e15 | 1.5e5 | 57" | x  | 9e48 |    x    |
+
+#+BEGIN_SRC latex
+El flujo en el proplyd: S ~ n0^2 r0 ~ Q(H)/(4 pi R^2)
+
+y el Q(H) es el mismo para ambos proplyds (bajo la suposicion de que ambos son solo fotoionizados por Theta 1C. Entonces:
+
+\begin{equation}
+n_1^2 \, r_0_1 \, R_1^2 = n_10^2 \, r_0_10 \, R_10^2
+\end{equation}
+
+donde el subindice 1 es para HST1 y 10 para HST10. Por otro lado, si relacionamos la separacion proyectaba (la que observamos en segundos de arco) con la separacion fisica:
+
+\begin{equation}
+sin (180-i) = \frac {sp}{sf}
+\end{equation}
+
+donde i es el angulo de inclinacion. Entonces,
+
+\begin{equation}
+sin i_{10} = \frac{n_{10}}{n_1} (\frac{r_0_{10}}{r_0_1})^{1/2} \frac{sp_{10}}{sp_1} sin i_1
+\end{equation}
+
+poniendo los numeros de la tabla resulta i = 37 deg
+#+END_SRC
+Probamos modelos con i=30 y 40 deg
+
+|  i | separacion fisica |  Phi(H) | log Phi(H) |
+|----+-------------------+---------+------------|
+| 30 |           7.51e17 | 1.27e12 | 12.1       |
+| 40 |           5.84e17 |  2.1e12 | 12.3       |
+
+*** Abundancias Quimicas
+
+Para los primeros modelos utilizo los grupos de abundancias que ya tenemos:
+
+Orion
+Esteban
+Tsamis LV2 - aquellas propuestas por Tsamis para LV2 en el articulo de 2011
+Tweaked 03 - aquellas que funcionaron para 177-341 (proplyd del articulo de Adal, HST1)
+
+y un nuevo set que aparece como: TsamisHST10
+(son las abundancias preliminares que propone Yiannis para HST10 en su platica de Tenerife)
+
+| Elemento | HST10 | Orion | HST10 lineal | Orion lineal | factor de escala |
+|----------+-------+-------+--------------+--------------+------------------|
+| O/H      |  8.77 |   8.6 |      5.89e-4 |      3.98e-4 |             1.48 |
+| S/H      |   6.9 |   7.0 |       7.9e-6 |       1.0e-5 |            0.787 |
+| Fe/H     |  5.78 |  6.48 |         6e-7 |       3.0e-6 |              0.2 |
+| O/H(2)   |  8.28 |   8.6 |       1.9e-4 |      3.98e-4 |             0.48 |
+| O/H(2)   |  8.46 |   8.6 |      2.88e-4 |      3.98e-4 |             0.72 |
+Nota: El factor de escala es aquel necesario para escalar las abundancias que estan por default en Cloudy
+(2): Es el valor que Yiannis da en el borrador del articulo. El valor de S/H es basicamente el mismo y de Fe/H no da valor
+
+*** Modelos
+
+Probamos modelos con varias abundancias quimicas y distancias fisicas a Theta 1C pero con otros parametros fijos:
+
++ -n 10
++ --r0 3.7e15
++ --logPhiH varios
++ --Tstar 39000
++ --diffuseBeta 0.1
++ --composition varios
+
+| composition  | log phi(h) | maquina | densidad maxima (th00) |   |
+|--------------+------------+---------+------------------------+---|
+| Orion        |       12.1 | astro04 |                        |   |
+| Orion        |       12.3 | robie   |                        |   |
+| Esteban      |       12.1 | robie   |                        |   |
+| Esteban      |       12.3 | astro04 |                        |   |
+| Tsamis LV2   |       12.1 | robie   |                        |   |
+| Tsamis LV2   |       12.3 | astro04 |                        |   |
+| Tweak 03     |       12.1 | astro04 |                        |   |
+| Tweak 03     |       12.3 | astro04 |                        |   |
+| Tsamis HST10 |       12.1 | astro04 |                        |   |
+| Tsamis HST10 |       12.3 | astro04 |                        |   |
+| HST10t01     |       12.1 | astro04 |                        |   |
+| HST10t01     |       12.3 | robie   |                        |   |
+| HST10t02     |       12.1 | astro04 |                        |   |
+| HST10t02     |       12.3 | astro04 |                        |   |
+
+
+
+
