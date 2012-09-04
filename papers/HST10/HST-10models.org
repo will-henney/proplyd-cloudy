@@ -35,6 +35,158 @@ Fe = 5.78
 
 ** Observations
 
+*** Comparison of Keck line ratios between HST 1 and HST 10
+
+| Object      | Slit | exposure |  5755 |           6584 |            4861 |    6584 / 5755 | 100 x 6584 / 4861 |
+|-------------+------+----------+-------+----------------+-----------------+----------------+-------------------|
+| 182413      | p77  |      900 | 33444 |          79800 |           50360 |           2.39 |             158.5 |
+| Nebula      | p77  |      900 | 33100 | 64000 +/- 2000 |   48700 +/- 400 |  1.93 +/- 0.06 |     131.4 +/- 4.2 |
+| Bias        | p77  |      900 | 32800 |          32820 |           32800 |           1.00 |             100.1 |
+| Neb - Bias  |      |      900 |  0.57 | 34.64 +/- 2.22 | 126.19 +/- 3.17 | 60.77 +/- 3.89 |      27.5 +/- 1.9 |
+| Prop - Bias |      |      900 |  1.23 |          52.20 |          139.37 |          42.44 |              37.5 |
+| Prop - Neb  |      |          |  0.66 | 17.56 +/- 2.22 |  13.18 +/- 3.17 | 26.61 +/- 3.36 |    133.2 +/- 36.2 |
+|-------------+------+----------+-------+----------------+-----------------+----------------+-------------------|
+| 177341      | p60  |      300 | 33303 |          44000 |           38508 |           1.32 |             114.3 |
+| Nebula      | p60  |      300 | 32860 |  39100 +/- 500 |   36500 +/- 300 |  1.19 +/- 0.02 |     107.1 +/- 1.6 |
+| Bias        | p60  |      300 | 32785 |          32785 |           32785 |              1 |               100 |
+| Neb - Bias  |      |      300 |  0.43 | 21.05 +/- 1.67 |  88.45 +/- 7.14 | 48.95 +/- 3.88 |      23.8 +/- 2.7 |
+| Prop - Bias |      |      300 |  2.98 |          37.38 |          136.26 |          12.54 |              27.4 |
+| Prop - Neb  |      |          |  2.55 | 16.33 +/- 1.67 |  47.81 +/- 7.14 |  6.40 +/- 0.65 |      34.2 +/- 6.2 |
+|-------------+------+----------+-------+----------------+-----------------+----------------+-------------------|
+| Quartz      |      |          | 45000 |          53800 |           35700 |           1.20 |             150.7 |
+| Quartz Bias |      |          | 32765 |          32765 |           32765 |              1 |               100 |
+| Efficiency  |      |          |  0.58 |              1 |            0.14 |           1.72 |             714.3 |
+|             |      |          |       |                |                 |            0/0 |               0/0 |
+    #+TBLFM: $7=$5/$4 ; f2::$8=100 $5/$6 ; f1::@5$4..@5$6=(@-2 - @-1)/($3 @16) ; f2::@6$4..@6$6=(@-4 - @-2)/($3 @16) ; f2::@7$4..@7$6=@-1 - @-2; f2::@11$4..@11$6=(@-2 - @-1)/($3 @16); f2::@12$4..@12$6=(@-4 - @-2)/($3 @16); f2::@13$4..@13$6=@-1 - @-2; f2::@16$4..@16$6=(@-2 - @-1) / (@-2$5 - @-1$5) ; f2
+
+*** Line fluxes from Yiannis
+| LINE     | IMAGE                       | NPIX |   MEAN |  STDDEV |    MIN |    MAX | NOTES |
+|----------+-----------------------------+------+--------+---------+--------+--------+-------|
+| [O II]   | der3726Hb.fits[8:15,2:5]    |   32 |   62.1 |    2.86 |  55.26 |  66.69 |       |
+| [O II]   | der3729Hb.fits[8:15,2:5]    |   32 |  32.84 |   1.858 |   28.1 |  36.99 |       |
+| [Ne III] | der3967Hb.fits[8:15,2:5]    |   32 |  4.044 |  0.3046 |  3.511 |  5.021 |       |
+| H I      | der3970Hb.fits[8:15,2:5]    |   32 |  13.43 |  0.4987 |  12.46 |  14.66 | [1]   |
+| H I      | der4101Hb.fits[8:15,2:5]    |   32 |  25.22 |  0.6144 |   23.7 |  26.24 | [1]   |
+| H I      | derscHab.fits[8:15,2:5]     |   32 |   227. |   49.13 |   148. |  365.8 |       |
+| C II     | der4267Hb.fits[8:15,2:5]    |   32 | 0.2153 | 0.02657 |  0.162 | 0.2686 | [2]   |
+| C II     | der6578Hb.fits[8:15,2:5]    |   32 | 0.2306 |   0.024 | 0.1876 | 0.2931 | [3]   |
+| [O III]  | der4363Hb.fits[8:15,2:5]    |   32 | 0.9819 | 0.08034 | 0.8605 |  1.196 |       |
+| [O III]  | der4959Hb.fits[8:15,2:5]    |   32 |  89.25 |   7.782 |  75.71 |  108.2 |       |
+| [N II]   | der5755Hb_L4.fits[8:15,2:5] |   32 |  1.214 |  0.4113 |  0.634 |  2.237 | [4]   |
+| [N II]   | der5755Hb_L5.fits[8:15,2:5] |   32 |  1.251 |  0.4324 | 0.6757 |  2.317 | [4]   |
+| [N II]   | der6584Hb.fits[8:15,2:5]    |   32 |  50.46 |   5.342 |   36.8 |  58.34 |       |
+| He I     | der4471Hb.fits[8:15,2:5]    |   32 |  4.517 |  0.2858 |  4.034 |  5.196 |       |
+| He I     | der5876Hb_L5.fits[8:15,2:5] |   32 |  12.93 |  0.8712 |  10.89 |  14.89 |       |
+| [O I]    | der6300Hb.fits[8:15,2:5]    |   32 |  1.786 |  0.8056 | 0.6728 |  3.427 |       |
+| [O I]    | der5577Hb.fits[8:15,2:5]    |   32 | 0.4213 | 0.06122 | 0.2939 | 0.5707 |       |
+| [N I]    | der5198Hb.fits[8:15,2:5]    |   32 | 0.1954 | 0.07203 |     0. | 0.3184 |       |
+| [N I]    | der5200Hb.fits[8:15,2:5]    |   32 | 0.1256 | 0.04418 |     0. | 0.1765 |       |
+| [Cl III] | der5518Hb.fits[8:15,2:5]    |   32 | 0.3155 | 0.03255 | 0.2341 |  0.386 |       |
+| [Cl III] | der5538Hb.fits[8:15,2:5]    |   32 | 0.4134 | 0.03045 | 0.3353 |  0.477 |       |
+| [Fe III] | der5270Hb.fits[8:15,2:5]    |   32 | 0.2994 | 0.02696 | 0.2232 | 0.3552 |       |
+| [S II]   | der6716Hb.fits[8:15,2:5]    |   32 |  2.457 |  0.3261 |   2.04 |  3.127 |       |
+| [S II]   | der6731Hb.fits[8:15,2:5]    |   32 |  4.224 |  0.5908 |  3.515 |  5.409 |       |
+| [S III]  | der6312Hb.fits[8:15,2:5]    |   32 |  1.549 | 0.09926 |  1.341 |  1.819 |       |
+| [Ar III] | der7136Hb.fits[8:15,2:5]    |   32 |  12.02 |  0.8041 |   10.7 |  13.52 |       |
+
+
+[1] Dereddened Hbeta in flux units of 1E-15 erg/s/cm2/spax 
+[2] 4267 is a pure recombination line
+[3] 6578 can be partly fluorescence 
+[4] (for 5755 use L5)
+
+**** QUOTE Original message
+HST10
+These are the fluxes within the 80 per cent Hbeta isophote (32 spaxels)
+(dereddened and relative to Hbeta=100)
+
+[O II]
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der3726Hb.fits[8:15,2:5]        32      62.1      2.86     55.26     66.69
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der3729Hb.fits[8:15,2:5]        32     32.84     1.858      28.1     36.99
+
+[Ne III]
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der3967Hb.fits[8:15,2:5]        32     4.044    0.3046     3.511     5.021
+
+H I
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der3970Hb.fits[8:15,2:5]        32     13.43    0.4987     12.46     14.66
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der4101Hb.fits[8:15,2:5]        32     25.22    0.6144      23.7     26.24
+
+Dereddened Hbeta in flux units of 1E-15 erg/s/cm2/spax
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ derscHab.fits[8:15,2:5]        32      227.     49.13      148.     365.8
+
+C II - 4267 is a pure recombination line, 6578 can be partly fluorescence 
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der4267Hb.fits[8:15,2:5]        32    0.2153   0.02657     0.162    0.2686
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der6578Hb.fits[8:15,2:5]        32    0.2306     0.024    0.1876    0.2931
+
+[O III]
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der4363Hb.fits[8:15,2:5]        32    0.9819   0.08034    0.8605     1.196
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der4959Hb.fits[8:15,2:5]        32     89.25     7.782     75.71     108.2
+
+[N II] (for 5755 use L5)
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der5755Hb_L4.fits[8:15,2:5]        32     1.214    0.4113     0.634     2.237
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der5755Hb_L5.fits[8:15,2:5]        32     1.251    0.4324    0.6757     2.317
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der6584Hb.fits[8:15,2:5]        32     50.46     5.342      36.8     58.34
+
+He I
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der4471Hb.fits[8:15,2:5]        32     4.517    0.2858     4.034     5.196
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der5876Hb_L5.fits[8:15,2:5]        32     12.93    0.8712     10.89     14.89
+
+[O I]
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der6300Hb.fits[8:15,2:5]        32     1.786    0.8056    0.6728     3.427
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der5577Hb.fits[8:15,2:5]        32    0.4213   0.06122    0.2939    0.5707
+
+[N I]
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der5198Hb.fits[8:15,2:5]        32    0.1954   0.07203        0.    0.3184
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der5200Hb.fits[8:15,2:5]        32    0.1256   0.04418        0.    0.1765
+
+[Cl III]
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der5518Hb.fits[8:15,2:5]        32    0.3155   0.03255    0.2341     0.386
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der5538Hb.fits[8:15,2:5]        32    0.4134   0.03045    0.3353     0.477
+
+[Fe III]
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der5270Hb.fits[8:15,2:5]        32    0.2994   0.02696    0.2232    0.3552
+
+[S II]
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der6716Hb.fits[8:15,2:5]        32     2.457    0.3261      2.04     3.127
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der6731Hb.fits[8:15,2:5]        32     4.224    0.5908     3.515     5.409
+
+[S III]
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der6312Hb.fits[8:15,2:5]        32     1.549   0.09926     1.341     1.819
+
+[Ar III]
+#               IMAGE      NPIX      MEAN    STDDEV       MIN       MAX
+ der7136Hb.fits[8:15,2:5]        32     12.02    0.8041      10.7     13.52
+ 
+
+
+ 
+
+
 *** QUOTE Yiannis comunication
 
 Hi Nahiely, Will,
