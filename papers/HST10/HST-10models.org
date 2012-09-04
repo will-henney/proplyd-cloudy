@@ -1,4 +1,4 @@
-#+OPTIONS:   H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
 #+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
 #+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
 #+EXPORT_SELECT_TAGS: export
@@ -98,19 +98,18 @@ Por la forma del proplyd parece que i > 90 deg, pero...
 | HST-1   | 1.9e15 | 6.4e5 | 25" | 55 | 9e48 | 1.58e13 |
 | HST-10  | 3.7e15 | 1.5e5 | 57" | x  | 9e48 |    x    |
 
-#+BEGIN_SRC latex
 El flujo en el proplyd: S ~ n0^2 r0 ~ Q(H)/(4 pi R^2)
 
 y el Q(H) es el mismo para ambos proplyds (bajo la suposicion de que ambos son solo fotoionizados por Theta 1C. Entonces:
 
 \begin{equation}
-n_1^2 \, r_0_1 \, R_1^2 = n_10^2 \, r_0_10 \, R_10^2
+n_1^2 \, r_{0_1} \, R_1^2 = n_10^2 \, r_{0_10} \, R_10^2
 \end{equation}
 
 donde el subindice 1 es para HST1 y 10 para HST10. Por otro lado, si relacionamos la separacion proyectaba (la que observamos en segundos de arco) con la separacion fisica:
 
 \begin{equation}
-sin (180-i) = \frac {sp}{sf}
+\sin (180-i) = \frac {sp}{sf}
 \end{equation}
 
 donde i es el angulo de inclinacion. Entonces,
@@ -120,7 +119,7 @@ sin i_{10} = \frac{n_{10}}{n_1} (\frac{r_0_{10}}{r_0_1})^{1/2} \frac{sp_{10}}{sp
 \end{equation}
 
 poniendo los numeros de la tabla resulta i = 37 deg
-#+END_SRC
+
 Probamos modelos con i=30 y 40 deg
 
 |  i | separacion fisica |  Phi(H) | log Phi(H) |
