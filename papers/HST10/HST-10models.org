@@ -35,6 +35,17 @@ Fe = 5.78
 
 ** Observations
 
+*** TODO [2/5] Calculate the density from the H alpha surface brightness
+
++ [X] From Fig 2 of Yiannis draft, peak Ha brightness is 3.2e-13 erg/s/cm2/spaxel
++ [X] Field of view is 6.6 x 4.2 arcsec = 22 x 14 spaxels
+  + => spaxels are 0.3 x 0.3 arcsec = 0.09 square arcsec = 2.11539477435e-12 steradians
++ [ ] Correct for extinction
++ [ ] Calculate EM, assuming an effective alpha
++ [ ] Calculate density, assuming a path length ~= radius
+  + See LL Ori paper for more precise estimates
+
+
 *** Comparison of Keck line ratios between HST 1 and HST 10
 
 | Object      | Slit | exposure |  5755 |           6584 |            4861 |    6584 / 5755 | 100 x 6584 / 4861 |
