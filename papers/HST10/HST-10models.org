@@ -42,6 +42,10 @@ Fe = 5.78
   + => spaxels are 0.3 x 0.3 arcsec = 0.09 square arcsec = 2.11539477435e-12 steradians
 + [ ] Correct for extinction
 + [ ] Calculate EM, assuming an effective alpha
+  + S(Ha) = eta(Ha) dL
+  + eta(Ha) = alpha(Ha) n^2 (h nu) / (4 pi)
+  + EM = n^2 dL 
+  + S(Ha) = EM alpha(Ha) (h nu) / (4 pi)
 + [ ] Calculate density, assuming a path length ~= radius
   + See LL Ori paper for more precise estimates
 
