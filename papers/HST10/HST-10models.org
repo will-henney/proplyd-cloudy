@@ -35,20 +35,73 @@ Fe = 5.78
 
 ** Observations
 
-*** TODO [2/5] Calculate the density from the H alpha surface brightness
+*** DONE [8/8] Calculate the density from the H alpha surface brightness
+    CLOSED: [2012-09-06 Thu 09:30]
 
 + [X] From Fig 2 of Yiannis draft, peak Ha brightness is 3.2e-13 erg/s/cm2/spaxel
-+ [X] Field of view is 6.6 x 4.2 arcsec = 22 x 14 spaxels
++ [X] Remove background
+  + Nebular background is about 200 in front of the proplyd
+  + And about 170 behind the tail
+  + Both in units of 1e-15
+  + Take average of 1.85e-13
+  + We won't subtract this yet, since we want to do the extinction
+    correction separately for the proplyd and the nebula
++ [X] Convert to per steradian
+  + Field of view is 6.6 x 4.2 arcsec = 22 x 14 spaxels
   + => spaxels are 0.3 x 0.3 arcsec = 0.09 square arcsec = 2.11539477435e-12 steradians
-+ [ ] Correct for extinction
-+ [ ] Calculate EM, assuming an effective alpha
-  + S(Ha) = eta(Ha) dL
-  + eta(Ha) = alpha(Ha) n^2 (h nu) / (4 pi)
+  + S(Ha) = 3.2e-13 / 2.11539477435e-12 = 0.151 erg/s/cm2/sr
+    + Background S(Ha) is 0.0874
+  + Or in photons
+    + Using E(Ha) = 13.6 1.602176462e-12 (1/4 - 1/9) = 3.026e-12 erg
+    + S(Ha) = 5.00e10 phot/s/cm2/sr
+    + BG S(Ha) = 2.89e10 phot/s/cm2/sr
++ [X] Correct for extinction
+  + Measured C(Hb) is 0.6 (both Yiannis y O'Dell 1998)
+  + A(Ha) / A(Hb) = 4.7 / 6 = 0.783
+  + Extinction correction at Ha is 10**(0.783 0.6) = 2.95
+  + Corrected total brightness is 1.475e11 phot/s/cm2/sr
+  + BG C(Hb) = 0.4 => extinct correction = 10**(0.783 0.4) = 2.057
+    + That is using the extinction of the nebula
+    + But it may be better to use the proplyd extinction factor: 2.95
+  + Corrected BG S(Ha) is 5.94e10 or 8.53e10
++ [X] Now subtract the background
+  + 1.475e11 - [5.94e10, 8.53e10] = [8.81e10, 6.22e10]
+  + The second value is probably the best
++ [X] Calculate EM, assuming an effective alpha
+  + S(Ha) = (eta(Ha) / h nu) dL
+  + eta(Ha) / h nu = alpha(Ha) n^2 / (4 pi)
   + EM = n^2 dL 
-  + S(Ha) = EM alpha(Ha) (h nu) / (4 pi)
-+ [ ] Calculate density, assuming a path length ~= radius
+  + S(Ha) = EM alpha(Ha) / (4 pi)
+  + EM = 4 pi S(Ha) / alpha(Ha)
+  + alpha(Ha) = 1e-13 at 1e4 K
+  + Therefore, EM = 4 pi 6.22e10 / 1.e-13 = 7.816e24 
++ [X] Calculate density, assuming a path length ~= radius
   + See LL Ori paper for more precise estimates
+  + R ~ 2 spax = 2 0.3 440 au = 3.95e15
+  + So density is sqrt( 7.816e24 /  3.95e15) = 4.45e4 pcc
++ [X] We can also do the tail
+  + This has C(Hb) of 0.47
+  + And brightness of 240
+    + Subtracted brightness is 55, as opposed to 135 for the head
+    + 0.297 times fainter
+    + With the same path length, this is sqrt(0.297) smaller densities
+    + 4.45e4 sqrt(0.297) = 2.42e4 pcc
 
+**** Alternative way to estimate the density: scale from LV2
+
++ LV2 has a well-determined density from C III obervations of ~1e6 pcc
+
++ The Ha brightness of LV2 is 214e10 according to O'Dell (1998)
+
+  + This is 70 or 35 times higher than HST10, depending on whether we take our values or O'Dell's
+
++ The Ha brightness should scale as n^2 L, so density scales as sqrt(SHa/L)
+
++ LV2 has a size (r0) of 8e14 cm, whereas HST10 has 3.69e15 cm
+
++ Therefore density of HST10 should be 1.e6 sqrt(8e14 / 3.69e15 35) = 7.87e4 pcc
+
+  + This is similar to, although slightly higher than, the value we derived above
 
 *** Comparison of Keck line ratios between HST 1 and HST 10
 
