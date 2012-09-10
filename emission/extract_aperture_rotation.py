@@ -49,8 +49,8 @@ sa = np.sin(np.radians(alpha))
 
 # Create the folder, if not exist, where the profiles will be
 fitsdir = os.path.join(os.getcwd(), 
-                       'aperture-xc{:02}-yc{:02}-w{:02}-h{:02}-{}'.format(
-        int(10*xc), int(10*yc), int(10*w), int(10*h), cmd_args.suffix))
+                       'aperture-xc{:02}-yc{:02}-w{:02}-h{:02}-rot{:02}-{}'.format(
+        int(10*xc), int(10*yc), int(10*w), int(10*h), (alpha), cmd_args.suffix))
 
 if not os.path.isdir(fitsdir): 
     os.makedirs(fitsdir)
@@ -95,28 +95,30 @@ for line, cube in zip(emlines, cubefiles):
 
     # construct x-axis slit index
     i0, x0, dx, nx = [hdu.header[kwd] for kwd in "CRPIX1", "CRVAL1", "CDELT1", "NAXIS1"]
+
     # construct y-axis slit index
     j0, y0, dy, ny = [hdu.header[kwd] for kwd in "CRPIX2", "CRVAL2", "CDELT2", "NAXIS2"]
 
     # construct an x array
     xf = x0 + (nx*dx)
-    x = np.arange(x0,xf+dx,dx)
+    x = np.linspace(x0,xf,nx)
 
     # construct an y array
     yf = y0 + (ny*dy)
-    y = np.arange(y0,yf+dy,dy)
+    y = np.linspace(y0,yf,ny)
 
     # Promote coordinate axes to 2d arrays
     X, Y = np.meshgrid(x, y)
 
     # Rotate to the frame of the aperture
-    P = (X-x0)*ca - (Y-y0)*sa
-    Q = (X-x0)*sa + (Y-y0)*ca
+    P = (X)*ca - (Y)*sa
+    Q = (X)*sa + (Y)*ca
 
-    mask = (abs(P) < 0.5*w) & (abs(Q) < 0.5*h)
+    mask = (abs(P) < 0.5*w-x0) & (abs(Q) < 0.5*h-y0)
 
     cubo = hdu.data
 
+    print mask.shape, cubo.shape
     
     # select the data cube restricted to the slit 
     aperture_cube = np.where( mask, cubo, 0.0 )
