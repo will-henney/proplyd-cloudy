@@ -111,10 +111,10 @@ for line, cube in zip(emlines, cubefiles):
     X, Y = np.meshgrid(x, y)
 
     # Rotate to the frame of the aperture
-    P = (X)*ca - (Y)*sa
-    Q = (X)*sa + (Y)*ca
+    P = (X-xc)*ca - (Y-yc)*sa
+    Q = (X-xc)*sa + (Y-yc)*ca
 
-    mask = (abs(P) < 0.5*w-x0) & (abs(Q) < 0.5*h-y0)
+    mask = (abs(P) < 0.5*w) & (abs(Q) < 0.5*h)
 
     cubo = hdu.data
 
