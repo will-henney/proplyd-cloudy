@@ -38,8 +38,14 @@ emlines_found = [ s.split("-")[1].split(".")[0] for s in cubefiles_found ]
 
 xc, yc = cmd_args.center
 w, h =  cmd_args.size
-xi, yi, xf, yf = xc - 0.5*w, yc - 0.5*h, xc + 0.5*w, yc+0.5*h
+
+
 alpha = cmd_args.rotation
+ca = np.cos(np.radians(alpha))
+sa = np.sin(np.radians(alpha))
+
+# # corners of rotated aperture - Not needed
+# xi, yi, xf, yf = xc - 0.5*w*ca, yc - 0.5*h*sa, xc + 0.5*w*ca, yc+0.5*h*sa
 
 
 # Create the folder, if not exist, where the profiles will be
@@ -90,6 +96,12 @@ for line, cube in zip(emlines, cubefiles):
 
     # construct x-axis slit index
     i0, x0, dx, nx = [hdu.header[kwd] for kwd in "CRPIX1", "CRVAL1", "CDELT1", "NAXIS1"]
+    # construct y-axis slit index
+    j0, y0, dy, ny = [hdu.header[kwd] for kwd in "CRPIX2", "CRVAL2", "CDELT2", "NAXIS2"]
+
+
+    ## Use a mask instead of simply a rectangular sub-cube
+
     # find indices that correspond to the limits xi and xf
     i1 = i0 + int((xi - x0)/dx)
     i2 = i0 + int((xf - x0)/dx)
@@ -97,8 +109,6 @@ for line, cube in zip(emlines, cubefiles):
     i1 = max(min(i1, nx), 0)
     i2 = max(min(i2, nx), 0)
 
-    # construct y-axis slit index
-    j0, y0, dy, ny = [hdu.header[kwd] for kwd in "CRPIX2", "CRVAL2", "CDELT2", "NAXIS2"]
     j1 = j0 + int((yi - y0)/dy)
     j2 = j0 + int((yf - y0)/dy)
     j1 = max(min(j1, ny), 0)
