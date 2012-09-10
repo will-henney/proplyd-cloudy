@@ -462,3 +462,13 @@ if we take D = 440 pc => 1 pixel = 1.963e15 x 1.963e15 cm
 r0 = 3.69e15 cm => 1 pixel = 0.532 x 0.532 R (R=r/r0)
 
 **** TODO The maximum Halpha from the models
+
+
+** The nebular environment of HST10
+
++ Use images such as
+  + [[file:~/Work/BobKPNO/TereFigs/DOHha-sigma.png]]
+  + [[file:~/Work/BobKPNO/TereFigs/DOHha-mean.png]]
++ Use the HST images to identify the two filaments that cross next to
+  the proplyds
+
