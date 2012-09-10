@@ -39,7 +39,6 @@ emlines_found = [ s.split("-")[1].split(".")[0] for s in cubefiles_found ]
 xc, yc = cmd_args.center
 w, h =  cmd_args.size
 
-
 alpha = cmd_args.rotation
 ca = np.cos(np.radians(alpha))
 sa = np.sin(np.radians(alpha))
@@ -99,27 +98,35 @@ for line, cube in zip(emlines, cubefiles):
     # construct y-axis slit index
     j0, y0, dy, ny = [hdu.header[kwd] for kwd in "CRPIX2", "CRVAL2", "CDELT2", "NAXIS2"]
 
+    # construct an x array
+    xf = x0 + (nx*dx)
+    x = np.arange(x0,xf+dx,dx)
+
+    # construct an y array
+    yf = y0 + (ny*dy)
+    y = np.arange(y0,yf+dy,dy)
+
+    # make the ratation
+    p = x*ca - y*sa
+    q = x*sa + y*ca
+
+    mask = np.logical_and(np.less_equal(abs(p), (w / 0.5 + x0)) , np.less_equal(abs(q), (h / 0.5 + y0)))
 
     ## Use a mask instead of simply a rectangular sub-cube
 
     # find indices that correspond to the limits xi and xf
-    i1 = i0 + int((xi - x0)/dx)
-    i2 = i0 + int((xf - x0)/dx)
+    # i1 = i0 + int((xi - x0)/dx)
+    # i2 = i0 + int((xf - x0)/dx)
     # ensure that we do not exceed the array bounds
-    i1 = max(min(i1, nx), 0)
-    i2 = max(min(i2, nx), 0)
+    # i1 = max(min(i1, nx), 0)
+    # i2 = max(min(i2, nx), 0)
 
-    j1 = j0 + int((yi - y0)/dy)
-    j2 = j0 + int((yf - y0)/dy)
-    j1 = max(min(j1, ny), 0)
-    j2 = max(min(j2, ny), 0)
+    # j1 = j0 + int((yi - y0)/dy)
+    # j2 = j0 + int((yf - y0)/dy)
+    # j1 = max(min(j1, ny), 0)
+    # j2 = max(min(j2, ny), 0)
 
     cubo = hdu.data
-
-    # rotate the cubes to match the image/spectrum direction
-
-    calpha = np.cos(alpha)
-    salpha = np.sin(alpha)
 
     
 
