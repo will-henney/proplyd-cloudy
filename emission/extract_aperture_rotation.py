@@ -106,32 +106,20 @@ for line, cube in zip(emlines, cubefiles):
     yf = y0 + (ny*dy)
     y = np.arange(y0,yf+dy,dy)
 
-    # make the ratation
-    p = x*ca - y*sa
-    q = x*sa + y*ca
+    # Promote coordinate axes to 2d arrays
+    X, Y = np.meshgrid(x, y)
 
-    mask = np.logical_and(np.less_equal(abs(p), (w / 0.5 + x0)) , np.less_equal(abs(q), (h / 0.5 + y0)))
+    # Rotate to the frame of the aperture
+    P = (X-x0)*ca - (Y-y0)*sa
+    Q = (X-x0)*sa + (Y-y0)*ca
 
-    ## Use a mask instead of simply a rectangular sub-cube
-
-    # find indices that correspond to the limits xi and xf
-    # i1 = i0 + int((xi - x0)/dx)
-    # i2 = i0 + int((xf - x0)/dx)
-    # ensure that we do not exceed the array bounds
-    # i1 = max(min(i1, nx), 0)
-    # i2 = max(min(i2, nx), 0)
-
-    # j1 = j0 + int((yi - y0)/dy)
-    # j2 = j0 + int((yf - y0)/dy)
-    # j1 = max(min(j1, ny), 0)
-    # j2 = max(min(j2, ny), 0)
+    mask = (abs(P) < 0.5*w) & (abs(Q) < 0.5*h)
 
     cubo = hdu.data
 
     
-
     # select the data cube restricted to the slit 
-    aperture_cube = cubo[:,j1:j2,i1:i2]
+    aperture_cube = np.where( mask, cubo, 0.0 )
 
     aperture_profile[line] = np.zeros(nu)
     total_aperture_flux[line] = 0.0
