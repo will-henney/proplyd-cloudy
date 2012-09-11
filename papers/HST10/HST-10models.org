@@ -359,13 +359,17 @@ Tweaked 03 - aquellas que funcionaron para 177-341 (proplyd del articulo de Adal
 y un nuevo set que aparece como: TsamisHST10
 (son las abundancias preliminares que propone Yiannis para HST10 en su platica de Tenerife)
 
-| Elemento | HST10 | Orion | HST10 lineal | Orion lineal | factor de escala |
-|----------+-------+-------+--------------+--------------+------------------|
-| O/H      |  8.77 |   8.6 |      5.89e-4 |      3.98e-4 |             1.48 |
-| S/H      |   6.9 |   7.0 |       7.9e-6 |       1.0e-5 |            0.787 |
-| Fe/H     |  5.78 |  6.48 |         6e-7 |       3.0e-6 |              0.2 |
-| O/H(2)   |  8.28 |   8.6 |       1.9e-4 |      3.98e-4 |             0.48 |
-| O/H(2)   |  8.46 |   8.6 |      2.88e-4 |      3.98e-4 |             0.72 |
+| Set    | Elemento | HST10 | Orion | HST10 lineal | Orion lineal | factor de escala |
+|--------+----------+-------+-------+--------------+--------------+------------------|
+| HST10  | O/H      |  8.77 |   8.6 |      5.89e-4 |      3.98e-4 |             1.48 |
+| HST10  | S/H      |   6.9 |   7.0 |       7.9e-6 |       1.0e-5 |            0.787 |
+| HST10  | Fe/H     |  5.78 |  6.48 |         6e-7 |       3.0e-6 |              0.2 |
+| HST101 | O/H(2)   |  8.28 |   8.6 |       1.9e-4 |      3.98e-4 |             0.48 |
+| HST102 | O/H(2)   |  8.46 |   8.6 |      2.88e-4 |      3.98e-4 |             0.72 |
+|        | N/H      |  7.48 | 7.845 |      3.02e-5 |         7e-5 |            0.432 |
+|        | O/H      |  8.63 |   8.6 |      4.27e-4 |      3.98e-4 |             1.07 |
+|        | Ne/H     |  7.75 |  7.78 |      5.62e-5 |     6.026e-5 |            0.933 |
+|        | S/H      |  6.75 |   7.0 |     5.623e-6 |         1e-5 |           0.5623 |
 Nota: El factor de escala es aquel necesario para escalar las abundancias que estan por default en Cloudy
 (2): Es el valor que Yiannis da en el borrador del articulo. El valor de S/H es basicamente el mismo y de Fe/H no da valor
 
