@@ -458,6 +458,56 @@ Cubes(1): i=30, NPhi=400, Nvel=50
 (1) :: logPhi(H)=12.1
 (2) :: logPhi(H)=12.3
 
+
+*** Remeasuring the fluxes
+
+
+#+BEGIN_SRC python :dir /Users/will/Dropbox/Nahiely-Will/HST10/willmaps :results output
+import pyfits
+import numpy as np
+
+linetab = [
+    ["H alpha", "scHa"],
+    ["[N II] 6584", "rub6584sc"],
+    ["[S II] 6731", "rub6731sc"],
+    ]
+
+# Window to extract line fluxes 
+# All in 1-based FITS image pixels
+# Long axis, X: 13-15
+# Short axis, Y: 2-4
+prop = slice(2-1, 4), slice(13-1, 15)
+
+# top box x=18-19  y=9-12
+bgtop = slice(9-1, 12), slice(18-1, 19)
+# bottom box x=2-3  y=4-7
+bgbot = slice(4-1, 7), slice(2-1, 3)
+
+# filament x=8-11, y=8-11
+bgfil = slice(8-1, 11), slice(8-1, 11)
+
+
+for emline, filename in linetab:
+    hdu, = pyfits.open(filename + ".fits")
+    s = hdu.data
+    head = s[prop].mean()
+    bg1, ebg1 = s[bgtop].mean(), s[bgtop].std()
+    bg2, ebg2 = s[bgbot].mean(), s[bgbot].std()
+    bg3, ebg3 = s[bgfil].mean(), s[bgfil].std()
+    
+    print "{}: head = {:.1f}, bg = {:.1f}, {:.1f}, {:.1f}".format(emline, head, bg1, bg2, bg3)
+
+
+#+END_SRC
+
+#+RESULTS:
+: H alpha: head = 281.4, bg = 181.7, 189.6, 208.3
+: [N II] 6584: head = 57.5, bg = 22.2, 19.8, 29.5
+: [S II] 6731: head = 4.2, bg = 2.4, 2.2, 3.6
+
++ The last bg number is for the filament
++ This makes a big difference for [S II]
+
 *** Taking the 3x3 aperture as Yiannis
 
 Observations :: 1 pixel = 0.3 x 0.3 arcsec
