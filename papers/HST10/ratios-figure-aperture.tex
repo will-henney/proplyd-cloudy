@@ -1,0 +1,136 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{txfonts}
+\usepackage{pgfplots}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\setcounter{secnumdepth}{0}
+
+\newcommand\Ion[2]{\ensuremath{\mathrm{#1\,\scriptstyle #2}}}
+\newcounter{ionstage}
+\newcommand{\ion}[2]{% replace the aastex version
+  \setcounter{ionstage}{#2}%
+  \Ion{#1}{\Roman{ionstage}}}
+
+% \usepgfplotslibrary{external}
+% \tikzset{external/force remake}
+% \tikzexternalize
+
+\pgfplotsset{
+  compat=1.5.1, % most current version as of writing (27 Jan 2012)
+  % compat=newest, % select to always use latest version (may cause minor appearance changes)
+  width=\textwidth,
+  every axis legend/.append style={
+    % make legend less tightly packed
+    inner xsep=0.5em,
+    inner ysep=3pt,
+    nodes={
+      inner xsep=1em,
+      text depth=0.25em
+    },
+  },
+}
+\pgfplotsset{}
+\newcommand\RatioPlot[1]{
+\begin{tikzpicture}
+  \begin{loglogaxis}[
+    xlabel={Observed Intensity, \(100 \times I(\lambda)/I(\mathrm{H}\beta)\)}, 
+    ylabel={Model Intensity, \(100 \times I(\lambda)/I(\mathrm{H}\beta)\)},
+    log ticks with fixed point,
+    legend columns=3,
+    legend pos=north west,
+    % transpose legend,
+    ]
+    \addplot [
+    scatter/classes={
+      H1={mark=*,brown},% 
+      He1={mark=*,green},% 
+      C2={mark=triangle*,black},%  
+      N2={mark=triangle*,cyan},% 
+      O1={mark=*,orange},% 
+      O3={mark=square*,orange},%
+      Ne3={mark=square*,blue},%
+      S2={mark=triangle*,red},% 
+      S3={mark=square*,red},% 
+      Ar3={mark=square*,magenta},%
+      Fe3={mark=square*,yellow}%
+    },
+    only marks, scatter, 
+    scatter src=explicit symbolic,
+    point meta=explicit symbolic,
+    nodes near coords*={\scriptsize\pgfmathprintnumber[set thousands separator={}]\LAMBDA\,\AA},
+    visualization depends on={\thisrow{Lambda} \as \LAMBDA},
+    nodes near coords align=\ALIGN,
+    visualization depends on={value\thisrow{Align} \as \ALIGN},    
+    error bars/x dir=both,
+    error bars/x explicit,
+    error bars/y dir=none,
+    ] table [
+    x=Cusp, 
+    y=Model#1, 
+    x error=CIns,
+    meta=ID
+    ] {HST-10aperture.dat};
+    \addlegendentry{\ion{H}{1}} 
+    \addlegendentry{\ion{He}{1}} 
+    \addlegendentry{\ion{C}{2}} 
+    \addlegendentry{[\ion{N}{2}]} 
+    \addlegendentry{[\ion{O}{1}]}
+    \addlegendentry{[\ion{O}{3}]}
+    \addlegendentry{[\ion{Ne}{3}]}
+    \addlegendentry{[\ion{S}{2}]}
+    \addlegendentry{[\ion{S}{3}]}
+    \addlegendentry{[\ion{Ar}{3}]}
+    \addlegendentry{[\ion{Fe}{3}]}
+    \addplot [gray,domain=0.08:300] {x};
+  \end{loglogaxis}
+\end{tikzpicture}
+}
+
+\begin{document} 
+
+
+\section{Model A: Total Flux}
+\begin{description}
+\item[Spectrum] WMBasic, \SI{39000}{K}
+\item[Flux] \(\log_{10} \Phi = 12.10\)
+\item[Abundance set] Esteban et al.\@ (2004), M42, \(t^2 = 0.002\)
+\end{description}
+\bigskip
+\RatioPlot{A}
+
+\newpage 
+
+\section{Model B: 1.6 x 1.6 aperture, c=(1.0, 0.0)}
+\begin{description}
+\item[Spectrum] WMBasic, \SI{39000}{K}
+\item[Flux] \(\log_{10} \Phi = 12.10\)
+\item[Abundance set] Esteban et al.\@ (2004), M42, \(t^2 = 0.002\)
+\end{description}
+\bigskip
+\RatioPlot{B}
+
+\newpage 
+
+\section{Model C:  1.6 x 1.6 aperture, c=(1.5, 0.0)}
+\begin{description}
+\item[Spectrum] WMBasic, \SI{39000}{K}
+\item[Flux] \(\log_{10} \Phi = 12.10\)
+\item[Abundance set] Esteban et al.\@ (2004), M42, \(t^2 = 0.002\)
+\end{description}
+\bigskip
+\RatioPlot{C}
+
+\newpage 
+
+\section{Model D: 1.6 x 1.6 aperture, c=(2.0, 0.0)}
+\begin{description}
+\item[Spectrum] WMBasic, \SI{39000}{K}
+\item[Flux] \(\log_{10} \Phi = 12.10\)
+\item[Abundance set] Esteban et al.\@ (2004), M42, \(t^2 = 0.002\)
+\end{description}
+\bigskip
+\RatioPlot{D}
+
+
+\end{document}
