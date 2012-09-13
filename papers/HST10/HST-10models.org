@@ -473,31 +473,48 @@ Cubes(1): i=30, NPhi=400, Nvel=50
 
 
 *** Remeasuring the fluxes
+    :PROPERTIES:
+    :EXPORT_FILE_NAME: remeasure-fluxes
+    :END:
 
-+ This is the table of lines and corresponding FITS files that Yannis sent me. 
+**** Table of lines and corresponding FITS files that Yannis sent me.
 
 #+NAME: yiannis-brightness-maps
-| [O II] 3726   | map3726sc_mask       |
-| [Ne III] 3967 | map3967_L2mask       |
-| H delta 4101  | map4101_L2mask       |
-| C II 4267     | map4267_L2mask       |
-| [O III] 4363  | map4363_L2mask       |
-| [O III] 4959  | rub4959cubezero_mask |
-| [N I] 5198    | rub5198_NI_L4        |
-| [Fe III] 5270 | rub5270_FeIII_L4     |
-| O I 5577      | rub5577_OI_L4        |
-| [N II] 5755   | rub5755_L5sc         |
-| He I 5776     | rub5876_L5sc         |
-| [O I] 6300    | rub6300_OI_L5sc      |
-| [S III] 6312  | rub6312_L5sc         |
-| ?? 6578       | rub6578_L6sc         |
-| [N II] 6584   | rub6584sc            |
-| [S II] 6731   | rub6731sc            |
-| [Ar III] 7136 | rub7136sc            |
-| H alpha 6563  | scHa                 |
+| Ion      |  wav | Alam | Alamfit | fitsfile             |
+|----------+------+------+---------+----------------------|
+| [O II]   | 3726 | 7.09 |    7.19 | map3726sc_mask       |
+| [Ne III] | 3967 | 7.00 |    6.90 | map3967_L2mask       |
+| H delta  | 4101 |      |    6.75 | map4101_L2mask       |
+| C II     | 4267 |      |    6.58 | map4267_L2mask       |
+| [O III]  | 4363 | 6.54 |    6.49 | map4363_L2mask       |
+| [O III]  | 4959 | 5.95 |    5.97 | rub4959cubezero_mask |
+| [N I]    | 5198 |      |    5.79 | rub5198_NI_L4        |
+| [Fe III] | 5270 |      |    5.74 | rub5270_FeIII_L4     |
+| O I      | 5577 | 5.44 |    5.53 | rub5577_OI_L4        |
+| [N II]   | 5755 | 5.30 |    5.42 | rub5755_L5sc         |
+| He I     | 5876 | 5.21 |    5.35 | rub5876_L5sc         |
+| [O I]    | 6300 | 4.90 |    5.11 | rub6300_OI_L5sc      |
+| [S III]  | 6312 |      |    5.10 | rub6312_L5sc         |
+| H alpha  | 6563 | 4.71 |    4.97 | scHa                 |
+| C II     | 6578 |      |    4.97 | rub6578_L6sc         |
+| [N II]   | 6584 | 4.70 |    4.96 | rub6584sc            |
+| [S II]   | 6731 | 4.60 |    4.89 | rub6731sc            |
+| [Ar III] | 7136 |      |    4.71 | rub7136sc            |
+     #+TBLFM: $4=6.0462 ($2/4861)**(-0.65) ; f2
 
-+ [ ] I do not know if they are dereddened or not - probably not
++ [X] I do not know if they are dereddened or not - probably not
   + also, we don't even have the H beta map!
+  + We can assume C(Hb) = 0.6
+  + and use the extinction curve from Baldwin et al
+    + Normalised to A(Hb) = 6.0462
+    + try 6.0462 ($wav/4861)**(-0.65)
+    + that is the best compromise between fitting the blue and red ends
+    + really it should get completely flat on the blue side
+
+**** Extracting bg-subtracted fluxes from the proplyd cusp
+     :PROPERTIES:
+     :exports:  both
+     :END: 
 
 + The table gets read in by the following python block, which calculates the background-subtracted brightnesses, together with their uncertainties
 
@@ -539,13 +556,26 @@ back_windows = [
 resultstab = list()
 
 resultstab.append([
-    "line", "S(prop)", "S(bg)", "dS1", "dS2", 
-    "S(prop-bg)", "dS/S", "S(prop-bg)/S(bg)"
+    "line", "wav", "S(p)", "<S(b)>", "dS_1", "dS_2", 
+    "S(p-b)", "dS/S", "S(p-b)/S(b)"
 ])
 
-for emline, filename in linetab:
+Ahb = 6.0462      # Extinction per unit E(B-V) at wavelength of H beta
+# Read in C(Hb) map
+hdu, = pyfits.open("chbeta_5p5new.fits")
+chb = hdu.data
+
+for emline, wav, Alam, Alamfit, filename in linetab:
+    # Extinction correction
+    if not Alam:
+        # Prefer the first column, which is from Baldwin (1991)
+        # If not there, use my power-law fit
+        Alam = Alamfit
+        
     hdu, = pyfits.open(filename + ".fits")
-    s = hdu.data
+    # Extinction-corrected surface brightness map
+    s = hdu.data * 10**(chb*Alam/Ahb)
+
     head = s[obj_window].mean()
     # mean bg in each window
     bgs = [s[window].mean() for window in back_windows]
@@ -558,18 +588,11 @@ for emline, filename in linetab:
     # uncertainty due to variation _within_ bg windows
     epsilon2 = np.mean( bgstems )
 
-    print "{:15s}: head = {:.3f}, bg = {:.3f} +/- {:.3f} +/- {:.3f}".format(
-        emline, head, meanbg, epsilon1, epsilon2
-    )
-
     head_bg = head - meanbg
     epsfrac = np.sqrt(epsilon1**2 + epsilon2**2) / head_bg
     contrast = head_bg/meanbg
-    print " BG-subtracted: {:.3f} +/- {:d}%".format(head_bg, int(100*epsfrac))
-    print " Contrast with BG: {:.3f}".format(contrast)
-    print
 
-    resultstab.append([emline] + ["{:.3f}".format(v) for v in 
+    resultstab.append([emline, wav] + ["{:.3f}".format(v) for v in 
                                   [head, meanbg, epsilon1, epsilon2, 
                                    head_bg, epsfrac, contrast]
                                   ]
@@ -580,31 +603,159 @@ return resultstab
 #+END_SRC
 
 #+RESULTS:
-| line          | S(prop) |   S(bg) |    dS1 |   dS2 | S(prop-bg) |  dS/S | S(prop-bg)/S(bg) |
-| [O II] 3726   |  39.313 |  35.980 |  7.507 | 1.011 |      3.333 | 2.272 |            0.093 |
-| [Ne III] 3967 |   2.626 |   2.471 |  0.078 | 0.030 |      0.155 | 0.537 |            0.063 |
-| H delta 4101  |  17.423 |  13.156 |  1.088 | 0.089 |      4.267 | 0.256 |            0.324 |
-| C II 4267     |   0.150 |   0.136 |  0.007 | 0.004 |      0.014 | 0.550 |            0.103 |
-| [O III] 4363  |   0.718 |   0.580 |  0.011 | 0.006 |      0.138 | 0.092 |            0.238 |
-| [O III] 4959  |  69.621 |  62.808 |  3.897 | 1.812 |      6.812 | 0.631 |            0.108 |
-| [N I] 5198    |   0.127 |   0.074 |  0.025 | 0.012 |      0.053 | 0.524 |            0.723 |
-| [Fe III] 5270 |   0.282 |   0.203 |  0.022 | 0.006 |      0.079 | 0.284 |            0.387 |
-| O I 5577      |   0.325 |   0.305 |  0.002 | 0.004 |      0.020 | 0.192 |            0.066 |
-| [N II] 5755   |   1.387 |   0.307 |  0.047 | 0.007 |      1.080 | 0.044 |            3.517 |
-| He I 5776     |  11.953 |   8.849 |  0.614 | 0.048 |      3.105 | 0.198 |            0.351 |
-| [O I] 6300    |   1.806 |   0.367 |  0.064 | 0.007 |      1.439 | 0.044 |            3.917 |
-| [S III] 6312  |   1.569 |   1.109 |  0.062 | 0.010 |      0.460 | 0.137 |            0.415 |
-| ?? 6578       |   0.236 |   0.178 |  0.024 | 0.005 |      0.058 | 0.426 |            0.325 |
-| [N II] 6584   |  57.540 |  23.870 |  4.850 | 0.272 |     33.670 | 0.144 |            1.411 |
-| [S II] 6731   |   4.201 |   2.719 |  0.689 | 0.052 |      1.483 | 0.466 |            0.545 |
-| [Ar III] 7136 |  14.730 |   9.151 |  0.262 | 0.058 |      5.579 | 0.048 |            0.610 |
-| H alpha 6563  | 281.358 | 193.199 | 13.292 | 1.181 |     88.158 | 0.151 |            0.456 |
+
+
+#+name: saved-will-flux-table
+| line     |  wav |    S(p) |  <S(b)> |   dS_1 |   dS_2 |  S(p-b) |  dS/S | S(p-b)/S(b) |
+|----------+------+---------+---------+--------+--------+---------+-------+-------------|
+| [O II]   | 3726 | 167.896 | 115.782 | 30.298 |  3.364 |  52.113 | 0.585 |       0.450 |
+| [Ne III] | 3967 |  10.991 |   7.765 |  0.566 |  0.283 |   3.226 | 0.196 |       0.415 |
+| H delta  | 4101 |  69.433 |  39.636 |  4.290 |  1.199 |  29.797 | 0.149 |       0.752 |
+| C II     | 4267 |   0.576 |   0.397 |  0.029 |  0.016 |   0.179 | 0.187 |       0.451 |
+| [O III]  | 4363 |   2.731 |   1.690 |  0.148 |  0.052 |   1.041 | 0.150 |       0.616 |
+| [O III]  | 4959 | 234.622 | 167.770 | 21.846 |  8.088 |  66.852 | 0.348 |       0.398 |
+| [N I]    | 5198 |   0.418 |   0.188 |  0.062 |  0.031 |   0.231 | 0.300 |       1.231 |
+| [Fe III] | 5270 |   0.915 |   0.520 |  0.056 |  0.023 |   0.395 | 0.154 |       0.760 |
+| O I      | 5577 |   0.988 |   0.743 |  0.061 |  0.020 |   0.245 | 0.261 |       0.330 |
+| [N II]   | 5755 |   4.167 |   0.734 |  0.147 |  0.027 |   3.433 | 0.044 |       4.674 |
+| He I     | 5876 |  34.783 |  20.733 |  1.942 |  0.565 |  14.049 | 0.144 |       0.678 |
+| [O I]    | 6300 |   4.983 |   0.823 |  0.179 |  0.030 |   4.160 | 0.044 |       5.056 |
+| [S III]  | 6312 |   4.463 |   2.555 |  0.273 |  0.069 |   1.908 | 0.147 |       0.747 |
+| H alpha  | 6563 | 739.269 | 417.271 | 40.167 | 10.922 | 321.998 | 0.129 |       0.772 |
+| C II     | 6578 |   0.655 |   0.401 |  0.047 |  0.016 |   0.254 | 0.196 |       0.633 |
+| [N II]   | 6584 | 151.725 |  51.734 | 12.738 |  1.532 |  99.992 | 0.128 |       1.933 |
+| [S II]   | 6731 |  10.810 |   5.800 |  1.717 |  0.211 |   5.010 | 0.345 |       0.864 |
+| [Ar III] | 7136 |  38.702 |  19.756 |  1.279 |  0.483 |  18.946 | 0.072 |       0.959 |
 
 So, in the results table the last 3 columns are the most interesting:
 
-+ S(prop-bg) :: The background-subtracted mean proplyd brightness
-+ dS/S :: The fractional uncertainty in S(prop-bg) due to the background
-+ S(prop-bg)/S(bg) :: The contrast of the proplyd against the background
++ \(S(\mathrm{p-b})\) is the background-subtracted mean proplyd brightness
++ \(dS/S\) is the fractional uncertainty in \(S(\mathrm{p-b})\) due to the background
+  + \(dS = (dS_1^2 + dS_2^2)^{1/2}\) with \(dS_1\) and \(dS_2\) defined as above. 
++ \(S(\mathrm{p-b})/\langle S(\mathrm{b}) \rangle\) is the contrast of the proplyd against the background
+
+
+**** Will's table of the Yiannis measurements
+#+name: yiannis-flux-table
+| Ion   |  wav |   S(p) | dS(p) |  S(b) | dS(b) | willmaps |  SS(p) | SS(b) |
+|-------+------+--------+-------+-------+-------+----------+--------+-------|
+| oii   | 3726 |   89.0 |  17.9 |  73.3 |   8.0 | *        |  132.3 | 104.1 |
+| neiii | 3967 |   2.54 |  0.30 |  5.21 |  0.27 | *        |    3.8 |   7.4 |
+| hi    | 3970 |   13.3 |  0.38 |  15.8 |  0.67 |          |   19.8 |  22.4 |
+| sii   | 4069 |   4.45 |  0.47 | 0.875 | 0.056 |          |    6.6 |   1.2 |
+| hd    | 4101 |   22.1 |  0.55 |  26.5 |  0.72 | *        |   32.9 |  37.6 |
+| cii   | 4267 |  0.122 | 0.048 | 0.275 | 0.027 | *        |    0.2 |   0.4 |
+| hg    | 4340 |   40.4 |   4.6 |  49.6 |  0.67 |          |   60.1 |  70.4 |
+| oiii  | 4363 |  0.796 | 0.181 |  1.16 |  0.03 | *        |    1.2 |   1.6 |
+| hb    | 4861 |  100.0 |  34.4 | 100.0 |  14.8 |          |  148.7 | 142.0 |
+| oiii  | 4959 |   55.2 |   9.4 | 117.5 |   3.6 | *        |   82.1 | 166.9 |
+| feiii | 5270 |  0.297 | 0.039 | 0.330 | 0.037 | *        |    0.4 |   0.5 |
+| cliii | 5518 | 0.1712 | 0.039 | 0.400 | 0.083 |          |    0.3 |   0.6 |
+| cliii | 5538 | 0.2658 | 0.038 | 0.480 | 0.085 |          |    0.4 |   0.7 |
+| oi    | 5577 |     -- |       | 0.495 | 0.116 | *        | #ERROR |   0.7 |
+| nii   | 5755 |   2.32 |  1.16 | 0.470 | 0.049 | *        |    3.4 |   0.7 |
+| hei   | 5876 |   10.3 |   2.1 |  13.9 |  0.32 | *        |   15.3 |  19.7 |
+| oi    | 6300 |   2.82 |  2.08 | 0.535 | 0.128 | *        |    4.2 |   0.8 |
+| siii  | 6312 |   1.36 |  0.39 |  1.74 |  0.46 | *        |    2.0 |   2.5 |
+| ha    | 6563 |  235.6 |   2.2 | 276.5 |   7.9 | *        |  350.3 | 392.6 |
+| nii   | 6584 |   72.1 |   6.2 |  31.7 |   1.4 | *        |  107.2 |  45.0 |
+| sii   | 6716 |   1.82 |  0.32 |  2.44 |  0.60 |          |    2.7 |   3.5 |
+| sii   | 6731 |   4.00 |  0.67 |  3.63 |  0.88 | *        |    5.9 |   5.2 |
+| ariii | 7136 |   13.1 |  1.38 |  12.1 |   1.5 | *        |   19.5 |  17.2 |
+|-------+------+--------+-------+-------+-------+----------+--------+-------|
+| hb    | 4861 |  148.7 |  51.1 | 142.0 |  21.0 |          |  221.1 | 201.6 |
+    #+TBLFM: $8=$3*1.487 ; f1::$9=$5*1.42 ; f1
+
+**** Comparing Will's and Yiannis' fluxes
+
+#+BEGIN_SRC python :var willtab=saved-will-flux-table :var yiantab=yiannis-flux-table
+
+# find lines in Yoannis table that are also in Will table
+wavs = [ row[1] for row in yiantab if row[6] == "*" ]
+# prune the Yiannis table 
+yiantab = [ row for row in yiantab if row[1] in wavs ]
+# prunt the Will table
+willtab = [ row for row in willtab if row[1] in wavs ]
+
+resultstab = list()
+resultstab.append(
+    ["Ion", "wav", "Will S(p)", "Yian S(p)", "Will S(b)", "Yian S(b)"]
+)
+for yian, will in zip(yiantab, willtab):
+    print will
+    print yian
+    ion = will[0]
+    wav = will[1]
+    WSp = will[6]
+    WdSp = will[7]*WSp
+    WSb = will[3]
+    WdSb = WdSp
+    try:
+        YSp = 1.487*yian[2]
+        YdSp = 1.487*yian[3]
+    except:
+        YSp, YdSp = 0.0, 0.0
+    YSb = 1.42*yian[4]
+    YdSb = 1.42*yian[5]
+    resultstab.append([ion, wav] + ["{:.3f} +/- {:.3f}".format(v, e) 
+                                    for v,e in (WSp, WdSp), (YSp, YdSp), (WSb, WdSb), (YSb, YdSb)
+                                    ])
+
+return resultstab
+
+#+END_SRC
+
+#+RESULTS:
+| Ion      |  wav | Will S(p)          | Yian S(p)          | Will S(b)          | Yian S(b)          |
+| [O II]   | 3726 | 52.113 +/- 30.486  | 132.343 +/- 26.617 | 115.782 +/- 30.486 | 104.086 +/- 11.360 |
+| [Ne III] | 3967 | 3.226 +/- 0.632    | 3.777 +/- 0.446    | 7.765 +/- 0.632    | 7.398 +/- 0.383    |
+| H delta  | 4101 | 29.797 +/- 4.440   | 32.863 +/- 0.818   | 39.636 +/- 4.440   | 37.630 +/- 1.022   |
+| C II     | 4267 | 0.179 +/- 0.033    | 0.181 +/- 0.071    | 0.397 +/- 0.033    | 0.391 +/- 0.038    |
+| [O III]  | 4363 | 1.041 +/- 0.156    | 1.184 +/- 0.269    | 1.690 +/- 0.156    | 1.647 +/- 0.043    |
+| [O III]  | 4959 | 66.852 +/- 23.264  | 82.082 +/- 13.978  | 167.770 +/- 23.264 | 166.850 +/- 5.112  |
+| [Fe III] | 5270 | 0.395 +/- 0.061    | 0.442 +/- 0.058    | 0.520 +/- 0.061    | 0.469 +/- 0.053    |
+| O I      | 5577 | 0.245 +/- 0.064    | 0.000 +/- 0.000    | 0.743 +/- 0.064    | 0.703 +/- 0.165    |
+| [N II]   | 5755 | 3.433 +/- 0.151    | 3.450 +/- 1.725    | 0.734 +/- 0.151    | 0.667 +/- 0.070    |
+| He I     | 5876 | 14.049 +/- 2.023   | 15.316 +/- 3.123   | 20.733 +/- 2.023   | 19.738 +/- 0.454   |
+| [O I]    | 6300 | 4.160 +/- 0.183    | 4.193 +/- 3.093    | 0.823 +/- 0.183    | 0.760 +/- 0.182    |
+| [S III]  | 6312 | 1.908 +/- 0.280    | 2.022 +/- 0.580    | 2.555 +/- 0.280    | 2.471 +/- 0.653    |
+| H alpha  | 6563 | 321.998 +/- 41.538 | 350.337 +/- 3.271  | 417.271 +/- 41.538 | 392.630 +/- 11.218 |
+| [N II]   | 6584 | 99.992 +/- 12.799  | 107.213 +/- 9.219  | 51.734 +/- 12.799  | 45.014 +/- 1.988   |
+| [S II]   | 6731 | 5.010 +/- 1.728    | 5.948 +/- 0.996    | 5.800 +/- 1.728    | 5.155 +/- 1.250    |
+| [Ar III] | 7136 | 18.946 +/- 1.364   | 19.480 +/- 2.052   | 19.756 +/- 1.364   | 17.182 +/- 2.130   |
+
+
++ Units of Hb: erg/s/cm2/spx
++ All other lines in units of Hb = 100
++ We are missing: 3970, 4069, 4340, 4471, 4861, 5518, 5538, 6716
++ Additional column SS(p) is the "real" flux (multiplied by Hb)
+
+***** QUOTE Original flux.txt from Yiannis
+\foii\ \lam3726	           &89.0 $\pm$ 17.9	      &73.3  $\pm$ 8.0			\\			
+\fneiii\ $\lambda$3967     &2.54 $\pm$ 0.30           &5.21  $\pm$ 0.27                 \\
+\hi\ \lam3970		   &13.3 $\pm$ 0.38 	      &15.8  $\pm$ 0.67 			\\
+\fsii\ $\lambda$4069       &4.45 $\pm$ 0.47           &0.875 $\pm$ 0.056               \\
+\hd\ $\lambda$4101         &22.1$\pm$ 0.55            &26.5 $\pm$0.72                   \\
+\cii\ \lam4267	           &0.122 $\pm$ 0.048	      &0.275$\pm$ 0.027
+\hg\ $\lambda$4340         &40.4 $\pm$ 4.6            &49.6 $\pm$0.67                 \\
+\foiii\ $\lambda$4363      &0.796 $\pm$ 0.181         &1.16 $\pm$0.03                 \\
+\hb\ $\lambda$4861         &100.0 $\pm$ 34.4          & 100.0$\pm$ 14.8                 
+\foiii\ $\lambda$4959      &55.2 $\pm$ 9.4            &117.5 $\pm$3.6              \\
+\foi\ $\lambda$5577        &--		              & 0.495$\pm$ 0.116     \\                   
+\ffeiii\ \lam5270	   &0.297 $\pm$ 0.039	      &0.330 $\pm$0.037   		 \\
+\fcliii\ \lam5518	   &0.631 $\pm$ 0.068 	      & 0.400 $\pm$ 0.083	  \\	
+\fcliii\ \lam5538	   &0.267 $\pm$ 0.038 	      & 0.480 $\pm$ 0.085		\\
+\fnii\ $\lambda$5755       &2.32 $\pm$ 1.16           &0.470 $\pm$0.049 		\\                 
+\hei\ \lam5876		   &10.3 $\pm$ 2.1	      &13.9  $\pm$ 0.32	 \\
+\foi\ $\lambda$6300        &2.82 $\pm$ 2.08           &0.535 $\pm$ 0.128	 \\                
+\fsiii\ $\lambda$6312      &1.36 $\pm$ 0.39           &1.74  $\pm$ 0.46 	\\             
+\ha\ $\lambda$6563         &235.6 $\pm$ 2.2           &276.5 $\pm$ 7.9                 \\
+\fnii\ $\lambda$6584       &72.1 $\pm$ 6.2            &31.7 $\pm$ 1.4 		\\           
+\fsii\ \lam6716	           &1.82 $\pm$ 0.32	      &2.44$\pm$0.60 				\\
+\fsii\ \lam6731	           &4.00 $\pm$ 0.67 	      &3.63$\pm$0.88		 \\
+\fariii\ \lam7136          &13.1 $\pm$ 1.38 	      &12.1$\pm$1.5 		\\
+
+\hb\ \lam4861		&148.7 $\pm$ 51.1 erg/s/cm2/spx   &142.0 pm 21.0 erg/s/cm2/spx \\
 
 
 
