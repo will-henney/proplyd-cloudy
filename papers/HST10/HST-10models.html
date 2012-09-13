@@ -3,10 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 lang="en" xml:lang="en">
 <head>
-<title>HST-10models</title>
+<title>Modelos para HST-10</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012/08/31 17:14:43"/>
+<meta name="generated" content="2012/09/06 18:18:09"/>
 <meta name="author" content="Nahiely Flores"/>
 <style type="text/css">
   html {
@@ -33,43 +33,37 @@ lang="en" xml:lang="en">
   }
 </style>
 </head><body>
-<h1 class="title">HST-10models</h1>
+<h1 class="title">Modelos para HST-10</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <ul>
-<li><a href="#sec-1">1 Modelos para HST-10</a>
+<li><a href="#sec-1">1 Proplyd observational properties</a>
 <ul>
-<li><a href="#sec-2">1.1 Proplyd observational properties</a>
-<ul>
-<li><a href="#sec-3">1.1.1 O'Dell 1998</a></li>
-<li><a href="#sec-4">1.1.2 Henney y O'Dell 1999</a></li>
-<li><a href="#sec-5">1.1.3 Yiannis preliminary results for chemical abundances (VLT/FLAMES data:</a></li>
+<li><a href="#sec-2">1.1 O'Dell 1998</a></li>
+<li><a href="#sec-3">1.2 Henney y O'Dell 1999</a></li>
+<li><a href="#sec-4">1.3 Yiannis preliminary results for chemical abundances (VLT/FLAMES data:</a></li>
 </ul>
 </li>
-<li><a href="#sec-6">1.2 Observations</a>
+<li><a href="#sec-5">2 Observations</a>
 <ul>
-<li><a href="#sec-7">1.2.1  Yiannis comunication</a></li>
+<li><a href="#sec-6">2.1 [8/8] Calculate the density from the H alpha surface brightness</a></li>
+<li><a href="#sec-7">2.2 Comparison of Keck line ratios between HST 1 and HST 10</a></li>
+<li><a href="#sec-8">2.3 Line fluxes from Yiannis</a></li>
+<li><a href="#sec-9">2.4  Yiannis comunication</a></li>
 </ul>
 </li>
-<li><a href="#sec-8">1.3 Models</a>
+<li><a href="#sec-10">3 Models</a>
 <ul>
-<li><a href="#sec-9">1.3.1 Angulo de inclinacion</a></li>
-<li><a href="#sec-10">1.3.2 Abundancias Quimicas</a></li>
-<li><a href="#sec-11">1.3.3 Modelos</a></li>
-</ul>
-</li>
+<li><a href="#sec-11">3.1 Angulo de inclinacion</a></li>
+<li><a href="#sec-12">3.2 Abundancias Quimicas</a></li>
+<li><a href="#sec-13">3.3 Modelos</a></li>
 </ul>
 </li>
 </ul>
 </div>
 
-<div class="outline-2">
-<h2 id="sec-1">1 Modelos para HST-10</h2>
-
-
-
 <div class="outline-3">
-<h3 id="sec-2">1.1 Proplyd observational properties</h3>
+<h3 id="sec-1">1 Proplyd observational properties</h3>
 
 
 <p>
@@ -78,7 +72,7 @@ Bally et al. 2005
 </p>
 
 <div class="outline-4">
-<h4 id="sec-3">1.1.1 O'Dell 1998</h4>
+<h4 id="sec-2">1.1 O'Dell 1998</h4>
 
 
 <p>
@@ -92,7 +86,7 @@ log &lt;S(Halpha)&gt; = 10.96
 </div>
 
 <div class="outline-4">
-<h4 id="sec-4">1.1.2 Henney y O'Dell 1999</h4>
+<h4 id="sec-3">1.2 Henney y O'Dell 1999</h4>
 
 
 <p>
@@ -104,7 +98,7 @@ i = 0-30 ; 150-180 deg
 </div>
 
 <div class="outline-4">
-<h4 id="sec-5">1.1.3 Yiannis preliminary results for chemical abundances (VLT/FLAMES data:</h4>
+<h4 id="sec-4">1.3 Yiannis preliminary results for chemical abundances (VLT/FLAMES data:</h4>
 
 
 <p>
@@ -117,12 +111,359 @@ Fe = 5.78
 </div>
 
 <div class="outline-3">
-<h3 id="sec-6">1.2 Observations</h3>
+<h3 id="sec-5">2 Observations</h3>
 
 
 
 <div class="outline-4">
-<h4 id="sec-7">1.2.1  Yiannis comunication</h4>
+<h4 id="sec-6">2.1 <span class="done">DONE</span> [8/8] Calculate the density from the H alpha surface brightness</h4>
+
+<p><span class="timestamp-kwd">CLOSED: </span> <span class="timestamp">2012-09-06 Thu 09:30</span><br/>
+</p>
+<ul>
+<li>
+<b>[X]</b> From Fig 2 of Yiannis draft, peak Ha brightness is 3.2e-13 erg/s/cm2/spaxel
+</li>
+<li>
+<b>[X]</b> Remove background
+<ul>
+<li>
+Nebular background is about 200 in front of the proplyd
+</li>
+<li>
+And about 170 behind the tail
+</li>
+<li>
+Both in units of 1e-15
+</li>
+<li>
+Take average of 1.85e-13
+</li>
+<li>
+We won't subtract this yet, since we want to do the extinction
+correction separately for the proplyd and the nebula
+</li>
+</ul></li>
+<li>
+<b>[X]</b> Convert to per steradian
+<ul>
+<li>
+Field of view is 6.6 x 4.2 arcsec = 22 x 14 spaxels
+</li>
+<li>
+=&gt; spaxels are 0.3 x 0.3 arcsec = 0.09 square arcsec = 2.11539477435e-12 steradians
+</li>
+<li>
+S(Ha) = 3.2e-13 / 2.11539477435e-12 = 0.151 erg/s/cm2/sr
+<ul>
+<li>
+Background S(Ha) is 0.0874
+</li>
+</ul></li>
+<li>
+Or in photons
+<ul>
+<li>
+Using E(Ha) = 13.6 1.602176462e-12 (1/4 - 1/9) = 3.026e-12 erg
+</li>
+<li>
+S(Ha) = 5.00e10 phot/s/cm2/sr
+</li>
+<li>
+BG S(Ha) = 2.89e10 phot/s/cm2/sr
+</li>
+</ul></li>
+</ul></li>
+<li>
+<b>[X]</b> Correct for extinction
+<ul>
+<li>
+Measured C(Hb) is 0.6 (both Yiannis y O'Dell 1998)
+</li>
+<li>
+A(Ha) / A(Hb) = 4.7 / 6 = 0.783
+</li>
+<li>
+Extinction correction at Ha is 10**(0.783 0.6) = 2.95
+</li>
+<li>
+Corrected total brightness is 1.475e11 phot/s/cm2/sr
+</li>
+<li>
+BG C(Hb) = 0.4 =&gt; extinct correction = 10**(0.783 0.4) = 2.057
+<ul>
+<li>
+That is using the extinction of the nebula
+</li>
+<li>
+But it may be better to use the proplyd extinction factor: 2.95
+</li>
+</ul></li>
+<li>
+Corrected BG S(Ha) is 5.94e10 or 8.53e10
+</li>
+</ul></li>
+<li>
+<b>[X]</b> Now subtract the background
+<ul>
+<li>
+1.475e11 - [5.94e10, 8.53e10] = [8.81e10, 6.22e10]
+</li>
+<li>
+The second value is probably the best
+</li>
+</ul></li>
+<li>
+<b>[X]</b> Calculate EM, assuming an effective alpha
+<ul>
+<li>
+S(Ha) = (eta(Ha) / h nu) dL
+</li>
+<li>
+eta(Ha) / h nu = alpha(Ha) n<sup>2</sup> / (4 pi)
+</li>
+<li>
+EM = n<sup>2</sup> dL 
+</li>
+<li>
+S(Ha) = EM alpha(Ha) / (4 pi)
+</li>
+<li>
+EM = 4 pi S(Ha) / alpha(Ha)
+</li>
+<li>
+alpha(Ha) = 1e-13 at 1e4 K
+</li>
+<li>
+Therefore, EM = 4 pi 6.22e10 / 1.e-13 = 7.816e24 
+</li>
+</ul></li>
+<li>
+<b>[X]</b> Calculate density, assuming a path length ~= radius
+<ul>
+<li>
+See LL Ori paper for more precise estimates
+</li>
+<li>
+R ~ 2 spax = 2 0.3 440 au = 3.95e15
+</li>
+<li>
+So density is sqrt( 7.816e24 /  3.95e15) = 4.45e4 pcc
+</li>
+</ul></li>
+<li>
+<b>[X]</b> We can also do the tail
+<ul>
+<li>
+This has C(Hb) of 0.47
+</li>
+<li>
+And brightness of 240
+<ul>
+<li>
+Subtracted brightness is 55, as opposed to 135 for the head
+</li>
+<li>
+0.297 times fainter
+</li>
+<li>
+With the same path length, this is sqrt(0.297) smaller densities
+</li>
+<li>
+4.45e4 sqrt(0.297) = 2.42e4 pcc
+
+</li>
+</ul></li>
+</ul></li>
+<li>Alternative way to estimate the density: scale from LV2<br/>
+
+<ul>
+<li>
+LV2 has a well-determined density from C III obervations of ~1e6 pcc
+
+</li>
+<li>
+The Ha brightness of LV2 is 214e10 according to O'Dell (1998)
+
+<ul>
+<li>
+This is 70 or 35 times higher than HST10, depending on whether we take our values or O'Dell's
+
+</li>
+</ul></li>
+<li>
+The Ha brightness should scale as n<sup>2</sup> L, so density scales as sqrt(SHa/L)
+
+</li>
+<li>
+LV2 has a size (r0) of 8e14 cm, whereas HST10 has 3.69e15 cm
+
+</li>
+<li>
+Therefore density of HST10 should be 1.e6 sqrt(8e14 / 3.69e15 35) = 7.87e4 pcc
+
+<ul>
+<li>
+This is similar to, although slightly higher than, the value we derived above
+
+</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<div class="outline-4">
+<h4 id="sec-7">2.2 Comparison of Keck line ratios between HST 1 and HST 10</h4>
+
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<col align="left"></col><col align="left"></col><col align="right"></col><col align="right"></col><col align="left"></col><col align="left"></col><col align="left"></col><col align="left"></col>
+<thead>
+<tr><th>Object</th><th>Slit</th><th>exposure</th><th>5755</th><th>6584</th><th>4861</th><th>6584 / 5755</th><th>100 x 6584 / 4861</th></tr>
+</thead>
+<tbody>
+<tr><td>182413</td><td>p77</td><td>900</td><td>33444</td><td>79800</td><td>50360</td><td>2.39</td><td>158.5</td></tr>
+<tr><td>Nebula</td><td>p77</td><td>900</td><td>33100</td><td>64000 +/- 2000</td><td>48700 +/- 400</td><td>1.93 +/- 0.06</td><td>131.4 +/- 4.2</td></tr>
+<tr><td>Bias</td><td>p77</td><td>900</td><td>32800</td><td>32820</td><td>32800</td><td>1.00</td><td>100.1</td></tr>
+<tr><td>Neb - Bias</td><td></td><td>900</td><td>0.57</td><td>34.64 +/- 2.22</td><td>126.19 +/- 3.17</td><td>60.77 +/- 3.89</td><td>27.5 +/- 1.9</td></tr>
+<tr><td>Prop - Bias</td><td></td><td>900</td><td>1.23</td><td>52.20</td><td>139.37</td><td>42.44</td><td>37.5</td></tr>
+<tr><td>Prop - Neb</td><td></td><td></td><td>0.66</td><td>17.56 <del>/- 2.22</td><td>13.18 +/- 3.17</td><td>26.61 +/- 3.36</td><td>133.2 +/- 36.2</td><td></td><td>-&mdash;&mdash;&mdash;&mdash;</del>&mdash;&mdash;+-&mdash;&mdash;&mdash;+-&mdash;&mdash;+-&mdash;&mdash;&mdash;&mdash;&mdash;+&ndash;&mdash;&mdash;&mdash;&mdash;&mdash;+-&mdash;&mdash;&mdash;&mdash;&mdash;+-&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</td></tr>
+<tr><td>177341</td><td>p60</td><td>300</td><td>33303</td><td>44000</td><td>38508</td><td>1.32</td><td>114.3</td></tr>
+<tr><td>Nebula</td><td>p60</td><td>300</td><td>32860</td><td>39100 +/- 500</td><td>36500 +/- 300</td><td>1.19 +/- 0.02</td><td>107.1 +/- 1.6</td></tr>
+<tr><td>Bias</td><td>p60</td><td>300</td><td>32785</td><td>32785</td><td>32785</td><td>1</td><td>100</td></tr>
+<tr><td>Neb - Bias</td><td></td><td>300</td><td>0.43</td><td>21.05 +/- 1.67</td><td>88.45 +/- 7.14</td><td>48.95 +/- 3.88</td><td>23.8 +/- 2.7</td></tr>
+<tr><td>Prop - Bias</td><td></td><td>300</td><td>2.98</td><td>37.38</td><td>136.26</td><td>12.54</td><td>27.4</td></tr>
+<tr><td>Prop - Neb</td><td></td><td></td><td>2.55</td><td>16.33 <del>/- 1.67</td><td>47.81 +/- 7.14</td><td>6.40 +/- 0.65</td><td>34.2 +/- 6.2</td><td></td><td>-&mdash;&mdash;&mdash;&mdash;</del>&mdash;&mdash;+-&mdash;&mdash;&mdash;+-&mdash;&mdash;+-&mdash;&mdash;&mdash;&mdash;&mdash;+&ndash;&mdash;&mdash;&mdash;&mdash;&mdash;+-&mdash;&mdash;&mdash;&mdash;&mdash;+-&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</td></tr>
+<tr><td>Quartz</td><td></td><td></td><td>45000</td><td>53800</td><td>35700</td><td>1.20</td><td>150.7</td></tr>
+<tr><td>Quartz Bias</td><td></td><td></td><td>32765</td><td>32765</td><td>32765</td><td>1</td><td>100</td></tr>
+<tr><td>Efficiency</td><td></td><td></td><td>0.58</td><td>1</td><td>0.14</td><td>1.72</td><td>714.3</td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>0/0</td><td>0/0</td></tr>
+</tbody>
+</table>
+
+#+TBLFM: $7=$5/$4 ; f2::$8=100 $5/$6 ; f1::@5$4..@5$6=(@-2 - @-1)/($3 @16) ; f2::@6$4..@6$6=(@-4 - @-2)/($3 @16) ; f2::@7$4..@7$6=@-1 - @-2; f2::@11$4..@11$6=(@-2 - @-1)/($3 @16); f2::@12$4..@12$6=(@-4 - @-2)/($3 @16); f2::@13$4..@13$6=@-1 - @-2; f2::@16$4..@16$6=(@-2 - @-1) / (@-2$5 - @-1$5) ; f2
+
+</div>
+
+<div class="outline-4">
+<h4 id="sec-8">2.3 Line fluxes from Yiannis</h4>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<col align="left"></col><col align="left"></col><col align="right"></col><col align="right"></col><col align="right"></col><col align="right"></col><col align="right"></col><col align="left"></col>
+<thead>
+<tr><th>LINE</th><th>IMAGE</th><th>NPIX</th><th>MEAN</th><th>STDDEV</th><th>MIN</th><th>MAX</th><th>NOTES</th></tr>
+</thead>
+<tbody>
+<tr><td>[O II]</td><td>der3726Hb.fits[8:15,2:5]</td><td>32</td><td>62.1</td><td>2.86</td><td>55.26</td><td>66.69</td><td></td></tr>
+<tr><td>[O II]</td><td>der3729Hb.fits[8:15,2:5]</td><td>32</td><td>32.84</td><td>1.858</td><td>28.1</td><td>36.99</td><td></td></tr>
+<tr><td>[Ne III]</td><td>der3967Hb.fits[8:15,2:5]</td><td>32</td><td>4.044</td><td>0.3046</td><td>3.511</td><td>5.021</td><td></td></tr>
+<tr><td>H I</td><td>der3970Hb.fits[8:15,2:5]</td><td>32</td><td>13.43</td><td>0.4987</td><td>12.46</td><td>14.66</td><td><sup><a class="footref" name="fnr.1" href="#fn.1">1</a></sup></td></tr>
+<tr><td>H I</td><td>der4101Hb.fits[8:15,2:5]</td><td>32</td><td>25.22</td><td>0.6144</td><td>23.7</td><td>26.24</td><td><sup><a class="footref" name="fnr.1" href="#fn.1">1</a></sup></td></tr>
+<tr><td>H I</td><td>derscHab.fits[8:15,2:5]</td><td>32</td><td>227.</td><td>49.13</td><td>148.</td><td>365.8</td><td></td></tr>
+<tr><td>C II</td><td>der4267Hb.fits[8:15,2:5]</td><td>32</td><td>0.2153</td><td>0.02657</td><td>0.162</td><td>0.2686</td><td><sup><a class="footref" name="fnr.2" href="#fn.2">2</a></sup></td></tr>
+<tr><td>C II</td><td>der6578Hb.fits[8:15,2:5]</td><td>32</td><td>0.2306</td><td>0.024</td><td>0.1876</td><td>0.2931</td><td><sup><a class="footref" name="fnr.3" href="#fn.3">3</a></sup></td></tr>
+<tr><td>[O III]</td><td>der4363Hb.fits[8:15,2:5]</td><td>32</td><td>0.9819</td><td>0.08034</td><td>0.8605</td><td>1.196</td><td></td></tr>
+<tr><td>[O III]</td><td>der4959Hb.fits[8:15,2:5]</td><td>32</td><td>89.25</td><td>7.782</td><td>75.71</td><td>108.2</td><td></td></tr>
+<tr><td>[N II]</td><td>der5755Hb<sub>L4</sub>.fits[8:15,2:5]</td><td>32</td><td>1.214</td><td>0.4113</td><td>0.634</td><td>2.237</td><td><sup><a class="footref" name="fnr.4" href="#fn.4">4</a></sup></td></tr>
+<tr><td>[N II]</td><td>der5755Hb<sub>L5</sub>.fits[8:15,2:5]</td><td>32</td><td>1.251</td><td>0.4324</td><td>0.6757</td><td>2.317</td><td><sup><a class="footref" name="fnr.4" href="#fn.4">4</a></sup></td></tr>
+<tr><td>[N II]</td><td>der6584Hb.fits[8:15,2:5]</td><td>32</td><td>50.46</td><td>5.342</td><td>36.8</td><td>58.34</td><td></td></tr>
+<tr><td>He I</td><td>der4471Hb.fits[8:15,2:5]</td><td>32</td><td>4.517</td><td>0.2858</td><td>4.034</td><td>5.196</td><td></td></tr>
+<tr><td>He I</td><td>der5876Hb<sub>L5</sub>.fits[8:15,2:5]</td><td>32</td><td>12.93</td><td>0.8712</td><td>10.89</td><td>14.89</td><td></td></tr>
+<tr><td>[O I]</td><td>der6300Hb.fits[8:15,2:5]</td><td>32</td><td>1.786</td><td>0.8056</td><td>0.6728</td><td>3.427</td><td></td></tr>
+<tr><td>[O I]</td><td>der5577Hb.fits[8:15,2:5]</td><td>32</td><td>0.4213</td><td>0.06122</td><td>0.2939</td><td>0.5707</td><td></td></tr>
+<tr><td>[N I]</td><td>der5198Hb.fits[8:15,2:5]</td><td>32</td><td>0.1954</td><td>0.07203</td><td>0.</td><td>0.3184</td><td></td></tr>
+<tr><td>[N I]</td><td>der5200Hb.fits[8:15,2:5]</td><td>32</td><td>0.1256</td><td>0.04418</td><td>0.</td><td>0.1765</td><td></td></tr>
+<tr><td>[Cl III]</td><td>der5518Hb.fits[8:15,2:5]</td><td>32</td><td>0.3155</td><td>0.03255</td><td>0.2341</td><td>0.386</td><td></td></tr>
+<tr><td>[Cl III]</td><td>der5538Hb.fits[8:15,2:5]</td><td>32</td><td>0.4134</td><td>0.03045</td><td>0.3353</td><td>0.477</td><td></td></tr>
+<tr><td>[Fe III]</td><td>der5270Hb.fits[8:15,2:5]</td><td>32</td><td>0.2994</td><td>0.02696</td><td>0.2232</td><td>0.3552</td><td></td></tr>
+<tr><td>[S II]</td><td>der6716Hb.fits[8:15,2:5]</td><td>32</td><td>2.457</td><td>0.3261</td><td>2.04</td><td>3.127</td><td></td></tr>
+<tr><td>[S II]</td><td>der6731Hb.fits[8:15,2:5]</td><td>32</td><td>4.224</td><td>0.5908</td><td>3.515</td><td>5.409</td><td></td></tr>
+<tr><td>[S III]</td><td>der6312Hb.fits[8:15,2:5]</td><td>32</td><td>1.549</td><td>0.09926</td><td>1.341</td><td>1.819</td><td></td></tr>
+<tr><td>[Ar III]</td><td>der7136Hb.fits[8:15,2:5]</td><td>32</td><td>12.02</td><td>0.8041</td><td>10.7</td><td>13.52</td><td></td></tr>
+</tbody>
+</table>
+
+
+
+<p class="footnote"><sup><a class="footnum" name="fn.1" href="#fnr.1">1</a></sup> Dereddened Hbeta in flux units of 1E-15 erg/s/cm2/spax 
+<p class="footnote"><sup><a class="footnum" name="fn.2" href="#fnr.2">2</a></sup> 4267 is a pure recombination line
+<p class="footnote"><sup><a class="footnum" name="fn.3" href="#fnr.3">3</a></sup> 6578 can be partly fluorescence 
+<p class="footnote"><sup><a class="footnum" name="fn.4" href="#fnr.4">4</a></sup> (for 5755 use L5)
+
+<ul>
+<li> Original message<br/>
+<pre>HST10
+These are the fluxes within the 80 per cent Hbeta isophote (32 spaxels)
+(dereddened and relative to Hbeta=100)
+
+[O II]
+ der3726Hb.fits[8:15,2:5]        32      62.1      2.86     55.26     66.69
+ der3729Hb.fits[8:15,2:5]        32     32.84     1.858      28.1     36.99
+
+[Ne III]
+ der3967Hb.fits[8:15,2:5]        32     4.044    0.3046     3.511     5.021
+
+H I
+ der3970Hb.fits[8:15,2:5]        32     13.43    0.4987     12.46     14.66
+ der4101Hb.fits[8:15,2:5]        32     25.22    0.6144      23.7     26.24
+
+Dereddened Hbeta in flux units of 1E-15 erg/s/cm2/spax
+ derscHab.fits[8:15,2:5]        32      227.     49.13      148.     365.8
+
+C II - 4267 is a pure recombination line, 6578 can be partly fluorescence 
+ der4267Hb.fits[8:15,2:5]        32    0.2153   0.02657     0.162    0.2686
+ der6578Hb.fits[8:15,2:5]        32    0.2306     0.024    0.1876    0.2931
+
+[O III]
+ der4363Hb.fits[8:15,2:5]        32    0.9819   0.08034    0.8605     1.196
+ der4959Hb.fits[8:15,2:5]        32     89.25     7.782     75.71     108.2
+
+[N II] (for 5755 use L5)
+ der5755Hb_L4.fits[8:15,2:5]        32     1.214    0.4113     0.634     2.237
+ der5755Hb_L5.fits[8:15,2:5]        32     1.251    0.4324    0.6757     2.317
+ der6584Hb.fits[8:15,2:5]        32     50.46     5.342      36.8     58.34
+
+He I
+ der4471Hb.fits[8:15,2:5]        32     4.517    0.2858     4.034     5.196
+ der5876Hb_L5.fits[8:15,2:5]        32     12.93    0.8712     10.89     14.89
+
+[O I]
+ der6300Hb.fits[8:15,2:5]        32     1.786    0.8056    0.6728     3.427
+ der5577Hb.fits[8:15,2:5]        32    0.4213   0.06122    0.2939    0.5707
+
+[N I]
+ der5198Hb.fits[8:15,2:5]        32    0.1954   0.07203        0.    0.3184
+ der5200Hb.fits[8:15,2:5]        32    0.1256   0.04418        0.    0.1765
+
+[Cl III]
+ der5518Hb.fits[8:15,2:5]        32    0.3155   0.03255    0.2341     0.386
+ der5538Hb.fits[8:15,2:5]        32    0.4134   0.03045    0.3353     0.477
+
+[Fe III]
+ der5270Hb.fits[8:15,2:5]        32    0.2994   0.02696    0.2232    0.3552
+
+[S II]
+ der6716Hb.fits[8:15,2:5]        32     2.457    0.3261      2.04     3.127
+ der6731Hb.fits[8:15,2:5]        32     4.224    0.5908     3.515     5.409
+
+[S III]
+ der6312Hb.fits[8:15,2:5]        32     1.549   0.09926     1.341     1.819
+
+[Ar III]
+ der7136Hb.fits[8:15,2:5]        32     12.02    0.8041      10.7     13.52
+ 
+
+
+ 
+
+
+</pre>
+</li>
+</ul>
+</div>
+
+<div class="outline-4">
+<h4 id="sec-9">2.4  Yiannis comunication</h4>
 
 <p><pre>
 Hi Nahiely, Will,
@@ -180,12 +521,12 @@ Yiannis
 </div>
 
 <div class="outline-3">
-<h3 id="sec-8">1.3 Models</h3>
+<h3 id="sec-10">3 Models</h3>
 
 
 
 <div class="outline-4">
-<h4 id="sec-9">1.3.1 Angulo de inclinacion</h4>
+<h4 id="sec-11">3.1 Angulo de inclinacion</h4>
 
 
 <p>
@@ -238,6 +579,8 @@ donde i es el angulo de inclinacion. Entonces,
 
 <p>
 poniendo los numeros de la tabla resulta i = 37 deg
+</p>
+<p>
 Probamos modelos con i=30 y 40 deg
 </p>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
@@ -255,7 +598,7 @@ Probamos modelos con i=30 y 40 deg
 </div>
 
 <div class="outline-4">
-<h4 id="sec-10">1.3.2 Abundancias Quimicas</h4>
+<h4 id="sec-12">3.2 Abundancias Quimicas</h4>
 
 
 <p>
@@ -269,10 +612,10 @@ Tweaked 03 - aquellas que funcionaron para 177-341 (proplyd del articulo de Adal
 </p>
 <p>
 y un nuevo set que aparece como: TsamisHST10
-(son las abundancias que preliminares que propone Yiannis para HST10 en su platica de Tenerife)
+(son las abundancias preliminares que propone Yiannis para HST10 en su platica de Tenerife)
 </p>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-<col align="left"></col><col align="right"></col><col align="left"></col><col align="left"></col><col align="left"></col><col align="left"></col>
+<col align="left"></col><col align="right"></col><col align="right"></col><col align="left"></col><col align="left"></col><col align="left"></col>
 <thead>
 <tr><th>Elemento</th><th>HST10</th><th>Orion</th><th>HST10 lineal</th><th>Orion lineal</th><th>factor de escala</th></tr>
 </thead>
@@ -280,44 +623,62 @@ y un nuevo set que aparece como: TsamisHST10
 <tr><td>O/H</td><td>8.77</td><td>8.6</td><td>5.89e-4</td><td>3.98e-4</td><td>1.48</td></tr>
 <tr><td>S/H</td><td>6.9</td><td>7.0</td><td>7.9e-6</td><td>1.0e-5</td><td>0.787</td></tr>
 <tr><td>Fe/H</td><td>5.78</td><td>6.48</td><td>6e-7</td><td>3.0e-6</td><td>0.2</td></tr>
+<tr><td>O/H(2)</td><td>8.28</td><td>8.6</td><td>1.9e-4</td><td>3.98e-4</td><td>0.48</td></tr>
+<tr><td>O/H(2)</td><td>8.46</td><td>8.6</td><td>2.88e-4</td><td>3.98e-4</td><td>0.72</td></tr>
 </tbody>
 </table>
 
 Nota: El factor de escala es aquel necesario para escalar las abundancias que estan por default en Cloudy
+(2): Es el valor que Yiannis da en el borrador del articulo. El valor de S/H es basicamente el mismo y de Fe/H no da valor
 
 </div>
 
 <div class="outline-4">
-<h4 id="sec-11">1.3.3 Modelos</h4>
+<h4 id="sec-13">3.3 Modelos</h4>
 
 
 <p>
 Probamos modelos con varias abundancias quimicas y distancias fisicas a Theta 1C pero con otros parametros fijos:
 </p>
-<p>
+<ul>
+<li>
 -n 10
+</li>
+<li>
 &ndash;r0 3.7e15
+</li>
+<li>
 &ndash;logPhiH varios
+</li>
+<li>
 &ndash;Tstar 39000
+</li>
+<li>
 &ndash;diffuseBeta 0.1
+</li>
+<li>
 &ndash;composition varios
-</p>
+
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-<col align="left"></col><col align="right"></col><col align="left"></col><col align="left"></col><col align="left"></col>
+<col align="left"></col><col align="right"></col><col align="right"></col><col align="left"></col><col align="left"></col><col align="left"></col><col align="left"></col><col align="left"></col>
 <thead>
-<tr><th>composition</th><th>log phi(h)</th><th>maquina</th><th>densidad maxima (th00)</th><th></th></tr>
+<tr><th>composition</th><th>log phi(h)</th><th>i</th><th>maquina</th><th>ne(max) (th00)</th><th>Te(max) (th00)</th><th>Rebin</th><th>Cubes</th></tr>
 </thead>
 <tbody>
-<tr><td>Orion</td><td>12.1</td><td>astro04</td><td></td><td></td></tr>
-<tr><td>Orion</td><td>12.3</td><td></td><td></td><td></td></tr>
-<tr><td>Esteban</td><td>12.1</td><td>robie</td><td></td><td></td></tr>
-<tr><td>Esteban</td><td>12.3</td><td>astro04</td><td></td><td></td></tr>
-<tr><td>Tsamis LV2</td><td>12.1</td><td>robie</td><td></td><td></td></tr>
-<tr><td>Tsamis LV2</td><td>12.3</td><td></td><td></td><td></td></tr>
-<tr><td>Tweak 03</td><td>12.1</td><td>astro04</td><td></td><td></td></tr>
-<tr><td>Tweak 03</td><td>12.3</td><td>astro04</td><td></td><td></td></tr>
-<tr><td>Tsamis HST10</td><td>12.1</td><td></td><td></td><td></td></tr>
-<tr><td>Tsamis HST10</td><td>12.3</td><td>astro04</td><td></td><td></td></tr>
+<tr><td>Orion</td><td>12.1</td><td>30</td><td>astro04</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Orion</td><td>12.3</td><td>40</td><td>robie</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Esteban</td><td>12.1</td><td>30</td><td>robie</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Esteban</td><td>12.3</td><td>40</td><td>astro04</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Tsamis LV2</td><td>12.1</td><td>30</td><td>robie</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Tsamis LV2</td><td>12.3</td><td>40</td><td>astro04</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Tweak 03</td><td>12.1</td><td>30</td><td>astro04</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Tweak 03</td><td>12.3</td><td>40</td><td>astro04</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Tsamis HST10</td><td>12.1</td><td>30</td><td>astro04</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Tsamis HST10</td><td>12.3</td><td>40</td><td>astro04</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>HST10t01</td><td>12.1</td><td>30</td><td>astro04</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>HST10t01</td><td>12.3</td><td>40</td><td>robie</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>HST10t02</td><td>12.1</td><td>30</td><td>astro04</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>HST10t02</td><td>12.3</td><td>40</td><td>astro04</td><td></td><td></td><td></td><td></td></tr>
 </tbody>
 </table>
 
@@ -325,12 +686,13 @@ Probamos modelos con varias abundancias quimicas y distancias fisicas a Theta 1C
 
 
 
-</div>
+</li>
+</ul>
 </div>
 </div>
 <div id="postamble"><p class="author"> Author: Nahiely Flores
 <a href="mailto:nahiely@macbook-de-nahiely-flores.local">&lt;nahiely@macbook-de-nahiely-flores.local&gt;</a>
 </p>
-<p class="date"> Date: 2012/08/31 17:14:43</p>
+<p class="date"> Date: 2012/09/06 18:18:09</p>
 </div></body>
 </html>
