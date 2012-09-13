@@ -252,9 +252,6 @@ He I
  
 
 
- 
-
-
 *** QUOTE Yiannis comunication
 
 Hi Nahiely, Will,
@@ -306,6 +303,22 @@ Are you available for a Skype session later today?
 
 cheers and thanks!
 Yiannis
+
+
+*** The maximum emissivities from Yianni's maps
+
+| Line | SN | WE |    Max |      N |      S |      W |      E |
+|------+----+----+--------+--------+--------+--------+--------|
+| 4861 | 14 |  3 |  87.79 |  75.21 |   86.8 |  77.23 |  82.58 |
+| 6300 | 13 |  4 |   3.28 |   2.71 |   2.72 |   3.18 |   1.62 |
+| 6563 | 14 |  3 | 322.44 | 264.31 | 293.92 | 293.26 | 293.37 |
+| 6584 | 14 |  3 |   74.3 |  50.18 |  65.25 |  58.87 |  65.07 |
+| 4363 | 14 |  3 |   0.78 |   0.76 |   0.76 |   0.70 |   0.75 |
+| 4959 | 16 |  2 |  74.52 |  68.56 |  72.14 |      - |  70.01 |
+| 5577 | 11 |  4 |  0.432 |   0.39 |   0.36 |  0.427 |   0.34 |
+
++ Yiannis cusp is in spaxels: 13-15 (S->N), 2-4 (W->E)
+
 
 ** Models
 
@@ -727,6 +740,8 @@ N: ZZ03, logPhi(H)=12.3
 | TOTL | auto  |   2326 | X   |   Nan |   Nan |    Nan |   Nan | 31.3706 |  37.5273 |   30.2104 |   12.9941 |
 | TOTL | auto  |   4363 | O3  | 0.796 | 0.181 |   1.16 |  0.03 | 0.51773 |  0.48776 |  0.556361 |  0.721625 |
 | TOTL | auto  |   5199 | X   |   Nan |   Nan |    Nan |   Nan | 0.09749 | 0.100086 | 0.0819599 | 0.0262346 |
+
+Es evidente que el mover de posicion de la apertura es "determinante" para el cociente de lineas que tenemos. En el ultimo caso, cuando la apertura esta centrada en R=2.0, a diferencia de los otros dos centros, subestimamos el cociente 6300/Hbeta respecto al observado.
 
 
 ** The nebular environment of HST10
