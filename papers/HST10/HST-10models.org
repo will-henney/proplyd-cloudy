@@ -705,6 +705,7 @@ So, in the results table the last 3 columns are the most interesting:
 
 We read in the two tables above, find all lines that are in both tables, 
 
+#+name: flux-comparison-table
 #+BEGIN_SRC python :var willtab=saved-will-flux-table :var yiantab=yiannis-flux-table
 
 # find lines in Yoannis table that are also in Will table
@@ -740,7 +741,7 @@ return resultstab
 
 #+END_SRC
 
-#+RESULTS:
+#+RESULTS: flux-comparison-table
 | Ion       |  wav | Will S(p)        | Yiannis S(p)     | Will S(b)        | Yiannis S(b)     |
 | [O II]    | 3726 | 52.11 +/- 30.49  | 132.34 +/- 26.62 | 115.78 +/- 30.49 | 104.09 +/- 11.36 |
 | [Ne III]  | 3967 | 3.13 +/- 0.61    | 3.78 +/- 0.45    | 7.64 +/- 0.61    | 7.40 +/- 0.38    |
@@ -765,6 +766,62 @@ return resultstab
 | [S II]    | 6716 | 2.89 +/- 1.02    | 2.71 +/- 0.48    | 4.52 +/- 1.02    | 3.46 +/- 0.85    |
 | [S II]    | 6731 | 5.01 +/- 1.73    | 5.95 +/- 1.00    | 5.80 +/- 1.73    | 5.15 +/- 1.25    |
 | [Ar III]  | 7136 | 18.95 +/- 1.36   | 19.48 +/- 2.05   | 19.76 +/- 1.36   | 17.18 +/- 2.13   |
+
+Now make a graph of the above table.
+
+#+name: flux-comparison-plot
+#+header: :results file
+#+BEGIN_SRC python :var datatab=flux-comparison-table
+import numpy as np
+import matplotlib.pyplot as plt
+
+plotfile = "w-vs-y.png"
+labels = list()
+fluxdict = dict( p=dict(w=list(), y=list()), b=dict(w=list(), y=list()) )
+for ion, wav, wsp, ysp, wsb, ysb in datatab[1:]:
+    labels.append("{} {}".format(ion, wav))
+    # munge the fluxes into a nested dict of dicts of pairs
+    fluxdict["p"]["w"].append([float(x) for x in wsp.split("+/-")])
+    fluxdict["p"]["y"].append([float(x) for x in ysp.split("+/-")])
+    fluxdict["b"]["w"].append([float(x) for x in wsb.split("+/-")])
+    fluxdict["b"]["y"].append([float(x) for x in ysb.split("+/-")])
+
+    
+# convert them all to numpy arrays
+fluxes, errors = dict(p=dict(), b=dict()), dict(p=dict(), b=dict())
+for sample in "pb":
+    for person in "wy":
+        fluxes[sample][person] = np.array([f[0] for f in fluxdict[sample][person]])
+        errors[sample][person] = np.array([f[1] for f in fluxdict[sample][person]])
+
+sample = "p"
+# # make the plots
+plt.loglog(fluxes[sample]["w"], fluxes[sample]["y"], ".")
+plt.errorbar(fluxes[sample]["w"], fluxes[sample]["y"],
+             xerr=errors[sample]["w"], yerr=errors[sample]["y"], fmt=None) 
+
+dx, dy, i = -20, 20, 0
+for label, x, y in zip(labels, fluxes[sample]["w"], fluxes[sample]["y"]):
+    plt.annotate(
+        label, 
+        xy = (x, y), xytext = (dx, dy),
+        textcoords = 'offset points', ha = ['right', 'left'][i], va = ['bottom', 'top'][i],
+        bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 0.5),
+        arrowprops = dict(arrowstyle = '->', connectionstyle = 'arc3,rad=0'))
+    dx, dy, i = -dx, -dy, 1 - i
+
+plt.plot([1.e-1, 1.e3], [1.e-1, 1.e3], '-')
+
+plt.xlabel("Will")
+plt.ylabel("Yiannis")
+plt.title("Battle of the fluxes!")
+plt.savefig(plotfile)
+
+return plotfile
+#+END_SRC
+
+#+RESULTS: flux-comparison-plot
+[[file:w-vs-y.png]]
 
 
 
