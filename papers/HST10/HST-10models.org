@@ -722,6 +722,7 @@ resultstab.append(
 for yian, will in zip(yiantab, willtab):
     ion = will[0]
     wav = will[1]
+    if wav == 5577: continue
     WSp = will[6]
     WdSp = will[7]*WSp
     WSb = will[3]
@@ -756,7 +757,6 @@ return resultstab
 | [Fe III]  | 5270 | 0.40 +/- 0.06    | 0.44 +/- 0.06    | 0.52 +/- 0.06    | 0.47 +/- 0.05    |
 | [Cl III]  | 5518 | 0.16 +/- 0.05    | 0.25 +/- 0.06    | 0.63 +/- 0.05    | 0.57 +/- 0.12    |
 | [Cl III]  | 5538 | 0.33 +/- 0.07    | 0.40 +/- 0.06    | 0.75 +/- 0.07    | 0.68 +/- 0.12    |
-| O I       | 5577 | 0.24 +/- 0.06    | 0.00 +/- 0.00    | 0.74 +/- 0.06    | 0.70 +/- 0.16    |
 | [N II]    | 5755 | 3.43 +/- 0.15    | 3.45 +/- 1.72    | 0.73 +/- 0.15    | 0.67 +/- 0.07    |
 | He I      | 5876 | 14.05 +/- 2.02   | 15.32 +/- 3.12   | 20.73 +/- 2.02   | 19.74 +/- 0.45   |
 | [O I]     | 6300 | 4.16 +/- 0.18    | 4.19 +/- 3.09    | 0.82 +/- 0.18    | 0.76 +/- 0.18    |
@@ -770,16 +770,25 @@ return resultstab
 Now make a graph of the above table.
 
 #+name: flux-comparison-plot
+#+header: :var datatab=flux-comparison-table :var sample="p"
 #+header: :results file
-#+BEGIN_SRC python :var datatab=flux-comparison-table
+#+BEGIN_SRC python
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
 
-plotfile = "w-vs-y.png"
+# Variables <datatab> and <sample> are passed in from the Org header
+
+print "sample is ", sample
+
+plotfile = "w-vs-y-{}.png".format(sample)
+sample_labels = dict(p="proplyd", b="background")  
 labels = list()
+wavs = list()
 fluxdict = dict( p=dict(w=list(), y=list()), b=dict(w=list(), y=list()) )
 for ion, wav, wsp, ysp, wsb, ysb in datatab[1:]:
     labels.append("{} {}".format(ion, wav))
+    wavs.append(wav)
     # munge the fluxes into a nested dict of dicts of pairs
     fluxdict["p"]["w"].append([float(x) for x in wsp.split("+/-")])
     fluxdict["p"]["y"].append([float(x) for x in ysp.split("+/-")])
@@ -788,40 +797,62 @@ for ion, wav, wsp, ysp, wsb, ysb in datatab[1:]:
 
     
 # convert them all to numpy arrays
-fluxes, errors = dict(p=dict(), b=dict()), dict(p=dict(), b=dict())
-for sample in "pb":
-    for person in "wy":
-        fluxes[sample][person] = np.array([f[0] for f in fluxdict[sample][person]])
-        errors[sample][person] = np.array([f[1] for f in fluxdict[sample][person]])
+fluxes, errors = dict(), dict()
+for person in "wy":
+    fluxes[person] = np.array([f[0] for f in fluxdict[sample][person]])
+    errors[person] = np.array([f[1] for f in fluxdict[sample][person]])
 
-sample = "p"
 # # make the plots
-plt.loglog(fluxes[sample]["w"], fluxes[sample]["y"], ".")
-plt.errorbar(fluxes[sample]["w"], fluxes[sample]["y"],
-             xerr=errors[sample]["w"], yerr=errors[sample]["y"], fmt=None) 
+plt.errorbar(fluxes["w"], fluxes["y"], xerr=errors["w"], yerr=errors["y"], fmt=None) 
+plt.scatter(fluxes["w"], fluxes["y"], zorder=100, s=40, c=wavs, cmap=cm.rainbow)
 
+def discrepancy(x, y, scale=2.0):
+    """Evaluate the discrepancy between x and y on a scale of 0 (agree) to 1 (disagree)"""
+    delta = np.abs(np.log10(x/y))
+    return 1.0 - 1.0 / (1.0 + scale*delta)
+
+# In general we flip the label offsets every time, so that half are above and half below the line
 dx, dy, i = -20, 20, 0
-for label, x, y in zip(labels, fluxes[sample]["w"], fluxes[sample]["y"]):
+# But some lines we give an extra flip by hand, to prevent collisions
+fliplines = ["[Cl III] 5538", "[Ne III] 3967", "[S II] 6716", "H beta 4861"]
+for label, x, y in zip(labels, fluxes["w"], fluxes["y"]):
+    if label in fliplines:
+        dx, dy, i = -dx, -dy, 1 - i
     plt.annotate(
         label, 
         xy = (x, y), xytext = (dx, dy),
+        size="xx-small",
         textcoords = 'offset points', ha = ['right', 'left'][i], va = ['bottom', 'top'][i],
-        bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 0.5),
+        bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = discrepancy(x, y)),
         arrowprops = dict(arrowstyle = '->', connectionstyle = 'arc3,rad=0'))
+    if label in fliplines:
+        dx, dy, i = -dx, -dy, 1 - i
     dx, dy, i = -dx, -dy, 1 - i
 
 plt.plot([1.e-1, 1.e3], [1.e-1, 1.e3], '-')
 
-plt.xlabel("Will")
-plt.ylabel("Yiannis")
-plt.title("Battle of the fluxes!")
+plt.axis([1.e-1, 1.e3, 1.e-1, 1.e3])
+plt.xscale("log")
+plt.yscale("log")
+plt.xlabel("Will's {} flux".format(sample_labels[sample]))
+plt.ylabel("Yiannis' {} flux".format(sample_labels[sample]))
+plt.title("Comparison of {} flux measurements".format(sample_labels[sample]))
 plt.savefig(plotfile)
 
 return plotfile
 #+END_SRC
 
 #+RESULTS: flux-comparison-plot
-[[file:w-vs-y.png]]
+[[file:w-vs-y-p.png]]
+
+
+That was of the proplyd fluxes.  Now we do the same for the background fluxes. 
+
+#+call: flux-comparison-plot(sample="b") :results file
+
+#+RESULTS: flux-comparison-plot(sample="b"):results file
+[[file:w-vs-y-b.png]]
+
 
 
 
