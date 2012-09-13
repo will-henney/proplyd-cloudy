@@ -12,9 +12,15 @@ models/.ropeproject
 models/proplyd-auto-models/*
 emission/*.dat
 emission/*.png
+*.log
+_region_.tex
+*.blg
+*.bbl
+*.dvi
 *.aux
 *.auxlock
 *.synctex.gz
+ltxpng
 papers/*.log
 papers/*.dep
 papers/*.dpth
@@ -30,6 +36,8 @@ emission/test_data/M[01234]-*.fits
 emission/test_data/Tmap-*.fits
 emission/test_data/pv-cube-*.fits
 emission/test_data/*.bck*
+emission/test_data/*.bck*
 emission/test_data/aperture-*
 /papers/HST10/HST-10models.pdf
 /papers/HST10/HST-10models.tex
+testdata
