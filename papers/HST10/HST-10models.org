@@ -1072,7 +1072,119 @@ Es evidente que el mover de posicion de la apertura es "determinante" para el co
   + [ ] select the lines we want
 
 
+*** Discussion of what determines the spectrum
+
+The emissivity spectrum of a given point is determined by four local quantities (are there more?):
+
+1. Ionization parameter
+2. Electron density
+3. Temperature
+4. Composition
+
+For a compound ionization-bounded object, 
+such as a proplyd, 
+the local ionization parameter and density show variations of several orders of magnitude within the object,
+with significant variations (of order 20\%) in the temperature also. 
+(We might hope that the composition stays constant.)
+The dynamic photoevaporation models imply that the variations in density and ionization parameter are strongly coupled,
+and the thermal balance equations produce a coupling to the temperature as well. 
+An illustration of this for a particular model is given in Figure~10 of Mesa Delgado et al. (2012),
+but the basic structure should be similar for all proplyds. 
+The highest electron densities and temperatures are reached at intermediate ionization parameters 
+in a zone where H is still predominantly ionized, but very close to the ionization front. 
+This zone is traced most effectively by lines from singly ionized metal ions, such as [N II],
+whereas both higher ionization lines, such as [O III], 
+and lower ionization lines, such as [O I], 
+will come from zones with different densities and temperatures. 
+
+
+
+
 *** Baldwin fluxes (Baldwin et al 2000)
+
+**** Just the lines that we want (but still in Baldwin's original format)
+
++ Mostly we go for lines with Icorr/6678 > 0.1
+  + Although I was more picky in the blue
+  + Until I got to the O II ORLs, where we include all of them
+#+name: baldwin-etal-2000-table-1-selection
+| lambda(obs) | lambda_0 | Ion      | ? | delta V | FWHM |  I/6678 | Icorr/6678 |      S/N | Notes                |
+|             |          |          |   |         |      |         |            |          | <20>                 |
+|-------------+----------+----------+---+---------+------+---------+------------+----------+----------------------|
+|    3726.062 | 3726.032 | [O II]   |   |     2.4 |   15 | 10.3841 |    18.2900 |  19282.3 |                      |
+|    3728.813 | 3728.815 | [O II]   |   |    -0.2 |   16 |  4.8506 |     8.5426 |   8998.5 |                      |
+|    3750.144 |  3750.15 | H I      |   |    -0.5 |   26 |  0.6863 |     1.2047 |    486.2 | average              |
+|    3770.627 |  3770.63 | H I      |   |    -0.2 |   26 |  0.7653 |     1.3400 |    593.2 | average              |
+|    3797.894 |  3797.90 | H I      |   |    -0.4 |   25 |  0.8080 |     1.4087 |   1701.8 |                      |
+|    3819.620 |  3819.61 | He I     |   |     0.7 |   19 |  0.1863 |     0.3238 |    290.6 | average              |
+|    3837.729 | 3837.726 | S III    | ? |     0.2 |   17 |  0.0043 |     0.0075 |      9.1 | gh                   |
+|    3868.743 |  3868.75 | [Ne III] |   |    -0.5 |   13 |  2.6885 |     4.6349 |   9407.0 |                      |
+|    3889.017 | 3889.049 | H I      |   |         |   35 |  2.9943 |     5.1471 |   2223.2 | average; large FWHM; blend |
+|    3964.724 | 3964.729 | He I     |   |    -0.3 |   17 |  0.1920 |     0.3252 |    324.3 | average              |
+|    3967.447 | 3967.460 | [Ne III] |   |    -1.0 |   13 |  1.3926 |     2.3576 |   1702.0 |                      |
+|    3970.069 | 3970.072 | H I      |   |    -0.2 |   25 |  4.5235 |     7.6475 |   2592.5 |                      |
+|    4026.201 |  4026.19 | He I     |   |     0.8 |   18 |  0.4068 |     0.6803 |    855.8 | average              |
+|    4068.663 | 4068.600 | [S II]   |   |     4.6 |   18 |  0.2617 |     0.4338 |    867.8 |                      |
+|    4076.415 |  4076.35 | [S II]   |   |     4.8 |   18 |  0.0838 |     0.1387 |    329.5 |                      |
+|    4101.738 |  4101.71 | H I      |   |     2.0 |   26 |  5.8677 |     9.6639 |  16801.0 | average              |
+|    4267.168 | 4267.001 | C II     |   |         |   28 |  0.0449 |     0.0712 |     85.1 | average, blend       |
+|             | 4267.183 | C II     |   |         |      |         |            |          |                      |
+|             | 4267.261 | C II     |   |         |      |         |            |          |                      |
+|    4340.469 | 4340.450 | H I      |   |     1.3 |   26 | 10.6472 |    16.5986 |  23204.7 | average              |
+|    4363.195 | 4363.209 | [O III]  |   |    -0.9 |   14 |  0.2148 |     0.3332 |    964.7 |                      |
+|    4387.929 | 4387.929 | He I     |   |     0.0 |   17 |  0.1026 |     0.1581 |    451.1 |                      |
+|    4471.491 | 4471.486 | He I     |   |     0.8 |   19 |  0.8535 |     1.2895 |   4822.3 |                      |
+|    4638.841 | 4638.856 | O II     |   |    -0.9 |   14 |  0.0083 |     0.0121 |     53.9 |                      |
+|    4641.806 | 4641.810 | O II     |   |    -0.3 |   14 |  0.0166 |     0.0241 |    109.0 |                      |
+|    4649.133 | 4649.135 | O II     |   |    -0.1 |   14 |  0.0266 |     0.0386 |    171.5 | this is the strongest line of the multiplet; all lines are observed |
+|    4650.827 | 4650.838 | O II     |   |    -0.7 |   13 |  0.0081 |     0.0117 |     54.9 |                      |
+|    4658.149 |  4658.05 | [Fe III] |   |     6.4 |   15 |  0.1246 |     0.1804 |    844.6 |                      |
+|    4661.621 | 4661.632 | O II     |   |    -0.7 |   14 |  0.0091 |     0.0132 |     67.4 |                      |
+|    4667.047 |  4667.01 | [Fe III] |   |     2.4 |   16 |  0.0050 |     0.0072 |     35.9 |                      |
+|    4676.224 | 4676.235 | O II     |   |    -0.7 |   16 |  0.0060 |     0.0087 |     43.5 | cosmic ray hit on wing |
+|    4701.603 |  4701.53 | [Fe III] |   |     4.6 |   14 |  0.0390 |     0.0559 |    188.8 |                      |
+|    4713.164 | 4713.139 | He I     |   |     1.5 |   19 |  0.1340 |     0.1916 |    354.3 | average              |
+|    4861.334 |  4861.33 | H\beta   |   |     0.2 |   26 | 17.4964 |    24.2016 |  62680.0 |                      |
+|    4921.937 | 4921.931 | He I     |   |     0.4 |   17 |  0.2596 |     0.3544 |    616.2 | average              |
+|    4958.930 | 4958.911 | [O III]  |   |     1.2 |   13 | 24.7511 |    33.5152 |  79477.3 | measured from short exposures |
+|    5006.854 | 5006.843 | [O III]  |   |     0.6 |   13 | 74.1110 |    99.3964 | 205787.5 | short exposures      |
+|    5517.675 |  5517.66 | [Cl III] |   |         |   14 |  0.0810 |     0.0984 |    456.3 | R average, blended with weak line |
+|             |  5517.66 | [Ni IV]  |   |         |      |         |            |          | R                    |
+|    5517.680 |  5517.66 | [Cl III] |   |         |   14 |  0.0832 |     0.1011 |    258.4 | B blended with weak line |
+|             |  5517.66 | [Ni IV]  |   |         |      |         |            |          | B                    |
+|    5537.829 |   5537.7 | [Cl III] |   |         |   17 |  0.1257 |     0.1522 |    701.9 | B                    |
+|    5537.830 |   5537.7 | [Cl III] |   |         |   14 |  0.1220 |     0.1477 |    856.1 | R average            |
+|    5754.663 |  5754.59 | [N II]   |   |     3.8 |   18 |  0.1727 |     0.2014 |    974.0 | R average            |
+|    5754.664 |  5754.59 | [N II]   |   |     3.9 |   19 |  0.1693 |     0.1974 |   1162.2 | B                    |
+|    5875.628 |  5875.64 | He I     |   |    -0.6 |   22 |  3.0441 |     3.4745 |  17593.2 | B                    |
+|    5875.630 |  5875.64 | He I     |   |    -0.5 |   19 |  3.1916 |     3.6428 |  18100.6 | R average            |
+|    6300.536 | 6300.304 | [O I]    |   |    11.0 |   17 |  0.1853 |     0.1973 |   1028.1 | average              |
+|    6312.075 |  6312.06 | [S III]  |   |     0.7 |   14 |  0.4755 |     0.5050 |   2908.8 | average              |
+|    6347.147 |  6347.11 | Si II    |   |     1.8 |   20 |  0.0420 |     0.0444 |    227.4 | average              |
+|    6364.011 | 6363.776 | [O I]    |   |    11.1 |   16 |  0.0621 |     0.0654 |    469.5 | average              |
+|    6371.396 |  6371.37 | Si II    |   |     1.2 |   19 |  0.0212 |     0.0223 |    153.1 | average; blend       |
+|    6548.123 |  6548.05 | [N II]   |   |     3.3 |   17 |  3.6260 |     3.7086 |   9685.7 | average              |
+|    6562.804 |  6562.82 | H\alpha  |   |    -0.7 |   27 | 73.7560 |    75.2211 |   6091.4 | average              |
+|    6578.024 |  6578.05 | C II     |   |    -1.2 |   14 |  0.0582 |     0.0592 |    273.2 | average              |
+|    6583.496 |  6583.45 | [N II]   |   |     2.1 |   17 | 11.3392 |    11.5179 |   2297.1 | average              |
+|    6678.146 | 6678.152 | He I     |   |    -0.2 |   17 |  1.0000 |            |   7808.0 | average              |
+|    6716.539 |  6716.44 | [S II]   |   |     4.4 |   20 |  0.5331 |     0.5307 |   3263.8 | average              |
+|    6730.924 | 6730.816 | [S II]   |   |     4.8 |   19 |  1.0041 |     0.9969 |   6625.0 | average              |
+|    7002.436 | 7002.173 | O I      |   |         |   24 |  0.0194 |     0.0184 |     91.8 | average, blend or cut by atmospheric absorption |
+|             | 7002.196 | O I      |   |         |      |         |            |          |                      |
+|             | 7002.230 | O I      |   |         |      |         |            |          |                      |
+|             | 7002.250 | O I      |   |         |      |         |            |          |                      |
+|    7065.203 | 7065.179 | He I     |   |         |   18 |  2.1055 |     1.9813 |  10405.8 | average              |
+|             | 7065.217 | He I     |   |         |      |         |            |          |                      |
+|    7135.773 | 7135.790 | [Ar III] |   |    -0.7 |   13 |  4.6787 |     4.3507 |  38291.5 |                      |
+|    7281.355 | 7281.351 | He I     |   |     0.2 |   20 |  0.1684 |     0.1529 |    747.4 | average              |
+|    7319.106 |  7318.92 | [O II]   |   |     7.6 |   18 |  0.4923 |     0.4450 |   2676.0 |                      |
+|    7320.184 |  7319.99 | [O II]   |   |     8.0 |   17 |  1.4107 |     1.2749 |   7986.8 |                      |
+|    7329.728 |  7329.67 | [O II]   |   |     2.4 |   16 |  0.7478 |     0.6746 |   4987.6 |                      |
+|    7330.822 |  7330.73 | [O II]   |   |     3.8 |   18 |  0.7832 |     0.7064 |   4958.1 |                      |
+|             |          |          |   |         |      |         |            |          |                      |
+
+
 
 **** Complete reformatted table
 
