@@ -66,9 +66,9 @@
     error bars/x explicit,
     error bars/y dir=none,
     ] table [
-    x=Cusp, 
+    x=WillSP, 
     y=Model#1, 
-    x error=CIns,
+    x error=WilldSP,
     meta=ID
     ] {HST-10models.dat};
     \addlegendentry{\ion{H}{1}} 
@@ -90,166 +90,60 @@
 \begin{document} 
 
 
-\section{Model A: Baseline model}
+\section{Model A: Esteban}
 \begin{description}
 \item[Spectrum] WMBasic, \SI{39000}{K}
 \item[Flux] \(\log_{10} \Phi = 12.10\)
-\item[Abundance set] Cloudy Orion
-\end{description}
-\bigskip
-\RatioPlot{A}
-
-\newpage 
-
-\section{Model B: Esteban Set}
-\begin{description}
-\item[Spectrum] WMBasic, \SI{39000}{K}
-\item[Flux] \(\log_{10} \Phi = 12.10\)
-\item[Abundance set] Esteban et al.\@ (2004), M42, \(t^2 = 0.002\)
+\item[Abundance set] 
 \end{description}
 \bigskip
 \RatioPlot{B}
 
 \newpage 
 
-\section{Model C:  Tsamis for LV2}
+\section{Model B: Tsamis LV2}
 \begin{description}
 \item[Spectrum] WMBasic, \SI{39000}{K}
 \item[Flux] \(\log_{10} \Phi = 12.10\)
-\item[Abundance set] Tsamis et al.\@ (2011), LV2
+\item[Abundance set] 
 \end{description}
 \bigskip
 \RatioPlot{C}
 
 \newpage 
 
-\section{Model D: Tsamis HST10 preliminary}
+\section{Model C:  ZZ03}
 \begin{description}
 \item[Spectrum] WMBasic, \SI{39000}{K}
 \item[Flux] \(\log_{10} \Phi = 12.10\)
 \item[Abundance set] 
-\end{description}
-\bigskip
-\RatioPlot{D}
-
-\newpage  
-
-\section{Model E: Tsamis HST10 new1}
-\begin{description}
-\item[Spectrum] Tlusty, \SI{39000}{K}
-\item[Flux] \(\log_{10} \Phi = 12.10\)
-\item[Abundance set]
-\end{description}
-\bigskip
-\RatioPlot{E}
-
-\newpage 
-
-\section{Model F: Tsamis HST10 new2}
-\begin{description}
-\item[Spectrum] WMBasic, \SI{39000}{K}
-\item[Flux] \(\log_{10} \Phi = 12.10\)
-\item[Abundance set] 
-\end{description}
-\bigskip
-\RatioPlot{F}
-\newpage 
-
-\section{Model G: ZZ03}
-\begin{description}
-\item[Spectrum] WMBasic, \SI{39000}{K}
-\item[Flux] \(\log_{10} \Phi = 12.10\)
-\item[Abundance set]
 \end{description}
 \bigskip
 \RatioPlot{G}
-\newpage
 
-\section{Model H: Baseline model}
+\newpage 
+
+\section{Model D: Tsamis final}
 \begin{description}
 \item[Spectrum] WMBasic, \SI{39000}{K}
-\item[Flux] \(\log_{10} \Phi = 12.30\)
-\item[Abundance set] Cloudy Orion
+\item[Flux] \(\log_{10} \Phi = 12.10\)
+\item[Abundance set] 
 \end{description}
 \bigskip
 \RatioPlot{H}
 
-\newpage 
-
-\section{Model I: Esteban Set}
-\begin{description}
-\item[Spectrum] WMBasic, \SI{39000}{K}
-\item[Flux] \(\log_{10} \Phi = 12.30\)
-\item[Abundance set] Esteban et al.\@ (2004), M42, \(t^2 = 0.002\)
-\end{description}
-\bigskip
-\RatioPlot{I}
-
-\newpage 
-
-\section{Model J:  Tsamis for LV2}
-\begin{description}
-\item[Spectrum] WMBasic, \SI{39000}{K}
-\item[Flux] \(\log_{10} \Phi = 12.30\)
-\item[Abundance set] Tsamis et al.\@ (2011), LV2
-\end{description}
-\bigskip
-\RatioPlot{J}
-
-\newpage 
-
-\section{Model K: Tsamis HST10 preliminary}
-\begin{description}
-\item[Spectrum] WMBasic, \SI{39000}{K}
-\item[Flux] \(\log_{10} \Phi = 12.30\)
-\item[Abundance set] 
-\end{description}
-\bigskip
-\RatioPlot{K}
-
 \newpage  
 
-\section{Model L: Tsamis HST10 new1}
+\section{Model E: ZZ03}
 \begin{description}
 \item[Spectrum] Tlusty, \SI{39000}{K}
-\item[Flux] \(\log_{10} \Phi = 12.30\)
+\item[Flux] \(\log_{10} \Phi = 14.0\)
 \item[Abundance set]
 \end{description}
 \bigskip
-\RatioPlot{L}
+\RatioPlot{P}
 
 \newpage 
 
-\section{Model M: Tsamis HST10 new2}
-\begin{description}
-\item[Spectrum] WMBasic, \SI{39000}{K}
-\item[Flux] \(\log_{10} \Phi = 12.30\)
-\item[Abundance set] 
-\end{description}
-\bigskip
-\RatioPlot{M}
-\newpage 
-
-\section{Model N: ZZ03}
-\begin{description}
-\item[Spectrum] WMBasic, \SI{39000}{K}
-\item[Flux] \(\log_{10} \Phi = 12.30\)
-\item[Abundance set]
-\end{description}
-\bigskip
-\RatioPlot{N}
-\newpage
-
-\section{Model O: Orion total}
-\begin{description}
-\item[Spectrum] WMBasic, \SI{39000}{K}
-\item[Flux] \(\log_{10} \Phi = 12.10\)
-\item[Abundance set]
-\end{description}
-\bigskip
-\RatioPlot{O}
-\newpage
-
-% The marker for [\ion{Ne}{3}] is \ref{marker:Ne3}
 
 \end{document}
