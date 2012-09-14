@@ -5,12 +5,12 @@
 #+EXPORT_EXCLUDE_TAGS: noexport
 #+TITLE: Modelos para HST-10
 
-** Proplyd observational properties
+* Proplyd observational properties
 
 "...also has a jet that may partially affect the shape of its ionization front..."
 Bally et al. 2005
 
-*** O'Dell 1998
+** O'Dell 1998
 
 F(Halpha) = 0.82 cm-2 s-1
 Phi = 1.19"
@@ -19,23 +19,23 @@ C(Hbeta) = 0.64
 <S(Halpha)> = 3.1e10 ph cm-2 s-1 sr-1
 log <S(Halpha)> = 10.96
 
-*** Henney y O'Dell 1999
+** Henney y O'Dell 1999
 
 tau (Halpha) = 1.09
 r0 = 3.69e15 cm
 n0 = 0.153e6 cm-3
 i = 0-30 ; 150-180 deg
 
-*** Yiannis preliminary results for chemical abundances (VLT/FLAMES data:
+** Yiannis preliminary results for chemical abundances (VLT/FLAMES data:
 
 O = 8.77 +- 0.1
 S = 6.9 +- 0.04
 Fe = 5.78
 
 
-** Observations
+* Observations
 
-*** DONE [8/8] Calculate the density from the H alpha surface brightness
+** DONE [8/8] Calculate the density from the H alpha surface brightness
     CLOSED: [2012-09-06 Thu 09:30]
 
 + [X] From Fig 2 of Yiannis draft, peak Ha brightness is 3.2e-13 erg/s/cm2/spaxel
@@ -87,7 +87,7 @@ Fe = 5.78
     + With the same path length, this is sqrt(0.297) smaller densities
     + 4.45e4 sqrt(0.297) = 2.42e4 pcc
 
-**** Alternative way to estimate the density: scale from LV2
+*** Alternative way to estimate the density: scale from LV2
 
 + LV2 has a well-determined density from C III obervations of ~1e6 pcc
 
@@ -103,7 +103,7 @@ Fe = 5.78
 
   + This is similar to, although slightly higher than, the value we derived above
 
-*** Comparison of Keck line ratios between HST 1 and HST 10
+** Comparison of Keck line ratios between HST 1 and HST 10
 
 | Object      | Slit | exposure |  5755 |           6584 |            4861 |          6300 |    6584 / 5755 | 100 x 6584 / 4861 |     6300 / 5755 |
 |-------------+------+----------+-------+----------------+-----------------+---------------+----------------+-------------------+-----------------|
@@ -144,7 +144,7 @@ Fe = 5.78
 + The models show a strong variaton in oi/nii, presumably due to the changing ionization parameter
 + The observations show only a slight change 
 
-*** Line fluxes from Yiannis
+** Line fluxes from Yiannis
 | LINE     | IMAGE                       | NPIX |   MEAN |  STDDEV |    MIN |    MAX | NOTES |
 |----------+-----------------------------+------+--------+---------+--------+--------+-------|
 | [O II]   | der3726Hb.fits[8:15,2:5]    |   32 |   62.1 |    2.86 |  55.26 |  66.69 |       |
@@ -180,7 +180,7 @@ Fe = 5.78
 [3] 6578 can be partly fluorescence 
 [4] (for 5755 use L5)
 
-**** QUOTE Original message
+*** QUOTE Original message
 HST10
 These are the fluxes within the 80 per cent Hbeta isophote (32 spaxels)
 (dereddened and relative to Hbeta=100)
@@ -269,7 +269,7 @@ He I
  
 
 
-*** QUOTE Yiannis comunication
+** QUOTE Yiannis comunication
 
 Hi Nahiely, Will,
 
@@ -322,7 +322,7 @@ cheers and thanks!
 Yiannis
 
 
-*** The maximum emissivities from Yianni's maps
+** The maximum emissivities from Yianni's maps
 
 | Line | SN | WE |    Max |      N |      S |      W |      E |
 |------+----+----+--------+--------+--------+--------+--------|
@@ -337,9 +337,9 @@ Yiannis
 + Yiannis cusp is in spaxels: 13-15 (S->N), 2-4 (W->E)
 
 
-** Models
+* Models
 
-*** Angulo de inclinacion
+** Angulo de inclinacion
 
 Por la forma del proplyd parece que i > 90 deg, pero...
 
@@ -377,7 +377,7 @@ Probamos modelos con i=30 y 40 deg
 | 30 |           7.51e17 | 1.27e12 | 12.1       |
 | 40 |           5.84e17 |  2.1e12 | 12.3       |
 
-*** Abundancias Quimicas
+** Abundancias Quimicas
 
 Para los primeros modelos utilizo los grupos de abundancias que ya tenemos:
 
@@ -403,7 +403,7 @@ y un nuevo set que aparece como: TsamisHST10
 Nota: El factor de escala es aquel necesario para escalar las abundancias que estan por default en Cloudy
 (2): Es el valor que Yiannis da en el borrador del articulo. El valor de S/H es basicamente el mismo y de Fe/H no da valor
 
-*** Modelos
+** Modelos
 
 Probamos modelos con varias abundancias quimicas y distancias fisicas a Theta 1C pero con otros parametros fijos:
 
@@ -435,7 +435,7 @@ Probamos modelos con varias abundancias quimicas y distancias fisicas a Theta 1C
 Rebin(1): Nmu=1001, method=lineal
 Cubes(1): i=30, NPhi=400, Nvel=50
 
-*** The total flux (proplyd head only) respect to Hbeta = 100
+** The total flux (proplyd head only) respect to Hbeta = 100
 
 | Ion  |  Lamb | Orion (1) |  ZE (1) |  ZT (1) | ZT10 (1) | ZT101 (1) | ZT102 (1) | ZZ03 (1) | ZT103 (1) | Orion (2) |  ZE (2) |  ZT (2) | ZT10 (2) | ZT101 (2) | ZT102 (2) | ZZ03 (2) | ZT103 (2) |
 |------+-------+-----------+---------+---------+----------+-----------+-----------+----------+-----------+-----------+---------+---------+----------+-----------+-----------+----------+-----------|
@@ -489,12 +489,12 @@ Cubes(1): i=30, NPhi=400, Nvel=50
 (2) :: logPhi(H)=12.3
 
 
-*** Remeasuring the fluxes
-    :PROPERTIES:
-    :EXPORT_FILE_NAME: remeasure-fluxes
-    :END:
+** Remeasuring the fluxes
+   :PROPERTIES:
+   :EXPORT_FILE_NAME: remeasure-fluxes
+   :END:
 
-**** Table of lines and corresponding FITS files that Yannis sent me.
+*** Table of lines and corresponding FITS files that Yannis sent me.
 
 #+NAME: yiannis-brightness-maps
 | Ion       |  wav |   Alam | Alamfit | fitsfile             |      y |
@@ -535,7 +535,7 @@ Cubes(1): i=30, NPhi=400, Nvel=50
     + that is the best compromise between fitting the blue and red ends
     + really it should get completely flat on the blue side
 
-**** Extracting bg-subtracted fluxes from the proplyd cusp
+*** Extracting bg-subtracted fluxes from the proplyd cusp
      :PROPERTIES:
      :exports:  both
      :END: 
@@ -693,7 +693,7 @@ So, in the results table the last 3 columns are the most interesting:
 
 
 
-**** Will's table of the Yiannis measurements
+*** Will's table of the Yiannis measurements
 #+name: yiannis-flux-table
 | Ion   |  wav |   S(p) | dS(p) |  S(b) | dS(b) | willmaps |  SS(p) | SS(b) |
 |-------+------+--------+-------+-------+-------+----------+--------+-------|
@@ -730,7 +730,7 @@ So, in the results table the last 3 columns are the most interesting:
 + Additional column SS(p) is the "real" flux (multiplied by Hb)
 
 
-**** Comparing Will's and Yiannis' fluxes
+*** Comparing Will's and Yiannis' fluxes
 
 We read in the two tables above, find all lines that are in both tables, 
 
@@ -885,7 +885,7 @@ That was of the proplyd fluxes.  Now we do the same for the background fluxes.
 
 
 
-***** QUOTE Original flux.txt from Yiannis
+**** QUOTE Original flux.txt from Yiannis
 \foii\ \lam3726	           &89.0 $\pm$ 17.9	      &73.3  $\pm$ 8.0			\\			
 \fneiii\ $\lambda$3967     &2.54 $\pm$ 0.30           &5.21  $\pm$ 0.27                 \\
 \hi\ \lam3970		   &13.3 $\pm$ 0.38 	      &15.8  $\pm$ 0.67 			\\
@@ -914,7 +914,7 @@ That was of the proplyd fluxes.  Now we do the same for the background fluxes.
 
 
 
-*** Taking the 3x3 aperture as Yiannis
+** Taking the 3x3 aperture as Yiannis
 
 Observations :: 1 pixel = 0.3 x 0.3 arcsec
 
@@ -997,7 +997,7 @@ L: Tsamis HST101, logPhi(H)=12.3
 M: Tsamis HST102, logPhi(H)=12.3
 N: ZZ03, logPhi(H)=12.3
 
-*** Moving the center of the 3x3 aperture (Phi(H)=12.1)
+** Moving the center of the 3x3 aperture (Phi(H)=12.1)
 
 | Ion  | Align | Lambda | ID  |  Cusp |  CIns |     BG | BGIns |  ZE_tot |   ZE_1.0 |    ZE_1.5 |    ZE_2.0 |
 |------+-------+--------+-----+-------+-------+--------+-------+---------+----------+-----------+-----------|
@@ -1050,10 +1050,14 @@ N: ZZ03, logPhi(H)=12.3
 Es evidente que el mover de posicion de la apertura es "determinante" para el cociente de lineas que tenemos. En el ultimo caso, cuando la apertura esta centrada en R=2.0, a diferencia de los otros dos centros, subestimamos el cociente 6300/Hbeta respecto al observado.
 
 
-** The nebular environment of HST10
+* The nebular environment of HST10
 
 + Use images such as
   + [[file:~/Work/BobKPNO/TereFigs/DOHha-sigma.png]]
   + [[file:~/Work/BobKPNO/TereFigs/DOHha-mean.png]]
 + Use the HST images to identify the two filaments that cross next to
   the proplyds
+
+** Comparison of the spectrum between proplyds
+
+
