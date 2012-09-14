@@ -1067,6 +1067,34 @@ Es evidente que el mover de posicion de la apertura es "determinante" para el co
   + [ ] select the lines we want
 
 
+*** Discussion of what determines the spectrum
+
+The emissivity spectrum of a given point is determined by four local quantities (are there more?):
+
+1. Ionization parameter
+2. Electron density
+3. Temperature
+4. Composition
+
+For a compound ionization-bounded object, 
+such as a proplyd, 
+the local ionization parameter and density show variations of several orders of magnitude within the object,
+with significant variations (of order 20\%) in the temperature also. 
+(We might hope that the composition stays constant.)
+The dynamic photoevaporation models imply that the variations in density and ionization parameter are strongly coupled,
+and the thermal balance equations produce a coupling to the temperature as well. 
+An illustration of this for a particular model is given in Figure~10 of Mesa Delgado et al. (2012),
+but the basic structure should be similar for all proplyds. 
+The highest electron densities and temperatures are reached at intermediate ionization parameters 
+in a zone where H is still predominantly ionized, but very close to the ionization front. 
+This zone is traced most effectively by lines from singly ionized metal ions, such as [N II],
+whereas both higher ionization lines, such as [O III], 
+and lower ionization lines, such as [O I], 
+will come from zones with different densities and temperatures. 
+
+
+
+
 *** Baldwin fluxes (Baldwin et al 2000)
 
 **** Complete reformatted table
