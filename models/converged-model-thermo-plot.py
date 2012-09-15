@@ -104,7 +104,7 @@ def plot_vars(modelid):
     plt.grid(True)
     plt.xscale('symlog')
     plt.axis([-0.3*r0/deltascale, Rmax*r0/deltascale, 0.0, 2.8])
-    plt.legend(loc="upper left")
+    plt.legend(loc="upper left", prop={'size':10})
     plt.savefig("thermoplot-%s.png" % (modelid))
 
 if __name__ == '__main__':
