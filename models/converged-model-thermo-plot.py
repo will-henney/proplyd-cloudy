@@ -2,7 +2,9 @@ import numpy, sys, os
 sys.path.append("/Users/will/Work/Nahiely/proplyd-cloudy/src")
 import claudia
 import matplotlib.pyplot as plt
-  
+import matplotlib 
+
+matplotlib.rcParams['lines.linewidth'] = 3
 
 
 # Parameters for ionization transition, specified in .in files
@@ -98,6 +100,9 @@ def plot_vars(modelid):
     plt.plot(delta, nplus, 'g--', label='N+/N')
     plt.plot(delta, splus, 'g-.', label='S+/S')
 
+    for l in plt.gca().lines:
+        l.set_alpha(.7)
+
     plt.xlabel('[r - r(x=0.5)] / %.0e cm' % (deltascale))
     plt.ylabel('')
     plt.title('Proplyd ionization front structure')
@@ -105,7 +110,7 @@ def plot_vars(modelid):
     plt.xscale('symlog')
     plt.axis([-0.3*r0/deltascale, Rmax*r0/deltascale, 0.0, 2.8])
     plt.legend(loc="upper left", prop={'size':10})
-    plt.savefig("thermoplot-%s.png" % (modelid))
+    plt.savefig("thermoplot-%s.png" % (modelid), dpi=args.dpi)
 
 if __name__ == '__main__':
     import warnings, argparse
@@ -125,6 +130,8 @@ if __name__ == '__main__':
                         help='I-front radius')
     parser.add_argument("--scale", type=float, default=1.e11,
                         help='Length scale for plot (should be roughly r0/1.e4)')
+    parser.add_argument("--dpi", type=int, default=300,
+                        help='Resolution of PNG file (values >= 600 give multi-MB files)')
     args = parser.parse_args()
     
 

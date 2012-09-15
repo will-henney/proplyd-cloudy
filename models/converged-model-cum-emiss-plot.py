@@ -152,9 +152,15 @@ def plot_vars(modelid):
         formatted_velocities = ["V(%.2i)=%5.2f" % (cent, vel) for cent, vel in zip(centiles, velocities)]
         print "           :", "  100 F/Hb = %.4f," % (100*emsum[emid]/emsum['H__1__4861A']), ", ".join(formatted_velocities)
 
-    
-    for emid in linelist:
-        plt.plot(delta, emlines[emid], label=emid)
+
+    linewidths = [1, 2, 3]      # cycle through 3 different widths
+    linestyles = ["-", "-."] # cycle through 2 linestyles
+    linecolors = ["b", "g", "r", "c", "m", "y", "k"] # cycle through 7 colors
+    for i, emid in enumerate(linelist):
+        lw = linewidths[i//14 % len(linewidths)]
+        ls = linestyles[i//7 % len(linestyles)]
+        lc = linecolors[i % len(linecolors)]
+        plt.plot(delta, emlines[emid], c=lc, linewidth=lw, linestyle=ls, label=emid, alpha=0.6)
 
     plt.xlabel('[r - r(x=0.5)] / %.0e cm' % (deltascale))
     plt.ylabel('')
@@ -163,7 +169,7 @@ def plot_vars(modelid):
     plt.xscale('symlog')
     plt.axis([-0.3*r0/deltascale, Rmax*r0/deltascale, 0.0, 1.1])
     plt.legend(loc="lower left", ncol=2, prop={'size':6} )
-    plt.savefig("emissplot-%s.png" % (modelid))
+    plt.savefig("emissplot-%s.png" % (modelid), dpi=args.dpi)
 
 if __name__ == '__main__':
     import warnings, argparse
@@ -183,6 +189,8 @@ if __name__ == '__main__':
                         help='I-front radius')
     parser.add_argument("--scale", type=float, default=1.e11,
                         help='Length scale for plot (should be roughly r0/1.e4)')
+    parser.add_argument("--dpi", type=int, default=300,
+                        help='Resolution of PNG file (values >= 600 give multi-MB files)')
     args = parser.parse_args()
     
 
