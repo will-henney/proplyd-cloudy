@@ -1052,6 +1052,40 @@ P: ZZ03, log Phi(H)= (is the model that match the Mesa-Delgado (2012) 177-341 da
 
 Es evidente que el mover de posicion de la apertura es "determinante" para el cociente de lineas que tenemos. En el ultimo caso, cuando la apertura esta centrada en R=2.0, a diferencia de los otros dos centros, subestimamos el cociente 6300/Hbeta respecto al observado.
 
+** Checking the convergence of Nahiely's models
+
+#+BEGIN_SRC sh :dir ~/Dropbox/Nahiely-Will/HST10/WM039000-phi12.10-r15.57-ZT103
+for th in $(ls -d th*); do
+   ls $th/*.ovr
+done
+#+END_SRC
+
+#+RESULTS:
+| th00/it11n2.974e+02x02.52.ovr |
+| th10/it17n2.870e+02x03.58.ovr |
+| th20/it11n2.891e+02x02.61.ovr |
+| th30/it11n2.787e+02x02.22.ovr |
+| th40/it17n2.543e+02x03.35.ovr |
+| th50/it09n2.444e+02x02.10.ovr |
+| th60/it20n2.094e+02x02.90.ovr |
+| th70/it09n1.885e+02x01.73.ovr |
+| th80/it17n1.382e+02x02.11.ovr |
+| th90/it17n7.717e+01x01.70.ovr |
+
+
+| th | it |         n |   x0 |   mu |
+|----+----+-----------+------+------|
+| 00 | 11 | 2.974e+02 | 2.52 |    1 |
+| 10 | 17 | 2.870e+02 | 3.58 | 0.98 |
+| 20 | 11 | 2.891e+02 | 2.61 | 0.94 |
+| 30 | 11 | 2.787e+02 | 2.22 | 0.87 |
+| 40 | 17 | 2.543e+02 | 3.35 | 0.77 |
+| 50 | 09 | 2.444e+02 | 2.10 | 0.64 |
+| 60 | 20 | 2.094e+02 | 2.90 | 0.50 |
+| 70 | 09 | 1.885e+02 | 1.73 | 0.34 |
+| 80 | 17 | 1.382e+02 | 2.11 | 0.17 |
+| 90 | 17 | 7.717e+01 | 1.70 |    0 |
+   #+TBLFM: $5=cos($1) ; f2
 
 * The nebular environment of HST10
 
