@@ -150,7 +150,7 @@ def plot_vars(modelid):
         print "%s:" % (emid), "Flux = %.2e," % (emsum[emid]), ", ".join(formatted_radii)
         velocities = [v[emlines[emid] > 0.01*cent].max() for cent in centiles]
         formatted_velocities = ["V(%.2i)=%5.2f" % (cent, vel) for cent, vel in zip(centiles, velocities)]
-        print "           :", "  F/Ha = %.4f," % (emsum[emid]/emsum['H__1__6563A']), ", ".join(formatted_velocities)
+        print "           :", "  100 F/Hb = %.4f," % (100*emsum[emid]/emsum['H__1__4861A']), ", ".join(formatted_velocities)
 
     
     for emid in linelist:
@@ -162,7 +162,7 @@ def plot_vars(modelid):
     plt.grid(True)
     plt.xscale('symlog')
     plt.axis([-0.3*r0/deltascale, Rmax*r0/deltascale, 0.0, 1.1])
-    plt.legend(loc="lower left")
+    plt.legend(loc="lower left", ncol=2, prop={'size':6} )
     plt.savefig("emissplot-%s.png" % (modelid))
 
 if __name__ == '__main__':
