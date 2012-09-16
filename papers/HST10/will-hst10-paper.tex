@@ -1,0 +1,50 @@
+\documentclass[useAMS,usenatbib]{mn2e}
+\pdfoutput=1
+\usepackage[varg]{txfonts}
+\usepackage{astrojournals}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{fixltx2e}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\hypersetup{colorlinks=True, linkcolor=blue!50!black, citecolor=black,
+  urlcolor=blue!50!black}
+
+\usepackage{color}
+
+\graphicspath{ {/Users/will/Dropbox/Nahiely-Will/HST10/}, } 
+
+\newcommand\texttheta{\ensuremath{\theta}}
+\newcommand\thC{\texttheta\textsuperscript{1}\,Ori~C}
+\newcommand\elec{\ensuremath{_{\mathrm{e}}}}
+\newcommand\Ion[2]{\ensuremath{\mathrm{#1\,\scriptstyle #2}}}
+\newcounter{ionstage}
+\newcommand{\ion}[2]{% needs to be renewcommand with aastex
+  \setcounter{ionstage}{#2}%
+  \Ion{#1}{\Roman{ionstage}}}
+\newcommand\nii{\ion{N}{2}}
+\newcommand\sii{\ion{S}{2}}
+\newcommand\oiii{\ion{O}{3}}
+
+\begin{document}
+
+\section{Introduction}
+
+PART WRITTEN BY YIANNIS
+
+The location on the sky of HST~10 (182-413) is halfway between the inner Trapezium cluster and the Bright Bar region, at an angular separation of roughly \(1'\) to the south-south-east from \thC{} (O7V), the principal illuminating star of the nebula.  Kinematic studies of the emission from the proplyd \cite{1999AJ....118.2350H} suggest that it is situated in the foreground of the nebula, with a true separation from \thC{} of 0.2--0.3~pc.  The proplyd is larger and fainter than the proplyds found close to the Trapezium, with a less elongated and less symmetric tail.  This is in line with the general trends seen in the proplyds \cite{1998AJ....116..293B, 1998AJ....115..263O}, which can be understood in terms of a model whereby protostellar disks around the young low-mass stars in the nebula are evaporated by the ultraviolet radiation from the high-mass stars \cite{Johnstone:1998, Henney:1998}.  
+
+\begin{figure}
+  \setkeys{Gin}{width=\linewidth}
+  \centering
+  \includegraphics{HST10-NHO-mosaic-wide} \\
+  \includegraphics{HST10-OSN-mosaic-zoom} 
+  \caption{Upper panel: Large-scale view of HST~10 in the context of the Orion Nebula.  Lower panel: Zoomed view of HST~10 and its immediate environs.  }
+  \label{fig:wfpc2-images}
+\end{figure}
+\bibliographystyle{mn2e}
+\bibliography{BibdeskLibrary}
+
+
+\end{document}
