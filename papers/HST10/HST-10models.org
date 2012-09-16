@@ -33,6 +33,28 @@ S = 6.9 +- 0.04
 Fe = 5.78
 
 
+** QUOTE Final empirical abundances from Yiannis
+
+and these are the abundances in the same 9 spaxels based on the background subtracted spectra:: key \np = N+, \op = O+, \opp = O++, \nepp = Ne++, arpp = Ar++, clpp = Cl++, sulp = S+, sulpp = S++
+
+\np/\hp                &7.37 $\pm$ 0.03         
+\op/\hp                &8.45 $\pm$ 0.08
+\opp/\hp               &7.98 $\pm$ 0.08
+\nepp/\hp              &7.16 $\pm$ 0.05
+\arpp/\hp              &6.18 $\pm$ 0.05 
+\clpp/\hp              &4.79 $\pm$ 0.06 
+\sulp/\hp\             &5.90 $\pm$ 0.06
+\sulpp/\hp\            &6.68 $\pm$ 0.11
+
+N/H                     &7.48 $\pm$ 0.05        
+O/H                     &8.63 $\pm$ 0.08        
+Ne/H                    &7.75 $\pm$ 0.04        
+S/H                     &6.75 $\pm$ 0.09
+
+for Neon and Nitrogen the ICF prescriptions followed in LV2 (paper I) was adopted. S = S^+ plus S^2+, and O = O^+ plus O^2+
+
+thanks,
+
 * Observations
 
 ** DONE [8/8] Calculate the density from the H alpha surface brightness
@@ -1094,7 +1116,7 @@ done
 #+BEGIN_SRC sh :results output
 python ../../emission/emiss-NT-plane.py \
     --modeldir ~/Dropbox/Nahiely-Will/HST10/WM039000-phi12.10-r15.57-ZT103 \
-    --r0 3.7e15 --lineset SNO --rebin linear-1001 --N 100
+    --r0 3.7e15 --lineset ONO --rebin linear-1001 --N 100
 #+END_SRC
 
 #+RESULTS:
@@ -1105,7 +1127,9 @@ python ../../emission/emiss-NT-plane.py \
 : 
 
 
-[[file:NT-plane-SNO.pdf][file:~/Work/Nahiely/proplyd-cloudy/papers/HST10/NT-plane-SNO.pdf]]
+[[file:NT-plane-SNO.pdf][NT-plane-SNO.pdf]]
+[[file:NT-plane-ONO.pdf][NT-plane-ONO.pdf]]
+[[file:NT-plane-SONe.pdf][NT-plane-SONe.pdf]]
 
 
 
@@ -1149,7 +1173,12 @@ optional arguments:
 + Use the HST images to identify the two filaments that cross next to
   the proplyds
 
-** Comparison of the spectrum between proplyds
+
+** Description for paper
+This is in a [[file:will-hst10-paper.tex][separate tex file]]. 
+
+
+* Comparison of the spectrum between proplyds
 
 + [ ] We can compare HST1 and HST10,
 + [ ] and also possibly LV2.
@@ -1158,7 +1187,7 @@ optional arguments:
   + [ ] select the lines we want
 
 
-*** Discussion of what determines the spectrum
+** Discussion of what determines the spectrum			      :paper:
 
 The emissivity spectrum of a given point is determined by four local quantities (are there more?):
 
@@ -1186,9 +1215,9 @@ will come from zones with different densities and temperatures.
 
 
 
-*** Baldwin fluxes (Baldwin et al 2000)
+** Baldwin fluxes (Baldwin et al 2000)
 
-**** Just the lines that we want (but still in Baldwin's original format)
+*** Just the lines that we want (but still in Baldwin's original format)
 
 + Mostly we go for lines with Icorr/6678 > 0.1
   + Although I was more picky in the blue
@@ -1272,7 +1301,7 @@ will come from zones with different densities and temperatures.
 
 
 
-**** Complete reformatted table
+*** Complete reformatted table
 
 #+name: baldwin-etal-2000-table-1
 | lambda(obs) | lambda_0 | Ion      | ? | delta V | FWHM |  I/6678 | Icorr/6678 |      S/N | Notes                |
@@ -1788,7 +1817,7 @@ will come from zones with different densities and temperatures.
 |    7468.689 | 7468.312 | N I      |   |    15.1 |   13 |  0.0120 |     0.0106 |    105.0 |                      |
 
 
-**** Raw table from http://iopscience.iop.org/0067-0049/129/1/229/fulltext/ :noexport:
+*** Raw table from http://iopscience.iop.org/0067-0049/129/1/229/fulltext/ :noexport:
 
 #+BEGIN_EXAMPLE
 3498.660	3498.64	He I	\ldots	1.7	23	0.0233	0.0417	7.7	
@@ -2302,7 +2331,7 @@ will come from zones with different densities and temperatures.
 #+END_EXAMPLE 
 
 
-*** HST 10 fluxes
+** HST 10 fluxes
 
 #+name: hst10-bg-subtracted-wrt-hbeta
 | Ion       |  wav |     Sb' |   dSb' |     Sp' |   dSp' |      Sb |    dSb |      Sp |    dSp |
@@ -2337,7 +2366,7 @@ will come from zones with different densities and temperatures.
 + Columns Sb' etc are the measured fluxes.  
 + Columns Sb etc are the fluxes relative to H beta = 100
 
-*** HST 1 fluxes
+** HST 1 fluxes
 These come from the Adal paper. 
 
 #+name: hst1-bg-subtracted
@@ -2379,7 +2408,7 @@ These come from the Adal paper.
 
 
 
-**** PDF table from paper					   :noexport:
+*** PDF table from paper					   :noexport:
 
 | 3728.00 | [Oii]   | 1F  |               | 50.6 +/- 3.7  | 85.1 +/- 6.0  | 41.2 +/- 4.5  | 71.1 +/- 7.3  | 84.7 +/- 5.9  | 25.4 +/- 3.2  | 69.8 +/- 5.0  | 83.8 +/- 6.0  |
 | 3868.75 | [Neiii] | 1F  | 10.8 +/- 1.4  | 18.6 +/- 1.3  | 21.6 +/- 1.4  | 25.5 +/- 2.7  | 21.6 +/- 2.0  | 20.7 +/- 1.4  | 23.7 +/- 2.8  | 22.2 +/- 1.5  | 20.7 +/- 1.4  |
@@ -2416,4 +2445,4 @@ These come from the Adal paper.
 | 7135.78 | [Ariii] | 1F  | 17.0 +/- 1.5  | 14.1 +/- 0.8  | 13.3 +/- 0.72 | 17.3 +/- 1.4  | 14.7 +/- 0.8  | 13.7 +/- 0.7  | 18.8 +/- 1.6  | 14.8 +/- 0.8  | 13.8 +/- 0.8  |
 
 
-*** LV 2 fluxes
+** LV 2 fluxes
