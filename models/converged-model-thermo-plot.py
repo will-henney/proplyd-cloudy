@@ -59,6 +59,7 @@ def plot_vars(modelid):
     oplus = m.ion_o.O__2
     nplus = m.ion_n.N__2
     splus = m.ion_s.S__2
+    heplus = 10**m.ovr.HeII
 
     # Calculate the optical depths
 
@@ -98,7 +99,8 @@ def plot_vars(modelid):
 
     plt.plot(delta, oplus, 'g-', label='O+/O')
     plt.plot(delta, nplus, 'g--', label='N+/N')
-    plt.plot(delta, splus, 'g-.', label='S+/S')
+    plt.plot(delta, heplus, 'y-', label='He+/He')
+    plt.plot(delta, splus, 'y--', label='S+/S')
 
     for l in plt.gca().lines:
         l.set_alpha(.7)
