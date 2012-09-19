@@ -2500,3 +2500,64 @@ These come from the Adal paper.
 
 
 ** LV 2 fluxes
+
+* The N1 and CII lines
+
++ This two lines are tines that have a contribution from recombination but from a "pump" by fluorescent. From a 1D Cloudy model we can see how Cloudy take this into account.
+  + We can see the complete model in proplyd-cloudy/models/proplyd-auto-models/Flourescence 
+
+** The N1 5199A line in Cloudy
+
++ This line is too complicate because we have two lines (5198 + 5200) with recombination a flouresence each one.
+ + Each line is described as follow in cloudy prt_lines_lv1_li_ne.cpp
+
+| Label         | TOTr  5199A               | chem  5199A        | H CT  5199A     | pump  5199A | N  1  5200A                 | N  1  5198A                 | TOTL  5199A           |
+| Description   | 5198 + 5200 recombination | photo dissociation | charge transfer | pumping     | all processes stat weight 6 | all processes stat weight 4 | N 1 5198A + N 1 5200A |
+| Value / Hbeta | 1.5958e-06                | 0.0000e+00         | 1.2493e-07      | 4.2766e-06  | 2.3592e-04                  | 4.2238e-04                  | 6.5830e-04            |
+
+It seems that Cloudy is not calculating the photo dissociation.
+
+*** QUOTE Cloudy description
+
+	PntForLine(5199.,"N  1",&ipnt);
+	/**** Terry's addition **************/
+	lindst( nitro.rec5199, 5199, "TOTr", ipnt, 'r', true,
+		" estimate of contribution to [N I] 5199 by recombination" );
+
+	/* this is upper limit to production of 5200 by chemistry - assume every photo dissociation
+	 * populates upper level 
+	 * co.nitro_dissoc_rate is the total N photo dissociation rate, cm-3 s-1 */
+	// count as recombination since removes energy but is not coolng
+	chem = co.nitro_dissoc_rate * 3.82e-12 * nitro.quench_5200;
+	lindst( chem, 5199, "chem", ipnt, 'r', true,
+		" upper limit to [N I] 5199 produced by chemistry" );
+
+	/* this is upper limit to production of 5200 by charge transfer -  
+	 * atmdat.HCharExcRecTo_N0_2D is the rate coefficient (cm3 s-1) for N+(3P) + H0 -> H+ + N0(2D) */
+	ctRate = atmdat.HCharExcRecTo_N0_2D*dense.xIonDense[ipHYDROGEN][0]*dense.xIonDense[ipNITROGEN][1] * 
+		3.82e-12 * nitro.quench_5200;
+	lindst( ctRate, 5199, "H CT", ipnt, 'r', true,
+		" upper limit to [N I] 5199 produced by charge transfer" );
+
+	// estimate of pumping contribution to 5200 doublet
+	lindst( nitro.pump5199, 5199, "pump", ipnt, 'r', true,
+		" estimate of contribution to [N I] 5199 by FUV pumping" );
+
+	/*  >>chng 06 jul 08, add chem process to total assuming in proportion to stat weight  */
+	lindst( nitro.xN5200 + (ctRate+chem)*0.6, 5200, "N  1", ipnt, 'c', true,
+		" [N I] 5200 - all processes - stat weight is 6 - total in term is 10" );
+
+	lindst( nitro.xN5198 + (ctRate+chem)*0.4, 5198, "N  1", ipnt, 'c', true,
+		" [N I] 5198 - all processes - stat weight is 4 - total in term is 10" );
+
+	// doublet together
+	lindst( nitro.xN5200+nitro.xN5198 + (ctRate+chem), 5199, "TOTL", ipnt, 'i', false,
+		" [N I] 5200 + 5198 together" );
+
+** The C 2 6580A line in Cloudy
+
+| Label         | TOTL  6580A | C 2r  6580A   | C 2p  6580A | C  2  6580A |
+| Description   | Total       | recombination | pumping     | not know    |
+| Value / Hbeta | 1.3666e-04  | 1.3666e-04    | 0.0000e+00  | 0.0000e+00  |
+
+It seems that Cloudy are not calculating the fluorescence of this line.

@@ -1,0 +1,160 @@
+#zone	depth	dr	dr 2 go	reason 
+0	1.00000e-30	3.444e+13	0.000e+00	radius_first keys from drOpacity
+0	1.00000e-30	3.444e+13	0.000e+00	radius_first keys from drOpacity
+0	1.00000e-30	3.446e+13	0.000e+00	radius_first keys from drOpacity
+1	1.00000e-30	3.446e+13	2.972e+16	capped to old DR in first zone
+2	3.44578e+13	1.378e+14	2.968e+16	DRMAX
+3	1.72289e+14	5.513e+14	2.954e+16	DRMAX
+4	7.23613e+14	1.215e+15	2.899e+16	change in heating; current=3.151e-19 delta=0.068
+5	1.93856e+15	1.235e+15	2.778e+16	change in heating; current=3.697e-19 delta=0.148
+6	3.17351e+15	1.194e+15	2.654e+16	change in heating; current=4.376e-19 delta=0.155
+7	4.36704e+15	1.146e+15	2.535e+16	change in heating; current=5.186e-19 delta=0.156
+8	5.51317e+15	1.100e+15	2.420e+16	change in heating; current=6.147e-19 delta=0.156
+9	6.61296e+15	1.055e+15	2.310e+16	change in heating; current=7.286e-19 delta=0.156
+10	7.66803e+15	1.012e+15	2.205e+16	change in heating; current=8.636e-19 delta=0.156
+11	8.68005e+15	9.706e+14	2.104e+16	change in heating; current=1.024e-18 delta=0.156
+12	9.65069e+15	9.309e+14	2.007e+16	change in heating; current=1.214e-18 delta=0.156
+13	1.05816e+16	8.927e+14	1.914e+16	change in heating; current=1.439e-18 delta=0.156
+14	1.14743e+16	8.561e+14	1.824e+16	change in heating; current=1.705e-18 delta=0.156
+15	1.23304e+16	8.210e+14	1.739e+16	change in heating; current=2.021e-18 delta=0.156
+16	1.31514e+16	7.873e+14	1.657e+16	change in heating; current=2.396e-18 delta=0.156
+17	1.39387e+16	7.549e+14	1.578e+16	change in heating; current=2.841e-18 delta=0.156
+18	1.46936e+16	7.237e+14	1.502e+16	change in heating; current=3.368e-18 delta=0.156
+19	1.54172e+16	6.942e+14	1.430e+16	change in heating; current=3.992e-18 delta=0.156
+20	1.61114e+16	6.657e+14	1.361e+16	change in heating; current=4.732e-18 delta=0.156
+21	1.67771e+16	6.383e+14	1.294e+16	change in heating; current=5.609e-18 delta=0.156
+22	1.74154e+16	6.123e+14	1.230e+16	change in heating; current=6.649e-18 delta=0.156
+23	1.80277e+16	5.873e+14	1.169e+16	change in heating; current=7.882e-18 delta=0.156
+24	1.86151e+16	5.634e+14	1.110e+16	change in heating; current=9.343e-18 delta=0.156
+25	1.91784e+16	5.404e+14	1.054e+16	change in heating; current=1.107e-17 delta=0.156
+26	1.97189e+16	5.184e+14	9.998e+15	change in heating; current=1.313e-17 delta=0.156
+27	2.02373e+16	4.974e+14	9.480e+15	change in heating; current=1.556e-17 delta=0.156
+28	2.07347e+16	4.772e+14	8.982e+15	change in heating; current=1.844e-17 delta=0.156
+29	2.12119e+16	4.579e+14	8.505e+15	change in heating; current=2.186e-17 delta=0.156
+30	2.16698e+16	4.395e+14	8.047e+15	change in heating; current=2.591e-17 delta=0.156
+31	2.21093e+16	4.218e+14	7.608e+15	change in heating; current=3.071e-17 delta=0.156
+32	2.25310e+16	4.048e+14	7.186e+15	change in heating; current=3.640e-17 delta=0.156
+33	2.29358e+16	3.885e+14	6.781e+15	change in heating; current=4.314e-17 delta=0.156
+34	2.33244e+16	3.730e+14	6.392e+15	change in heating; current=5.113e-17 delta=0.156
+35	2.36973e+16	3.580e+14	6.019e+15	change in heating; current=6.060e-17 delta=0.156
+36	2.40553e+16	3.437e+14	5.661e+15	change in heating; current=7.182e-17 delta=0.156
+37	2.43990e+16	3.299e+14	5.318e+15	change in heating; current=8.512e-17 delta=0.156
+38	2.47290e+16	3.167e+14	4.988e+15	change in heating; current=1.009e-16 delta=0.156
+39	2.50457e+16	3.041e+14	4.671e+15	change in heating; current=1.196e-16 delta=0.156
+40	2.53498e+16	2.919e+14	4.367e+15	change in heating; current=1.417e-16 delta=0.156
+41	2.56416e+16	2.801e+14	4.075e+15	change in heating; current=1.680e-16 delta=0.156
+42	2.59218e+16	2.688e+14	3.795e+15	change in heating; current=1.991e-16 delta=0.156
+43	2.61906e+16	2.580e+14	3.526e+15	change in heating; current=2.360e-16 delta=0.156
+44	2.64486e+16	2.474e+14	3.268e+15	change in heating; current=2.797e-16 delta=0.156
+45	2.66960e+16	2.372e+14	3.021e+15	change in heating; current=3.316e-16 delta=0.156
+46	2.69333e+16	2.273e+14	2.784e+15	change in heating; current=3.931e-16 delta=0.157
+47	2.71606e+16	2.177e+14	2.556e+15	change in heating; current=4.661e-16 delta=0.157
+48	2.73783e+16	2.081e+14	2.338e+15	change in ionization, element Oxygen     ion (C scale) 0 rel change 2.09e-01 ion frac 6.62e-04
+49	2.75865e+16	1.991e+14	2.130e+15	change in heating; current=6.556e-16 delta=0.157
+50	2.77856e+16	1.901e+14	1.931e+15	change in heating; current=7.778e-16 delta=0.157
+51	2.79757e+16	1.811e+14	1.741e+15	change in heating; current=9.231e-16 delta=0.157
+52	2.81568e+16	1.697e+14	1.560e+15	change in ionization, element Nickel     ion (C scale) 1 rel change 2.13e-01 ion frac 3.49e-02
+53	2.83265e+16	1.568e+14	1.390e+15	change in ionization, element Nickel     ion (C scale) 1 rel change 2.16e-01 ion frac 4.24e-02
+54	2.84833e+16	1.189e+14	1.233e+15	change in ionization, element Nitrogen   ion (C scale) 0 rel change 2.64e-01 ion frac 7.87e-04
+55	2.86023e+16	1.101e+14	1.115e+15	change in ionization, element Nitrogen   ion (C scale) 0 rel change 2.16e-01 ion frac 9.57e-04
+56	2.87123e+16	1.071e+14	1.004e+15	change in ionization, element Nitrogen   ion (C scale) 0 rel change 2.06e-01 ion frac 1.15e-03
+57	2.88194e+16	1.007e+14	8.974e+14	change in ionization, element Nitrogen   ion (C scale) 0 rel change 2.13e-01 ion frac 1.40e-03
+58	2.89202e+16	9.351e+13	7.966e+14	change in ionization, element Nitrogen   ion (C scale) 0 rel change 2.15e-01 ion frac 1.70e-03
+59	2.90137e+16	8.698e+13	7.031e+14	change in ionization, element Nitrogen   ion (C scale) 0 rel change 2.15e-01 ion frac 2.07e-03
+60	2.91007e+16	8.091e+13	6.161e+14	change in ionization, element Nitrogen   ion (C scale) 0 rel change 2.15e-01 ion frac 2.51e-03
+61	2.91816e+16	7.495e+13	5.352e+14	change in ionization, element Nitrogen   ion (C scale) 0 rel change 2.16e-01 ion frac 3.05e-03
+62	2.92565e+16	6.913e+13	4.603e+14	change in ionization, element Nitrogen   ion (C scale) 0 rel change 2.17e-01 ion frac 3.72e-03
+63	2.93257e+16	6.314e+13	3.911e+14	change in ionization, element Nickel     ion (C scale) 1 rel change 2.19e-01 ion frac 2.59e-01
+64	2.93888e+16	5.702e+13	3.280e+14	change in ionization, element Nickel     ion (C scale) 1 rel change 2.21e-01 ion frac 3.17e-01
+65	2.94458e+16	5.140e+13	2.710e+14	change in ionization, element Nitrogen   ion (C scale) 0 rel change 2.22e-01 ion frac 6.75e-03
+66	2.94972e+16	2.919e+13	2.196e+14	change in ionization, element Argon      ion (C scale) 0 rel change 3.52e-01 ion frac 8.59e-04
+67	2.95264e+16	2.105e+13	1.904e+14	change in ionization, element Argon      ion (C scale) 0 rel change 2.77e-01 ion frac 1.10e-03
+68	2.95475e+16	1.950e+13	1.693e+14	change in ionization, element Argon      ion (C scale) 0 rel change 2.16e-01 ion frac 1.33e-03
+69	2.95670e+16	1.871e+13	1.498e+14	change in ionization, element Argon      ion (C scale) 0 rel change 2.08e-01 ion frac 1.61e-03
+70	2.95857e+16	1.453e+13	1.311e+14	special law, HDEN=7.37e+04
+71	2.96002e+16	8.553e+12	1.166e+14	change in ionization, element Argon      ion (C scale) 0 rel change 3.40e-01 ion frac 2.62e-03
+72	2.96088e+16	1.112e+13	1.081e+14	DRMAX
+73	2.96199e+16	1.445e+13	9.693e+13	DRMAX
+74	2.96343e+16	1.063e+13	8.248e+13	change in ionization, element Argon      ion (C scale) 0 rel change 2.72e-01 ion frac 4.61e-03
+75	2.96450e+16	6.911e+12	7.185e+13	change in ionization, element Argon      ion (C scale) 0 rel change 3.08e-01 ion frac 6.03e-03
+76	2.96519e+16	5.463e+12	6.494e+13	change in ionization, element Argon      ion (C scale) 0 rel change 2.53e-01 ion frac 7.55e-03
+77	2.96573e+16	5.218e+12	5.947e+13	change in ionization, element Argon      ion (C scale) 0 rel change 2.09e-01 ion frac 9.13e-03
+78	2.96626e+16	4.941e+12	5.425e+13	change in ionization, element Argon      ion (C scale) 0 rel change 2.11e-01 ion frac 1.11e-02
+79	2.96675e+16	4.332e+12	4.931e+13	change in ionization, element Argon      ion (C scale) 0 rel change 2.28e-01 ion frac 1.36e-02
+80	2.96718e+16	3.229e+12	4.498e+13	change in ionization, element Chromium   ion (C scale) 0 rel change 2.68e-01 ion frac 7.63e-04
+81	2.96751e+16	2.668e+12	4.175e+13	change in ionization, element Chromium   ion (C scale) 0 rel change 2.42e-01 ion frac 9.48e-04
+82	2.96777e+16	2.621e+12	3.908e+13	change in ionization, element Chromium   ion (C scale) 0 rel change 2.04e-01 ion frac 1.14e-03
+83	2.96803e+16	3.408e+12	3.646e+13	DRMAX
+84	2.96838e+16	3.089e+12	3.306e+13	change in ionization, element Argon      ion (C scale) 0 rel change 2.21e-01 ion frac 3.36e-02
+85	2.96868e+16	2.266e+12	2.997e+13	change in elec den, rel chng: 5.453e-02 cur=7.980e-01 old=8.415e-01
+86	2.96891e+16	1.513e+12	2.770e+13	change in elec den, rel chng: 5.992e-02 cur=7.528e-01 old=7.980e-01
+87	2.96906e+16	1.139e+12	2.619e+13	change in elec den, rel chng: 5.310e-02 cur=7.149e-01 old=7.528e-01
+88	2.96918e+16	1.033e+12	2.505e+13	change in elec den, rel chng: 4.413e-02 cur=6.847e-01 old=7.149e-01
+89	2.96928e+16	9.930e+11	2.402e+13	change in elec den, rel chng: 4.160e-02 cur=6.573e-01 old=6.847e-01
+90	2.96938e+16	9.096e+11	2.302e+13	change in elec den, rel chng: 4.367e-02 cur=6.298e-01 old=6.573e-01
+91	2.96947e+16	8.017e+11	2.211e+13	change in elec den, rel chng: 4.539e-02 cur=6.025e-01 old=6.298e-01
+92	2.96955e+16	7.169e+11	2.131e+13	change in elec den, rel chng: 4.473e-02 cur=5.767e-01 old=6.025e-01
+93	2.96962e+16	6.635e+11	2.059e+13	change in elec den, rel chng: 4.322e-02 cur=5.528e-01 old=5.767e-01
+94	2.96969e+16	6.249e+11	1.993e+13	change in elec den, rel chng: 4.247e-02 cur=5.303e-01 old=5.528e-01
+95	2.96975e+16	5.884e+11	1.931e+13	change in elec den, rel chng: 4.248e-02 cur=5.087e-01 old=5.303e-01
+96	2.96981e+16	5.532e+11	1.872e+13	change in elec den, rel chng: 4.255e-02 cur=4.879e-01 old=5.087e-01
+97	2.96986e+16	3.687e+11	1.816e+13	change in H ionization old=9.200e-01 new=8.510e-01
+98	2.96990e+16	3.135e+11	1.780e+13	change in H ionization old=8.510e-01 new=8.010e-01
+99	2.96993e+16	3.409e+11	1.748e+13	change in H ionization old=8.010e-01 new=7.642e-01
+100	2.96997e+16	3.670e+11	1.714e+13	change in H ionization old=7.642e-01 new=7.287e-01
+101	2.97000e+16	3.617e+11	1.677e+13	change in H ionization old=7.287e-01 new=6.917e-01
+102	2.97004e+16	3.492e+11	1.641e+13	change in H ionization old=6.917e-01 new=6.559e-01
+103	2.97007e+16	3.431e+11	1.606e+13	change in H ionization old=6.559e-01 new=6.225e-01
+104	2.97011e+16	3.418e+11	1.572e+13	change in H ionization old=6.225e-01 new=5.913e-01
+105	2.97014e+16	3.401e+11	1.538e+13	change in H ionization old=5.913e-01 new=5.615e-01
+106	2.97018e+16	3.369e+11	1.504e+13	change in H ionization old=5.615e-01 new=5.332e-01
+107	2.97021e+16	3.334e+11	1.470e+13	change in H ionization old=5.332e-01 new=5.063e-01
+108	2.97024e+16	3.305e+11	1.437e+13	change in H ionization old=5.063e-01 new=4.807e-01
+109	2.97028e+16	3.280e+11	1.404e+13	change in H ionization old=4.807e-01 new=4.565e-01
+110	2.97031e+16	3.255e+11	1.371e+13	change in H ionization old=4.565e-01 new=4.335e-01
+111	2.97034e+16	3.231e+11	1.338e+13	change in H ionization old=4.335e-01 new=4.117e-01
+112	2.97037e+16	3.207e+11	1.306e+13	change in H ionization old=4.117e-01 new=3.909e-01
+113	2.97041e+16	3.185e+11	1.274e+13	change in H ionization old=3.909e-01 new=3.712e-01
+114	2.97044e+16	3.164e+11	1.242e+13	change in H ionization old=3.712e-01 new=3.526e-01
+115	2.97047e+16	3.144e+11	1.211e+13	change in H ionization old=3.526e-01 new=3.348e-01
+116	2.97050e+16	3.125e+11	1.179e+13	change in H ionization old=3.348e-01 new=3.180e-01
+117	2.97053e+16	3.107e+11	1.148e+13	change in H ionization old=3.180e-01 new=3.020e-01
+118	2.97056e+16	3.085e+11	1.117e+13	change in elec den, rel chng: 4.029e-02 cur=2.277e-01 old=2.369e-01
+119	2.97059e+16	3.046e+11	1.086e+13	change in elec den, rel chng: 4.051e-02 cur=2.188e-01 old=2.277e-01
+120	2.97063e+16	2.917e+11	1.056e+13	change in elec den, rel chng: 4.177e-02 cur=2.101e-01 old=2.188e-01
+121	2.97065e+16	2.884e+11	1.026e+13	change in elec den, rel chng: 4.045e-02 cur=2.019e-01 old=2.101e-01
+122	2.97068e+16	2.883e+11	9.975e+12	change in elec den, rel chng: 4.002e-02 cur=1.941e-01 old=2.019e-01
+123	2.97071e+16	2.871e+11	9.687e+12	change in elec den, rel chng: 4.016e-02 cur=1.866e-01 old=1.941e-01
+124	2.97074e+16	2.846e+11	9.400e+12	change in elec den, rel chng: 4.036e-02 cur=1.794e-01 old=1.866e-01
+125	2.97077e+16	2.798e+11	9.115e+12	change in elec den, rel chng: 4.068e-02 cur=1.724e-01 old=1.794e-01
+126	2.97080e+16	2.746e+11	8.835e+12	change in elec den, rel chng: 4.077e-02 cur=1.656e-01 old=1.724e-01
+127	2.97082e+16	2.721e+11	8.561e+12	change in elec den, rel chng: 4.037e-02 cur=1.592e-01 old=1.656e-01
+128	2.97085e+16	2.683e+11	8.289e+12	change in elec den, rel chng: 4.057e-02 cur=1.530e-01 old=1.592e-01
+129	2.97088e+16	2.663e+11	8.020e+12	change in elec den, rel chng: 4.029e-02 cur=1.471e-01 old=1.530e-01
+130	2.97091e+16	2.653e+11	7.754e+12	change in elec den, rel chng: 4.015e-02 cur=1.414e-01 old=1.471e-01
+131	2.97093e+16	2.638e+11	7.489e+12	change in elec den, rel chng: 4.023e-02 cur=1.359e-01 old=1.414e-01
+132	2.97096e+16	2.617e+11	7.225e+12	change in elec den, rel chng: 4.032e-02 cur=1.307e-01 old=1.359e-01
+133	2.97098e+16	2.591e+11	6.963e+12	change in elec den, rel chng: 4.040e-02 cur=1.256e-01 old=1.307e-01
+134	2.97101e+16	2.564e+11	6.704e+12	change in elec den, rel chng: 4.042e-02 cur=1.207e-01 old=1.256e-01
+135	2.97104e+16	2.542e+11	6.448e+12	change in elec den, rel chng: 4.034e-02 cur=1.160e-01 old=1.207e-01
+136	2.97106e+16	2.527e+11	6.194e+12	change in elec den, rel chng: 4.024e-02 cur=1.115e-01 old=1.160e-01
+137	2.97109e+16	2.517e+11	5.941e+12	change in elec den, rel chng: 4.016e-02 cur=1.072e-01 old=1.115e-01
+138	2.97111e+16	2.508e+11	5.689e+12	change in elec den, rel chng: 4.014e-02 cur=1.031e-01 old=1.072e-01
+139	2.97114e+16	2.497e+11	5.438e+12	change in elec den, rel chng: 4.017e-02 cur=9.911e-02 old=1.031e-01
+140	2.97116e+16	2.484e+11	5.189e+12	change in elec den, rel chng: 4.022e-02 cur=9.528e-02 old=9.911e-02
+141	2.97119e+16	2.468e+11	4.940e+12	change in elec den, rel chng: 4.025e-02 cur=9.159e-02 old=9.528e-02
+142	2.97121e+16	2.453e+11	4.694e+12	change in elec den, rel chng: 4.024e-02 cur=8.805e-02 old=9.159e-02
+143	2.97124e+16	2.442e+11	4.448e+12	change in elec den, rel chng: 4.018e-02 cur=8.465e-02 old=8.805e-02
+144	2.97126e+16	2.435e+11	4.204e+12	change in elec den, rel chng: 4.011e-02 cur=8.139e-02 old=8.465e-02
+145	2.97128e+16	2.432e+11	3.960e+12	change in elec den, rel chng: 4.006e-02 cur=7.825e-02 old=8.139e-02
+146	2.97131e+16	2.429e+11	3.717e+12	change in elec den, rel chng: 4.004e-02 cur=7.524e-02 old=7.825e-02
+147	2.97133e+16	2.626e+11	3.474e+12	change in H ionization old=7.826e-02 new=7.464e-02
+148	2.97136e+16	2.489e+11	3.212e+12	change in elec den, rel chng: 4.221e-02 cur=6.968e-02 old=7.262e-02
+149	2.97138e+16	2.361e+11	2.963e+12	change in elec den, rel chng: 4.217e-02 cur=6.686e-02 old=6.968e-02
+150	2.97141e+16	2.255e+11	2.727e+12	change in elec den, rel chng: 4.189e-02 cur=6.417e-02 old=6.686e-02
+151	2.97143e+16	2.474e+11	2.501e+12	change in elec den, rel chng: 3.646e-02 cur=6.191e-02 old=6.417e-02
+152	2.97146e+16	2.349e+11	2.254e+12	change in elec den, rel chng: 4.213e-02 cur=5.941e-02 old=6.191e-02
+153	2.97148e+16	2.548e+11	2.019e+12	change in elec den, rel chng: 3.687e-02 cur=5.730e-02 old=5.941e-02
+154	2.97150e+16	2.450e+11	1.764e+12	change in elec den, rel chng: 4.159e-02 cur=5.501e-02 old=5.730e-02
+155	2.97153e+16	2.299e+11	1.519e+12	change in elec den, rel chng: 4.263e-02 cur=5.276e-02 old=5.501e-02
+156	2.97155e+16	2.523e+11	1.289e+12	change in elec den, rel chng: 3.644e-02 cur=5.091e-02 old=5.276e-02
