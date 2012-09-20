@@ -1,0 +1,48 @@
+=============Line Disambiguation=======================================================
+                  Wavelengths            ||                  Intensities               
+Label    line   match1   match2   match3 ||   asserted     match1     match2     match3
+Ca B 3889.00A 3889.07A 3888.63A -------- ||     0.1050     0.1053     0.1026     0.0000
+
+=============Results of monitors: Cloudy 10.00 Wed Sep 19 18:44:26 2012
+ Errors were found.  Summary follows.
+                   Label line    computed     asserted Rel Err Set err
+ ChkMonitor -      totl  4861A   -11.2460 =   -11.2530  -0.016   0.050 
+ ChkMonitor        H  1  3889A     0.1061 =     0.1070   0.009   0.050 
+ ChkMonitor        Ca B  3889A     0.1053 =     0.1050  -0.003   0.050 
+ ChkMonitor botch>>He 1  5876A     0.1589 =     0.1470  -0.081   0.050 
+ ChkMonitor ---    +Col  5876A     0.1389 =     0.1330  -0.044   0.050 
+ ChkMonitor -----  He 1  3889A     0.0187 =     0.0196   0.048   0.050 
+ ChkMonitor -      +Col  3889A     0.1162 =     0.1140  -0.019   0.050 
+ ChkMonitor -      He 1  7065A     0.1005 =     0.0990  -0.015   0.050 
+ ChkMonitor -      +Col  7065A     0.0375 =     0.0381   0.016   0.050 
+ ChkMonitor botch>>He 1  4471A     0.0515 =     0.0490  -0.051   0.050 
+ ChkMonitor ----   +Col  4471A     0.0477 =     0.0456  -0.046   0.050 
+ ChkMonitor botch>>He 1  6678A     0.0414 =     0.0394  -0.051   0.050 
+ ChkMonitor botch>>+Col  6678A     0.0381 =     0.0358  -0.064   0.050 
+ ChkMonitor --     He 1 1.083m     0.4155 =     0.4280   0.029   0.050 
+ ChkMonitor        +Col 1.083m     1.2887 =     1.2760  -0.010   0.050 
+ ChkMonitor botch>>totl  2326A     0.1455 =     0.2440   0.404   0.100  <<BIG BOTCH!!
+ ChkMonitor botch>>totl  1909A     0.3625 =     0.5488   0.340   0.100  <<BIG BOTCH!!
+ ChkMonitor botch>>TOTL  5199A   -15.4571 =   -15.3300   0.254   0.050  <<BIG BOTCH!!
+ ChkMonitor botch>>n  2  6584A     0.3397 =     0.4979   0.318   0.050  <<BIG BOTCH!!
+ ChkMonitor botch>>S  2  6720A     0.0243 =     0.0319   0.239   0.050  <<BIG BOTCH!!
+ ChkMonitor botch>>O  1  6300A     0.0074 =     0.0082   0.101   0.050 
+ ChkMonitor botch>>totl  3727A     0.5792 =     1.2730   0.545   0.050  <<BIG BOTCH!!
+ ChkMonitor botch>>totl  7325A     0.1375 =     0.3084   0.554   0.050  <<BIG BOTCH!!
+ ChkMonitor botch>>o  3  5007A     4.8403 =     3.8140  -0.269   0.050  <<BIG BOTCH!!
+ ChkMonitor botch>>ne 2 12.81m     0.2310 =     0.3680   0.372   0.050  <<BIG BOTCH!!
+ ChkMonitor botch>>GrGH     0      1.3198 =     1.4030   0.059   0.050 
+ ChkMonitor botch>>GrGC     0      0.5104 =     0.5460   0.065   0.050 
+ ChkMonitor --     GraT     0    166.5376 =   162.3000  -0.026   0.050 
+ ChkMonitor --     GraI     0    122.9494 =   119.6000  -0.028   0.050 
+ ChkMonitor -      GraL  1216A    29.2528 =    28.8200  -0.015   0.050 
+ ChkMonitor ---    nFnu 60.83m    15.0000 =    15.6800   0.043   0.050 
+ ChkMonitor -      nFnu 21.42m   151.6948 =   148.3000  -0.023   0.050 
+ ChkMonitor botch>>nFnu 12.43m    54.9722 =    49.7000  -0.106   0.050 
+ ChkMonitor botch>>nFnu 7.580m     7.2658 =     6.4710  -0.123   0.050 
+ ChkMonitor        nFnu 1.436m     1.4272 =     1.4410   0.010   0.050 
+ ChkMonitor botch>>Prad      0     0.0319 =     0.0297  -0.074   0.050 
+ ChkMonitor botch>>HHei      0     0.0262 =     0.0519   0.026   0.020 
+ ChkMonitor        itrz      0    47.8830 =    45.0000   0.000   0.100 
+ 
+ BIG BOTCHED MONITORS!!!   Big Botched Monitors!!! 

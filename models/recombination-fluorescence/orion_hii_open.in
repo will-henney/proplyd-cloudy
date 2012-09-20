@@ -1,0 +1,201 @@
+title conditions similar to Orion nebula blister
+c orion hii region with open geometry
+c
+c commands controlling continuum =========
+c SED of central star
+table star wmbasic 39000 4.100 0.000
+c its flux of H-ionizing photons
+phi(h) 13.0
+c
+c this is to include velocity field in radiative transfer
+turbulence 8 km/sec no pressure 
+c
+c commands for density & abundances =========
+hden 4
+abundances hii region no grains
+grains orion
+c
+c commands controlling geometry  =========
+cosmic rays, background
+constant pressure
+c this is the account for continued matter beyond i front 
+double optical depths
+c
+c other commands for details     =========
+iterate 2
+c
+c commands controlling output    =========
+print line faint -5
+c print lines as surface brightness
+print lines surface brightness arcsec 
+print line optical depths
+print diffuse continuum 
+c want to print line intensities are surface brightness, per arcsec^2
+print lines surface brightness arcsec
+print diffuse continuum 
+save overview last "orion_hii_open.ovr"
+save dr last "orion_hii_open.dr"
+save continuum last "orion_hii_open.con" units microns
+save transmitted continuum last "orion_hii_open.trn" 
+save monitors last "orion_hii_open.asr"
+save overview last "orion_hii_open.ovr"
+save fine opacity last "orion_hii_open.opc" range 0.7 0.9 ryd
+save element nitrogen last no hash "orion_hii_open.nit"
+save line emissivity "orion_hii_open.ems" last no hash emergent
+totl 5199
+o  1 6300 
+end of lines
+save linelist "orion_hii_open.lin" "LineList.dat" last no hash emergent absolute
+c
+c commands giving the monitors    =========
+// >>chn 05 mar 07, add this to test suite 
+monitor line "totl" 4861 intensity -11.253
+// 
+monitor line "H  1" 3889A 0.107
+monitor line "Ca B" 3889A 0.105
+//
+// >>chng 05 jun 05, from 0.143 to 0.137, RP update he-like iso seq
+// >>chng 05 oct 01, from 0.137 to 0.123, RP update He levels
+// >>chng 05 dec 22, from 0.123 to 0.129, RP incr levels he
+// >>chng 08 apr 30, from 0.129 to 0.147 H, He topoff change
+monitor line "He 1" 5876 0.147
+monitor line "+Col" 5876 0.133
+// 
+// >>chng 08 may 16, from 0.0192 to 0.0196, line is sensitive to gradual underflow
+monitor line "He 1" 3889 0.0196
+monitor line "+Col" 3889 0.114
+// 
+monitor line "He 1" 7065 0.0990
+monitor line "+Col" 7065 0.0381
+// 
+monitor line "He 1" 4471 0.0490
+monitor line "+Col" 4471 0.0456
+// 
+// >>chng 09 feb 24, from 0.0377 to 0.0394, botches due to r2763
+monitor line "He 1" 6678 0.0394
+monitor line "+Col" 6678 0.0358
+//
+// >>chng 08 apr 03, from 0.591 to 0.428, include 10830 in fine opacity array
+monitor line "He 1" 10830 0.428
+monitor line "+Col" 10830 1.276
+//
+// >>chng 05 oct 01, from 0.313 to 0.287, RP update He levels
+// >>chng 06 nov 29, from 0.287 to 0.244, Badnell DR turned on
+monitor line "totl" 2326 0.244 error 0.1
+//
+// >>chng 10 mar 05, from 0.497 to 0.5488, changes caused by r3848 atomic data update
+monitor line "totl" 1909 0.5488 error 0.1
+// 
+// >>chng 06 nov 29, from -15.114 to -15.165, Badnell DR turned on
+// >>chng 09 jul 14, from -15.165 to -15.357 update NI atomic data
+// >>chng 09 nov 17, from -15.36 to -15.33, N I changes (r3588)
+monitor line "TOTL" 5199A luminosity -15.33
+//
+// >>chng 05 jun 05, from 0.549 to 0.521, RP update he-like iso seq
+// >>chng 05 oct 01, from 0.521 to 0.495, RP update He levels
+// >>chng 05 dec 22, from 0.495 to 0.519, RP incr levels he
+// >>chng 06 nov 29, from 0.519 to 0.446, Badnell DR turned on
+// >>chng 08 apr 30, from 0.446 to 0.474 H, He topoff change
+// >>chng 10 mar 05, from 0.474 to 0.4979, changes caused by r3848 atomic data update
+monitor line "n  2" 6584 0.4979
+//
+// >>chng 09 jun 18, add this
+// >>chng 10 mar 05, from 0.0384 to 0.0341, changes caused by r3848 atomic data update
+// >>chng 10 mar 14, from 0.0341 to 0.0319, update As to NIST recommended values
+monitor line "S  2"  6720A 0.0319
+//
+// >>chng 09 jun 18, add this
+monitor line "O  1"  6300A 0.0082
+//
+// >>chng 06 nov 24, from 1.360 to 1.426, turn on Badnell RR
+// >>chng 06 nov 29, from 1.426 to 1.273, Badnell DR turned on
+monitor line "totl" 3727 1.273
+//
+// >>chng 06 jul 25, from 0.348 to 0.401 HN update OIII, OII collision data
+// >>chng 06 nov 29, from 0.401 to 0.361, Badnell DR turned on
+// >>chng 10 feb 14, from 0.361 to 0.3084, update O atomic data
+monitor line "totl" 7325 0.3084
+//
+// >>chng 06 nov 29, from 3.585 to 3.814, Badnell DR turned on
+monitor line "o  3" 5007 3.814
+//
+// >>chng 06 jul 06, from 0.335 to 0.368, update Ne cs
+monitor line "ne 2" 12.81m 0.368
+//
+// some grain properties
+// >>chng 07 dec 15, from 1.447 to 1.342, X-ray grain merge
+// >>chng 10 mar 05, from 1.342 to 1.403, changes caused by r3848 atomic data update
+monitor line "GrGH" 0 1.403
+//
+monitor line "GrGC" 0 0.546
+//
+// >>chng 07 oct 26, from 162.0 to 154.4, very close to botch after recent changes
+// >>chng 08 jul 08, from 154.4 to 162.3 line radiation pressure
+monitor line "GraT" 0 162.3
+//
+monitor line "GraI" 0 119.6
+//
+// >>chng 07 dec 06, from 25.02 to 28.82, changes in h-like collisions
+monitor line "GraL" 1216 28.82
+//
+// grain emission 
+monitor line "nFnu"  60.83m  15.68
+//
+// >>chng 07 oct 26, from 148.2 to 141.2, very close to botch after recent changes
+// >>chng 08 jul 08, from 141.2 to 148.3 line radiation pressure
+monitor line "nFnu"  21.42m 148.3
+//
+// >>chng 07 jan 20, from 49.9 to 47.2 e2 bug
+// >>chng 08 jul 08, from 47.2 to 49.7 line radiation pressure
+monitor line "nFnu"  12.43m  49.7
+//
+// >>chng 07 jan 20, from 6.15 to 5.68 e2 bug
+// >>chng 08 mar 20, from 5.68 to 5.94 value drifted but did not throw assert
+// >>chng 09 feb 23, from 5.94 to 6.471, remove otslin, otscon dampers (PR #84, r2758)
+monitor line "nFnu"  7.580m   6.471
+//
+monitor line "nFnu"  1.436m   1.441
+//
+// >>chng 07 oct 26, from 0.0470 to 0.0508, due to changes in r1472
+// >>chng 07 dec 14, from 0.0508 to 0.0532 RP update is seq
+// >>chng 08 feb 20, from 0.0532 to 0.0457, grain charge transfer changes in ion_solver and iso*
+// >>chng 08 mar 17, from 0.0457 to 0.0219, r1844 - mostly iso PopOpc and rt_line_one_tauinc changes
+// >>chng 08 apr 03, from 0.0219 to 0.0118, include 10830 in fine opacity array
+// >>chng 08 jul 08, from 0.0118 to 0.0781 line radiation pressure
+// >>chng 08 jul 23, fromo 0.0781 to 0.0323 chng Pesc line radiation pressure
+// >>chng 10 jul 30, from 0.0323 to 0.0297, lower te floor so column density stopping criterion is reached
+monitor Pradmax 0.0297
+// 
+// >>chng 05 oct 01, from 0.0702 to 0.0519, RP update He levels
+monitor hheicf 0.0519 error 0.02
+//
+// >>chng 05 mar 28, from 26 to 18 impr mol converg
+// >>chng 08 dec 08, from 18 to 14.96, upper limit -> equals (r2515)
+// >>chng 08 dec 13, from 14.96 to 47.7, merging newsolvers branch
+// >>chng 09 jan 08, from 47.7 to 49.15, minor changes in iter/zn, iterations, and zone that crept in over last month
+// >>chng 09 jan 16, from 49.15 to 48.04 (error 0.08), average of 10 runs
+// >>chng 09 oct 05, from 48.04 to 43.63, [NI] pumping changes
+// >>chng 10 jun 26, from 43.6 to 45 results for three platforms
+monitor itrzn 45 error 0.10
+//
+// >>chng 08 dec 08, from 220 to 182, upper limit -> equals (r2515)
+// >>chng 09 jan 08, from 182 to 165, minor changes in iter/zn, iterations, and zone that crept in over last month
+// >>chng 09 jan 16, disable this assert because the values show a bimodal distribution over various platforms
+// assert nzone 165
+//
+c orion_hii_open.in
+c class hii 
+c ========================================
+
+This is a model similar in spirit to the blister geometry HII region
+model computed by Baldwin et al. (1991). 
+Size-resolved Orion grains are included.
+The constant pressure command does a
+hydrostatic equilibrium structure.  The predicted emission-line spectrum is
+affected by the reddening of the internal grains.  The resulting t2
+analysis produces artificial results as a result.
+This has an open geometry, the original BFM paper was a closed geometry.
+(This makes little difference).  Background cosmic rays are also included
+although these should have little effect on warm ionized gas.  The emission
+line spectrum is given in surface brightness units, as in the BFM paper.
+

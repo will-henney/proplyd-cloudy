@@ -28,6 +28,7 @@ Ar 4  4711A  // [Ar IV]
 Cl 3  5518A  // [Cl III]
 Cl 3  5538A  // [Cl III] given as 5539A in Tsamis et al 2011
 O 2r  4651A   // O II 4651 total recombination, 4638.86-4696.35 (8 lines) 
+O 2p  4651A
 C  2  4267A   // C II recombination line
 TOTL  6580A   // C II recombination 6578 + 6580 A
 C 2r  6580A   // C II recombination part 6580A
