@@ -54,7 +54,7 @@
                        * save fine opacity last "orion_hii_open.opc" range 0.7 0.9 ryd                   *
                        * save element nitrogen last no hash "orion_hii_open.nit"                         *
                        * save line emissivity "orion_hii_open.ems" last no hash emergent                 *
-                       * save linelist "orion_hii_open.lin" "LineList_HII.dat" last no hash emergent absolute  *
+                       * save linelist "orion_hii_open.lin" "LineList.dat" last no hash emergent absolute  *
                        * c                                                                               *
                        * c commands giving the monitors    =========                                     *
                        * monitor line "totl" 4861 intensity -11.253                                      *
@@ -292,7 +292,7 @@
                        * totl 5199                                                                       *
                        * o  1 6300                                                                       *
                        * end of lines                                                                    *
-                       * save linelist "orion_hii_open.lin" "LineList_HII.dat" last no hash emergent absolute  *
+                       * save linelist "orion_hii_open.lin" "LineList.dat" last no hash emergent absolute  *
                        * c                                                                               *
                        * c commands giving the monitors    =========                                     *
                        * monitor line "totl" 4861 intensity -11.253                                      *
@@ -1285,7 +1285,7 @@
    <a>:8.60E-06  erdeFe0.0E+00  Tcompt1.79E+06  Tthr1.10E+09  <Tden>: 8.75E+03  <dens>:3.44E-20  <MolWgt>6.42E-01
      Mean Jeans  l(cm)1.18E+19  M(sun)8.51E+04  smallest:     len(cm):7.91E+18  M(sun):2.58E+04  a_ox tran:  0.00
  Rion:1.000E+30  Dist:0.00E+00  Diam:0.000E+00
- Hatom level 70  HatomType: add  HInducImp  F  He tot level: 63  He2 level:   70  ExecTime   224.9
+ Hatom level 70  HatomType: add  HInducImp  F  He tot level: 63  He2 level:   70  ExecTime   222.6
  ConvrgError(%)  <eden>  0.005  MaxEden  0.099  <H-C>   0.02  Max(H-C)    0.29  <Press>   0.039  MaxPrs er  0.181
   Continuity(%)  chng Te   1.9  elec den   4.7  n(H2)    0.0  n(CO)        0.0
 
@@ -1694,7 +1694,7 @@
                        * totl 5199                                                                       *
                        * o  1 6300                                                                       *
                        * end of lines                                                                    *
-                       * save linelist "orion_hii_open.lin" "LineList_HII.dat" last no hash emergent absolute  *
+                       * save linelist "orion_hii_open.lin" "LineList.dat" last no hash emergent absolute  *
                        * c                                                                               *
                        * c commands giving the monitors    =========                                     *
                        * monitor line "totl" 4861 intensity -11.253                                      *
@@ -2671,7 +2671,7 @@
    <a>:8.54E-06  erdeFe0.0E+00  Tcompt1.79E+06  Tthr1.11E+09  <Tden>: 8.73E+03  <dens>:3.39E-20  <MolWgt>6.42E-01
      Mean Jeans  l(cm)1.17E+19  M(sun)8.47E+04  smallest:     len(cm):7.88E+18  M(sun):2.56E+04  a_ox tran:  0.00
  Rion:1.000E+30  Dist:0.00E+00  Diam:0.000E+00
- Hatom level 70  HatomType: add  HInducImp  F  He tot level: 63  He2 level:   70  ExecTime   449.6
+ Hatom level 70  HatomType: add  HInducImp  F  He tot level: 63  He2 level:   70  ExecTime   444.1
  ConvrgError(%)  <eden>  0.005  MaxEden  0.135  <H-C>   0.03  Max(H-C)    0.41  <Press>   0.044  MaxPrs er  0.224
   Continuity(%)  chng Te   1.9  elec den   4.4  n(H2)    0.0  n(CO)        0.0
 
@@ -3077,7 +3077,7 @@
 Label    line   match1   match2   match3 ||   asserted     match1     match2     match3
 Ca B 3889.00A 3889.07A 3888.63A -------- ||     0.1050     0.1053     0.1026     0.0000
 
-=============Results of monitors: Cloudy 10.00 Wed Sep 19 18:44:27 2012
+=============Results of monitors: Cloudy 10.00 Wed Sep 19 19:11:46 2012
  Errors were found.  Summary follows.
                    Label line    computed     asserted Rel Err Set err
  ChkMonitor -      totl  4861A   -11.2460 =   -11.2530  -0.016   0.050 
@@ -3122,5 +3122,5 @@ Ca B 3889.00A 3889.07A 3888.63A -------- ||     0.1050     0.1053     0.1026    
  BIG BOTCHED MONITORS!!!   Big Botched Monitors!!! 
  Cloudy compiled on Oct 25 2011 in OS Apple MacOS using the g++ 40201 compiler. Mode LP64, denormalized float: T double: T.
 
- Cloudy ends: 171 zones, 2 iterations, BIG BOTCHED MONITORS!!!.  ExecTime(s) 449.72
+ Cloudy ends: 171 zones, 2 iterations, BIG BOTCHED MONITORS!!!.  ExecTime(s) 444.22
  [Stop in cdMain at maincl.cpp:417, something went wrong]
