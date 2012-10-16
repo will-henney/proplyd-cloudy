@@ -1,0 +1,50 @@
+%%Units
+\newcommand{\degr}{$^\circ$\xspace}
+
+%Solar amounts
+\newcommand{\ro}{R$_\odot$\xspace}
+\newcommand{\mo}{M$_\odot$\xspace}
+\newcommand{\zo}{Z$_\odot$\xspace}
+
+\newcommand{\tc}{$\mathrm{\theta}^1\mathrm{C}$\xspace}
+
+%Physical variables
+\newcommand{\teff}{$\mathrm{T}_{\mathrm{eff}}$\xspace}
+\newcommand{\te}{$\mathrm{T}_{\mathrm{e}}$\xspace}
+\newcommand{\nelec}{$\mathrm{n}_{\mathrm{e}}$\xspace}
+
+%This is necesary for the \ion command works
+\DeclareRobustCommand\ion[2]{%
+  \mbox{#1\kern0.2em%
+    \smaller\rmfamily%
+    \edef\@tempa{\@car#2\@nil}%
+    \ifcat1\@tempa%
+    \@Roman{#2}%
+    \else%
+    \uppercase{#2}%
+    \fi}}
+\newcounter{IonStage}
+\DeclareRobustCommand\plainion[2]{\setcounter{IonStage}{#2}#1
+  \Roman{IonStage}}
+\DeclareRobustCommand\nodata{$\cdots$}
+\newcommand{\smaller}{\small}
+
+%This are my most used lines
+\newcommand{\ha}{H$\alpha$\xspace}
+\newcommand{\hb}{H$\beta$\xspace}
+\newcommand{\hii}{\ion{H}{ii}\xspace}
+\newcommand{\he}{\ion{He}{i}\xspace}
+\newcommand{\sii}{[\ion{S}{ii}]\xspace}
+\newcommand{\siip}{[\ion{S}{ii}]+\xspace}
+\newcommand{\nii}{[\ion{N}{II}]\xspace}
+\newcommand{\oi}{[\ion{O}{I}]\xspace}
+\newcommand{\oii}{[\ion{O}{II}]\xspace}
+\newcommand{\oiii}{[\ion{O}{III}]\xspace}
+\newcommand{\neii}{[\ion{Ne}{II}]\xspace}
+\newcommand{\lhe}{\ion{He}{I}$\lambda5876$\xspace}
+\newcommand{\lsii}{[\ion{S}{II}]$\lambda6716$\xspace}
+\newcommand{\lsiimas}{[\ion{S}{II}]$\lambda6716+\lambda6731$\xspace}
+\newcommand{\lnii}{[\ion{N}{II}]$\lambda6583$\xspace}
+\newcommand{\loi}{[\ion{O}{I}]$\lambda6300$\xspace}
+\newcommand{\loii}{[\ion{O}{II}]$\lambda3727$\xspace}
+\newcommand{\loiii}{[\ion{O}{III}]$\lambda5007$\xspace}

@@ -1,0 +1,45 @@
+html {
+    /* font-family: Times, serif; */
+    font-family: Lucida Grande, Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+}
+/* Added by Will 03 Sep 2007 */
+li {padding: 4px; }
+
+/* Added by Will 08 Oct 2007 */ 
+
+/* Headings shamelessly copied from MoinMoin theme "sinorca4moin" by David Linke*/
+
+h1, h2, h3, h4, h5 {
+	margin: 1em 0 0.5em 0;
+	padding: 0px 5px 2px;
+        font-weight: bold;
+	color: black;
+	line-height: 1.2em;
+}	
+
+h5, h6 {
+    border-bottom: 1px dashed rgb(135,135,135);
+}  
+h1, h2, h3, h4 {
+    border-left: 1px solid rgb(135,135,135);
+    border-bottom: 2px solid rgb(135,135,135);
+}  
+h1, h2 {
+    background-color: rgb(240,240,240);
+}
+h3 {
+    background-color: rgb(250,250,250);
+}
+h1 {font-size: 120%;}
+h2 {font-size: 110%;}
+h3, h4, h5, h6 {font-size: 100%;}
+h6 {font-style: italic;}
+
+
+
+
+
+
+
+

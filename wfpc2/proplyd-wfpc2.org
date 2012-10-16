@@ -1,0 +1,39 @@
+
+* Proplyd line ratios from WFPC2 images
+
+** Flux callibration
+
++ Normalization is described in [[file:README.bob][README.bob]]
+: The normalization is to the exposure times in the program GO 5085, i.e.
+: f656n(200S), f658n(500s), f502n(200s), f547m(50s).
+
++ Calibration coefficients are from O'Dell & Doi 1999
+  + copied from [[file:~/Dropbox/Org/llobjects.org::*Constants%20from%20O'Dell%20and%20Doi][llobjects.org]]
+
+
+*** Equations
+
+*** Leading coefficients
+
++ These are for WFC, so we need to correct for the different pixel sizes.
++ Correction factor is (0.0455/0.0996)**2 = 0.2087
+#+tblname: OD99-coefficents
+| line  |      1/A |       A |
+|-------+----------+---------|
+| N II  |  1.7e-10 |  5.88e9 |
+| Ha    | 1.67e-10 |  5.99e9 |
+| O III | 8.19e-11 | 1.22e10 |
+#+TBLFM: $3=1/$2 ; s3
+
+*** Exposure times
+
+#+tblname: ll1-wfc-exposure-times
+| Filter | Exposure, t |
+|--------+-------------|
+| f656n  |         200 |
+| f658n  |         500 |
+| f502n  |         200 |
+| f547m  |          50 |
+
+*** Correction terms
+

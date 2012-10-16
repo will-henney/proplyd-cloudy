@@ -1,0 +1,647 @@
+#+SEQ_TODO: TODO(t) STARTED(s) WAITING(w@) | DONE(d) CANCELED(c@)
+#+STYLE: <link rel="stylesheet" type="text/css" href="main.css" />
+
+Claudia is a lightweight python library for parsing the output from the Cloudy plasma code. The design goal is to be as flexible as possible, and to present a simple interface to the user. The Cloudy save files (or "punch files" in Cloudy versions before 10) are identified automatically from the input script and each file is loaded into a numpy record array, so that the data columns are immediately available with the same names as in the output file: 
+
+#+srcname: usage-example
+#+begin_src python
+import claudia
+m = claudia.CloudyModel("mymodel")
+
+import pylab
+plot(m.ovr.depth, m.ovr.eden)
+xlabel("Depth, cm")
+ylabel("log10 (Electron Density, pcc)")
+#+end_src
+
+* The source code for =claudia.py=
+  :LOGBOOK:
+  CLOCK: [2011-08-23 Tue 09:40]--[2011-08-23 Tue 10:50] =>  1:10
+  CLOCK: [2011-06-27 Mon 23:28]--[2011-06-27 Mon 23:46] =>  0:18
+  CLOCK: [2011-06-26 Sun 22:54]--[2011-06-26 Sun 23:23] =>  0:29
+  :END:
+  :PROPERTIES:
+  :tangle:   ../src/claudia.py
+  :dir: ~/Work/Nahiely/proplyd-cloudy/src
+  :comments: org
+  :cache:    yes
+  :END:
+
+** Imports
+
+#+srcname: claudia-imports
+#+begin_src python
+import numpy
+import argparse
+import string
+import os
+#+end_src
+
+** Utility classes
+
+*** [1/1] Some SmartDict classes
++ /I am still not convinced that this is a good idea/
+  + Currently I am using my modified version for the =metadata= attribute, where it can't do much harm.
+  + My main improvement over the original is that mine supports tab completion of attributes. 
++ Taken from the interesting [[http://code.activestate.com/recipes/577590-dictionary-whos-keys-act-like-attributes-as-well/][Python Recipe]] by [[http://code.activestate.com/recipes/users/4174115/][Sunjay Varma]]
++ One problem with using this is that the tab completion does not work for the attributes
++ [X] How can this be fixed?
+  + We could do =self.__dict__[name] = value= in =__setattr__()=
+  + Yes, this is now implemented in =WJHSmartDict= below. It turned out that I had to change the implementation a lot. I no longer need to define =__getattr__()=, since =__setattr__()= defines both the attribute and the dict item. Meanwhile, =__setitem==()= does exactly the same as =__setattr__()= . I also had to define =__init__()=, =__delattr__()= and =update*()= for completeness. 
+
+
+#+srcname: claudia-smartdict
+#+begin_src python
+class SmartDict(dict):
+    """
+    Combines the features of a class and a dict
+    """
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError as e:
+            raise AttributeError(e)
+    def __setattr__(self, name, value):
+        self[name] = value
+
+class WJHSmartDict(dict):
+    """
+    Combines the features of a class and a dict in a different way
+
+    This has the advantage that tab completion works on attributes. 
+    Are there any disadvantages?
+
+    The attributes and the dict keys are views on the same data:
+
+    >>> d = WJHSmartDict(x=1, y=2)
+    >>> d.x
+    1
+    >>> d['x']
+    1
+    >>> d.y is d['y']
+    True
+    >>> d.update(dict(aa=[100, 200], bb=500))
+    >>> d.aa[1] += 10
+    >>> d['aa']
+    [100, 210]
+
+    """
+    def __init__(self, **kwdargs):
+        for k in kwdargs:
+            setattr(self, k, kwdargs[k])
+
+    def __setattr__(self, name, value):
+        dict.__setitem__(self, name, value)
+        self.__dict__[name] = value
+
+    def __delattr__(self, name):
+        self.__dict__.pop(name)
+        self.pop(name)
+
+    __setitem__ = __setattr__
+
+    def update(self, E):
+        """
+        Supplement dict update by also updating self.__dict__
+
+        This doesn't work for **kwdargs though.
+        """
+        dict.update(self.__dict__, E)
+        dict.update(self, E)
+
+
+#+end_src
+
+**** Original description by Sunjay Varma from Python Recipes
+
+Dictionary Who's Keys Act Like Attributes As Well (Python recipe)
+
+Think of this as a JavaScript object. In JavaScript, the objects can be referenced by indexing (e.g. d[name]) or by directly using the dot (.) operator (e.g. d.name).
+
+This is the same concept.
+
+Note to Python 2.4 Users: You will need to change the =except KeyError as e:= line to =except KeyError, (e):=.
+
+#+begin_example
+>>> d = Dict(radius=10)
+>>> d.radius
+10
+>>> d.copy = 10
+>>> d.copy
+<built-in method copy of Dict object at 0x02A056B8>
+>>> d["copy"]
+10
+>>> d.copy()
+{'copy': 10, 'radius': 10}
+>>> d.fromkeys = lambda x: x * 2
+>>> d.fromkeys([10], [10])
+{10: [10]}
+>>> d["fromkeys"](20)
+40
+#+end_example
+
+** The class for a Cloudy model
+
+
+#+srcname: claudia-model-class
+#+begin_src python
+SAVETYPES_TWO_LINE_HEADER = [
+    # "line emissivity",
+    ] 
+
+class CloudyModel(object):
+    """
+    A single Cloudy model
+
+    >>> from claudia import CloudyModel
+    >>> modelname = 'sample01'
+    >>> CloudyModel.indir = '../testdata'
+    >>> CloudyModel.outdir = '../testdata'
+    >>> m = CloudyModel(modelname)
+    """
+    indir, outdir = ".", "."
+    insuff, outsuff = ".in", ".out"
+    # list of save types to skip (problematic to read with genfromtxt)
+    skipsaves = ["grains physical", "transmitted continuum", "heating", "cooling"]
+
+
+    def __init__(self, modelname, **kwargs):
+        # Any optional keywords get set as attributes
+        # We do this first in case indir or insuff are set
+        self.__dict__.update(kwargs)
+
+        # "metadata" for each file implemented as a SmartDict of SmartDicts
+        self.metadata = WJHSmartDict()
+
+        # Read in the input script
+        self.infilepath = os.path.join(self.indir, modelname + self.insuff)
+        with open(self.infilepath) as f:
+            self._inscript = f.read() 
+
+        # Now read in from all the save files
+        for savetype, savesuff in find_save_commands(self._inscript):
+            if savesuff.startswith(modelname):
+                savefile = savesuff # deal with case where outfile is written in full
+            else:
+                savefile = modelname + savesuff
+            savefilepath = os.path.join(self.outdir, savefile)
+            saveid = savesuff[1:]       # strip the leading dot to make the attribute name
+            if not savetype in self.skipsaves:
+                skip = 0 if not savetype in SAVETYPES_TWO_LINE_HEADER else 1
+                try:
+                    setattr(self, saveid, recarray_from_savefile(savefilepath, skip))
+                except IOError:
+                    print "Failed to read from %s" % (savefilepath)
+                self.metadata[saveid] = WJHSmartDict(savetype=savetype, savefilepath=savefilepath)
+
+  
+  
+#+end_src
+
+** Parsing the save files
+
++ It is almost impossible to do this cleanly with output from older versions of Cloudy. At the moment I am resorting to editing the header of the "line emissivity" file to put the header on two lines and delete the final tab. 
+
++ [2011-08-23 Tue] Some design questions:
+
+  + Recarray looks useful, since it gives you attribute access for free. But, if we make, for instance,  =model.ovr= actually /be/ a recarray, then it doesn't allow adding extra metadata to the instance. So, there are two possibilities:
+
+    1. Use the composition pattern and have that =model.ovr.data= is the recarray, so we can have things like =model.ovr.savetype= as well.
+
+    2. An alternative design would be to optimize for the most common use-case by making =model.ovr= be the recarray, and then putting the metadata somewhere else, such as =model.metadata.ovr.savetype=
+
+  + For the moment, we are going to plump for the second option, even though it is a bit more work to implement. 
+
+
+
+
+#+srcname: claudia-parse-save-file
+#+begin_src python
+def recarray_from_savefile(filepath, skip=0):
+    return numpy.genfromtxt(filepath, delimiter='\t', skip_header=skip,
+                            invalid_raise=False, names=True).view(numpy.recarray)
+
+#+end_src
+
+
+
+** Parsing the input file
+
+*** List of possibilities for cloudy save files
+
++ Taken from Hazy1 C10 version 2011/08/14
++ This is nowhere near exhaustive
++ These are checked in turn, so more specific types should come first. 
+
+#+srcname: claudia-types-of-cloudy-save-files
+#+begin_src python
+SAVETYPES = [
+    "diffuse continuum", 
+    "emitted continuum", 
+    "fine continuum", 
+    "grain continuum", 
+    "incident continuum", 
+    "interactive continuum", 
+    "ionizing continuum", 
+    "outward continuum", 
+    "raw continuum", 
+    "reflected continuum", 
+    "transmitted continuum", 
+    "two photon continuum", 
+    "continuum", 
+    "cooling",
+    "dr",
+    "dynamics",
+    "element hydrogen",
+    "element helium",
+    "element carbon",
+    "element nitrogen",
+    "element oxygen",
+    "element sulfur",
+    "element silicon",
+    "element iron",
+    "grain charge",
+    "grain drift velocity",
+    "grain temperature",
+    "heating",
+    "line emissivity",
+    "line list", 
+    "overview",
+    "PDR",
+    "physical conditions",
+    "pressure",
+    "radius",
+    "source function, spectrum",
+    "source function, depth",
+    ]
+#+end_src
+
+*** TODO Find basic info about the run
+    :LOGBOOK:
+    CLOCK: [2011-08-20 Sat 18:24]--[2011-08-21 Sun 00:04] =>  5:40
+    :END:
+We should at least read the =title= and =save prefix= lines (currently we assume that the prefix is the same as for the input file). 
+
+#+srcname: claudia-input-parse-basic-info
+#+begin_src python
+pass
+
+#+end_src
+
+
+*** Find which save files were written
+    :LOGBOOK:
+    - Note taken on [2011-08-20 Sat 18:21] \\
+      OK, this is just about working now, time to move on
+    - Note taken on [2011-08-20 Sat 14:16] \\
+      Not sure what we were doing here? What was the use-case of the cut_out function.
+    CLOCK: [2011-08-20 Sat 14:16]--[2011-08-20 Sat 18:24] =>  4:08
+    CLOCK: [2011-06-28 Tue 13:14]--[2011-06-28 Tue 13:16] =>  0:02
+    CLOCK: [2011-06-27 Mon 23:46]--[2011-06-27 Mon 23:46] =>  0:00
+    :END:
+
+This originally seemed like a job for regular expressions, but that quickly got out of hand. 
+
+Instead of allowing any type of save file, we use a finite list =SAVETYPES= since that makes the parsing much simpler. The only problem is that Cloudy allows the names to be abbreviated to four letters. 
+
+#+srcname: claudia-get-list-of-save-files
+#+begin_src python
+def find_save_commands(s):
+    """
+    Find all save commands in a Cloudy input file and return a list of [type, file] pairs
+
+    >>> find_save_commands('save heating last ".heat"\\nsave cooling last ".cool"')
+    [('heating', '.heat'), ('cooling', '.cool')]
+    """
+    save_commands = [] 
+    for line in s.split("\n"):
+        found = find_single_save_command(line)
+        if found: save_commands.append(found)
+    return save_commands or None
+    
+
+def find_single_save_command(line):
+    """
+    Parse single line of a Cloudy input file, looking for a save command
+
+    It should work both with C08-style (punch) and C10-style (save) commands:
+
+    >>> find_single_save_command('save overview last ".ovr"')
+    ('overview', '.ovr')
+    >>> find_single_save_command('PUNCH LAST OVERVIEW ".ovr"')
+    ('overview', '.ovr')
+    >>> find_single_save_command('save over no buffering, last, file=".ovr"')
+    ('overview', '.ovr')
+    >>> find_single_save_command('save madeupname file=".xyz"')
+    (None, '.xyz')
+    >>> find_single_save_command('this is not the right command')
+
+    Note that the last command prints nothing since it returns None
+   
+    """
+    line = line.lower()
+    if line.startswith("save") or line.startswith("punch"):
+        assert '"' in line or "'" in line, "No filename given in save/punch command"
+        line = cut_out(line, "save")
+        line = cut_out(line, "punch")
+        if "last" in line:
+            line = cut_out(line, "last")
+        if '"' in line:
+            delim = '"'
+        elif "'" in line:
+            delim = "'"
+        firstpart, savefile = line.split(delim)[:2]
+        if not savefile.startswith("."):
+            savefile = "." + savefile.split(".")[1]
+        for savetype in SAVETYPES:
+            if look4stringinline(savetype, firstpart):
+                return savetype, savefile
+        # failed to find anything
+        return None, savefile
+    else:
+        return None
+
+
+#+end_src
+
+*** Utility functions for input parsing 
+#+srcname: claudia-input-parse-utilities
+#+begin_src python
+def cut_out(s, phrase):
+    """
+    Returns the input string <s> but with all occurrences of <phrase> deleted
+
+    <phrase> should be one or more words, separated by whitespace. Effort is made
+    to preserve one space between words, which makes it better than s.replace(phrase, '')
+
+    >>> s = 'the quick brown fox, which is the brownest ever, jumped over the lazy dog'
+    >>> cut_out(s, 'the')
+    'quick brown fox, which is brownest ever, jumped over lazy dog'
+    >>> s.replace('the', '')
+    ' quick brown fox, which is  brownest ever, jumped over  lazy dog'
+
+    Note the extra spaces in the s.replace version
+    """
+    return ' '.join(map(string.strip, s.split(phrase))).strip()
+
+def look4stringinline(string, line):
+    """
+    Look for string in line, only comparing the first 4 characters of each word
+
+    This is because cloudy does the same.
+
+    Case should not matter: 
+    >>> look4stringinline('punch pressure', 'PUNC FINAL PRES')
+    True
+
+    And it is OK to have strings with less than 4 characters:
+    >>> look4stringinline('PDR', 'save pdr')
+    True
+
+    And here is an example that should fail:
+    >>> look4stringinline('save whatever', 'save foobar')
+    False
+
+    """
+    words = string.split()
+    for word in words:
+        if len(word) > 4: word = word[:4] 
+        if not word.upper() in line.upper():
+            return False
+    return True
+
+#+end_src
+
+** Mindlessly loading all the data from all the output files
+
+** TODO Dealing with multiple iterations
+
+For simplicity, we first implement only the last iteration. So, either 
+
+1. There is only 1 iteration
+2. Only last iteration is saved (using "last" keyword)
+3. Or, we just ignore all the earlier ones
+
+Cases 1 and 2 are easiest to deal with, whereas Case 3 requires some preprocessing of the output file before using =numpy.genfromtxt=
+
+There is also:
+
+4. We use all the iterations
+
+Which requires a more complicated structure to hold them. 
+
+
+* STARTED Tests for =claudia.py=
+  :LOGBOOK:
+   - Note taken on [2011-08-21 Sun 00:07] \\
+     Changed mind - nose has clearer docs than py.test does
+  CLOCK: [2011-08-20 Sat 23:40]--[2011-08-21 Sun 16:52] => 17:12
+  :END:
+   :PROPERTIES:
+   :cache:    no
+   :dir: ~/Work/Nahiely/proplyd-cloudy/src
+   :END:
+The main choices for testing frameworks are 
+
++ unittest http://docs.python.org/library/unittest.html
++ py.test http://doc.pytest.org/
++ nose http://www.somethingaboutorange.com/mrl/projects/nose/
+
+After trying each of these, I have decided to use unittest because
+
++ It is in the standard library
+
++ [2011-08-23 Tue] With Python version 2.7, it seems that the =unittest= module can now do lots of the things that =nose= can do (e.g., automated discovery of tests). This is backported to earlier pythons as =unittest2=
+
++ The online documentation seems clearer
+
+I am also using =doctest= lines in the documentation strings, mainly to ensure that documentation of API is accurate. 
+
+Scripts for running all the tests are given below for [[id:6F33DE3F-2B88-4934-9A63-FA02441BB188][unittest]] and [[id:929CD6C9-98BE-4698-A27C-78E7060AB4D1][doctest]]. 
+
+** Example data for tests
+Put some test data in a top-level directory =testdata= 
+
+** Unittest tests
+   :LOGBOOK:
+   CLOCK: [2011-08-23 Tue 10:50]--[2011-08-23 Tue 13:45] =>  2:55
+   :END:
+
+
+
+*** Example unittest tests
+    :LOGBOOK:
+     - Note taken on [2011-08-23 Tue 11:10] \\
+       Note that we had to use test_claudia.py not test-claudia.py since the latter is not a valid module name.
+     - Note taken on [2011-08-23 Tue 11:02] \\
+       First version is a straight port of the nose tests I already had
+    :END:
+     :PROPERTIES:
+     :tangle:   ../src/test_claudia.py
+     :END:
+
+#+srcname: unittest-claudia
+#+begin_src python
+import unittest
+from claudia import CloudyModel
+
+class ClaudiaTestSample01(unittest.TestCase):
+    def setUp(self):
+        "set up test fixtures"
+        self.model = CloudyModel('sample01', 
+                                 indir='../testdata', 
+                                 outdir='../testdata',
+                                 skipsaves=[])
+
+    # def teardown_func():
+    #     "tear down test fixtures"
+
+    def test_doomed_to_fail(self):
+        self.assertEquals(1, 2)
+
+    def test_infilepath(self):
+        self.assertEquals(self.model.infilepath, '../testdata/sample01.in')
+
+#+end_src
+
+*** Run all the unit tests
+    :PROPERTIES:
+    :exports:  both
+    :ID:       6F33DE3F-2B88-4934-9A63-FA02441BB188
+    :END:
+#+srcname: run-claudia-unitttests
+#+begin_src sh :tangle no :results output
+echo "Running unit tests in $(pwd)"
+python -m unittest discover -v 2>&1 
+echo
+echo "Tests last ran $(date)"
+#+end_src
+
+#+results: run-claudia-unitttests
+#+begin_example
+Running unit tests in /Users/will/Work/Nahiely/proplyd-cloudy/src
+test_doomed_to_fail (test_claudia.ClaudiaTestSample01) ... FAIL
+test_infilepath (test_claudia.ClaudiaTestSample01) ... ok
+
+======================================================================
+FAIL: test_doomed_to_fail (test_claudia.ClaudiaTestSample01)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/will/Work/Nahiely/proplyd-cloudy/src/test_claudia.py", line 17, in test_doomed_to_fail
+    self.assertEquals(1, 2)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.205s
+
+FAILED (failures=1)
+
+Tests last ran Wed Aug 24 09:49:37 CDT 2011
+#+end_example
+
+
+
+
+** Doctest tests
+   :LOGBOOK:
+   CLOCK: [2011-06-28 Tue 13:27]--[2011-06-28 Tue 13:28] =>  0:01
+   :END:
+
+Doctest gets mixed reviews. It is the simplest of all to use and seems to be fine for illustrating how to call functions and to make sure that the documentation is in sync with the code. Lots of people warn that it should not replace proper unit testing though. 
+
+*** DONE Run all the doctest tests in claudia.py
+    CLOSED: [2011-06-28 Tue 14:24]
+    :LOGBOOK:
+     - Note taken on [2011-08-20 Sat 14:13] \\
+       Print the time that test was last run
+     - Note taken on [2011-06-28 Tue 14:24] \\
+       Re-factored to be standalone test
+    :END:
+     :PROPERTIES:
+     :exports:  both
+     :ID:       929CD6C9-98BE-4698-A27C-78E7060AB4D1
+     :END:
+
+
+#+srcname: claudia-doctests
+#+begin_src python :tangle no :results output
+import doctest
+import claudia
+from datetime import datetime
+doctest.testmod(claudia)
+print 'Tests last ran ', datetime.now()
+#+end_src
+
+#+results: claudia-doctests
+: Tests last ran  2011-08-24 09:49:19.405874
+
+
+
+* Infrastructure for tangling the code and exporting HTML docs
+
++ Tangle the source code with =C-c C-v t=
++ Export to HTML with =C-c C-e h= (or =C-c C-e b= to also browse)
++ Run the tests with =C-c C-c= in the relevent source code block
+  + Tests are also run automatically when exporting to HTML
+
+** TODO How can we automate this better?
+
+There was a post on the org mailing list a while back with something similar. 
+
+** Export template						   :noexport:
+#+TITLE:     Parse Cloudy Output with claudia.py
+#+AUTHOR:    William Henney
+#+EMAIL:     whenney@gmail.com
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:5 num:t toc:t \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
+
+* Scratch pad 							   :noexport:
+** Can class definitions come after use?
+   :PROPERTIES:
+   :tangle:   no
+   :END:
+
+No it can't - which is obvious really. 
+
+#+srcname: def-before-use
+#+begin_src python :results output
+
+ 
+class A(object):
+    def __init__(self):
+	print "Initialized"
+
+a = A()
+
+#+end_src
+
+#+results: def-before-use
+: Initialized
+
+#+srcname: use-before-def
+#+begin_src python :results output
+a = A()
+ 
+class A(object):
+    def __init__(self):
+	print "Initialized"
+
+
+#+end_src
+
+#+stderr: use-before-def
+: Traceback (most recent call last):
+:   File "<stdin>", line 1, in <module>
+: NameError: name 'A' is not defined
+
+
+

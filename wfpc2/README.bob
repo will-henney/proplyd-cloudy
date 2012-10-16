@@ -1,0 +1,126 @@
+Welcome to the Orion HST Images directory.
+
+This directory contains the following files:
+
+mosaicf502.fits
+mosaicf547.fits
+mosaicf656.fits
+mosaicf658.fits
+mosaiccolor.tiff
+pltsolballf547
+fov*f*.fits
+EROf*.fits
+GO5469PCf*.fits
+GO5469WFf*.fits
+
+The mosaic*.fits files are fits format images, each containing a single
+Orion image. The f... designation indications which WFPC2 filter was used.
+f502 is the F502N [OIII] filter, f547 is the F547M narrow V filter, f656 is the
+F656N Halpha filter, and f658 is the F658N [NII] filter. 
+
+The normalization is to the exposure times in the program GO 5085, i.e.
+f656n(200S), f658n(500s), f502n(200s), f547m(50s).
+
+These images are not purely the targeted emission-line because they all contain
+some contribution from the continuum and sometimes nearby lines. The method of
+calibration and separation of the components of the signal are described in
+a paper by C. R. O'Dell and T. Doi (1999 PASP, 111, 1316-1320).
+
+The images are each a composite of multiple pointings by the WFPC2 camera. Each pointing
+produced a four part single image through the STSDAS task wmosaic from cosmic ray cleaned
+sets of of individual CCD frames.  The different wmosaic images were then combined using
+the imcombine task after   orienting the central wmosaic images to north up, then pasting 
+on the outer wmosaic images by using stars in overlapping zones for getting the relative
+orientations.  The resulting mosaic images are 4999x5999 pixels. The data files are big,
+each being 114.4MB. The creation of these images are described in C. R. O'Dell and
+S.-K. Wong 1996,AJ,11,846.
+
+
+
+The relation of the x,y values to the RA and DEC is the same for all the fits images.
+The calculation of x,y values from known RA and DEC can be done with the STSDAS task
+(stsdas.analysis.gasp) "eqxy" while conversion from x,y to RA and DEC is done with
+task "xyeq". The parameter configuration for each is copied below:
+                    Image Reduction and Analysis Facility
+PACKAGE = gasp
+   TASK = xyeq
+
+iminfo  =                   no  Is there an input image
+image   =                       Input image name
+coeffile=       pltsolballf547  Input astrometic solution file
+xyfile  =                STDIN  Input (x,y) file name
+pix_cent=                 iraf  X,Y origin: iraf(1,1); dss(1.5,1.5); cos(0.5,0.
+xcolnum =                    1  X pixel column number
+ycolnum =                    2  Y pixel column number
+nskip   =                    0  Number of lines to skip in xy file
+(origina=                   no) Use original plate solution?
+(new    =                   no) Use new plate solution?
+(cdmatx =                   no) Use CD matrix values?
+(ra_hour=                  yes) Display RA in h:m:s?
+(ra_form=               %12.2h) Output format for RA
+(dec_for=               %12.2h) Output format for DEC
+(mode   =                   al)
+                    Image Reduction and Analysis Facility
+PACKAGE = gasp
+   TASK = eqxy
+
+iminfo  =                   no  Is there an input image
+image   =                       Input image name
+coeffile=       pltsolballf547  Input astrometic solution f
+rdfile  =                STDIN  Input (ra,dec) file name
+pix_cent=                 iraf  X,Y origin: iraf[1,1]; dss[1.5,1.5]; cos[.5,.5]
+rcolnum =                    1  ra column number
+dcolnum =                    2  dec column number
+nskip   =                    0  Number of lines to skip in rd file
+(origina=                   no) Use original plate solution?
+(new    =                   no) Use new plate solution?
+(cdmatx =                   no) Use CD matrix values?
+(ra_hour=                  yes) Are RA values in h:m:s?
+(xformat=               %12.2h) Output format for X
+(yformat=               %12.2h) Output format for Y
+(mode   =                   al)
+
+The mosaiccolor.tiff is a full resolution color image made from mosaic658(Red),
+mosaicf656(Green), and mosaicf502(Blue) using logarithmic display of intensity.
+The image is big, i.e. 49.8MB.
+
+The fov*f*.fits images are WFPC2 cosmic ray cleaned images prior to being turned into 
+a mosaic using task wmosaic. These are the highest spatial resolution images. Each file
+contains the four CCD images separately with the PC 0.0455"/pixel first, followed by the
+0.0996"/pixel WFC images. The fov* indicates which pointing from program GO 5085 is 
+meant. To determine the field of view, look at Figure 1 of O'Dell & Wong 1996. The 
+fields are drawn, but not numbered there. The cartoon below shows the numbering.
+
+                          fov10
+
+                 fov3              fov4
+
+               fov1       GO 5469 fov5
+                     ERO5193
+              fov2                 fov7 fov8
+                         fov6
+                  fov9
+
+The ERO5193f*.fits files are were generated with wmosaic from the cosmic-ray event
+cleaned images described in O'Dell & Wong 1996 and analyzed in the publication
+C. R. O'Dell & Z. Wen 1994,ApJ,436,194. Their single pointing is also shown in 
+O'Dell & Wong's Figure 1 and the position is in the above cartoon. 
+
+The GO5469PCf*.fits images are mosaics of images in the PC (CCD#1) images from 
+program GO 5469. It employed 4 slightly different pointings and used relatively short
+exposures and extended the usual list of filters to also include F631N (isolating the
+[OI] 6300 and [SIII] 6312 lines) and F673N (isolating the [SII] doublet at 6717+6731).
+Because of the shifting required to aligh the images, the resolution is slightly degraded
+from an individual PC image. The pointings are shown in the above cartoon and 
+O'Dell and Wong's Figure 1.
+
+The GO5469WFf*.fits images are mosaics of images from program GO 5469 at a scale of
+0.0996"/pixel processed similarly to the PC images described above.
+These images were used in the article C. R. O'Dell 1998,AJ,115,263.
+
+If you have questions, please direct them to Bob O'Dell at "cr.odell@vanderbilt.edu".
+
+Bon Appetit!
+
+
+

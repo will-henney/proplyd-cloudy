@@ -1,0 +1,9 @@
+
+* Plan for first Nahiely proplyd paper
+
+** Scope
++ Present realistic (but static) Cloudy models of a proplyd (LV2)
+  + Calculate observed spectrum, maps, etc
++ Establish if normal abundances model is consitent with Tsamis line ratios
++ That's it. Anything else can go in following papers
+

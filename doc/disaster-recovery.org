@@ -1,0 +1,129 @@
+
+* How to recover from deleting the =.git/= folder
+
+An example using =.emacs.d/=
+
+** The mistake
+*** First we clone the repo
+
+#+BEGIN_SRC sh
+git clone git@github.com:deprecated/.emacs.d.git
+cd .emacs.d/
+#+END_SRC
+
+*** Now we make some changes
+
+#+BEGIN_SRC sh
+echo ZZZ >> wjh-redbox-cursor-theme.el
+#+END_SRC
+
+*** Now is the disaster: we remove =.git/= by mistake
+
+#+BEGIN_SRC sh
+rm -fr .git
+#+END_SRC
+
+And reinitialize a new repo.
+
+#+BEGIN_SRC sh
+git init
+#+END_SRC
+
+** The recovery (local part)
+
+*** First, we commit all the local changes we have made
+
+In this case it is only one file.  In general, it may be several. 
+
+#+BEGIN_SRC sh
+git add wjh-redbox-cursor-theme.el
+git commit -m "Changes that we made locally"
+#+END_SRC
+
+We now have a master branch in our local copy, with all our changed files.
+
+*** Now, the scary part
+
+Remove the entire working copy. 
+
+#+BEGIN_SRC sh
+rm -r *
+#+END_SRC
+
+Note that this does not remove hidden files on the top-level, so the =.git/= folder is safe.  But if you have other top-level hidden files or folders (e.g., =.gitignore=), they should be removed separately. 
+
+*** Restore the locally changed files
+
+#+BEGIN_SRC sh
+git checkout .
+#+END_SRC
+
+Now we have the local repo in a state that is ready to merge back into the remote repo.
+** The recovery (remote part)
+
+*** Reestablish communication with github
+
+#+BEGIN_SRC sh
+git remote add origin git@github.com:deprecated/.emacs.d.git
+git branch --set-upstream master origin/master
+#+END_SRC
+
+*** Merge with the github version
+#+BEGIN_SRC sh
+git pull
+#+END_SRC
+
+This will probably produce conflicts.  
+
+*** Resolve conflicts
+Edit the files to resolve conflicts, then:
+#+BEGIN_SRC sh
+git add wjh-redbox-cursor-theme.el
+#+END_SRC
+In the general case, this may be more than one file.
+
+*** Continue with the merge
+#+BEGIN_SRC sh
+git pull
+#+END_SRC
+
+The End!
+
+** Full log
+#+BEGIN_SRC sh
+git clone git@github.com:deprecated/.emacs.d.git
+cd .emacs.d/
+echo ZZZ >> wjh-redbox-cursor-theme.el
+rm -fr .git
+git init
+git commit -m "Changes that we made locally"
+git branch
+git remote add origin git@github.com:deprecated/.emacs.d.git
+git fetch origin
+git pull origin
+git help pull
+git help fetch
+git help remote
+git stash save --keep-index
+git checkout -- .
+rm *
+ls -a
+git checkout .
+emacs -nw wjh-redbox-cursor-theme.el 
+git add wjh-redbox-cursor-theme.el
+git commit
+ls -l
+git blame wjh-emacs-config.org
+ls
+git blame wjh-redbox-cursor-theme.el
+git pull origin master
+git config
+git config --list
+git config 
+git branch --set-upstream master origin/master
+git push
+git pull
+cat wjh-redbox-cursor-theme.el
+git status
+git log
+#+END_SRC

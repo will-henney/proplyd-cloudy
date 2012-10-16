@@ -1,0 +1,533 @@
+#+TITLE:     Mesa Delgado 2012 paper
+#+AUTHOR:    William Henney
+#+EMAIL:     will@henney.org
+#+DATE:      2012-01-27 Fri
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
+#+STYLE: <link rel="stylesheet" type="text/css" href="../doc/main.css" />
+
+
+* Summary
+Comments on and possible contributions to the paper by Mesa Delgado et al (2012):
+#+BEGIN_QUOTE
+Nebular properties of three protoplanetary discs in the Orion Nebula and the effect of their presence on the abundance discrepancy
+#+END_QUOTE
+
+
+
+* Existing paper
+** Observed line ratios
+
+** Question of proplyd extinction
+Should cite \citep{Rost:2008} 
+
+
+* Our models
+
+** Explaining the models
+*** Test of predictive completion 
+
+    I have installed predictive completion mode and am trying it out.  I have customised it so that it will accept the current word when I type a space or punctuation mark.  So the main trouble is that I have to look down if I want to accept any but the main suggestion, which I find a little difficult.  The other problem is that I keep wanting to type a double space to get a full stop.  A third problem is that I get too used to typing the space bar and even do it at the end of a sentence so I then have to backtrack.  
+
+What happened then? Somehow I seem to have caused that previous paragraph to indent itself.  For some reason the dictionary does not recognise the word "indent".  Not sure why that should be the case.   
+
+So, do I like this feature or not?  Hard to tell really.  It would be better if a double tap of the space bar did really do a period.
+
+*** English version 
+
+    The figure shows the values of (ne,Te) that exist in our model.  The colors represent the two-dimensional PDF (probability distribution function) of the emission in the different lines in (ne,Te) space. 
+
+    The hook shape seen in the Figure reflects principally the variations with radius in the proplyd (there are also variations with angle but these are more minor).  If one starts at the left, then the blue horizontal branch is the outer, highly ionized part that emits predominantly [O III] and that covers a broad range in density but with little variation in temperature.   
+
+*** Spanish version that I sent to Adal
+
+Creo que no explicamos las cosas bien....
+
+Si son "tus" curvas - simplemente las tracé de tu figura 7a
+
+Pero tus curvas son curvas diagnósticas que muestran las posibles valores de (ne,Te) de un medio uniforme que son consistentes con las intensidades de líneas observadas.
+
+Nuestra figura muestra algo muy diferente, son los valores de (ne,Te) que existen en nuestro modelo (un modelo solamente).  Y los colores representan el PDF (función de distribución) bidimensional de la emisión de las diferentes líneas en el espacio ne-Te.  No sé si me explico bien, avísame si todavía no está claro.
+
+La forma de gancho que tiene nuestra figura refleja principalmente las variaciones con radio en el proplyd (también hay una variación con ángulo, pero es menor).  Si empiezas a la izquierda, entonces la rama horizontal azul es la parte exterior, altamente ionizada, que emite principalmente [O III] (por eso es azul), y que cubre un rango amplio de densidad con poca variación de temperatura.  A partir de 10^5 pcc, desvía hacía arriba (temperaturas mayores) mientras la ionización baja - por eso en esta parte se ve emisión de [N II].  La temperatura máxima se alcanza justo antes del frente de ionización, que es donde el verde es más intenso (el rojo también, pero eso no se ve en la nueva versión de la figura porque el verde lo tapa).  Luego, la temperatura baja en la rama roja, que corresponde a gas parcialmente ionizada en el frente mismo.  La densidad máxima se alcanza cuando la fracción de ionización es ~75%.  Toda esta rama emite más [S II] que [N II] y por eso se ve rojo.
+
+Entonces, como que nuestro modelo reproduce bien las intensidades observadas, es de esperarse que tus curvas diagnósticas deben de intersectar nuestra curva en un punto representativo para cada ion, que representa las condiciones promedias en la zona de emisión de cada uno.  Anexo otra versión de la figura que ilustra este hecho.  La estrella blanca es la (ne,Te) deducida de tu modelo homogéneo, mientras que las estrellas azul, verde, y rojo serían los valores (ne,Te) que son típicos de las zonas de emisión de [O III], [N II], y [S II], respectivamente, en nuestro modelo.
+
+Nota que aún dentro de la zona de emisión de cada ion, hay un rango de condiciones.  Por ejemplo, una variación enorme de densidad para [O III] (1.e3 a 1.e5), y una variación de temperatura para [S II] (7000 a 11000).  El [N II] no muestra tanta variación, pero todavía es un delta T ~ 1500 K y un factor de ~5 variación en densidad.
+
+A ver cómo te parece esta explicación.  Voy a escribir una versión en inglés para la sección del artículo.
+
+** Distributions in the ne-Te plane
+
+*** Color mixing modes
+On-screen, these look best in RGB, but that doesn't always print out very well.  So for the Adal paper we have experimented with some pigment-mixing methods: 
+
++ felt tips :: This is simple mixing of inks.  Unfortunately, it tends to make the important bits look dark and muddy
++ oil paints :: This has the opacity proportional to the value, so the dark bits are more colorful.  But, the results depend on the order in which the three colors are applied.  With the SNO and SNOa sets, the best results are using the order red, blue, green since the [N II] emission (green) has the most compact distribution and the [S II] (red) the most extended one.  
+
+*** Best model
+    :PROPERTIES:
+    :dir:      ~/Work/Nahiely/proplyd-cloudy/models/proplyd-auto-models/OLD-WM039000-phi13.20-r15.28-ZZ03
+    :END: 
+
++ WM039000-phi13.20-r15.28-ZZ03
+
+**** New version of SNO distribution with lower-case n_e
+     :LOGBOOK:
+     CLOCK: [2012-05-01 Tue 12:05]--[2012-05-01 Tue 12:45] =>  0:40
+     :END:
+This is the nebular lines of [S II], [N II] and [O III].  It is the version that we are using in the Adal paper. 
+#+BEGIN_SRC sh
+python ../../../emission/emiss-NT-plane.py  \
+    --r0 1.91e15 --lineset SNO --N 200 \
+    --gamma 3 --mode "oil paints" \
+    --bluepen blue --redpen red --greenpen "#5f5"
+mv NT-plane-SNO.pdf NT-plane-SNO-oil-paints.pdf
+python ../../../emission/emiss-NT-plane.py  \
+    --r0 1.91e15 --lineset SNO --N 200 \
+    --gamma 4 --mode "RGB" 
+mv NT-plane-SNO.pdf NT-plane-SNO-RGB.pdf
+#+END_SRC
+
+#+RESULTS:
+
+And repeat the sanitizing
+#+BEGIN_SRC sh
+epstopdf --nocompress --outfile=NT-plane-SNO-oil-paints-GS.pdf  NT-plane-SNO-oil-paints.pdf
+#+END_SRC
+
+#+RESULTS:
+
+
+***** And sanitize the VectorDesigner PDF file
+
+#+BEGIN_SRC sh :dir ~/Work/Nahiely/proplyd-cloudy/papers
+epstopdf --nocompress --outfile=ne-Te-overlay-GS.pdf  ne-Te-overlay.pdf
+#+END_SRC
+
+#+RESULTS:
+
+**** SNOa distribution 
+This is the auroral lines of [S II], [N II] and [O III].  It is the version that we are using in the Adal paper. 
+#+BEGIN_SRC sh
+python ../../../emission/emiss-NT-plane.py  \
+    --r0 1.91e15 --lineset SNOa --N 200 \
+    --gamma 3 --mode "oil paints" \
+    --bluepen blue --redpen red --greenpen "#5f5"
+#+END_SRC
+
+**** Sanitizing the PDF file
+     The LaTeX-produced PDF files do not show up well in Vector Designer.  But ghostscript can convert the fonts to outlines easily enough.  The trick is to stop it from lossily recompressing the images.  
+
+***** Best solution: epstopdf
+Although you are starting with a PDF file, you can still use epstopdf.  It complains about a missing bounding box, but that is harmless.  The important thing is to use the =--nocompress= option: 
+#+BEGIN_SRC sh
+epstopdf --nocompress --outfile=NT-plane-SNO-oil-paints-GS.pdf  NT-plane-SNO-oil-paints.pdf
+#+END_SRC
+
+This produces a pdf that is editable in vector graphics apps (e.g., Illustrator), but still has a reasonable looking 
+image. 
+
+Previously I had complicated solutions using =gs= command line arguments, but these are no longer necessary.  This is tested using version 2.16 of =epstopdf= in TeXLive 2011. 
+
+** First model
+
+*** Parameters
+
++ Radius: r0 = 1.91e15 cm
++ Spectrum
+  + log(Phi) = 13.502
+  + Tstar = 39000
+  + WMbasic
++ Abundances
+  + Cloudy Orion
+  + /Check Iron/
+
+#+BEGIN_SRC sh
+python auto-models.py --ntheta 5 --Tstar 39000 --logPhi 13.502 --r0 1.91e15
+#+END_SRC
+
+*** Calculating line ratios
+Run in the model directory 
+
+#+BEGIN_SRC sh
+python ../../../emission/model_profile.py  --nphi 200 --nvel 31 --inc 75 --r0 1.91e15
+#+END_SRC
+
+*** New comparison of our line ratios with the observed ones
+
+This time we will try and get it right
+| Ion  | Align                     | Lambda | ID  |   Obs | Sigma | ? |      ModelA |      ModelB |      ModelC |      ModelD |      ModelE |      ModelF |      ModelG |      ModelH |      ModelI |      ModelJ |      ModelK |
+|------+---------------------------+--------+-----+-------+-------+---+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------|
+| C__3 | auto                      |   1907 | X   |   NaN |   NaN | 0 |     9.49776 |     9.94567 |     5.25502 |     4.64541 |     15.5027 |     5.25502 |     5.15955 |     7.62107 |      11.228 |     19.0798 |     21.5272 |
+| C__3 | auto                      |   1910 | X   |   NaN |   NaN | 0 |     33.3904 |     27.6655 |      16.114 |     20.4402 |     56.6149 |      16.114 |     17.8769 |     23.4802 |     29.9581 |     45.4955 |      50.667 |
+| O_II | auto                      |   3726 | X   |   NaN |   NaN | 0 |     7.79459 |     12.0032 |     11.1761 |     11.9441 |     14.4979 |     11.1761 |     9.09291 |       9.942 |     10.7272 |     8.04264 |     8.46481 |
+| O_II | auto                      |   3729 | X   |   NaN |   NaN | 0 |     3.01501 |      4.6803 |     4.34672 |     4.59886 |     5.64987 |     4.34672 |     3.52243 |     3.85369 |     4.18612 |     3.14684 |     3.31345 |
+| NE_3 | auto                      |   3869 | Ne3 | 10.80 |   1.4 | 1 |     13.1336 |     10.7972 |     14.6936 |     15.4132 |     7.53344 |     14.6936 |     16.3147 |      8.6085 |     12.7813 |      13.995 |     11.2221 |
+| S_II | auto                      |   4070 | S2  | 8.227 | 0.979 | 1 |     5.61065 |     7.23381 |     10.9607 |     2.96215 |     5.80771 |     10.9607 |     9.70405 |      6.4973 |     8.49026 |     9.35081 |     8.33791 |
+| S_II | auto                      |   4078 | S2  | 2.698 | 0.318 | 1 |     1.61796 |     2.15071 |     3.25729 |    0.853434 |     1.67232 |     3.25729 |     2.84131 |     1.88283 |     2.52509 |     2.78191 |     2.48074 |
+| C__2 | auto                      |   4267 | C2  | 0.191 | 0.051 | 1 |    0.243313 |    0.230659 |    0.204367 |    0.544853 |    0.251977 |    0.204367 |    0.210017 |    0.216878 |    0.194176 |    0.189615 |    0.188665 |
+| TOTL | {left, anchor=south east} |   4363 | O3  | 2.011 | 0.207 | 1 |      2.4695 |      1.9087 |     1.39314 |     1.59562 |     2.44248 |     1.39314 |     1.60262 |     1.70869 |     1.95691 |     1.92056 |     2.12109 |
+| HE_1 | {right=2pt}               |   4471 | He1 |   4.3 | 0.416 | 1 |      4.6893 |     4.62188 |     4.70849 |     4.97334 |     4.82299 |     4.70849 |       4.743 |     4.21625 |     4.62994 |     4.63699 |     4.64119 |
+| FE_3 | auto                      |   4608 | X   |   NaN |   NaN | 0 |    0.150435 |    0.158247 |   0.0452157 |  0.00303324 |    0.198743 |   0.0452157 |   0.0444662 |    0.170636 |   0.0346069 |   0.0397881 |   0.0311617 |
+| O__2 | auto                      |   4651 | X   |   NaN |   NaN | 0 | 4.76076e-18 | 9.26191e-18 | 9.07873e-18 | 4.61488e-18 | 4.85088e-18 | 9.07873e-18 | 6.49714e-18 | 4.64273e-18 | 9.35279e-18 | 9.62233e-18 |  9.6936e-18 |
+| FE_3 | auto                      |   4659 | Fe3 | 0.338 | 0.042 | 1 |     1.59901 |     1.71774 |    0.490608 |   0.0322739 |     2.12035 |    0.490608 |    0.477086 |     1.82163 |    0.375625 |    0.432098 |    0.338306 |
+| FE_3 | below                     |   4702 | Fe3 | 0.198 | 0.052 | 1 |    0.877447 |     0.92303 |    0.263733 |    0.017692 |     1.15922 |    0.263733 |    0.259359 |    0.995273 |     0.20185 |    0.232075 |    0.181756 |
+| FE_3 | auto                      |   4734 | Fe3 | 0.117 | 0.036 | 1 |    0.460225 |    0.487041 |    0.139151 |  0.00926202 |    0.608571 |    0.139151 |    0.136599 |    0.522968 |    0.106519 |    0.122435 |   0.0959034 |
+| FE_3 | auto                      |   4755 | Fe3 | 0.069 | 0.028 | 1 |    0.292408 |     0.31413 |   0.0897206 |  0.00590197 |    0.387759 |   0.0897206 |   0.0872471 |    0.333126 |   0.0686915 |   0.0790187 |   0.0618677 |
+| H__1 | auto                      |   4861 | H1  |   100 |   7.2 | 1 |         100 |         100 |         100 |         100 |         100 |         100 |         100 |         100 |         100 |         100 |         100 |
+| FE_3 | auto                      |   4881 | X   |   NaN |   NaN | 0 |    0.424304 |    0.560984 |    0.160031 |  0.00853852 |    0.585872 |    0.160031 |    0.140743 |    0.507521 |    0.122571 |    0.141006 |    0.110187 |
+| O__3 | {left, anchor=south east} |   4959 | O3  | 80.94 |  5.91 | 1 |     121.619 |     109.591 |     97.2634 |     145.141 |     110.175 |     97.2634 |     103.264 |     96.6872 |     99.9242 |     79.3548 |     83.4609 |
+| FE_3 | auto                      |   4988 | X   |   NaN |   NaN | 0 |   0.0728537 |   0.0963204 |   0.0274778 |  0.00146609 |    0.100594 |   0.0274778 |   0.0241658 |    0.087143 |   0.0210456 |   0.0242105 |   0.0189191 |
+| O__3 | {left, anchor=south east} |   5007 | O3  | 232.7 |  16.2 | 1 |     366.072 |     329.875 |     292.766 |     436.871 |     331.624 |     292.766 |     310.825 |     291.028 |     300.771 |      238.86 |     251.215 |
+| TOTR | auto                      |   5199 | X   |   NaN |   NaN | 0 |  2.3845e-05 | 4.21996e-05 | 3.28054e-05 | 2.68541e-05 | 2.52941e-05 | 3.28054e-05 | 2.46962e-05 | 3.21692e-05 | 4.58296e-05 | 4.48826e-05 | 4.05029e-05 |
+| FE_3 | auto                      |   5271 | X   |   NaN |   NaN | 0 |    0.978355 |     1.05517 |    0.304163 |   0.0203051 |     1.28608 |    0.304163 |    0.295074 |      1.1182 |    0.229344 |    0.261458 |    0.204108 |
+| N__2 | auto                      |   5755 | N2  |  5.91 |  0.65 | 1 |     4.42658 |     4.64493 |     3.05251 |     2.97971 |      5.3035 |     3.05251 |     3.00748 |     5.24998 |     5.65103 |     6.52289 |     6.24335 |
+| HE_1 | {left, anchor=south east} |   5876 | He1 | 14.48 |  1.35 | 1 |     14.5211 |     14.3011 |     14.5145 |     15.2691 |      15.037 |     14.5145 |     14.6268 |     13.0087 |     14.3728 |     14.4955 |     14.5414 |
+| O__1 | auto                      |   6300 | O1  | 4.846 | 0.446 | 1 |     2.67567 |     3.69911 |     3.92331 |      5.4562 |     2.90203 |     3.92331 |     3.35565 |     2.60211 |     3.12624 |      2.0752 |     2.12516 |
+| S__3 | {left, anchor=south east} |   6312 | S3  |  3.88 | 0.357 | 1 |     3.76254 |     3.46033 |      4.6907 |      1.4029 |     4.94517 |      4.6907 |     4.91973 |     3.65459 |     4.30486 |     5.30177 |     4.83666 |
+| H__1 | auto                      |   6563 | H1  |   286 |  21.5 | 1 |     280.179 |     280.998 |     281.824 |     282.517 |     277.927 |     281.824 |     281.394 |     281.722 |     280.554 |     279.733 |     279.562 |
+| N__2 | auto                      |   6584 | N2  | 33.84 |  2.54 | 1 |     20.1692 |     30.2994 |     21.0458 |     16.5691 |     23.3465 |     21.0458 |     17.3056 |      26.358 |     35.3034 |     38.5125 |     35.9958 |
+| HE_1 | {left, anchor=south east} |   6678 | He1 | 3.514 | 0.316 | 1 |      3.8141 |      3.7857 |     3.86733 |     4.08205 |     3.91022 |     3.86733 |     3.88181 |     3.43606 |     3.78662 |     3.78387 |     3.78554 |
+| S_II | auto                      |   6716 | X   |   NaN |   NaN | 0 |    0.172746 |    0.304885 |    0.470588 |   0.0975679 |    0.174501 |    0.470588 |    0.355535 |    0.207567 |    0.352235 |    0.379638 |     0.33554 |
+| S_II | auto                      |   6731 | S2  | 0.747 | 0.067 | 1 |    0.394167 |    0.692943 |     1.06971 |    0.222802 |    0.398067 |     1.06971 |    0.809848 |    0.473713 |    0.800686 |    0.863011 |    0.762771 |
+| AR_3 | auto                      |   7135 | Ar3 | 17.01 |  1.48 | 1 |     23.4313 |     23.2348 |     28.1241 |     19.5507 |     28.5058 |     28.1241 |     28.3184 |     20.0919 |     17.5458 |     19.9689 |     17.6708 |
+| NE_2 | auto                      |  1281m | X   |   NaN |   NaN | 0 |     18.4336 |     21.8344 |     39.8143 |     56.6272 |     25.0638 |     39.8143 |     36.7886 |      21.339 |     22.0589 |     17.9654 |     13.5465 |
+| NE_3 | auto                      |  1555m | X   |   NaN |   NaN | 0 |     18.1332 |     17.1869 |     30.7255 |     49.2328 |     10.3217 |     30.7255 |     31.6815 |      14.052 |     17.5801 |     14.6122 |     11.0525 |
+|      |                           |        |     |       |       |   |             |             |             |             |             |             |             |             |             |             |             |
+
+*** Looking at line ratios
+
+This is a copy of the same table as above, but with some extra rows of important line ratios
+
+| Ion       | Lambda | Obs +/- Sigma   | ? |      ModelA |      ModelB |      ModelC |      ModelD |      ModelE |      ModelF |      ModelG |      ModelH |      ModelI |      ModelJ |      ModelK |
+|-----------+--------+-----------------+---+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------|
+| C__3      |   1907 | NaN +/-   NaN   | 0 |     9.49776 |     9.94567 |     5.25502 |     4.64541 |     15.5027 |     5.25502 |     5.15955 |     7.62107 |      11.228 |     19.0798 |     21.5272 |
+| C__3      |   1910 | NaN +/-   NaN   | 0 |     33.3904 |     27.6655 |      16.114 |     20.4402 |     56.6149 |      16.114 |     17.8769 |     23.4802 |     29.9581 |     45.4955 |      50.667 |
+| O_II      |   3726 | NaN +/-   NaN   | 0 |     7.79459 |     12.0032 |     11.1761 |     11.9441 |     14.4979 |     11.1761 |     9.09291 |       9.942 |     10.7272 |     8.04264 |     8.46481 |
+| O_II      |   3729 | NaN +/-   NaN   | 0 |     3.01501 |      4.6803 |     4.34672 |     4.59886 |     5.64987 |     4.34672 |     3.52243 |     3.85369 |     4.18612 |     3.14684 |     3.31345 |
+| NE_3      |   3869 | 10.80 +/-   1.4 | 1 |     13.1336 |     10.7972 |     14.6936 |     15.4132 |     7.53344 |     14.6936 |     16.3147 |      8.6085 |     12.7813 |      13.995 |     11.2221 |
+| S_II      |   4070 | 8.227 +/- 0.979 | 1 |     5.61065 |     7.23381 |     10.9607 |     2.96215 |     5.80771 |     10.9607 |     9.70405 |      6.4973 |     8.49026 |     9.35081 |     8.33791 |
+| S_II      |   4078 | 2.698 +/- 0.318 | 1 |     1.61796 |     2.15071 |     3.25729 |    0.853434 |     1.67232 |     3.25729 |     2.84131 |     1.88283 |     2.52509 |     2.78191 |     2.48074 |
+| C__2      |   4267 | 0.191 +/- 0.051 | 1 |    0.243313 |    0.230659 |    0.204367 |    0.544853 |    0.251977 |    0.204367 |    0.210017 |    0.216878 |    0.194176 |    0.189615 |    0.188665 |
+| TOTL      |   4363 | 2.011 +/- 0.207 | 1 |      2.4695 |      1.9087 |     1.39314 |     1.59562 |     2.44248 |     1.39314 |     1.60262 |     1.70869 |     1.95691 |     1.92056 |     2.12109 |
+| HE_1      |   4471 | 4.3 +/- 0.416   | 1 |      4.6893 |     4.62188 |     4.70849 |     4.97334 |     4.82299 |     4.70849 |       4.743 |     4.21625 |     4.62994 |     4.63699 |     4.64119 |
+| FE_3      |   4608 | NaN +/-   NaN   | 0 |    0.150435 |    0.158247 |   0.0452157 |  0.00303324 |    0.198743 |   0.0452157 |   0.0444662 |    0.170636 |   0.0346069 |   0.0397881 |   0.0311617 |
+| O__2      |   4651 | NaN +/-   NaN   | 0 | 4.76076e-18 | 9.26191e-18 | 9.07873e-18 | 4.61488e-18 | 4.85088e-18 | 9.07873e-18 | 6.49714e-18 | 4.64273e-18 | 9.35279e-18 | 9.62233e-18 |  9.6936e-18 |
+| FE_3      |   4659 | 0.338 +/- 0.042 | 1 |     1.59901 |     1.71774 |    0.490608 |   0.0322739 |     2.12035 |    0.490608 |    0.477086 |     1.82163 |    0.375625 |    0.432098 |    0.338306 |
+| FE_3      |   4702 | 0.198 +/- 0.052 | 1 |    0.877447 |     0.92303 |    0.263733 |    0.017692 |     1.15922 |    0.263733 |    0.259359 |    0.995273 |     0.20185 |    0.232075 |    0.181756 |
+| FE_3      |   4734 | 0.117 +/- 0.036 | 1 |    0.460225 |    0.487041 |    0.139151 |  0.00926202 |    0.608571 |    0.139151 |    0.136599 |    0.522968 |    0.106519 |    0.122435 |   0.0959034 |
+| FE_3      |   4755 | 0.069 +/- 0.028 | 1 |    0.292408 |     0.31413 |   0.0897206 |  0.00590197 |    0.387759 |   0.0897206 |   0.0872471 |    0.333126 |   0.0686915 |   0.0790187 |   0.0618677 |
+| H__1      |   4861 | 100 +/-   7.2   | 1 |         100 |         100 |         100 |         100 |         100 |         100 |         100 |         100 |         100 |         100 |         100 |
+| FE_3      |   4881 | NaN +/-   NaN   | 0 |    0.424304 |    0.560984 |    0.160031 |  0.00853852 |    0.585872 |    0.160031 |    0.140743 |    0.507521 |    0.122571 |    0.141006 |    0.110187 |
+| O__3      |   4959 | 80.94 +/-  5.91 | 1 |     121.619 |     109.591 |     97.2634 |     145.141 |     110.175 |     97.2634 |     103.264 |     96.6872 |     99.9242 |     79.3548 |     83.4609 |
+| FE_3      |   4988 | NaN +/-   NaN   | 0 |   0.0728537 |   0.0963204 |   0.0274778 |  0.00146609 |    0.100594 |   0.0274778 |   0.0241658 |    0.087143 |   0.0210456 |   0.0242105 |   0.0189191 |
+| O__3      |   5007 | 232.7 +/-  16.2 | 1 |     366.072 |     329.875 |     292.766 |     436.871 |     331.624 |     292.766 |     310.825 |     291.028 |     300.771 |      238.86 |     251.215 |
+| TOTR      |   5199 | NaN +/-   NaN   | 0 |  2.3845e-05 | 4.21996e-05 | 3.28054e-05 | 2.68541e-05 | 2.52941e-05 | 3.28054e-05 | 2.46962e-05 | 3.21692e-05 | 4.58296e-05 | 4.48826e-05 | 4.05029e-05 |
+| FE_3      |   5271 | NaN +/-   NaN   | 0 |    0.978355 |     1.05517 |    0.304163 |   0.0203051 |     1.28608 |    0.304163 |    0.295074 |      1.1182 |    0.229344 |    0.261458 |    0.204108 |
+| N__2      |   5755 | 5.91 +/-  0.65  | 1 |     4.42658 |     4.64493 |     3.05251 |     2.97971 |      5.3035 |     3.05251 |     3.00748 |     5.24998 |     5.65103 |     6.52289 |     6.24335 |
+| HE_1      |   5876 | 14.48 +/-  1.35 | 1 |     14.5211 |     14.3011 |     14.5145 |     15.2691 |      15.037 |     14.5145 |     14.6268 |     13.0087 |     14.3728 |     14.4955 |     14.5414 |
+| O__1      |   6300 | 4.846 +/- 0.446 | 1 |     2.67567 |     3.69911 |     3.92331 |      5.4562 |     2.90203 |     3.92331 |     3.35565 |     2.60211 |     3.12624 |      2.0752 |     2.12516 |
+| S__3      |   6312 | 3.88 +/- 0.357  | 1 |     3.76254 |     3.46033 |      4.6907 |      1.4029 |     4.94517 |      4.6907 |     4.91973 |     3.65459 |     4.30486 |     5.30177 |     4.83666 |
+| H__1      |   6563 | 286 +/-  21.5   | 1 |     280.179 |     280.998 |     281.824 |     282.517 |     277.927 |     281.824 |     281.394 |     281.722 |     280.554 |     279.733 |     279.562 |
+| N__2      |   6584 | 33.84 +/-  2.54 | 1 |     20.1692 |     30.2994 |     21.0458 |     16.5691 |     23.3465 |     21.0458 |     17.3056 |      26.358 |     35.3034 |     38.5125 |     35.9958 |
+| HE_1      |   6678 | 3.514 +/- 0.316 | 1 |      3.8141 |      3.7857 |     3.86733 |     4.08205 |     3.91022 |     3.86733 |     3.88181 |     3.43606 |     3.78662 |     3.78387 |     3.78554 |
+| S_II      |   6716 | NaN +/-   NaN   | 0 |    0.172746 |    0.304885 |    0.470588 |   0.0975679 |    0.174501 |    0.470588 |    0.355535 |    0.207567 |    0.352235 |    0.379638 |     0.33554 |
+| S_II      |   6731 | 0.747 +/- 0.067 | 1 |    0.394167 |    0.692943 |     1.06971 |    0.222802 |    0.398067 |     1.06971 |    0.809848 |    0.473713 |    0.800686 |    0.863011 |    0.762771 |
+| AR_3      |   7135 | 17.01 +/-  1.48 | 1 |     23.4313 |     23.2348 |     28.1241 |     19.5507 |     28.5058 |     28.1241 |     28.3184 |     20.0919 |     17.5458 |     19.9689 |     17.6708 |
+| NE_2      |  1281m | NaN +/-   NaN   | 0 |     18.4336 |     21.8344 |     39.8143 |     56.6272 |     25.0638 |     39.8143 |     36.7886 |      21.339 |     22.0589 |     17.9654 |     13.5465 |
+| NE_3      |  1555m | NaN +/-   NaN   | 0 |     18.1332 |     17.1869 |     30.7255 |     49.2328 |     10.3217 |     30.7255 |     31.6815 |      14.052 |     17.5801 |     14.6122 |     11.0525 |
+|-----------+--------+-----------------+---+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------|
+| 6312/4070 |  S3/S2 | 0.472 +/- 0.071 | 1 |       0.671 |       0.478 |       0.428 |       0.474 |       0.851 |       0.428 |       0.507 |       0.562 |       0.507 |       0.567 |       0.580 |
+| 6731/4070 |  S2/S2 | 0.091 +/- 0.014 | 1 |       0.070 |       0.096 |       0.098 |       0.075 |       0.069 |       0.098 |       0.083 |       0.073 |       0.094 |       0.092 |       0.091 |
+| 4363/5007 |  O3/O3 | 0.009 +/- 0.001 | 1 |       0.007 |       0.006 |       0.005 |       0.004 |       0.007 |       0.005 |       0.005 |       0.006 |       0.007 |       0.008 |       0.008 |
+| 5755/6584 |  N2/N2 | 0.175 +/- 0.023 | 1 |       0.219 |       0.153 |       0.145 |       0.180 |       0.227 |       0.145 |       0.174 |       0.199 |       0.160 |       0.169 |       0.173 |
+| 6300/5007 |  O1/O3 | 0.021 +/- 0.002 | 1 |       0.007 |       0.011 |       0.013 |       0.012 |       0.009 |       0.013 |       0.011 |       0.009 |       0.010 |       0.009 |       0.008 |
+| 3726/5007 |  O2/O3 |                 |   |       0.021 |       0.036 |       0.038 |       0.027 |       0.044 |       0.038 |       0.029 |       0.034 |       0.036 |       0.034 |       0.034 |
+| 3726/6584 |  O2/N2 |                 |   |       0.386 |       0.396 |       0.531 |       0.721 |       0.621 |       0.531 |       0.525 |       0.377 |       0.304 |       0.209 |       0.235 |
+| 3276/3279 |  O2/O2 |                 |   |       2.585 |       2.565 |       2.571 |       2.597 |       2.566 |       2.571 |       2.581 |       2.580 |       2.563 |       2.556 |       2.555 |
+    #+TBLFM: @37$3..@37$15=@28/@7 ; f3::@38$3..@38$15=@33/@7 ; f3::@39$3..@39$15=@10/@22 ; f3::@40$3..@40$15=@25/@30 ; f3::@41$3..@41$15=@27/@22 ; f3::@42$5..@42$15=@4/@22 ; f3::@43$5..@43$15=@4/@30 ; f3::@44$5..@44$15=@4/@5 ; f3
+
+
+
++ The He/H line ratios only depends on the He abundance (varies in Model D) and the stellar temperature (Model H)
++ Model K fits all but the S3/S2 and O1/O3 ratios
++ Absolutely no model can fit the O1/O3 ratio, suggesting that it must be a missing ingredient, such as the OH dissociation.
+  + Alternatively, it could be advection.
+  + C and F come closest (Esteban abundances), but still fall short by 40% 
++ N2 T ratio is too high in models A, E
+
+*** Original comparison of our line ratios with the observed ones
+
+This is not right since we had a mistake with the volume element. 
+
+| Cloudy | El  | lambda |          Model | Observed | Error |  M/O | (M - O)/E |
+|--------+-----+--------+----------------+----------+-------+------+-----------|
+| NE_3   | Ne3 | 3869A  |  8.17686723274 |    10.80 |   1.4 | 0.76 |     -1.87 |
+| S_II   | S2  | 4070A  |  10.4475816855 |    8.227 | 0.979 | 1.27 |      2.27 |
+| S_II   | S2  | 4078A  |  2.99580775427 |    2.698 | 0.318 | 1.11 |      0.94 |
+| C__2   | C2  | 4267A  | 0.207606269471 |    0.191 | 0.051 | 1.09 |      0.33 |
+| TOTL   | O3  | 4363A  |  2.37236800689 |    2.011 | 0.207 | 1.18 |      1.75 |
+| HE_1   | He1 | 4471A  |  4.65171605379 |      4.3 | 0.416 | 1.08 |      0.85 |
+| FE_3   | Fe3 | 4659A  |  2.60331622015 |    0.338 | 0.042 | 7.70 |     53.94 |
+| FE_3   | Fe3 | 4702A  |  1.44123467401 |    0.198 | 0.052 | 7.28 |     23.91 |
+| FE_3   | Fe3 | 4734A  | 0.756129700232 |    0.117 | 0.036 | 6.46 |     17.75 |
+| FE_3   | Fe3 | 4755A  |  0.47606006097 |    0.069 | 0.028 | 6.90 |     14.54 |
+| H__1   | H1  | 4861A  |          100.0 |      100 |   7.2 | 1.00 |      0.00 |
+| O__3   | O3  | 4959A  |  85.6877662453 |    80.94 |  5.91 | 1.06 |      0.80 |
+| O__3   | O3  | 5007A  |  257.917681537 |    232.7 |  16.2 | 1.11 |      1.56 |
+| N__2   | N2  | 5755A  |  8.17735206821 |     5.91 |  0.65 | 1.38 |      3.49 |
+| HE_1   | He1 | 5876A  |  14.5187752486 |    14.48 |  1.35 | 1.00 |      0.03 |
+| O__1   | O1  | 6300A  |   5.4711813156 |    4.846 | 0.446 | 1.13 |      1.40 |
+| S__3   | S3  | 6312A  |   5.1304323418 |     3.88 | 0.357 | 1.32 |      3.50 |
+| H__1   | H1  | 6563A  |  280.747361832 |      286 |  21.5 | 0.98 |     -0.24 |
+| N__2   | N2  | 6584A  |  33.6017794459 |    33.84 |  2.54 | 0.99 |     -0.09 |
+| HE_1   | He1 | 6678A  |  3.78215599287 |    3.514 | 0.316 | 1.08 |      0.85 |
+| S_II   | S2  | 6731A  | 0.637016569893 |    0.747 | 0.067 | 0.85 |     -1.64 |
+| AR_3   | Ar3 | 7135A  |  26.2075170797 |    17.01 |  1.48 | 1.54 |      6.21 |
+    #+TBLFM: $7=$4/$5 ; f2::$8=($4 - $5)/$6 ; f2
+
+
+
+| C__3 | 1907A |     7.93332427132 |       |       | 7.93 / 0   |       |
+| C__3 | 1910A |     43.3734088204 |       |       | 43.37 / 0  |       |
+| O_II | 3726A |     11.0093482515 |       |       | 11.01 / 0  |       |
+| O_II | 3729A |     4.20174031745 |       |       | 4.20 / 0   |       |
+| FE_3 | 4608A |    0.247094541475 |       |       | 0.25 / 0   |       |
+| O__2 | 4651A | 1.06161720282e-19 | 0.139 | 0.043 | 7.6e-19    | -3.23 |
+| FE_3 | 4881A |    0.636804217428 |       |       | 0.64 / 0   |       |
+| FE_3 | 4988A |     0.10934017033 |       |       | 0.11 / 0   |       |
+| TOTR | 5199A | 3.38756080326e-05 |       |       | 3.4e-5 / 0 |       |
+| FE_3 | 5271A |     1.58580914749 |       |       | 1.59 / 0   |       |
+| S_II | 6716A |    0.277357326781 |       |       | 0.28 / 0   |       |
+| NE_3 | 1555m |     6.75155251275 |       |       | 6.75 / 0   |       |
+| NE_2 | 1281m |      22.876453429 |       |       | 22.88 / 0  |       |
+
+
+*** Model variants
+
+|   | Model                         | Comment                      | Status | T                       | log Ne            |
+|---+-------------------------------+------------------------------+--------+-------------------------+-------------------|
+| A | WM039000-phi13.50-r15.28      | Baseline                     | Done   | 8823.1289 +/- 1147.8517 | 4.7097 +/- 0.7354 |
+| B | WM039000-phi13.20-r15.28      | Lower flux                   | Done   | 8691.0840 +/- 1114.1340 | 4.6002 +/- 0.7127 |
+| C | WM039000-phi13.50-r15.28-ZE   | Esteban Abundances           | Done   | 8637.6687 +/- 1138.5702 | 4.7304 +/- 0.7677 |
+| D | WM039000-phi13.50-r15.28-ZT   | Tsamis LV2 Abundances        | Done   | 7738.9668 +/- 1258.5955 | 4.6587 +/- 0.7340 |
+| E | TL039000-phi13.50-r15.28      | Tlusty atmosphere            | Done   | 9247.3746 +/- 1063.8601 | 4.7516 +/- 0.7763 |
+| F | WM039000-phi13.20-r15.28-ZE   | Esteban + Lower flux         | Done   | 8545.5756 +/- 1148.3822 | 4.6257 +/- 0.7393 |
+| G | WM039000-phi13.35-r15.28-ZE   | Esteban + Intermediate flux  | Done   | 8436.2395 +/- 1170.0774 | 4.6355 +/- 0.7366 |
+| H | WM038000-phi13.50-r15.28      | Cooler star                  | Done   | 8888.5844 +/- 1108.0291 | 4.7480 +/- 0.7453 |
+| I | WM039000-phi13.20-r15.28-ZZ   | Tweak01 (0.8 O) + Lower Flux | Done   | 9021.3427 +/- 981.6339  | 4.6355 +/- 0.7366 |
+| J | WM039000-phi13.20-r15.28-ZZ02 | Tweak02 (0.5 O) + Lower Flux | Done   | 9408.3561 +/- 935.3983  | 4.6471 +/- 0.7437 |
+| K | WM039000-phi13.20-r15.28-ZZ03 | Tweak03 (0.5 O) + Lower Flux | Done   | 9468.6648 +/- 1034.3894 | 4.6254 +/- 0.7264 |
+|   |                               |                              |        |                         |                   |
+
+Most of these change only one parameter, although some change two of them, since the lower flux seems best. 
+
+**** Screenshot of ne-Te plots
+
+#+ATTR_HTML: width=800px
+[[file:ScreenShot-ne-Te-multimodels-annotated.png]]
+
+
+The badly drawn lines on the bottom right figure show the diagnostic curves from Adal Fig 7 (blue [O III], orange [N II], red [S II]). 
+
+This shows that the assumption of a unique (ne, Te) combination for all the lines is probably not a good one.  The intersection of the 3 curves is at a higher density and lower T than the models.  But the model can still be consistent with the observations by crossing the curves individually where they are fanning out above and to left of intersection point.
+
+**** Thinking about the flux
+
+According to my NI notes, th1C has QH = 9.02e48, so if we use the lower flux of 1.58e13, then we get a distance (assuming no intervening absorption) of sqrt(9e48 / 4 pi 1.58e13) = 2.129e17 cm 
+
+177-341 has an angular separation of d=25.84" (see [[file:~/Work/Proplyd2005/Sizes/henney-arthur-1998.dat][henney-arthur-1998.dat]]), which for a distance of 440 pc is (1.701e17 / sin i) cm. This implies that the inclination of the proplyd axis from the line of sight is i = 53 degrees (or 37 degrees from the plane of the sky). 
+
+HO1999 found a value of 80 +/- 5 degrees, which is not consistent with this (if it really were 50 degrees, then there should be more net blueshift in the lines.  On the other hand, perhaps some of the redshifted shoulder is scattered....
+
+ 
+
+
+**** Two times smaller flux
+
++ WM039000-phi13.20-r15.28
++ This might be relevant if the true distance were higher
+  + or if there were intervening absorption (unlikely).
++ Which lines go up (> 20%)?
+  + Low ionization lines:
+    + [S II], [O II], [N II], [O I]
+    + Some [Fe III] lines (4881, 4988)
+  + Nebular more than auroral lines
+    + 1.7 vs 1.3 for [S II]
+    + 1.5 vs 1.0 for [N II]
++ Which lines go down (> 10%)?
+  + High ionization lines
+    + [O III], [Ne III], C III], [S III]
+  + Auroral more than nebular lines
+    + 0.7 vs 0.85 for [O III]
++ Which lines stay the same?
+  + H and He recomb lines
+  + Most [Fe III] lines (4659, 4755, 5271, 4734, 4608, 4702)
+  + [N II] 5755, and [Ar III] 7135
+
+
+***** Table ordered by wavelength
+| Ion  | Line  |          Original |        Lower flux | Ratio |
+|------+-------+-------------------+-------------------+-------|
+| C  3 | 1907A |     7.93332427132 |     8.55795829873 |  1.08 |
+| C  3 | 1910A |     43.3734088204 |     34.8275988647 |  0.80 |
+| O II | 3726A |     11.0093482515 |     16.1260976732 |  1.46 |
+| O II | 3729A |     4.20174031745 |     6.18066093444 |  1.47 |
+| NE 3 | 3869A |     8.17686723274 |     6.34357454535 |  0.78 |
+| S II | 4070A |     10.4475816855 |     13.2592267827 |  1.27 |
+| S II | 4078A |     2.99580775427 |     3.92201567734 |  1.31 |
+| C  2 | 4267A |    0.207606269471 |    0.189433359999 |  0.91 |
+| TOTL | 4363A |     2.37236800689 |     1.67044218231 |  0.70 |
+| HE 1 | 4471A |     4.65171605379 |     4.55858248773 |  0.98 |
+| FE 3 | 4608A |    0.247094541475 |    0.249619453645 |  1.01 |
+| O  2 | 4651A | 1.06161720282e-19 | 2.04371126802e-19 |  1.93 |
+| FE 3 | 4659A |     2.60331622015 |     2.67475388287 |  1.03 |
+| FE 3 | 4702A |     1.44123467401 |     1.45599328383 |  1.01 |
+| FE 3 | 4734A |    0.756129700232 |    0.771368776435 |  1.02 |
+| FE 3 | 4755A |     0.47606006097 |    0.489142101465 |  1.03 |
+| H  1 | 4861A |             100.0 |             100.0 |  1.00 |
+| FE 3 | 4881A |    0.636804217428 |    0.811547647614 |  1.27 |
+| O  3 | 4959A |     85.6877662453 |     72.7482506915 |  0.85 |
+| FE 3 | 4988A |     0.10934017033 |    0.139341266403 |  1.27 |
+| O  3 | 5007A |     257.917681537 |     218.974735354 |  0.85 |
+| TOTR | 5199A | 3.38756080326e-05 | 5.68272919719e-05 |  1.68 |
+| FE 3 | 5271A |     1.58580914749 |     1.63603284432 |  1.03 |
+| N  2 | 5755A |     8.17735206821 |     8.37378041706 |  1.02 |
+| HE 1 | 5876A |     14.5187752486 |     14.2056398326 |  0.98 |
+| O  1 | 6300A |      5.4711813156 |      7.4733468355 |  1.37 |
+| S  3 | 6312A |      5.1304323418 |     4.55072902872 |  0.89 |
+| H  1 | 6563A |     280.747361832 |     281.546881447 |  1.00 |
+| N  2 | 6584A |     33.6017794459 |     48.9856825497 |  1.46 |
+| HE 1 | 6678A |     3.78215599287 |     3.72565915025 |  0.99 |
+| S II | 6716A |    0.277357326781 |    0.476077678717 |  1.72 |
+| S II | 6731A |    0.637016569893 |     1.09129965062 |  1.71 |
+| AR 3 | 7135A |     26.2075170797 |     25.6031242347 |  0.98 |
+| NE 2 | 1281m |      22.876453429 |     26.6950708217 |  1.17 |
+| NE 3 | 1555m |     6.75155251275 |     6.24680533374 |  0.93 |
+     #+TBLFM: $4=$-1/$-2;f2
+
+***** Table ordered by relative change
+| Ion  | Line  |          Original |        Lower flux | Ratio |
+|------+-------+-------------------+-------------------+-------|
+| O  2 | 4651A | 1.06161720282e-19 | 2.04371126802e-19 |  1.93 |
+| S II | 6716A |    0.277357326781 |    0.476077678717 |  1.72 |
+| S II | 6731A |    0.637016569893 |     1.09129965062 |  1.71 |
+| TOTR | 5199A | 3.38756080326e-05 | 5.68272919719e-05 |  1.68 |
+| O II | 3729A |     4.20174031745 |     6.18066093444 |  1.47 |
+| O II | 3726A |     11.0093482515 |     16.1260976732 |  1.46 |
+| N  2 | 6584A |     33.6017794459 |     48.9856825497 |  1.46 |
+| O  1 | 6300A |      5.4711813156 |      7.4733468355 |  1.37 |
+| S II | 4078A |     2.99580775427 |     3.92201567734 |  1.31 |
+| S II | 4070A |     10.4475816855 |     13.2592267827 |  1.27 |
+| FE 3 | 4881A |    0.636804217428 |    0.811547647614 |  1.27 |
+| FE 3 | 4988A |     0.10934017033 |    0.139341266403 |  1.27 |
+| NE 2 | 1281m |      22.876453429 |     26.6950708217 |  1.17 |
+| C  3 | 1907A |     7.93332427132 |     8.55795829873 |  1.08 |
+| FE 3 | 4659A |     2.60331622015 |     2.67475388287 |  1.03 |
+| FE 3 | 4755A |     0.47606006097 |    0.489142101465 |  1.03 |
+| FE 3 | 5271A |     1.58580914749 |     1.63603284432 |  1.03 |
+| FE 3 | 4734A |    0.756129700232 |    0.771368776435 |  1.02 |
+| N  2 | 5755A |     8.17735206821 |     8.37378041706 |  1.02 |
+| FE 3 | 4608A |    0.247094541475 |    0.249619453645 |  1.01 |
+| FE 3 | 4702A |     1.44123467401 |     1.45599328383 |  1.01 |
+| H  1 | 4861A |             100.0 |             100.0 |  1.00 |
+| H  1 | 6563A |     280.747361832 |     281.546881447 |  1.00 |
+| HE 1 | 6678A |     3.78215599287 |     3.72565915025 |  0.99 |
+| HE 1 | 4471A |     4.65171605379 |     4.55858248773 |  0.98 |
+| HE 1 | 5876A |     14.5187752486 |     14.2056398326 |  0.98 |
+| AR 3 | 7135A |     26.2075170797 |     25.6031242347 |  0.98 |
+| NE 3 | 1555m |     6.75155251275 |     6.24680533374 |  0.93 |
+| C  2 | 4267A |    0.207606269471 |    0.189433359999 |  0.91 |
+| S  3 | 6312A |      5.1304323418 |     4.55072902872 |  0.89 |
+| O  3 | 4959A |     85.6877662453 |     72.7482506915 |  0.85 |
+| O  3 | 5007A |     257.917681537 |     218.974735354 |  0.85 |
+| C  3 | 1910A |     43.3734088204 |     34.8275988647 |  0.80 |
+| NE 3 | 3869A |     8.17686723274 |     6.34357454535 |  0.78 |
+| TOTL | 4363A |     2.37236800689 |     1.67044218231 |  0.70 |
+
+***** New corrected version
+
++ It turns out that we had the radius inside out in model_profile.py
++ This is now fixed
++ The new version gives higher intensities for the higher ionization lines 
+| Ion  | Line  |         New |               Old |   N/O |
+|------+-------+-------------+-------------------+-------|
+| C  3 | 1907A |     9.94567 |     8.55795829873 |  1.16 |
+| C  3 | 1910A |     27.6655 |     34.8275988647 |  0.79 |
+| O II | 3726A |     12.0032 |     16.1260976732 |  0.74 |
+| O II | 3729A |      4.6803 |     6.18066093444 |  0.76 |
+| NE 3 | 3869A |     10.7972 |     6.34357454535 |  1.70 |
+| S II | 4070A |     7.23381 |     13.2592267827 |  0.55 |
+| S II | 4078A |     2.15071 |     3.92201567734 |  0.55 |
+| C  2 | 4267A |    0.230659 |    0.189433359999 |  1.22 |
+| TOTL | 4363A |      1.9087 |     1.67044218231 |  1.14 |
+| HE 1 | 4471A |     4.62188 |     4.55858248773 |  1.01 |
+| FE 3 | 4608A |    0.158247 |    0.249619453645 |  0.63 |
+| O  2 | 4651A | 9.26191e-18 | 2.04371126802e-19 | 45.32 |
+| FE 3 | 4659A |     1.71774 |     2.67475388287 |  0.64 |
+| FE 3 | 4702A |     0.92303 |     1.45599328383 |  0.63 |
+| FE 3 | 4734A |    0.487041 |    0.771368776435 |  0.63 |
+| FE 3 | 4755A |     0.31413 |    0.489142101465 |  0.64 |
+| H  1 | 4861A |         100 |             100.0 |  1.00 |
+| FE 3 | 4881A |    0.560984 |    0.811547647614 |  0.69 |
+| O  3 | 4959A |     109.591 |     72.7482506915 |  1.51 |
+| FE 3 | 4988A |   0.0963204 |    0.139341266403 |  0.69 |
+| O  3 | 5007A |     329.875 |     218.974735354 |  1.51 |
+| TOTR | 5199A | 4.21996e-05 | 5.68272919719e-05 |  0.74 |
+| FE 3 | 5271A |     1.05517 |     1.63603284432 |  0.64 |
+| N  2 | 5755A |     4.64493 |     8.37378041706 |  0.55 |
+| HE 1 | 5876A |     14.3011 |     14.2056398326 |  1.01 |
+| O  1 | 6300A |     3.69911 |      7.4733468355 |  0.49 |
+| S  3 | 6312A |     3.46033 |     4.55072902872 |  0.76 |
+| H  1 | 6563A |     280.998 |     281.546881447 |  1.00 |
+| N  2 | 6584A |     30.2994 |     48.9856825497 |  0.62 |
+| HE 1 | 6678A |      3.7857 |     3.72565915025 |  1.02 |
+| S II | 6716A |    0.304885 |    0.476077678717 |  0.64 |
+| S II | 6731A |    0.692943 |     1.09129965062 |  0.63 |
+| AR 3 | 7135A |     23.2348 |     25.6031242347 |  0.91 |
+| NE 2 | 1281m |     21.8344 |     26.6950708217 |  0.82 |
+| NE 3 | 1555m |     17.1869 |     6.24680533374 |  2.75 |
+|      |       |             |                   |   0/0 |
+      #+TBLFM: $5=$-2/$-1;f2
+*** Abundances
+    
++ Cloudy Orion :: standard ISM abundances from Cloudy 10
++ Esteban Orion :: Esteban et al (2004) assuming t^2=0.022
++ Tsamis LV2 :: LV 2 Core from Tsamis et al (2011a)
+  + Carbon is average of RL and CL values 8.66, 8.98
+  + Oxygen is average of RL and CL values 8.96, 9.03
++ Tweak01 is guessed at to try and improve the fits
+  + It works pretty well, apart from [O I] and [O III]
+
+| Element | Cloudy M42 | Esteban M42 | Tweak01 | Tweak03 | Tsamis LV2 | Est/Clou | Tsam/Clou | Tweak01/Clou | Tweak02/Clou | Tweak03/Clou |
+|---------+------------+-------------+---------+---------+------------+----------+-----------+--------------+--------------+--------------|
+| He      |      10.98 |      10.988 |   10.98 |   10.98 |     11.017 |     1.02 |      1.09 |          1.0 |          1.0 |          1.0 |
+| C       |       8.48 |        8.42 |    8.41 |    8.41 |       8.82 |     0.87 |      2.19 |         0.85 |         0.85 |         0.85 |
+| N       |       7.85 |        7.73 |    7.89 |    7.85 |       7.86 |     0.76 |      1.02 |          1.1 |          1.1 |          1.0 |
+| O       |        8.6 |        8.65 |    8.50 |    8.30 |      8.995 |     1.12 |      2.48 |          0.8 |          0.5 |          0.5 |
+| Ne      |       7.78 |        8.05 |    7.78 |    7.56 |       8.28 |     1.86 |      3.16 |          1.0 |          0.8 |          0.6 |
+| S       |        7.0 |        7.22 |    7.04 |    6.98 |       6.83 |     1.66 |      0.68 |          1.1 |          1.1 |         0.95 |
+| Cl      |        5.0 |        5.46 |    5.30 |    5.30 |       5.36 |     2.88 |      2.29 |          2.0 |          2.0 |          2.0 |
+| Ar      |       6.48 |        6.62 |    6.33 |    6.26 |       6.59 |     1.38 |      1.29 |          0.7 |          0.7 |          0.6 |
+| Fe      |       6.47 |        5.99 |    5.77 |    5.65 |       4.96 |     0.33 |      0.03 |          0.2 |          0.2 |         0.15 |
+    #+TBLFM: $4=$2 + log10($9);f2::$5=$2 + log10($11);f2::$7=10**($3-$2); f2::$8=10**($6-$2); f2::@3$6=0.5 (8.98 + 8.66)::@5$6=0.5 (9.03 + 8.96)
+
+
+*** Sample region
+
++ Currently model is for entire proplyd head
+
++ Observations are a box that is 1" square, centered near the bright crescent
+
+
+**** TODO Add aperture effects to model_profile.py

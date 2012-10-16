@@ -347,6 +347,7 @@ if __name__ == '__main__':
         Zstring = "-ZZ%s" % (cmdargs.composition[-2:])
     elif cmdargs.composition == "TsamisHST10":
         Zstring = "-ZT10"
+<<<<<<< HEAD
     elif cmdargs.composition == "HST10t01":
         Zstring = "-ZT101"
     elif cmdargs.composition == "HST10t02":
@@ -361,6 +362,8 @@ if __name__ == '__main__':
         Zstring = "-ZT106"
     elif cmdargs.composition == 'HST10nd':
         Zstring = "-ZT106nd"
+=======
+>>>>>>> 489f1b21fe5cdd2a5d5d37d5d4f876774a4b84f0
     elif cmdargs.composition == "file":
         Zstring = cmdargs.composition_file.split(".")[0]
     else:

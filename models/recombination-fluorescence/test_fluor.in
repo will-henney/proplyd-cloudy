@@ -1,0 +1,51 @@
+* Cloudy input file written by auto-models.py
+title it16n2.876e+02x03.33
+set save prefix "test_fluor"
+* Proplyd density law from customized dense_fabden.cpp
+dlaw 53 3.700e+15 9.000 287.6209 30.0 3.3
+* Further tweaked abundances to try and improve fit
+abundances H II region no grains
+element scale factor nitrogen 0.59
+element scale factor oxygen 1.07
+element scale factor sulphur 0.56
+element scale factor neon 1.3
+element scale factor iron 0.2
+element scale factor argon 0.62
+grains Orion
+grains PAH
+set PAH "H" // Only have PAH in the neutral gas
+* Optimizations
+no molecules
+no level 2 lines
+*Stopping criteria
+stop efrac 0.050
+stop temperature 5.000 linear
+iterate
+* Background radiation that is always there
+cosmic ray background 1.0000 linear
+cmb
+table ism // Diffuse interstellar field
+* WMBasic (Pauldrach et al. 2001) non-LTE, line-blanketed, 
+*  and wind-blanketed hot stars
+table star wmbasic 39000 4.100 0.000 
+phi(H) 12.14
+* Output options
+set save hash "return"
+set save flush
+save last overview ".ovr"
+save last physical conditions ".phy"
+save last grain charge ".grc"
+save last grain drift velocity ".grv"
+save last grain temperature ".grt"
+save last PDR ".pdr"
+save last element oxygen ".ion_o"
+save last element nitrogen ".ion_n"
+save last element sulphur ".ion_s"
+save last element carbon ".ion_c"
+save last dr ".dr"
+save last continuum ".cont"
+save last pressure ".pre"
+save last heat ".heat" 
+save last cool ".cool" 
+save linelist ".lin" "LineList.dat"
+

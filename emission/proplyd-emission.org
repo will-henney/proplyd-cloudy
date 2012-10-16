@@ -1,0 +1,15 @@
+
+* Notes on calculation of proplyd emission
+** Calculating luminosities by Trapezium method
+*** Convergence of results
+Tests with the program lum.py
+
+|   N |               err |  1/N^2 | N^2 err    |
+|-----+-------------------+--------+------------|
+|  10 |  0.00978774840056 |   0.01 | 0.97877484 |
+|  50 | 0.000334955582118 |   4e-4 | 0.83738896 |
+| 100 | 8.20868854341e-05 |   1e-4 | 0.82086885 |
+| 200 | 2.03178732466e-05 | 2.5e-5 | 0.81271493 |
+#+TBLFM: $3=1/$1**2::$4=$2/$3
+
+Since the last column is roughly constant, the convergence is roughly 1/N^2, as expected.  This is with a logarithmic series in radius, to test the effects of non-uniform spacing of the ordinates. 

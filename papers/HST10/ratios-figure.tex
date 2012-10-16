@@ -1,0 +1,171 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{txfonts}
+\usepackage{pgfplots}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\setcounter{secnumdepth}{0}
+
+\newcommand\Ion[2]{\ensuremath{\mathrm{#1\,\scriptstyle #2}}}
+\newcounter{ionstage}
+\newcommand{\ion}[2]{% replace the aastex version
+  \setcounter{ionstage}{#2}%
+  \Ion{#1}{\Roman{ionstage}}}
+
+\usepgfplotslibrary{external}
+\tikzset{external/force remake}
+\tikzexternalize
+
+\pgfplotsset{
+  compat=1.5.1, % most current version as of writing (27 Jan 2012)
+  % compat=newest, % select to always use latest version (may cause minor appearance changes)
+  width=\textwidth,
+  every axis legend/.append style={
+    % make legend less tightly packed
+    inner xsep=0.5em,
+    inner ysep=3pt,
+    nodes={
+      inner xsep=1em,
+      text depth=0.25em
+    },
+  },
+}
+\pgfplotsset{}
+\newcommand\RatioPlot[1]{
+\begin{tikzpicture}
+  \begin{loglogaxis}[
+    xlabel={Observed Intensity, \(100 \times I(\lambda)/I(\mathrm{H}\beta)\)}, 
+    ylabel={Model Intensity, \(100 \times I(\lambda)/I(\mathrm{H}\beta)\)},
+    log ticks with fixed point,
+    legend columns=3,
+    legend pos=north west,
+    % transpose legend,
+    ]
+    \addplot [
+    scatter/classes={
+      Ar3={mark=square*,magenta},%
+%      Ar4={mark=square*,magenta},%
+      C2={mark=triangle*,black},%
+%      C3={mark=square*,black},%
+      Cl3={mark=square*,purple},%
+      Fe3={mark=square*,yellow},%
+      H1={mark=*,brown},% 
+      He1={mark=*,green},%  
+      N1={mark=*,violet},%
+      N2={mark=triangle*,violet},% 
+      Ne3={mark=square*,red},%
+      O1={mark=*,orange},% 
+      O2={mark=triangle*,orange},%
+      O3={mark=square*,orange},%
+      S2={mark=triangle*,blue},% 
+      S3={mark=square*,blue}%       
+    },
+    only marks, scatter, 
+    scatter src=explicit symbolic,
+    point meta=explicit symbolic,
+    nodes near coords*={\scriptsize\pgfmathprintnumber[set thousands separator={}]\LAMBDA\,\AA},
+    visualization depends on={\thisrow{Lambda} \as \LAMBDA},
+    nodes near coords align=\ALIGN,
+    visualization depends on={value\thisrow{Align} \as \ALIGN},    
+    error bars/x dir=both,
+    error bars/x explicit,
+    error bars/y dir=none,
+    ] table [
+    x=WillSP, 
+    y=Model#1, 
+    x error=WilldSP,
+    meta=ID
+    ] {HST-10aperture.dat};
+    \addlegendentry{[\ion{Ar}{3}]}
+    \addlegendentry{\ion{C}{2}} 
+    \addlegendentry{[\ion{Cl}{3}]}
+    \addlegendentry{[\ion{Fe}{3}]}
+    \addlegendentry{\ion{H}{1}} 
+    \addlegendentry{\ion{He}{1}} 
+    \addlegendentry{[\ion{N}{1}]}
+    \addlegendentry{[\ion{N}{2}]} 
+    \addlegendentry{[\ion{Ne}{3}]}
+    \addlegendentry{[\ion{O}{1}]}
+    \addlegendentry{[\ion{O}{2}]}
+    \addlegendentry{[\ion{O}{3}]}
+    \addlegendentry{[\ion{S}{2}]}
+    \addlegendentry{[\ion{S}{3}]}
+    \addplot [gray,domain=0.08:300] {x};
+  \end{loglogaxis}
+\end{tikzpicture}
+}
+
+% colores: red, green,blue, cyan, magenta, yellow, black, gray, white,
+% darkgray, lightgray, brown, lime, olive, orange, pink, purple, teal, violet.
+
+\begin{document} 
+
+
+\section{Model A: Esteban}
+\begin{description}
+\item[Spectrum] WMBasic, \SI{39000}{K}
+\item[Flux] \(\log_{10} \Phi = 12.10\)
+\item[Abundance set] 
+\end{description}
+\bigskip
+\RatioPlot{B}
+
+\newpage 
+
+\section{Model Q: Tsamis final}
+\begin{description}
+\item[Spectrum] WMBasic, \SI{39000}{K}
+\item[Flux] \(\log_{10} \Phi = 12.10\)
+\item[Abundance set] 
+\end{description}
+\bigskip
+\RatioPlot{Q}
+
+\newpage  
+
+\section{Model R: }
+\begin{description}
+\item[Spectrum] WMBasic, \SI{39000}{K}
+\item[Flux] \(\log_{10} \Phi = 12.10\)
+\item[Abundance set] 
+\end{description}
+\bigskip
+\RatioPlot{R}
+
+\newpage  
+
+\section{Model S: }
+\begin{description}
+\item[Spectrum] WMBasic, \SI{39000}{K}
+\item[Flux] \(\log_{10} \Phi = 12.10\)
+\item[Abundance set] 
+\end{description}
+\bigskip
+\RatioPlot{S}
+
+\newpage   
+
+\section{Model T: }
+\begin{description}
+\item[Spectrum] WMBasic, \SI{39000}{K}
+\item[Flux] \(\log_{10} \Phi = 12.10\)
+\item[Abundance set] 
+\end{description}
+\bigskip
+\RatioPlot{T}
+
+\newpage   
+
+\section{Model U: }
+\begin{description}
+\item[Spectrum] WMBasic, \SI{39000}{K}
+\item[Flux] \(\log_{10} \Phi = 12.10\)
+\item[Abundance set] 
+\end{description}
+\bigskip
+\RatioPlot{U}
+
+\newpage 
+
+\end{document}
