@@ -11,9 +11,11 @@ Make the integration to find the mass loss rate in the proplyd head
 """)
 
 parser.add_argument(
+        "--modeldir", type=str, default=".",  
+        help='Path to proplyd directory model')
+parser.add_argument(
         "--rebin", type=str, default="linear-101",
         help='Load rebinned model from "rebin-REBIN"')  
-    help='Last part of cube file names')
 parser.add_argument(
         "--r0", type=float, default=8.0e14,
         help='Radius of proplyd ionization front in cm')
@@ -30,7 +32,6 @@ def read_fits(varid):
            "%s.fits" % (varid)
            )
     return pyfits.open(fitsname)[0].data
-
 
 Mu = read_fits("mu")[:,0]
 dmu = Mu[1] - Mu[0]             # assume uniform spacing in mu
