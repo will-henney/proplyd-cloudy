@@ -41,13 +41,14 @@ Density2D = read_fits("ovr-hden")
 validmask = Density2D != -1.0
 Density2D = 10**Density2D
 sound_speed2D = np.sqrt(3./5.)*read_fits("pre-cadwind_kms")
-n0 = Density2D[:, i2:i2+1]
-c0 = sound_speed2D[:, i2:i2+1]
-R0 = R[:, i2:i2+1]
+n0 = Density2D[:, i2]
+c0 = sound_speed2D[:, i2] * 1.0e5 # sound speed in cm/s
 mp = 1.67262158e-24                # proton mass in g
 
-for mu in Mu:
-    dloss = n0 * c0 * (R0*r0)^2
-    loss += 2*np.pi*mp*dloss*dmu
+loss = 2*np.pi*1.3*mp*dmu*np.sum(n0 * c0) * cmd_args.r0**2
 
-print "Mass loss rate: ", loss
+print "Mass loss rate: ", loss, "g/s"
+loss *= 3.15576e7 / 1.989e33
+print "Mass loss rate: ", loss, "Msun/yr"
+
+
