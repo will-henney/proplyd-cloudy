@@ -48,3 +48,5 @@ mp = 1.67262158e-24                # proton mass in g
 for mu in Mu:
     dloss = n0 * c0 * (R0*r0)^2
     loss += 2*np.pi*mp*dloss*dmu
+
+print "Mass loss rate: ", loss
