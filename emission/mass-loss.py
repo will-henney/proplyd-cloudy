@@ -33,7 +33,7 @@ def read_fits(varid):
 
 
 Mu = read_fits("mu")[:,0]
-dmu = 
+dmu = Mu[1] - Mu[0]             # assume uniform spacing in mu
 R = read_fits("R")[0,:]
 i2 = len(R[R<1.0])             # find index where R = 1
 Density2D = read_fits("ovr-hden")
