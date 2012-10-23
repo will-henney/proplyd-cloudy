@@ -10,7 +10,14 @@ import claudia
 import matplotlib.pyplot as plt
 import matplotlib 
 
-matplotlib.rcParams['lines.linewidth'] = 3
+
+params = {
+    "lines.linewidth": 3,
+    "font.family": "serif",
+    "text.usetex": True,
+    "text.latex.preamble": [r"\usepackage[varg]{txfonts}"],
+    }
+matplotlib.rcParams.update(params)
 
 
 # Parameters for ionization transition, specified in .in files
@@ -94,31 +101,62 @@ def plot_vars(modelid):
     print "@ R = 1.0: T/Tmax = %.4f, ifrac = %.4f, U = %.4f" % (T[i2]/Tmax, ifrac[i2], U[i2])
     print "I-front thickness in approx model: dR = %.4f" % (dR)
 
-    delta = (z[i5] - z)/deltascale
-    plt.plot(delta, U, 'k-', label='velocity')                  # cloudy version
-    plt.plot(delta, T/1.e4, 'r-', label='T / 10^4 K')
-    plt.plot(delta, sound/sound[i2], 'r-.', label='c / c_m')
-    plt.plot(delta, eden/n0, 'k--', label='n_e/n_0')
-    plt.plot(delta, heat24/3.0, 'r--', label='Heat / 3.e-24')
-    plt.plot(delta, efrac, 'b-', label='n_e/n_H')
-    plt.plot(delta, tau0/10.0, 'b--', label='tau0/10')
+    if args.symlog:
+        delta = (z[i5] - z)/deltascale
+    else:
+        delta = (z[-1] + deltascale) - z
 
-    plt.plot(delta, oplus, 'g-', label='O+/O')
-    plt.plot(delta, nplus, 'g--', label='N+/N')
-    plt.plot(delta, heplus, 'y-', label='He+/He')
-    plt.plot(delta, splus, 'y--', label='S+/S')
+    if args.density_scale: 
+        nscale = args.density_scale
+        exponent = int(numpy.log10(nscale))
+        abcissa = nscale/10**exponent
+        if int(abcissa) == 1:
+            snscale = r"10^{{{:d}}}~\mathrm{{cm^{{-3}}}}".format(exponent)
+        else:
+            snscale = r"{:.0f} \times 10^{{{:d}}}~\mathrm{{cm^{{-3}}}}".format(abcissa, exponent)
+
+    else:
+        nscale = n0
+        snscale = "n_0"
+
+    plt.plot(delta, U * sound[i2] / 10., 'k-', label='\(\mathrm{velocity} / 10~\mathrm{km~s^{-1}}\)')                  # cloudy version
+    plt.plot(delta, T/1.e4, 'r-', label=r'\(T / 10^4\) K')
+    plt.plot(delta, sound/10., 'r--', label=r'\(c / 10~\mathrm{km~s^{-1}}\)')
+    plt.plot(delta, eden/nscale, 'k--', label=r'\(n_\mathrm{{e}}/{}\)'.format(snscale))
+    plt.plot(delta, hden/nscale, 'm-', label=r'\(n_\mathrm{{H}}/{}\)'.format(snscale))
+    if args.heat:
+        plt.plot(delta, heat24/3.0, 'r-.', label='Heat / 3.e-24')
+    plt.plot(delta, efrac, 'b-', label=r'\(n_\mathrm{e}/n_\mathrm{H}\)')
+    plt.plot(delta, tau0/10.0, 'b--', label=r'\(\tau_0/10\)')
+
+    plt.plot(delta, oplus, 'g-', label=r'\(\mathrm{O^+\!/\,O}\)')
+    plt.plot(delta, nplus, 'g--', label=r'\(\mathrm{N^+\!/\,N}\)')
+    plt.plot(delta, heplus, 'y-', label=r'\(\mathrm{He^+\!/\,He}\)')
+    plt.plot(delta, splus, 'y--', label=r'\(\mathrm{S^+\!/\,S}\)')
 
     for l in plt.gca().lines:
         l.set_alpha(.7)
 
-    plt.xlabel('[r - r(x=0.5)] / %.0e cm' % (deltascale))
     plt.ylabel('')
-    plt.title('Proplyd ionization front structure')
+    plt.ylim(0.0, 3.5)
+    if args.print_title:
+        plt.title('Proplyd ionization front structure')
     plt.grid(True)
-    plt.xscale('symlog')
-    plt.axis([-0.3*r0/deltascale, Rmax*r0/deltascale, 0.0, 2.8])
-    plt.legend(loc="upper left", prop={'size':10})
-    plt.savefig("thermoplot-%s.png" % (modelid), dpi=args.dpi)
+    if args.symlog:
+        plt.xlabel('[r - r(x=0.5)] / %.0e cm' % (deltascale))
+        plt.xscale('symlog')
+        plt.xlim(-0.3*r0/deltascale, Rmax*r0/deltascale)
+    else:
+        plt.xlabel(r'\(r - r_\mathrm{min}\) / cm')
+        plt.xscale('log')
+        plt.xlim(deltascale, Rmax*r0)
+        
+
+    plt.legend(loc="upper center", ncol=2, prop={'size':10})
+    if args.png:
+        plt.savefig("thermoplot-%s.png" % (modelid), dpi=args.dpi)
+    else:
+        plt.savefig("thermoplot-%s.pdf" % (modelid))
 
 if __name__ == '__main__':
     import warnings, argparse
@@ -138,8 +176,18 @@ if __name__ == '__main__':
                         help='I-front radius')
     parser.add_argument("--scale", type=float, default=1.e11,
                         help='Length scale for plot (should be roughly r0/1.e4)')
+    parser.add_argument("--density-scale", type=float, default=None,
+                        help='Density scale for plot (if None, use n0)')
     parser.add_argument("--dpi", type=int, default=300,
                         help='Resolution of PNG file (values >= 600 give multi-MB files)')
+    parser.add_argument("--symlog", action="store_true",
+                        help='Use symmetric log scale on the x-axis')
+    parser.add_argument("--heat", action="store_true",
+                        help='Plot the heating rate too')
+    parser.add_argument("--print-title", action="store_true",
+                        help='Print a title above the plot')
+    parser.add_argument("--png", action="store_true",
+                        help='Write a PNG file instead of a PDF')
     args = parser.parse_args()
     
 
