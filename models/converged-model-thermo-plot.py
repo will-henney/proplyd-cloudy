@@ -55,7 +55,8 @@ def plot_vars(modelid):
     nfrac = 10**m.ovr.HI
     T = 10**m.ovr.Te
     R = Rmax - z/r0
-    sound = m.pre.cadwind_kms
+    # convert adiabatic -> isothermal sound speed
+    sound = m.pre.cadwind_kms / numpy.sqrt(5./3.)
 
     dz = z[1:] - z[:-1]
     dz = numpy.array(dz.tolist() + [dz[-1]])
@@ -64,6 +65,7 @@ def plot_vars(modelid):
     Tmax = T.max()
     i1 = T.argmax()
     i2 = len(R[R>=1.0])
+    i3 = sound.argmax()
     print i2, len(hden)
     n0 = hden[i2]
     U = n0 / (R**2 * hden)
@@ -98,6 +100,7 @@ def plot_vars(modelid):
 
     print "-"*72
     print "model %s: Tmax at R = %.4f, ifrac = %.4f" % (modelid, R[i1], ifrac[i1])
+    print "sound max at {:.4f}".format(R[i3])
     print "@ R = 1.0: T/Tmax = %.4f, ifrac = %.4f, U = %.4f" % (T[i2]/Tmax, ifrac[i2], U[i2])
     print "I-front thickness in approx model: dR = %.4f" % (dR)
 
@@ -105,6 +108,9 @@ def plot_vars(modelid):
         delta = (z[i5] - z)/deltascale
     else:
         delta = (z[-1] + deltascale) - z
+        print "r - r_min at sonic point is {:.2e}".format(delta[i2])
+        print "r - r_min at x=0.5 is {:.2e}".format(delta[i5])
+        print "r - r_min at c_max is {:.2e}".format(delta[i3])
 
     if args.density_scale: 
         nscale = args.density_scale
@@ -138,7 +144,7 @@ def plot_vars(modelid):
         l.set_alpha(.7)
 
     plt.ylabel('')
-    plt.ylim(0.0, 3.5)
+    plt.ylim(0.0, args.ymax)
     if args.print_title:
         plt.title('Proplyd ionization front structure')
     plt.grid(True)
@@ -178,6 +184,8 @@ if __name__ == '__main__':
                         help='Length scale for plot (should be roughly r0/1.e4)')
     parser.add_argument("--density-scale", type=float, default=None,
                         help='Density scale for plot (if None, use n0)')
+    parser.add_argument("--ymax", type=float, default=3.5,
+                        help='Upper limit of dimensionless y axis')
     parser.add_argument("--dpi", type=int, default=300,
                         help='Resolution of PNG file (values >= 600 give multi-MB files)')
     parser.add_argument("--symlog", action="store_true",

@@ -1236,6 +1236,24 @@ optional arguments:
                         modes
 #+end_example
 
+** Model structure plot
+[[file:model-structure-hst10-th30.pdf][file:~/Work/Nahiely/proplyd-cloudy/papers/HST10/model-structure-hst10-th30.pdf]]
+
+*** Text to add to end of first paragraph of section 4
+#+BEGIN_SRC latex
+Figure~\ref{fig:model-structure} shows the run of physical variables along a representative radial cut through the model. 
+#+END_SRC
+
+*** Figure caption
+#+BEGIN_SRC latex
+  \begin{figure}
+    \includegraphics[width=\linewidth]{model-structure-hst10-th30}
+    \caption{Physical variables as a function of radius along a line at an angle of \(\theta = 30^{\circ}\) to the symmetry axis of our photoevaporation Model~B.    The radius \(r\) is measured from the center of curvature of the ionization front, shown on a logarithmic scale with respect to the deepest point in the model, \(r_{\mathrm{min}} = 3.5 \times 10^{15}\ \mathrm{cm}\).  Gas velocity in units of \(10\ \mathrm{km~s^{-1}}\) (solid black line).  Gas temperature, \(T\), in units of \(10^4\ \mathrm{K}\) (solid red line).  Isothermal sound speed, \(c\), in units of  \(10\ \mathrm{km~s^{-1}}\) (dashed red line).  Electron density, \(n_{\mathrm{e}}\), in units of \(7 \times 10^4\ \mathrm{cm^{-3}}\) (dashed black line).  Total hydrogen density, \(n_{\mathrm{H}}\), in units of  \(7 \times 10^4\ \mathrm{cm^{-3}}\) (solid purple line).  Electron fraction, \(n_{\mathrm{e}}/n_{\mathrm{H}}\) (solid blue line).  Lyman limit optical depth (divided by 10), measured from the ionizing source, which is located off the graph at \(r =  6.32 \times 10^{17}\ \mathrm{cm}\) (dashed blue line).  Fraction of singly ionized oxygen, \(\mathrm{O^{+}/O}\) (solid green line).  Fraction of singly ionized nitrogen, \(\mathrm{He^{+}/He}\) (solid yellow line).  Fraction of singly ionized sulfur, \(\mathrm{S^{+}/S}\) (dashed yellow line).  Results for other angles and abundance sets are similar, except with densities that scale roughly as \(\cos^{1/2}\theta\), and temperatures that tend to decrease slightly with \(\theta\) and with increased metal abundances.}
+    \label{fig:model-structure}
+  \end{figure}
+#+END_SRC
+
+
 * The nebular environment of HST10
 
 + Use images such as
