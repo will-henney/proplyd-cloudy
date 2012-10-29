@@ -50,7 +50,7 @@ sa = np.sin(np.radians(alpha))
 # Create the folder, if not exist, where the profiles will be
 fitsdir = os.path.join(os.getcwd(), 
                        'aperture-xc{:02}-yc{:02}-w{:02}-h{:02}-rot{:02}-{}'.format(
-        int(10*xc), int(10*yc), int(10*w), int(10*h), (alpha), cmd_args.suffix))
+        int(10*xc), int(10*yc), int(10*w), int(10*h), int(alpha), cmd_args.suffix))
 
 if not os.path.isdir(fitsdir): 
     os.makedirs(fitsdir)
@@ -117,8 +117,6 @@ for line, cube in zip(emlines, cubefiles):
     mask = (abs(P) < 0.5*w) & (abs(Q) < 0.5*h)
 
     cubo = hdu.data
-
-    print mask.shape, cubo.shape
     
     # select the data cube restricted to the slit 
     aperture_cube = np.where( mask, cubo, 0.0 )
@@ -142,6 +140,7 @@ for line, cube in zip(emlines, cubefiles):
 
 hbeta = total_aperture_flux["H__1__4861A"]
 print "H beta line flux: "
+print hbeta
 print "Line fluxes relative to H beta = 100:"
 
 for line in emlines:

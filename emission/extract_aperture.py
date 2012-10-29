@@ -110,7 +110,6 @@ for line, cube in zip(emlines, cubefiles):
 
     # add add in to a profile
     aperture_profile[line] = np.sum(np.sum(aperture_cube, axis=-1), axis=-1)
-    print line, aperture_profile[line]
 
     hdr = pyfits.Header()       # make a new header for the spectrum
     for prefix in ["CRPIX", "CRVAL", "CDELT", "CUNIT", "CTYPE"]:

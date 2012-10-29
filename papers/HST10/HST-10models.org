@@ -1094,6 +1094,7 @@ R: Tsamis 104, logPhi(H)=12.1
 S: Tsamis105
 T: Tsamis106
 U: Tsamis106nd
+V: Tsamis106, logPhi(h)=12.12
 
 ** Moving the center of the 3x3 aperture (Phi(H)=12.1)
 
