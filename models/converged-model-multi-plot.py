@@ -16,6 +16,7 @@ params = {
     "font.family": "serif",
     "text.usetex": True,
     "text.latex.preamble": [r"\usepackage[varg]{txfonts}"],
+    "figure.figsize": (5, 10),
     }
 matplotlib.rcParams.update(params)
 
@@ -73,7 +74,9 @@ def plot_vars(modelid):
     # Heavy element ion fracs
     oplus = m.ion_o.O__2
     nplus = m.ion_n.N__2
+    # neplus = m.ion_ne.Ne_2
     splus = m.ion_s.S__2
+    cplus = m.ion_c.C__2
     heplus = 10**m.ovr.HeII
 
     # Calculate the optical depths
@@ -81,6 +84,10 @@ def plot_vars(modelid):
     # First at the Lyman limit
     sig0 = 6.e-18 
     tau0 = sig0*numpy.cumsum(hden*nfrac*dz)
+
+    # Visual extinction
+    sigV = 5e-22
+    tauV = sigV*colden
 
     # Second, the "mean" ionizing optical depth
     # TODO
@@ -125,6 +132,7 @@ def plot_vars(modelid):
         nscale = n0
         snscale = "n_0"
 
+    plt.subplot(211)
     plt.plot(delta, U * sound[i2] / 10., 'k-', label='\(\mathrm{velocity} / 10~\mathrm{km~s^{-1}}\)')                  # cloudy version
     plt.plot(delta, T/1.e4, 'r-', label=r'\(T / 10^4\) K')
     plt.plot(delta, sound/10., 'r--', label=r'\(c / 10~\mathrm{km~s^{-1}}\)')
@@ -134,17 +142,29 @@ def plot_vars(modelid):
         plt.plot(delta, heat24/3.0, 'r-.', label='Heat / 3.e-24')
     plt.plot(delta, efrac, 'b-', label=r'\(n_\mathrm{e}/n_\mathrm{H}\)')
     plt.plot(delta, tau0/10.0, 'b--', label=r'\(\tau_0/10\)')
+    plt.plot(delta, 10*tauV, 'g--', label=r'\(10 \times \tau_V\)')
 
+    plt.ylim(0.0, args.ymax)
+    if args.symlog:
+        plt.xscale('symlog')
+        plt.xlim(-0.3*r0/deltascale, Rmax*r0/deltascale)
+    else:
+        plt.xscale('log')
+        plt.xlim(deltascale, Rmax*r0)
+    plt.legend(loc="upper right", title="Physical variables", ncol=3, prop={'size':9})
+
+    plt.subplot(212)
     plt.plot(delta, oplus, 'g-', label=r'\(\mathrm{O^+\!/\,O}\)')
     plt.plot(delta, nplus, 'g--', label=r'\(\mathrm{N^+\!/\,N}\)')
     plt.plot(delta, heplus, 'y-', label=r'\(\mathrm{He^+\!/\,He}\)')
     plt.plot(delta, splus, 'y--', label=r'\(\mathrm{S^+\!/\,S}\)')
+    plt.plot(delta, cplus, 'm-', label=r'\(\mathrm{C^+\!/\,C}\)')
 
     for l in plt.gca().lines:
         l.set_alpha(.7)
 
     plt.ylabel('')
-    plt.ylim(0.0, args.ymax)
+    plt.ylim(0.0, 1.25)
     if args.print_title:
         plt.title('Proplyd ionization front structure')
     plt.grid(True)
@@ -153,25 +173,28 @@ def plot_vars(modelid):
         plt.xscale('symlog')
         plt.xlim(-0.3*r0/deltascale, Rmax*r0/deltascale)
     else:
-        plt.xlabel(r'\(r - r_\mathrm{min}\) / cm')
+        plt.xlabel(r'\((r - r_\mathrm{min})\) / cm')
         plt.xscale('log')
         plt.xlim(deltascale, Rmax*r0)
         
 
-    plt.legend(loc="upper center", ncol=2, prop={'size':10})
+    plt.legend(loc="upper right", ncol=2, title="Ion fractions", prop={'size':9})
+
+    plt.tight_layout()          # tighten things up
     if args.png:
-        plt.savefig("thermoplot-%s.png" % (modelid), dpi=args.dpi)
+        plt.savefig("multiplot-%s.png" % (modelid), dpi=args.dpi)
     else:
-        plt.savefig("thermoplot-%s.pdf" % (modelid))
+        plt.savefig("multiplot-%s.pdf" % (modelid))
 
 if __name__ == '__main__':
     import warnings, argparse
     warnings.filterwarnings("ignore")
 
     parser = argparse.ArgumentParser(
-        description="Make thermal plots of Cloudy model i-front structure on split bi-log scale",
+        description="Make multi-panel plots of Cloudy model i-front structure",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
         )
+
     parser.add_argument("id", type=str,
                         help='Name of Cloudy model')
     parser.add_argument("--x0", type=float, default=10.8,
