@@ -16,7 +16,7 @@ params = {
     "font.family": "serif",
     "text.usetex": True,
     "text.latex.preamble": [r"\usepackage[varg]{txfonts}"],
-    "figure.figsize": (5, 10),
+    "figure.figsize": (5.5, 10),
     }
 matplotlib.rcParams.update(params)
 
@@ -30,6 +30,49 @@ Rmax = 9.0
 sigma = 6.3e-18
 
   
+em_labels = dict(
+    H__1__6563A = r"H\(\alpha\)       \(\lambda\)6563", 
+    TOTL__5199A = r"[N \textsc{i}]    \(\lambda\)5199", 
+    O__1__6300A = r"[O \textsc{i}]    \(\lambda\)6300", 
+    O_II__3726A = r"[O \textsc{ii}]    \(\lambda\)3726",
+    S_II__4070A = r"[S \textsc{ii}]   \(\lambda\)4070", 
+    S_II__6716A = r"[S \textsc{ii}]   \(\lambda\)6716", 
+    N__2__5755A = r"[N \textsc{ii}]   \(\lambda\)5755", 
+    N__2__6584A = r"[N \textsc{ii}]   \(\lambda\)6584", 
+    S__3__6312A = r"[S \textsc{iii}]  \(\lambda\)6312", 
+    Ar_3__7135A = r"[Ar \textsc{iii}] \(\lambda\)7135", 
+    He_1__5876A = r"He \textsc{i}     \(\lambda\)5876", 
+    C__2__4267A = r"C \textsc{ii}     \(\lambda\)4267", 
+    TOTL__4363A = r"[O \textsc{iii}]  \(\lambda\)4363", 
+    O__3__5007A = r"[O \textsc{iii}]  \(\lambda\)5007", 
+    O_2r__4651A = r"O \textsc{ii}     \(\lambda\)4651", 
+    Ne_3__3869A = r"[Ne \textsc{iii}] \(\lambda\)3869", 
+    )
+
+elements = dict(
+    H__1__6563A = r"H", 
+    TOTL__5199A = r"N", 
+    O__1__6300A = r"O", 
+    O_II__3726A = r"O", 
+    S_II__4070A = r"S", 
+    S_II__6716A = r"S", 
+    N__2__5755A = r"N", 
+    N__2__6584A = r"N", 
+    S__3__6312A = r"S", 
+    Ar_3__7135A = r"Ar", 
+    He_1__5876A = r"He", 
+    C__2__4267A = r"C", 
+    TOTL__4363A = r"O", 
+    O__3__5007A = r"O", 
+    O_2r__4651A = r"O", 
+    Ne_3__3869A = r"Ne", 
+    )
+
+colors = dict(O="g", H="r", N="b", S="y", He="r", C="m", Ne="k", Ar="c")
+
+
+
+
 def ionfrac(R, dR):
     "Smooth change of ion fraction at the i-front"
     x = x0*(R - 1.0 + dR)/dR
@@ -144,7 +187,7 @@ def plot_vars(modelid):
     numRows = 3 if hasEmissivityPanel else 2 
 
     plt.subplot(numRows, numCols, 1)
-    plt.plot(delta, U * sound[i2] / 10., 'k-', label='\(\mathrm{velocity} / 10~\mathrm{km~s^{-1}}\)')                  # cloudy version
+    plt.plot(delta, U * sound[i2] / 10., 'k-', label='\(v / 10~\mathrm{km~s^{-1}}\)')                  # cloudy version
     plt.plot(delta, T/1.e4, 'r-', label=r'\(T / 10^4\) K')
     plt.plot(delta, sound/10., 'r--', label=r'\(c / 10~\mathrm{km~s^{-1}}\)')
     plt.plot(delta, eden/nscale, 'k--', label=r'\(n_\mathrm{{e}}/{}\)'.format(snscale))
@@ -162,27 +205,28 @@ def plot_vars(modelid):
     else:
         plt.xscale('log')
         plt.xlim(deltascale, Rmax*r0)
+        plt.xlabel(r'\((r - r_\mathrm{min})\) / cm')
     plt.grid(True)
     for l in plt.gca().lines:
         l.set_alpha(.7)
-    plt.legend(loc="upper right", title="Physical variables", ncol=3, prop={'size':9})
+    plt.legend(loc="upper right", title="Physical variables", 
+               ncol=4, prop={'size':9})
 
     plt.subplot(numRows, numCols, numRows)
-    plt.plot(delta, oplus, 'g-', label=r'\(\mathrm{O^+\!/\,O}\)')
-    plt.plot(delta, nplus, 'g--', label=r'\(\mathrm{N^+\!/\,N}\)')
-    plt.plot(delta, heplus, 'y-', label=r'\(\mathrm{He^+\!/\,He}\)')
-    plt.plot(delta, splus, 'y--', label=r'\(\mathrm{S^+\!/\,S}\)')
-    plt.plot(delta, cplus, 'm-', label=r'\(\mathrm{C^+\!/\,C}\)')
-    if not neplus is None:
-        plt.plot(delta, neplus, 'b-', label=r'\(\mathrm{Ne^+\!/\,Ne}\)')
-    # if not clplus is None:
-    #     plt.plot(delta, clplus, 'r-', label=r'\(\mathrm{Cl^+\!/\,Cl}\)')
+    for ifrac, element in [
+        [oplus, "O"], [nplus, "N"], [heplus, "He"], 
+        [splus, "S"], [cplus, "C"], [neplus, "Ne"],
+        ]:
+        if not ifrac is None:
+            plt.plot(delta, ifrac, 
+                     '-', c=colors[element], 
+                     label=r'\(\mathrm{{{0}^+\!/\,{0}}}\)'.format(element))
 
     for l in plt.gca().lines:
         l.set_alpha(.7)
 
     plt.ylabel('')
-    plt.ylim(0.0, 1.25)
+    plt.ylim(0.0, 1.39)
     if args.print_title:
         plt.title('Proplyd ionization front structure')
     plt.grid(True)
@@ -196,16 +240,14 @@ def plot_vars(modelid):
         plt.xlim(deltascale, Rmax*r0)
         
 
-    plt.legend(loc="upper right", ncol=2, title="Ion fractions", prop={'size':9})
-
-    colors = dict(O="g", H="r", N="b")
+    plt.legend(loc="upper right", ncol=3, title="Ion fractions", prop={'size':9})
 
     if hasEmissivityPanel:
         plt.subplot(numRows, numCols, 2)
         linelist = [lineid for lineid in args.emlinefile.read().split("\n") if lineid]
         nlines = len(linelist)
         for iline, lineid in enumerate(linelist):
-            color = colors.get(lineid[0], "k")
+            color = colors.get(elements[lineid], "k")
             emissivity = 10**m.em[lineid]
             cumemiss = numpy.cumsum(R**2 * emissivity*dz)
             cumemiss /= cumemiss.max()
@@ -217,11 +259,17 @@ def plot_vars(modelid):
                      '-|', lw=6, c=color, ms=8.0, solid_capstyle="butt")
             plt.plot(centiles[0.5], iline, '|', ms=12.0, c=color)
             plt.text(deltascale, iline-0.2, 
-                     r"\verb|{}|".format(lineid), 
+                     em_labels.get(lineid, r"\verb|{}|".format(lineid)), 
                      fontdict=dict(size="x-small"), 
-                     horizontalalignment="center")
+                     horizontalalignment="left"
+                     )
 
         plt.xlabel('')
+        plt.text(0.5, -0.06,
+                 r'\setlength\fboxrule{1pt}\framebox{Emissivity structure}',
+                 horizontalalignment='center',
+                 verticalalignment='center',
+                 transform = plt.gca().transAxes)
         if args.symlog:
             plt.xscale('symlog')
             plt.xlim(-0.3*r0/deltascale, Rmax*r0/deltascale)
