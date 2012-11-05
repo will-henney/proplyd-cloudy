@@ -211,12 +211,15 @@ def plot_vars(modelid):
             cumemiss /= cumemiss.max()
             centiles = {fraction: delta[len(cumemiss[cumemiss <= fraction])] 
                         for fraction in [0.1, 0.25, 0.5, 0.75, 0.9]}
-            plt.plot([centiles[0.1], centiles[0.9]], [iline, iline], '-', lw=2, c=color)
-            plt.plot([centiles[0.25], centiles[0.75]], [iline, iline], '-|', lw=4, c=color)
-            plt.plot(centiles[0.5], iline, 'o', c=color)
+            plt.plot([centiles[0.1], centiles[0.9]], [iline, iline], 
+                     '-', lw=2, c=color, solid_capstyle="butt")
+            plt.plot([centiles[0.25], centiles[0.75]], [iline, iline], 
+                     '-|', lw=6, c=color, ms=8.0, solid_capstyle="butt")
+            plt.plot(centiles[0.5], iline, '|', ms=12.0, c=color)
             plt.text(deltascale, iline-0.2, 
                      r"\verb|{}|".format(lineid), 
-                     fontdict=dict(size="x-small"))
+                     fontdict=dict(size="x-small"), 
+                     horizontalalignment="center")
 
         plt.xlabel('')
         if args.symlog:
