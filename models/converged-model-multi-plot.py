@@ -74,10 +74,17 @@ def plot_vars(modelid):
     # Heavy element ion fracs
     oplus = m.ion_o.O__2
     nplus = m.ion_n.N__2
-    # neplus = m.ion_ne.Ne_2
     splus = m.ion_s.S__2
     cplus = m.ion_c.C__2
     heplus = 10**m.ovr.HeII
+
+    # Try to read in more ions if we can
+    try:
+        neplus = m.ion_ne.Ne_2
+        clplus = m.ion_cl.Cl_2
+    except IndexError:
+        neplus = None
+        clplus = None
 
     # Calculate the optical depths
 
@@ -151,6 +158,9 @@ def plot_vars(modelid):
     else:
         plt.xscale('log')
         plt.xlim(deltascale, Rmax*r0)
+    plt.grid(True)
+    for l in plt.gca().lines:
+        l.set_alpha(.7)
     plt.legend(loc="upper right", title="Physical variables", ncol=3, prop={'size':9})
 
     plt.subplot(212)
@@ -159,6 +169,10 @@ def plot_vars(modelid):
     plt.plot(delta, heplus, 'y-', label=r'\(\mathrm{He^+\!/\,He}\)')
     plt.plot(delta, splus, 'y--', label=r'\(\mathrm{S^+\!/\,S}\)')
     plt.plot(delta, cplus, 'm-', label=r'\(\mathrm{C^+\!/\,C}\)')
+    if not neplus is None:
+        plt.plot(delta, neplus, 'b-', label=r'\(\mathrm{Ne^+\!/\,Ne}\)')
+    # if not clplus is None:
+    #     plt.plot(delta, clplus, 'r-', label=r'\(\mathrm{Cl^+\!/\,Cl}\)')
 
     for l in plt.gca().lines:
         l.set_alpha(.7)
