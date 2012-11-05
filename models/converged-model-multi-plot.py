@@ -16,7 +16,7 @@ params = {
     "font.family": "serif",
     "text.usetex": True,
     "text.latex.preamble": [r"\usepackage[varg]{txfonts}"],
-    "figure.figsize": (5.5, 10),
+    "figure.figsize": (7, 10),
     }
 matplotlib.rcParams.update(params)
 
@@ -210,7 +210,7 @@ def plot_vars(modelid):
     for l in plt.gca().lines:
         l.set_alpha(.7)
     plt.legend(loc="upper right", title="Physical variables", 
-               ncol=4, prop={'size':9})
+               ncol=4, prop={'size':10})
 
     plt.subplot(numRows, numCols, numRows)
     for ifrac, element in [
@@ -240,7 +240,7 @@ def plot_vars(modelid):
         plt.xlim(deltascale, Rmax*r0)
         
 
-    plt.legend(loc="upper right", ncol=3, title="Ion fractions", prop={'size':9})
+    plt.legend(loc="upper right", ncol=3, title="Ion fractions", prop={'size':10})
 
     if hasEmissivityPanel:
         plt.subplot(numRows, numCols, 2)
@@ -260,7 +260,7 @@ def plot_vars(modelid):
             plt.plot(centiles[0.5], iline, '|', ms=12.0, c=color)
             plt.text(deltascale, iline-0.2, 
                      em_labels.get(lineid, r"\verb|{}|".format(lineid)), 
-                     fontdict=dict(size="x-small"), 
+                     fontdict=dict(size=10), 
                      horizontalalignment="left"
                      )
 
