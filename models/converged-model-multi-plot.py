@@ -77,7 +77,7 @@ def plot_vars(modelid):
     splus = m.ion_s.S__2
     cplus = m.ion_c.C__2
     heplus = 10**m.ovr.HeII
-
+    
     # Try to read in more ions if we can
     try:
         neplus = m.ion_ne.Ne_2
@@ -134,12 +134,16 @@ def plot_vars(modelid):
             snscale = r"10^{{{:d}}}~\mathrm{{cm^{{-3}}}}".format(exponent)
         else:
             snscale = r"{:.0f} \times 10^{{{:d}}}~\mathrm{{cm^{{-3}}}}".format(abcissa, exponent)
-
     else:
         nscale = n0
         snscale = "n_0"
 
-    plt.subplot(211)
+    hasEmissivityPanel = not args.emlinefile is None
+
+    numCols = 1
+    numRows = 3 if hasEmissivityPanel else 2 
+
+    plt.subplot(numRows, numCols, 1)
     plt.plot(delta, U * sound[i2] / 10., 'k-', label='\(\mathrm{velocity} / 10~\mathrm{km~s^{-1}}\)')                  # cloudy version
     plt.plot(delta, T/1.e4, 'r-', label=r'\(T / 10^4\) K')
     plt.plot(delta, sound/10., 'r--', label=r'\(c / 10~\mathrm{km~s^{-1}}\)')
@@ -163,7 +167,7 @@ def plot_vars(modelid):
         l.set_alpha(.7)
     plt.legend(loc="upper right", title="Physical variables", ncol=3, prop={'size':9})
 
-    plt.subplot(212)
+    plt.subplot(numRows, numCols, numRows)
     plt.plot(delta, oplus, 'g-', label=r'\(\mathrm{O^+\!/\,O}\)')
     plt.plot(delta, nplus, 'g--', label=r'\(\mathrm{N^+\!/\,N}\)')
     plt.plot(delta, heplus, 'y-', label=r'\(\mathrm{He^+\!/\,He}\)')
@@ -193,6 +197,38 @@ def plot_vars(modelid):
         
 
     plt.legend(loc="upper right", ncol=2, title="Ion fractions", prop={'size':9})
+
+    colors = dict(O="g", H="r", N="b")
+
+    if hasEmissivityPanel:
+        plt.subplot(numRows, numCols, 2)
+        linelist = [lineid for lineid in args.emlinefile.read().split("\n") if lineid]
+        nlines = len(linelist)
+        for iline, lineid in enumerate(linelist):
+            color = colors.get(lineid[0], "k")
+            emissivity = 10**m.em[lineid]
+            cumemiss = numpy.cumsum(R**2 * emissivity*dz)
+            cumemiss /= cumemiss.max()
+            centiles = {fraction: delta[len(cumemiss[cumemiss <= fraction])] 
+                        for fraction in [0.1, 0.25, 0.5, 0.75, 0.9]}
+            plt.plot([centiles[0.1], centiles[0.9]], [iline, iline], '-', lw=2, c=color)
+            plt.plot([centiles[0.25], centiles[0.75]], [iline, iline], '-|', lw=4, c=color)
+            plt.plot(centiles[0.5], iline, 'o', c=color)
+            plt.text(deltascale, iline-0.2, 
+                     r"\verb|{}|".format(lineid), 
+                     fontdict=dict(size="x-small"))
+
+        plt.xlabel('')
+        if args.symlog:
+            plt.xscale('symlog')
+            plt.xlim(-0.3*r0/deltascale, Rmax*r0/deltascale)
+        else:
+            plt.xscale('log')
+            plt.xlim(deltascale, Rmax*r0)
+        plt.ylabel('')
+        plt.ylim(-0.5, nlines-0.5)
+        plt.axis("off")
+        plt.grid(True)
 
     plt.tight_layout()          # tighten things up
     if args.png:
@@ -225,6 +261,11 @@ if __name__ == '__main__':
                         help='Upper limit of dimensionless y axis')
     parser.add_argument("--dpi", type=int, default=300,
                         help='Resolution of PNG file (values >= 600 give multi-MB files)')
+    parser.add_argument("--emlinefile", type=file, default=None,
+                        help='''Name of a file that lists emission
+                        lines to plot.   If this option is specified,
+                        then a candlestick plot of the emissivities
+                        will be added to the figure''') 
     parser.add_argument("--symlog", action="store_true",
                         help='Use symmetric log scale on the x-axis')
     parser.add_argument("--heat", action="store_true",
