@@ -47,19 +47,19 @@
     scatter/classes={
       Ar3={mark=square*,cyan},%
 %      Ar4={mark=square*,magenta},%
-      C2={mark=triangle*,magenta},%
+      C2={mark=triangle*,mark size={3pt},magenta},%
 %      C3={mark=square*,black},%
       Cl3={mark=square*,purple},%
       Fe3={mark=square*,orange!80!yellow},%
       H1={mark=*,red},% 
-      He1={mark=*,red},%  
+      He1={mark=square*,red},%  
       N1={mark=*,blue!90!magenta},%
-      N2={mark=triangle*,blue!90!magenta},% 
+      N2={mark=triangle*,mark size={3pt},blue!90!magenta},% 
       Ne3={mark=square*,black},%
       O1={mark=*,green!70!black},% 
-      O2={mark=triangle*,green!70!black},%
+      O2={mark=triangle*,mark size={3pt},green!70!black},%
       O3={mark=square*,green!70!black},%
-      S2={mark=triangle*,yellow!80!black},% 
+      S2={mark=triangle*,mark size={3pt},yellow!80!black},% 
       S3={mark=square*,yellow!80!black}%       
 %% Nahiely's version with named colors
 %       Ar3={mark=square*,TealBlue},%
@@ -82,7 +82,7 @@
     only marks, scatter, 
     scatter src=explicit symbolic,
     point meta=explicit symbolic,
-    nodes near coords*={\scriptsize\pgfmathprintnumber[set thousands separator={}]\LAMBDA\,\AA},
+    nodes near coords*={\scriptsize\(\lambda\)\pgfmathprintnumber[set thousands separator={}]\LAMBDA},
     visualization depends on={\thisrow{Lambda} \as \LAMBDA},
     nodes near coords align=\ALIGN,
     visualization depends on={value\thisrow{Align} \as \ALIGN},    
