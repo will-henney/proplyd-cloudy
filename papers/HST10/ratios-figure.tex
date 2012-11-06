@@ -1,11 +1,12 @@
-\documentclass{article}
+\documentclass[usenames,dvipsnames]{article}
+\usepackage{xcolor}
 \usepackage{fullpage}
 \usepackage{txfonts}
 \usepackage{pgfplots}
 \usepackage{siunitx}
 \usepackage{graphicx}
-\usepackage{xcolor}
 \setcounter{secnumdepth}{0}
+
 
 \newcommand\Ion[2]{\ensuremath{\mathrm{#1\,\scriptstyle #2}}}
 \newcounter{ionstage}
@@ -60,6 +61,23 @@
       O3={mark=square*,green!70!black},%
       S2={mark=triangle*,yellow!80!black},% 
       S3={mark=square*,yellow!80!black}%       
+%% Nahiely's version with named colors
+%       Ar3={mark=square*,TealBlue},%
+% %      Ar4={mark=square*,cyan},%
+%       C2={mark=triangle*,Purple},%
+% %      C3={mark=square*,magenta},%
+%       Cl3={mark=square*,magenta},%
+%       Fe3={mark=square*,yellow},%
+%       H1={mark=*,red},% 
+%       He1={mark=*,Orange},%  
+%       N1={mark=*,NavyBlue},%
+%       N2={mark=triangle*,NavyBlue},% 
+%       Ne3={mark=square*,black},%
+%       O1={mark=*,ForestGreen},% 
+%       O2={mark=triangle*,ForestGreen},%
+%       O3={mark=square*,ForestGreen},%
+%       S2={mark=triangle*,LimeGreen},% 
+%       S3={mark=square*,LimeGreen}%       
     },
     only marks, scatter, 
     scatter src=explicit symbolic,
