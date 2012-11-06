@@ -44,22 +44,22 @@
     ]
     \addplot [
     scatter/classes={
-      Ar3={mark=square*,magenta},%
+      Ar3={mark=square*,cyan},%
 %      Ar4={mark=square*,magenta},%
-      C2={mark=triangle*,black},%
+      C2={mark=triangle*,magenta},%
 %      C3={mark=square*,black},%
       Cl3={mark=square*,purple},%
-      Fe3={mark=square*,yellow},%
-      H1={mark=*,brown},% 
-      He1={mark=*,green},%  
-      N1={mark=*,violet},%
-      N2={mark=triangle*,violet},% 
-      Ne3={mark=square*,red},%
-      O1={mark=*,orange},% 
-      O2={mark=triangle*,orange},%
-      O3={mark=square*,orange},%
-      S2={mark=triangle*,blue},% 
-      S3={mark=square*,blue}%       
+      Fe3={mark=square*,orange!80!yellow},%
+      H1={mark=*,red},% 
+      He1={mark=*,red},%  
+      N1={mark=*,blue!90!magenta},%
+      N2={mark=triangle*,blue!90!magenta},% 
+      Ne3={mark=square*,black},%
+      O1={mark=*,green!70!black},% 
+      O2={mark=triangle*,green!70!black},%
+      O3={mark=square*,green!70!black},%
+      S2={mark=triangle*,yellow!80!black},% 
+      S3={mark=square*,yellow!80!black}%       
     },
     only marks, scatter, 
     scatter src=explicit symbolic,
@@ -76,7 +76,7 @@
     y=Model#1, 
     x error=WilldSP,
     meta=ID
-    ] {HST-10aperture-notabs.dat};
+    ] {HST-10aperture.dat};
     \addlegendentry{[\ion{Ar}{3}]}
     \addlegendentry{\ion{C}{2}} 
     \addlegendentry{[\ion{Cl}{3}]}
