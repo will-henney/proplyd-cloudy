@@ -21,14 +21,14 @@
 \pgfplotsset{
   compat=1.5.1, % most current version as of writing (27 Jan 2012)
   % compat=newest, % select to always use latest version (may cause minor appearance changes)
-  width=\textwidth,
+  width=0.7\textwidth,
   every axis legend/.append style={
     % make legend less tightly packed
-    inner xsep=0.5em,
-    inner ysep=3pt,
+    inner xsep=0.7em,
+    inner ysep=2pt,
     nodes={
-      inner xsep=1em,
-      text depth=0.25em
+      inner xsep=0.5em,
+      text depth=0.2em
     },
   },
 }
@@ -95,20 +95,20 @@
     x error=WilldSP,
     meta=ID
     ] {HST-10aperture.dat};
-    \addlegendentry{[\ion{Ar}{3}]}
-    \addlegendentry{\ion{C}{2}} 
-    \addlegendentry{[\ion{Cl}{3}]}
-    \addlegendentry{[\ion{Fe}{3}]}
-    \addlegendentry{\ion{H}{1}} 
-    \addlegendentry{\ion{He}{1}} 
-    \addlegendentry{[\ion{N}{1}]}
-    \addlegendentry{[\ion{N}{2}]} 
-    \addlegendentry{[\ion{Ne}{3}]}
-    \addlegendentry{[\ion{O}{1}]}
-    \addlegendentry{[\ion{O}{2}]}
-    \addlegendentry{[\ion{O}{3}]}
-    \addlegendentry{[\ion{S}{2}]}
-    \addlegendentry{[\ion{S}{3}]}
+    \addlegendentry{\scriptsize[\ion{Ar}{3}]\quad}
+    \addlegendentry{\scriptsize\ion{C}{2}\quad}
+    \addlegendentry{\scriptsize[\ion{Cl}{3}]\quad}
+    \addlegendentry{\scriptsize[\ion{Fe}{3}]\quad}
+    \addlegendentry{\scriptsize\ion{H}{1}\quad}
+    \addlegendentry{\scriptsize\ion{He}{1}\quad}
+    \addlegendentry{\scriptsize[\ion{N}{1}]\quad}
+    \addlegendentry{\scriptsize[\ion{N}{2}]\quad}
+    \addlegendentry{\scriptsize[\ion{Ne}{3}]\quad}
+    \addlegendentry{\scriptsize[\ion{O}{1}]\quad}
+    \addlegendentry{\scriptsize[\ion{O}{2}]\quad}
+    \addlegendentry{\scriptsize[\ion{O}{3}]\quad}
+    \addlegendentry{\scriptsize[\ion{S}{2}]\quad}
+    \addlegendentry{\scriptsize[\ion{S}{3}]\quad}
     \addplot [gray,domain=0.08:300] {x};
   \end{loglogaxis}
 \end{tikzpicture}
