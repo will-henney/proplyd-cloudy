@@ -5,6 +5,178 @@
 #+EXPORT_EXCLUDE_TAGS: noexport
 #+TITLE: Modelos para HST-10
 
+
+* Comments on 1 Nov draft
+
+** Abstract
+Should it not be in the present tense?
+
+** Section 1.1, page 2
+"the disc seen" -> "the disc is seen"
+
+** Section 3.2, first para
+
+Not sure what is meant by "indicate that small dust grains must be
+well mixed within the H II zone".
+
+I don't think that the enhanced C(Hb) at the proplyd position can be
+due to grains in the ionized gas.  This is because the dust optical
+depth through the ionized gas is proportional to the ionization
+parameter, which for the proplyd is quite low.  In fact, our model
+indicates a V-band optical depth of only about 0.05 to the i-front
+(see the figure).  So most of the extra extinction must be due to dust
+between the i-front and the surface of the accretion disk, which
+should have A_V of order unity.
+
+** Section 3.3
+
+I'm not sure it is worth showing the 6716/6731 plot and discussing it
+here, other than just to say that both lines are collisionally
+de-excited in the proplyd, and so the ratio should be in the
+high-density limit (if you have done the background subtraction
+properly).  Or you could leave the plot in and say that it is useful
+as a diagnostic of the nebular background, but doesn't work for the
+proplyd.  We need to make more clear which of the panels in Fig 6 are
+after BG subtraction and which are not.  I am assuming that the
+6716/6731 map is not BG subtracted, but the others are, right?
+
+** Section 3.4 Ion and element abundances
+
+I am wondering if it might be better to reorganise the material
+slightly, so as to better integrate the presentation of the empirical
+and model-based approaches to the abundance determination.  I think
+that this is necessary because there are quite a few forward
+references to the model in this section, but without some sort of
+introductory remarks this is going to be confusing to the reader.
+
+So, I propose making this a new section 4, which would start with a
+paragraph that discusses the two approaches to the abundance analysis.
+Something along the lines of the following (check in the Adal paper
+for any references that I give which you don't already have):
+
+"We employ two complementary approaches to determining the gas-phase
+elemental abundances.  The first is the traditional empirical method
+(CITATIONS), which assumes that each ion is emitted from a homogeneous
+zone with a constant electron density and temperature, and employs
+ionization correction factors (CITATIONS) to account for unobserved
+ionization stages.  The second is to construct self-consistent
+physical models of the proplyd ionization front and photoevaporation
+flow (Henney \& O'Dell 1999; Henney et al.\ 2002,2005; Mesa Delgado et
+al. 2012) that satisfy existing observational constraints from
+high-resolution spectroscopy and HST imaging, and in which the
+abundances are adjusted so as to best reproduce the observed line
+spectrum.  The second method has the great advantage that it can
+account for the fact that the physical conditions may vary greatly,
+even \emph{within} the zone of emission of a single ion.  It also
+obviates the need for the use of ionization correction factors since
+the full ionization structure of each element is calculated from first
+principles, using the Cloudy microphysics code (Ferland at el. 1998).
+On the other hand, it also has various disadvantages.  The models are
+computationally costly to calculate, and there is no guarantee that a
+model will be found that can simultaneously reproduce all of the
+observations.  In the case of several models that can each reproduce
+most, but not all, of the observed emission line spectrum, there is no
+obvious criterion for deciding which is ``best''. "
+
+The current section 3.4 would then become section 4.1 (with a title
+such as "Empirical abundance determination").  The current section 4
+would become section 4.2.
+
+** Consistency of atomic data?
+
+One thing that we never discuss is whether we are using consistent
+atomic data between the modelling and empirical analyses.  In the
+models, we are using what is in Cloudy 10, which in general is pretty
+up to date I think, although it does have some holes, particularly wrt
+the ORLs.  We should maybe check that your IONIC v2.14 does not give
+wildly disparate results, although we could leave this for now and see
+if the referee picks up on it.  It is the sort of thing that Grazyna
+or Mónica R. would be bound to notice!
+
+** Sect 3.4.1 Oxygen and sulphur
+
+When talking about the Esteban et al. (2004) abundances, we need to
+make clear that we are talking about the CEL+t^2 abundances, which are
+the same as ORL ones (and different from the CEL-with-no-t^2 ones).
+Although, of course you find that the oxygen ADF is effectively unity
+for the background nebula near HST 10.  
+
+You need to decide which spelling to use: "sulphur" or "sulfur".  The
+Royal Society of Chemistry prefers "sulfur"
+(http://www.rsc.org/periodic-table/element/16/sulfur), but as
+astronomers we don't have to be bound by that!
+
+The S/H abundance map in Figure 8 looks remarkably like the He+/H+
+abundance map.  Coincidence?  Although you say you do not need an ICF
+for sulfur, how are you acounting for the S^{3+}, given that you don't
+observe any [S IV] lines?  The models do imply that there should be
+some S^{3+} but I haven't checked if it is enough to make a
+significant difference.  Presumably not, since the model S abundance
+agrees with yours (although 4070 is a fly in the ointment).
+
+** Table 3
+We should maybe add the Esteban abundances (that we use in Model A) to
+this table, to make things easier for the reader.
+
+** Response to Jeremy's comments
+
+: para 1
+: It would be worth justifying the values in Table 4 a little more. In particular
+: I assume you take the projected distance to the Trapezium to determine the
+: ionizing flux at the proplyd. This could be a lower limit to the real distance.
+: 
+
+The ionizing flux was adjusted until the model reproduced the correct
+H beta flux for the proplyd cusp.  Assuming an ionizing flux of 0.9e49
+/s for th1C and no intervening absorption, this implies a true
+distance from the Trapezium of about twice the projected distance, or
+an inclination of about 60 degrees from the plane of the sky.  This is
+consistent with the appearance in the HST images and with the
+kinematics measured from the Keck spectra.
+
+
+Nahiely was supposed to be sending some text describing this.  If she
+hasn't, you can use what I just wrote...
+
+: I was a bit puzzled why the two models give such large differences when
+: the abundances between HST10 and the background (assumed similar to
+: Esteban et al.) are so similar (not different within the errors). Are you
+: implying that the Esteban set are not appropriate here.
+: 
+
+The Esteban abundances are a bit different. C and Ne are lower, but
+most other elements are higher.  The overall temperature of the model
+comes out lower.  I suggested adding these abundances to Table 3.  I'm
+not sure what to make of the fact that Yiannis's BG nebular abundances
+are so different from Esteban's.
+
+:  Given the great paper by Ferland et al. on [N I] would it not be interesting
+: to compare the [N I]/H-beta and [N I] EW with their plots to see if the transfer
+: responsible for pumping of [N I] is any different in the proplyds (and
+: by association also in LV2).
+
+I'm glad you liked the paper!  We are working up some (old) Keck HIRES
+observations of the weak lines in the proplyds and a main focus is on
+the fluorescent lines, not just [N I] but also the [O I] lines and the
+deuterium lines.  So expect more on this in the near future!
+
+** References to "generic nebula"
+
+You say "generic nebula" in lots of places, but I don't think it is
+what you mean.  Usually "generic" means "typical of its genre, or
+type".  I think you probably mean "general nebula", but it might be
+better to just say "nebula".
+
+** Conclusions
+
+It might be worthwhile here adding a few sentences about the contrast
+with LV2 and HST1, both of which were found to have abundances
+significantly different from the nebula.
+
+Apart from that, its looking great!
+
+
+
 * Proplyd observational properties
 
 "...also has a jet that may partially affect the shape of its ionization front..."
