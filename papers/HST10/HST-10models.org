@@ -229,6 +229,121 @@ thanks,
 
 * Observations
 
+** Disk masses from mm observations
+
+Typical flux measured at 340 GHz = 880 micron is 16 to 20 milliJansky, after subtracting the free-free contribution. 
+
++ Mdisk = d**2 F / kappa B
++ kappa = 0.1 (nu/1000 GHz) cm^2/g = 0.034 cm^2/g
++ B = (2 nu**2 /c**2 ) k T = 3.55e-14 T
++ Jy = 1e-23 erg cm^-2 s^-1 Hz^-1
++ => 20 mJy implies M = (440 pc)**2 20 1e-3 1e-23 / 0.034 3.55e-14 T
++ = 3.05e32 g / T = 0.154 Msun / T
++ So for T = 20 K, we get 7.7e-3 Msun, 
+
+
+*** Luminosity of Trapezium stars
+
+|------+--------+---------+------------+---------------+-------+-------+------------------------------------|
+| star | M/Msun | SP type | log L/Lsun | L / 1.e6 Lsun |   T/K | log g | Refs                               |
+|------+--------+---------+------------+---------------+-------+-------+------------------------------------|
+| A_1  |     14 | B0.5 V  |       4.45 |          0.03 | 30000 |   4.0 | \cite{2006A&A...448..351S}         |
+| B_1  |      7 | B3 V    |       3.25 |        1.8e-3 | 18000 |   4.1 | \cite{Weigelt:1999}                |
+| C_1  |     32 | O7 V    |       5.31 |          0.20 | 39000 |   4.1 | \cite{2006A&A...448..351S}         |
+| C_2  |     12 | B1 IV   |        4.2 |          0.02 | 25000 |  3.86 | \cite{Schertl:2003, Lehmann:2010a} |
+| D    |     18 | B0.5 V  |       4.47 |          0.03 | 32000 |   4.2 | \cite{2006A&A...448..351S}         |
+|------+--------+---------+------------+---------------+-------+-------+------------------------------------|
+|      |        |         |            |          0.28 |       |       |                                    |
+    #+TBLFM: $5=10**($-1 - 6) ; f2::@7$5=vsum(@II..@III); f2
+
++ Conclusion: total is 2.8e5 Lsun
+
+*** Disk temperatures
+
++ We have from the Luis seminario T = 27.4 (L/1e6 Lsun)**0.25 (D/pc)**-0.5
++ 1" = 440 AU = (440 / 206265) pc = 2.1331781931e-3 pc
++ L/1e6 Lsun = 0.28
++ => T = 430 / sqrt(D/")
+
+|    prop |    D' |  i |      D |      T |  Mdisk |   R0/cm | R_d/AU | Sigma0(10 AU) |
+|---------+-------+----+--------+--------+--------+---------+--------+---------------|
+| 167-317 |  7.83 | 50 |  10.22 | 134.51 | 1.1e-3 |  7.9e14 |   34.3 |          7.57 |
+| 177-341 | 25.84 | 70 |  27.50 |  82.00 | 1.9e-3 | 20.4e14 |   88.6 |          5.06 |
+| 182-413 |  56.7 | 30 | 113.40 |  40.38 | 3.8e-3 | 36.9e14 |  160.3 |          5.59 |
+    #+TBLFM: $4=$2 / sin($3) ; f2::$5=430 / sqrt($4) ; f2::$6=0.154 / $5 ; s2::$8=$-1 * 1.3/2 $au ; f1::$9=2.36e6 $6 / 10 $8 ; f2
+
+*** Surface density normalization
+
++ From the Luis models, we have Md = 0.6 (2 pi (AU)**2 Sigma0 (R/AU))
++ => Sigma0 = 2.36e6 (Md / Msun) (R/AU)**-1
+
+
+*** Summary table
+
+|                      | Units   | 167-317 | 177-341 | 182-413 |
+|----------------------+---------+---------+---------+---------|
+| D'                   | "       |    7.83 |   25.84 |    56.7 |
+| i                    | deg     |      50 |      70 |      30 |
+| D                    | pc      |   0.022 |   0.059 |   0.242 |
+|----------------------+---------+---------+---------+---------|
+| R_if                 | AU      |     53. |    136. |    247. |
+| n_0                  | cm^-3   |     2e6 |     4e5 |     1e5 |
+| Ionization parameter |         |   0.012 |   0.008 |   0.002 |
+| Mdot                 | Msun/yr |  2.6e-7 |  2.5e-7 |  2.1e-7 |
+|----------------------+---------+---------+---------+---------|
+| T_disk               | K       |  134.51 |   82.00 |   40.38 |
+| M_disk               | M_sun   |  1.1e-3 |  1.9e-3 |  3.8e-3 |
+| R_disk               | AU      |      34 |      89 |     160 |
+| Sigma0(10 AU)        | g/cm^2  |    7.57 |    5.06 |    5.59 |
+| t_evap               | yr      |   4.2e3 |   7.6e3 |   1.8e4 |
+|----------------------+---------+---------+---------+---------|
+    #+TBLFM: @4$3=10.22 440 $au /$pc ; f3::@4$4=27.50 440 $au /$pc ; f3::@4$5=113.40 440 $au /$pc ; f3::@5$3=7.9e14 / $au ; f0::@5$4=20.4e14/$au;f0::@5$5=36.9e14/$au; f0::@7$3..@7$5=1e49 / $pi (@4 $pc)**2 $c @-1 ; f3::@13$3..@13$5=@10/@8 ; s2
+
+
+
+** Could the proplyd affect the abundances in its environment?
+*** Total mass of ionized gas in nebular background
+
++ Average Ha surface brightness of 1.85e-13 erg/s/cm2/spaxel
++ Total number of spaxels 22 x 14 = 308 => Flux = 5.698e-11 erg/s/cm2
++ Extinction correction is 2.95 => Flux 1.68091e-10  erg/s/cm2
++ S(Ha) =  EM (h nu) alpha(Ha) / (4 pi)
++ F(Ha) =  Omega S(Ha) = (A/D^2) S(Ha)
++ EM = n^2 z
++ => F(Ha) = (A z) n^2 (h nu) alpha(Ha) / (4 pi D^2)   
++ M = V n m = A z n m 
++ F(Ha) = (M/m) n (h nu) alpha(Ha) / (4 pi D^2)
++ => M = F(Ha) m (4 pi D^2) / [n (h nu) alpha(Ha)]
+  + (h nu) =  3.026e-12 erg
+  + m = 2e-24 g
+  + alpha(ha) = 1e-13
+  + D = 440 pc = 1.358e21 cm
+  + n = 2500 pcc
+  + => M = 1.68091e-10 2e-24 (4 pi 1.358e21**2) / 2500 3.026e-12 1e-13
+         = 1.02985226406e31 g = 0.005 Msun
++ Therefore, the total mass of the nebula is less than the mass that the disk might have had
++ So this is not a good argument
+
+*** Mass flow into the nebular volume
++ Assume that gas in the nebula is moving around randomly with v ~ c_s
++ Then the rate of low of mass into the observed volume is
+  + Mdot = A n m c_s
+  + Lower limit on A is Omega D^2 (just one side of the volume)
+    + Omega = 6.6 x 4.2 arcsec = 27.72 arcsec^2
+    + => A = 27.72  4.848136812e-6**2 1.358e21**2 = 1.20155180349e33 cm^2
+  + => Mdot = 1.2e33 2500 2e-24 1e6 = 6e18 g/s = 9.52e-8 Msun/yr
+  + Better estimate for A - include the sides
+    + A = 4 L z + 2 L^2 = L^2 (2 + 4 z/L)
+      + L is width, z is depth
+      + where we already calculated L^2 = 1.2e33 cm^2
+	+ L = sqrt(1.2e33) = 3.46e16 cm 
+    + z = EM / n^2
+      + EM = 8e24 for proplyd, and must be same for nebula since S(Ha) are almost the same
+      + => z = 8e24 / 2500**2 = 1.28e18 cm
+      + => z/L = 37
+    + So A = 150 L^2 and Mdot increases in the same proportion
+    + => Mdot = 1.428e-5 Msun/year
+
 ** DONE [8/8] Calculate the density from the H alpha surface brightness
     CLOSED: [2012-09-06 Thu 09:30]
 
