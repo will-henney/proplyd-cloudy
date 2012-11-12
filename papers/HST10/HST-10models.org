@@ -259,18 +259,24 @@ Typical flux measured at 340 GHz = 880 micron is 16 to 20 milliJansky, after sub
 + Conclusion: total is 2.8e5 Lsun
 
 *** Disk temperatures
+    - Note taken on [2012-11-11 Sun 09:33] \\
+      Correct for fact that about half the luminosity of the star is absorbed in the ionized gas, and another half in the neutral evaporation flow.
+
+XXX
 
 + We have from the Luis seminario T = 27.4 (L/1e6 Lsun)**0.25 (D/pc)**-0.5
 + 1" = 440 AU = (440 / 206265) pc = 2.1331781931e-3 pc
 + L/1e6 Lsun = 0.28
 + => T = 430 / sqrt(D/")
++ Or, if only 1/4 of the flux reaches the disk
+  + 304 / sqrt(D/")
 
-|    prop |    D' |  i |      D |      T |  Mdisk |   R0/cm | R_d/AU | Sigma0(10 AU) |
-|---------+-------+----+--------+--------+--------+---------+--------+---------------|
-| 167-317 |  7.83 | 50 |  10.22 | 134.51 | 1.1e-3 |  7.9e14 |   34.3 |          7.57 |
-| 177-341 | 25.84 | 70 |  27.50 |  82.00 | 1.9e-3 | 20.4e14 |   88.6 |          5.06 |
-| 182-413 |  56.7 | 30 | 113.40 |  40.38 | 3.8e-3 | 36.9e14 |  160.3 |          5.59 |
-    #+TBLFM: $4=$2 / sin($3) ; f2::$5=430 / sqrt($4) ; f2::$6=0.154 / $5 ; s2::$8=$-1 * 1.3/2 $au ; f1::$9=2.36e6 $6 / 10 $8 ; f2
+|    prop |    D' |  i |      D |     T |  Mdisk |   R0/cm | R_d/AU | Sigma0(10 AU) |
+|---------+-------+----+--------+-------+--------+---------+--------+---------------|
+| 167-317 |  7.83 | 50 |  10.22 | 95.09 | 1.6e-3 |  7.9e14 |   34.3 |         11.01 |
+| 177-341 | 25.84 | 70 |  27.50 | 57.97 | 2.7e-3 | 20.4e14 |   88.6 |          7.19 |
+| 182-413 |  56.7 | 30 | 113.40 | 28.55 | 5.4e-3 | 36.9e14 |  160.3 |          7.95 |
+    #+TBLFM: $4=$2 / sin($3) ; f2::$5=304 / sqrt($4) ; f2::$6=0.154 / $5 ; s2::$8=$-1 * 1.3/2 $au ; f1::$9=2.36e6 $6 / 10 $8 ; f2
 
 *** Surface density normalization
 
@@ -283,7 +289,7 @@ Typical flux measured at 340 GHz = 880 micron is 16 to 20 milliJansky, after sub
 |                      | Units   | 167-317 | 177-341 | 182-413 |
 |----------------------+---------+---------+---------+---------|
 | D'                   | "       |    7.83 |   25.84 |    56.7 |
-| i                    | deg     |      50 |      70 |      30 |
+| i                    | deg     |      50 |      70 |     150 |
 | D                    | pc      |   0.022 |   0.059 |   0.242 |
 |----------------------+---------+---------+---------+---------|
 | R_if                 | AU      |     53. |    136. |    247. |
@@ -291,11 +297,11 @@ Typical flux measured at 340 GHz = 880 micron is 16 to 20 milliJansky, after sub
 | Ionization parameter |         |   0.012 |   0.008 |   0.002 |
 | Mdot                 | Msun/yr |  2.6e-7 |  2.5e-7 |  2.1e-7 |
 |----------------------+---------+---------+---------+---------|
-| T_disk               | K       |  134.51 |   82.00 |   40.38 |
-| M_disk               | M_sun   |  1.1e-3 |  1.9e-3 |  3.8e-3 |
+| T_disk               | K       |      95 |      58 |      29 |
+| M_disk               | M_sun   |  1.6e-3 |  2.7e-3 |  5.4e-3 |
 | R_disk               | AU      |      34 |      89 |     160 |
 | Sigma0(10 AU)        | g/cm^2  |    7.57 |    5.06 |    5.59 |
-| t_evap               | yr      |   4.2e3 |   7.6e3 |   1.8e4 |
+| t_evap               | yr      |   6.2e3 |   1.1e4 |   2.6e4 |
 |----------------------+---------+---------+---------+---------|
     #+TBLFM: @4$3=10.22 440 $au /$pc ; f3::@4$4=27.50 440 $au /$pc ; f3::@4$5=113.40 440 $au /$pc ; f3::@5$3=7.9e14 / $au ; f0::@5$4=20.4e14/$au;f0::@5$5=36.9e14/$au; f0::@7$3..@7$5=1e49 / $pi (@4 $pc)**2 $c @-1 ; f3::@13$3..@13$5=@10/@8 ; s2
 
