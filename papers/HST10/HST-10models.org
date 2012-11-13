@@ -6,6 +6,36 @@
 #+TITLE: Modelos para HST-10
 
 
+* Comments on the (final?) Nov 12 draft
+
+** Abstract
+
+*** "... the HST 10 proplyd found in Orion ..."
+-> "... the Orion proplyd HST 10 ..." 
+You already said "found in Orion" earlier.  
+
+*** "... in a variety of emission line maps ..."
+-> "... in a variety of emission lines  ..."
+
+*** "... the model fit is satisfactory for most spectral lines ..."
+-> "... the model fit is satisfactory for all spectral lines ..."
+You already listed the only two that are unsatisfactory!
+
+*** Name of telescope/instrument
+I think at least the telescope acronym should be expanded: Very Large
+Telescope (or even, European Southern Observatory Very Large Telescope)
+
+*** Names of elements
+I think that in an abstract the full names should be used: "neon"
+rather than Ne, etc.  This might make the list unwieldy, in which
+case maybe you could rephrase it as "The abundances of helium and
+eight heavy elements ..."
+
+** The rest of the paper
+
+Is perfect!
+
+
 * Comments on 1 Nov draft
 
 ** Abstract
