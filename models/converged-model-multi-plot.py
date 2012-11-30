@@ -36,7 +36,7 @@ em_labels = dict(
     O__1__6300A = r"[O \textsc{i}]    \(\lambda\)6300", 
     O_II__3726A = r"[O \textsc{ii}]    \(\lambda\)3726",
     S_II__4070A = r"[S \textsc{ii}]   \(\lambda\)4070", 
-    S_II__6716A = r"[S \textsc{ii}]   \(\lambda\)6716", 
+    S_II__6731A = r"[S \textsc{ii}]   \(\lambda\)6731", 
     N__2__5755A = r"[N \textsc{ii}]   \(\lambda\)5755", 
     N__2__6584A = r"[N \textsc{ii}]   \(\lambda\)6584", 
     S__3__6312A = r"[S \textsc{iii}]  \(\lambda\)6312", 
@@ -55,7 +55,7 @@ elements = dict(
     O__1__6300A = r"O", 
     O_II__3726A = r"O", 
     S_II__4070A = r"S", 
-    S_II__6716A = r"S", 
+    S_II__6731A = r"S", 
     N__2__5755A = r"N", 
     N__2__6584A = r"N", 
     S__3__6312A = r"S", 
@@ -118,6 +118,7 @@ def plot_vars(modelid):
     oplus = m.ion_o.O__2
     nplus = m.ion_n.N__2
     splus = m.ion_s.S__2
+    splusplus = m.ion_s.S__3
     cplus = m.ion_c.C__2
     heplus = 10**m.ovr.HeII
     
@@ -222,6 +223,15 @@ def plot_vars(modelid):
                      '-', c=colors[element], 
                      label=r'\(\mathrm{{{0}^+\!/\,{0}}}\)'.format(element))
 
+    if cmd_args.plusplus:
+        for ifrac, element in [
+            [splusplus, "S"], 
+            ]:
+            if not ifrac is None:
+                plt.plot(delta, ifrac, 
+                         '--', c=colors[element], 
+                         label=r'\(\mathrm{{{0}^{{2+}}\!/\,{0}}}\)'.format(element))
+
     for l in plt.gca().lines:
         l.set_alpha(.7)
 
@@ -317,6 +327,8 @@ if __name__ == '__main__':
                         lines to plot.   If this option is specified,
                         then a candlestick plot of the emissivities
                         will be added to the figure''') 
+    parser.add_argument("--plusplus", action="store_true",
+                        help='Include some doubly-ionized ions in the fraction plot')
     parser.add_argument("--symlog", action="store_true",
                         help='Use symmetric log scale on the x-axis')
     parser.add_argument("--heat", action="store_true",

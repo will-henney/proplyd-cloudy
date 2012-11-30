@@ -5,6 +5,208 @@
 #+EXPORT_EXCLUDE_TAGS: noexport
 #+TITLE: Modelos para HST-10
 
+
+* Comments on the (final?) Nov 12 draft
+
+** Abstract
+
+*** "... the HST 10 proplyd found in Orion ..."
+-> "... the Orion proplyd HST 10 ..." 
+You already said "found in Orion" earlier.  
+
+*** "... in a variety of emission line maps ..."
+-> "... in a variety of emission lines  ..."
+
+*** "... the model fit is satisfactory for most spectral lines ..."
+-> "... the model fit is satisfactory for all spectral lines ..."
+You already listed the only two that are unsatisfactory!
+
+*** Name of telescope/instrument
+I think at least the telescope acronym should be expanded: Very Large
+Telescope (or even, European Southern Observatory Very Large Telescope)
+
+*** Names of elements
+I think that in an abstract the full names should be used: "neon"
+rather than Ne, etc.  This might make the list unwieldy, in which
+case maybe you could rephrase it as "The abundances of helium and
+eight heavy elements ..."
+
+** The rest of the paper
+
+Is perfect!
+
+
+* Comments on 1 Nov draft
+
+** Abstract
+Should it not be in the present tense?
+
+** Section 1.1, page 2
+"the disc seen" -> "the disc is seen"
+
+** Section 3.2, first para
+
+Not sure what is meant by "indicate that small dust grains must be
+well mixed within the H II zone".
+
+I don't think that the enhanced C(Hb) at the proplyd position can be
+due to grains in the ionized gas.  This is because the dust optical
+depth through the ionized gas is proportional to the ionization
+parameter, which for the proplyd is quite low.  In fact, our model
+indicates a V-band optical depth of only about 0.05 to the i-front
+(see the figure).  So most of the extra extinction must be due to dust
+between the i-front and the surface of the accretion disk, which
+should have A_V of order unity.
+
+** Section 3.3
+
+I'm not sure it is worth showing the 6716/6731 plot and discussing it
+here, other than just to say that both lines are collisionally
+de-excited in the proplyd, and so the ratio should be in the
+high-density limit (if you have done the background subtraction
+properly).  Or you could leave the plot in and say that it is useful
+as a diagnostic of the nebular background, but doesn't work for the
+proplyd.  We need to make more clear which of the panels in Fig 6 are
+after BG subtraction and which are not.  I am assuming that the
+6716/6731 map is not BG subtracted, but the others are, right?
+
+** Section 3.4 Ion and element abundances
+
+I am wondering if it might be better to reorganise the material
+slightly, so as to better integrate the presentation of the empirical
+and model-based approaches to the abundance determination.  I think
+that this is necessary because there are quite a few forward
+references to the model in this section, but without some sort of
+introductory remarks this is going to be confusing to the reader.
+
+So, I propose making this a new section 4, which would start with a
+paragraph that discusses the two approaches to the abundance analysis.
+Something along the lines of the following (check in the Adal paper
+for any references that I give which you don't already have):
+
+"We employ two complementary approaches to determining the gas-phase
+elemental abundances.  The first is the traditional empirical method
+(CITATIONS), which assumes that each ion is emitted from a homogeneous
+zone with a constant electron density and temperature, and employs
+ionization correction factors (CITATIONS) to account for unobserved
+ionization stages.  The second is to construct self-consistent
+physical models of the proplyd ionization front and photoevaporation
+flow (Henney \& O'Dell 1999; Henney et al.\ 2002,2005; Mesa Delgado et
+al. 2012) that satisfy existing observational constraints from
+high-resolution spectroscopy and HST imaging, and in which the
+abundances are adjusted so as to best reproduce the observed line
+spectrum.  The second method has the great advantage that it can
+account for the fact that the physical conditions may vary greatly,
+even \emph{within} the zone of emission of a single ion.  It also
+obviates the need for the use of ionization correction factors since
+the full ionization structure of each element is calculated from first
+principles, using the Cloudy microphysics code (Ferland at el. 1998).
+On the other hand, it also has various disadvantages.  The models are
+computationally costly to calculate, and there is no guarantee that a
+model will be found that can simultaneously reproduce all of the
+observations.  In the case of several models that can each reproduce
+most, but not all, of the observed emission line spectrum, there is no
+obvious criterion for deciding which is ``best''. "
+
+The current section 3.4 would then become section 4.1 (with a title
+such as "Empirical abundance determination").  The current section 4
+would become section 4.2.
+
+** Consistency of atomic data?
+
+One thing that we never discuss is whether we are using consistent
+atomic data between the modelling and empirical analyses.  In the
+models, we are using what is in Cloudy 10, which in general is pretty
+up to date I think, although it does have some holes, particularly wrt
+the ORLs.  We should maybe check that your IONIC v2.14 does not give
+wildly disparate results, although we could leave this for now and see
+if the referee picks up on it.  It is the sort of thing that Grazyna
+or Mónica R. would be bound to notice!
+
+** Sect 3.4.1 Oxygen and sulphur
+
+When talking about the Esteban et al. (2004) abundances, we need to
+make clear that we are talking about the CEL+t^2 abundances, which are
+the same as ORL ones (and different from the CEL-with-no-t^2 ones).
+Although, of course you find that the oxygen ADF is effectively unity
+for the background nebula near HST 10.  
+
+You need to decide which spelling to use: "sulphur" or "sulfur".  The
+Royal Society of Chemistry prefers "sulfur"
+(http://www.rsc.org/periodic-table/element/16/sulfur), but as
+astronomers we don't have to be bound by that!
+
+The S/H abundance map in Figure 8 looks remarkably like the He+/H+
+abundance map.  Coincidence?  Although you say you do not need an ICF
+for sulfur, how are you acounting for the S^{3+}, given that you don't
+observe any [S IV] lines?  The models do imply that there should be
+some S^{3+} but I haven't checked if it is enough to make a
+significant difference.  Presumably not, since the model S abundance
+agrees with yours (although 4070 is a fly in the ointment).
+
+** Table 3
+We should maybe add the Esteban abundances (that we use in Model A) to
+this table, to make things easier for the reader.
+
+** Response to Jeremy's comments
+
+: para 1
+: It would be worth justifying the values in Table 4 a little more. In particular
+: I assume you take the projected distance to the Trapezium to determine the
+: ionizing flux at the proplyd. This could be a lower limit to the real distance.
+: 
+
+The ionizing flux was adjusted until the model reproduced the correct
+H beta flux for the proplyd cusp.  Assuming an ionizing flux of 0.9e49
+/s for th1C and no intervening absorption, this implies a true
+distance from the Trapezium of about twice the projected distance, or
+an inclination of about 60 degrees from the plane of the sky.  This is
+consistent with the appearance in the HST images and with the
+kinematics measured from the Keck spectra.
+
+
+Nahiely was supposed to be sending some text describing this.  If she
+hasn't, you can use what I just wrote...
+
+: I was a bit puzzled why the two models give such large differences when
+: the abundances between HST10 and the background (assumed similar to
+: Esteban et al.) are so similar (not different within the errors). Are you
+: implying that the Esteban set are not appropriate here.
+: 
+
+The Esteban abundances are a bit different. C and Ne are lower, but
+most other elements are higher.  The overall temperature of the model
+comes out lower.  I suggested adding these abundances to Table 3.  I'm
+not sure what to make of the fact that Yiannis's BG nebular abundances
+are so different from Esteban's.
+
+:  Given the great paper by Ferland et al. on [N I] would it not be interesting
+: to compare the [N I]/H-beta and [N I] EW with their plots to see if the transfer
+: responsible for pumping of [N I] is any different in the proplyds (and
+: by association also in LV2).
+
+I'm glad you liked the paper!  We are working up some (old) Keck HIRES
+observations of the weak lines in the proplyds and a main focus is on
+the fluorescent lines, not just [N I] but also the [O I] lines and the
+deuterium lines.  So expect more on this in the near future!
+
+** References to "generic nebula"
+
+You say "generic nebula" in lots of places, but I don't think it is
+what you mean.  Usually "generic" means "typical of its genre, or
+type".  I think you probably mean "general nebula", but it might be
+better to just say "nebula".
+
+** Conclusions
+
+It might be worthwhile here adding a few sentences about the contrast
+with LV2 and HST1, both of which were found to have abundances
+significantly different from the nebula.
+
+Apart from that, its looking great!
+
+
+
 * Proplyd observational properties
 
 "...also has a jet that may partially affect the shape of its ionization front..."
@@ -56,6 +258,127 @@ for Neon and Nitrogen the ICF prescriptions followed in LV2 (paper I) was adopte
 thanks,
 
 * Observations
+
+** Disk masses from mm observations
+
+Typical flux measured at 340 GHz = 880 micron is 16 to 20 milliJansky, after subtracting the free-free contribution. 
+
++ Mdisk = d**2 F / kappa B
++ kappa = 0.1 (nu/1000 GHz) cm^2/g = 0.034 cm^2/g
++ B = (2 nu**2 /c**2 ) k T = 3.55e-14 T
++ Jy = 1e-23 erg cm^-2 s^-1 Hz^-1
++ => 20 mJy implies M = (440 pc)**2 20 1e-3 1e-23 / 0.034 3.55e-14 T
++ = 3.05e32 g / T = 0.154 Msun / T
++ So for T = 20 K, we get 7.7e-3 Msun, 
+
+
+*** Luminosity of Trapezium stars
+
+|------+--------+---------+------------+---------------+-------+-------+------------------------------------|
+| star | M/Msun | SP type | log L/Lsun | L / 1.e6 Lsun |   T/K | log g | Refs                               |
+|------+--------+---------+------------+---------------+-------+-------+------------------------------------|
+| A_1  |     14 | B0.5 V  |       4.45 |          0.03 | 30000 |   4.0 | \cite{2006A&A...448..351S}         |
+| B_1  |      7 | B3 V    |       3.25 |        1.8e-3 | 18000 |   4.1 | \cite{Weigelt:1999}                |
+| C_1  |     32 | O7 V    |       5.31 |          0.20 | 39000 |   4.1 | \cite{2006A&A...448..351S}         |
+| C_2  |     12 | B1 IV   |        4.2 |          0.02 | 25000 |  3.86 | \cite{Schertl:2003, Lehmann:2010a} |
+| D    |     18 | B0.5 V  |       4.47 |          0.03 | 32000 |   4.2 | \cite{2006A&A...448..351S}         |
+|------+--------+---------+------------+---------------+-------+-------+------------------------------------|
+|      |        |         |            |          0.28 |       |       |                                    |
+    #+TBLFM: $5=10**($-1 - 6) ; f2::@7$5=vsum(@II..@III); f2
+
++ Conclusion: total is 2.8e5 Lsun
+
+*** Disk temperatures
+    - Note taken on [2012-11-11 Sun 09:33] \\
+      Correct for fact that about half the luminosity of the star is absorbed in the ionized gas, and another half in the neutral evaporation flow.
+
+XXX
+
++ We have from the Luis seminario T = 27.4 (L/1e6 Lsun)**0.25 (D/pc)**-0.5
++ 1" = 440 AU = (440 / 206265) pc = 2.1331781931e-3 pc
++ L/1e6 Lsun = 0.28
++ => T = 430 / sqrt(D/")
++ Or, if only 1/4 of the flux reaches the disk
+  + 304 / sqrt(D/")
+
+|    prop |    D' |  i |      D |     T |  Mdisk |   R0/cm | R_d/AU | Sigma0(10 AU) |
+|---------+-------+----+--------+-------+--------+---------+--------+---------------|
+| 167-317 |  7.83 | 50 |  10.22 | 95.09 | 1.6e-3 |  7.9e14 |   34.3 |         11.01 |
+| 177-341 | 25.84 | 70 |  27.50 | 57.97 | 2.7e-3 | 20.4e14 |   88.6 |          7.19 |
+| 182-413 |  56.7 | 30 | 113.40 | 28.55 | 5.4e-3 | 36.9e14 |  160.3 |          7.95 |
+    #+TBLFM: $4=$2 / sin($3) ; f2::$5=304 / sqrt($4) ; f2::$6=0.154 / $5 ; s2::$8=$-1 * 1.3/2 $au ; f1::$9=2.36e6 $6 / 10 $8 ; f2
+
+*** Surface density normalization
+
++ From the Luis models, we have Md = 0.6 (2 pi (AU)**2 Sigma0 (R/AU))
++ => Sigma0 = 2.36e6 (Md / Msun) (R/AU)**-1
+
+
+*** Summary table
+
+|                      | Units   | 167-317 | 177-341 | 182-413 |
+|----------------------+---------+---------+---------+---------|
+| D'                   | "       |    7.83 |   25.84 |    56.7 |
+| i                    | deg     |      50 |      70 |     150 |
+| D                    | pc      |   0.022 |   0.059 |   0.242 |
+|----------------------+---------+---------+---------+---------|
+| R_if                 | AU      |     53. |    136. |    247. |
+| n_0                  | cm^-3   |     2e6 |     4e5 |     1e5 |
+| Ionization parameter |         |   0.012 |   0.008 |   0.002 |
+| Mdot                 | Msun/yr |  2.6e-7 |  2.5e-7 |  2.1e-7 |
+|----------------------+---------+---------+---------+---------|
+| T_disk               | K       |      95 |      58 |      29 |
+| M_disk               | M_sun   |  1.6e-3 |  2.7e-3 |  5.4e-3 |
+| R_disk               | AU      |      34 |      89 |     160 |
+| Sigma0(10 AU)        | g/cm^2  |    7.57 |    5.06 |    5.59 |
+| t_evap               | yr      |   6.2e3 |   1.1e4 |   2.6e4 |
+|----------------------+---------+---------+---------+---------|
+    #+TBLFM: @4$3=10.22 440 $au /$pc ; f3::@4$4=27.50 440 $au /$pc ; f3::@4$5=113.40 440 $au /$pc ; f3::@5$3=7.9e14 / $au ; f0::@5$4=20.4e14/$au;f0::@5$5=36.9e14/$au; f0::@7$3..@7$5=1e49 / $pi (@4 $pc)**2 $c @-1 ; f3::@13$3..@13$5=@10/@8 ; s2
+
+
+
+** Could the proplyd affect the abundances in its environment?
+*** Total mass of ionized gas in nebular background
+
++ Average Ha surface brightness of 1.85e-13 erg/s/cm2/spaxel
++ Total number of spaxels 22 x 14 = 308 => Flux = 5.698e-11 erg/s/cm2
++ Extinction correction is 2.95 => Flux 1.68091e-10  erg/s/cm2
++ S(Ha) =  EM (h nu) alpha(Ha) / (4 pi)
++ F(Ha) =  Omega S(Ha) = (A/D^2) S(Ha)
++ EM = n^2 z
++ => F(Ha) = (A z) n^2 (h nu) alpha(Ha) / (4 pi D^2)   
++ M = V n m = A z n m 
++ F(Ha) = (M/m) n (h nu) alpha(Ha) / (4 pi D^2)
++ => M = F(Ha) m (4 pi D^2) / [n (h nu) alpha(Ha)]
+  + (h nu) =  3.026e-12 erg
+  + m = 2e-24 g
+  + alpha(ha) = 1e-13
+  + D = 440 pc = 1.358e21 cm
+  + n = 2500 pcc
+  + => M = 1.68091e-10 2e-24 (4 pi 1.358e21**2) / 2500 3.026e-12 1e-13
+         = 1.02985226406e31 g = 0.005 Msun
++ Therefore, the total mass of the nebula is less than the mass that the disk might have had
++ So this is not a good argument
+
+*** Mass flow into the nebular volume
++ Assume that gas in the nebula is moving around randomly with v ~ c_s
++ Then the rate of low of mass into the observed volume is
+  + Mdot = A n m c_s
+  + Lower limit on A is Omega D^2 (just one side of the volume)
+    + Omega = 6.6 x 4.2 arcsec = 27.72 arcsec^2
+    + => A = 27.72  4.848136812e-6**2 1.358e21**2 = 1.20155180349e33 cm^2
+  + => Mdot = 1.2e33 2500 2e-24 1e6 = 6e18 g/s = 9.52e-8 Msun/yr
+  + Better estimate for A - include the sides
+    + A = 4 L z + 2 L^2 = L^2 (2 + 4 z/L)
+      + L is width, z is depth
+      + where we already calculated L^2 = 1.2e33 cm^2
+	+ L = sqrt(1.2e33) = 3.46e16 cm 
+    + z = EM / n^2
+      + EM = 8e24 for proplyd, and must be same for nebula since S(Ha) are almost the same
+      + => z = 8e24 / 2500**2 = 1.28e18 cm
+      + => z/L = 37
+    + So A = 150 L^2 and Mdot increases in the same proportion
+    + => Mdot = 1.428e-5 Msun/year
 
 ** DONE [8/8] Calculate the density from the H alpha surface brightness
     CLOSED: [2012-09-06 Thu 09:30]

@@ -21,14 +21,14 @@
 \pgfplotsset{
   compat=1.5.1, % most current version as of writing (27 Jan 2012)
   % compat=newest, % select to always use latest version (may cause minor appearance changes)
-  width=\textwidth,
+  width=0.7\textwidth,
   every axis legend/.append style={
     % make legend less tightly packed
-    inner xsep=0.5em,
-    inner ysep=3pt,
+    inner xsep=0.7em,
+    inner ysep=2pt,
     nodes={
-      inner xsep=1em,
-      text depth=0.25em
+      inner xsep=0.5em,
+      text depth=0.2em
     },
   },
 }
@@ -45,27 +45,44 @@
     ]
     \addplot [
     scatter/classes={
-      Ar3={mark=square*,TealBlue},%
-%      Ar4={mark=square*,cyan},%
-      C2={mark=triangle*,Purple},%
-%      C3={mark=square*,magenta},%
-      Cl3={mark=square*,magenta},%
-      Fe3={mark=square*,yellow},%
+      Ar3={mark=square*,cyan},%
+%      Ar4={mark=square*,magenta},%
+      C2={mark=triangle*,mark size={3pt},magenta},%
+%      C3={mark=square*,black},%
+      Cl3={mark=square*,purple},%
+      Fe3={mark=square*,orange!80!yellow},%
       H1={mark=*,red},% 
-      He1={mark=*,Orange},%  
-      N1={mark=*,NavyBlue},%
-      N2={mark=triangle*,NavyBlue},% 
+      He1={mark=square*,red},%  
+      N1={mark=*,blue!90!magenta},%
+      N2={mark=triangle*,mark size={3pt},blue!90!magenta},% 
       Ne3={mark=square*,black},%
-      O1={mark=*,ForestGreen},% 
-      O2={mark=triangle*,ForestGreen},%
-      O3={mark=square*,ForestGreen},%
-      S2={mark=triangle*,LimeGreen},% 
-      S3={mark=square*,LimeGreen}%       
+      O1={mark=*,green!70!black},% 
+      O2={mark=triangle*,mark size={3pt},green!70!black},%
+      O3={mark=square*,green!70!black},%
+      S2={mark=triangle*,mark size={3pt},yellow!80!black},% 
+      S3={mark=square*,yellow!80!black}%       
+%% Nahiely's version with named colors
+%       Ar3={mark=square*,TealBlue},%
+% %      Ar4={mark=square*,cyan},%
+%       C2={mark=triangle*,Purple},%
+% %      C3={mark=square*,magenta},%
+%       Cl3={mark=square*,magenta},%
+%       Fe3={mark=square*,yellow},%
+%       H1={mark=*,red},% 
+%       He1={mark=*,Orange},%  
+%       N1={mark=*,NavyBlue},%
+%       N2={mark=triangle*,NavyBlue},% 
+%       Ne3={mark=square*,black},%
+%       O1={mark=*,ForestGreen},% 
+%       O2={mark=triangle*,ForestGreen},%
+%       O3={mark=square*,ForestGreen},%
+%       S2={mark=triangle*,LimeGreen},% 
+%       S3={mark=square*,LimeGreen}%       
     },
     only marks, scatter, 
     scatter src=explicit symbolic,
     point meta=explicit symbolic,
-    nodes near coords*={\scriptsize\pgfmathprintnumber[set thousands separator={}]\LAMBDA\,\AA},
+    nodes near coords*={\scriptsize\(\lambda\)\pgfmathprintnumber[set thousands separator={}]\LAMBDA},
     visualization depends on={\thisrow{Lambda} \as \LAMBDA},
     nodes near coords align=\ALIGN,
     visualization depends on={value\thisrow{Align} \as \ALIGN},    
@@ -77,21 +94,21 @@
     y=Model#1, 
     x error=WilldSP,
     meta=ID
-    ] {HST-10aperture-notabs.dat};
-    \addlegendentry{[\ion{Ar}{3}]}
-    \addlegendentry{\ion{C}{2}} 
-    \addlegendentry{[\ion{Cl}{3}]}
-    \addlegendentry{[\ion{Fe}{3}]}
-    \addlegendentry{\ion{H}{1}} 
-    \addlegendentry{\ion{He}{1}} 
-    \addlegendentry{[\ion{N}{1}]}
-    \addlegendentry{[\ion{N}{2}]} 
-    \addlegendentry{[\ion{Ne}{3}]}
-    \addlegendentry{[\ion{O}{1}]}
-    \addlegendentry{[\ion{O}{2}]}
-    \addlegendentry{[\ion{O}{3}]}
-    \addlegendentry{[\ion{S}{2}]}
-    \addlegendentry{[\ion{S}{3}]}
+    ] {HST-10aperture.dat};
+    \addlegendentry{\scriptsize[\ion{Ar}{3}]\quad}
+    \addlegendentry{\scriptsize\ion{C}{2}\quad}
+    \addlegendentry{\scriptsize[\ion{Cl}{3}]\quad}
+    \addlegendentry{\scriptsize[\ion{Fe}{3}]\quad}
+    \addlegendentry{\scriptsize\ion{H}{1}\quad}
+    \addlegendentry{\scriptsize\ion{He}{1}\quad}
+    \addlegendentry{\scriptsize[\ion{N}{1}]\quad}
+    \addlegendentry{\scriptsize[\ion{N}{2}]\quad}
+    \addlegendentry{\scriptsize[\ion{Ne}{3}]\quad}
+    \addlegendentry{\scriptsize[\ion{O}{1}]\quad}
+    \addlegendentry{\scriptsize[\ion{O}{2}]\quad}
+    \addlegendentry{\scriptsize[\ion{O}{3}]\quad}
+    \addlegendentry{\scriptsize[\ion{S}{2}]\quad}
+    \addlegendentry{\scriptsize[\ion{S}{3}]\quad}
     \addplot [gray,domain=0.08:300] {x};
   \end{loglogaxis}
 \end{tikzpicture}
