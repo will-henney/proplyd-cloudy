@@ -6,7 +6,13 @@ import pyfits
 import fastcube
 import fastcube_gauss
 
-sys.path.append("../../../src")       # make sure we can find claudia.py
+# ugly hack to make sure the claudia src folder is in sys.path
+sys.path.append(
+    os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
+        "src"
+        )
+    )
 import claudia
 
 # Avoid verbose error messages from numpy during the reading of the Cloudy files
