@@ -13,12 +13,12 @@ import subprocess
 import sys, os
 import multiprocessing
 
-# from cloudycontrol.model import Model
-# from cloudycontrol import incident, save, misc, physical
+from cloudycontrol.model import Model
+from cloudycontrol import incident, save, misc, physical
 
-# sys.path.append("../src"); import claudia
+sys.path.append("../src"); import claudia
 
-sys.path.append("../../../src")       # make sure we can find claudia.py
+#sys.path.append("../../../src")       # make sure we can find claudia.py
 import claudia
 
 scriptname = sys.argv[0]
