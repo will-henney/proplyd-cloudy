@@ -30,11 +30,37 @@ save last lines, emissivity ".em"
 * Hydrogen Balmer lines
 H  1  4861A  // H beta
 H  1  6563A  // H alpha
+Ca A  3704A  // H16 3703.86
+Ca A  3712A  // H15 3711.97
+Ca A  3734A  // H13 3734.37
+Ca A  3750A  // H12 3750.15
+Ca A  3771A  // H11 3770.63
+Ca A  3835A  // H9  3835.39
+Ca A  4102A  // H6  4101.74
+Ca A  4340A  // H gama 4340.47
+Ca A  8467A  // P17 8467.25
+Ca A  8502A  // P16 8502.48
+Ca A  8665A  // P13 8665.02
+Ca A  8750A  // P12 8750.47
+Ca A  8863A  // P11 8862.79
+Ca A  9015A  // P10 9014.91
+Ca A  9229A  // P9  9229.01
+Ca A  9546A  // P8  9545.97
+Ca A 1.005m  // P7  10049.4
 * Helium recombination lines (WARNING: some may be optically thick)
+He 1  7281A  // 7281.35
+He 1  7065A  // 7065.28
 He 1  6678A  // 6678.15
 He 1  5876A  // 5875.64
+He 1  5016A  // 5015.68
+He 1  4922A  // 4958.91
 He 1  4471A
+He 1  3889A
+He 1  3188A
+He 1  2945A  // 2946 in STIS identification
+He 1  2829A  // 2830 in STIS identification
 * Collisionally excited optical diagnostic lines
+N  2  6548A  // [N II] 6548.03
 N  2  6584A  // [N II] nebular line 6583.41
 N  2  5755A  // [N II] auroral line 5754.64
 TOTL  4363A  // [O III] auroral line
@@ -44,7 +70,10 @@ S II  6731A  // [S II] nebular line
 S II  6716A  // ditto
 S II  4070A  // [S II] auroral line (4068A in Mesa-Delgado)
 S II  4078A  // [S II] auroral line (4076A in Mesa-Delgado)
+S  3  3722A  // [S III] 3721.83 same upper level as 6312
 S  3  6312A  // [S III] 6312.10
+S  3  9069A  // [SIII] 9068.90
+S  3  9530A  // [SIII] 9530.60
 O  1  6300A  // [O I] 6300.3
 O  1  5577A  // [O I]
 O II  3729A  // [O II] 
@@ -60,6 +89,7 @@ Ar 4  4711A  // [Ar IV]
 Cl 3  5518A  // [Cl III]
 Cl 3  5538A  // [Cl III] given as 5539A in Tsamis et al 2011
 * Metal optical recombination lines
+O  1  8446A  // O I 8446 from six level atom
 O 2r  4651A   // O II 4651 total recombination, 4638.86-4696.35 (8 lines) 
 C  2  4267A   // C II recombination line
 TOTL  6580A   // C II recombination 6578 + 6580 A
@@ -78,11 +108,17 @@ Fe 3  4702A  // 4701.62
 Fe 3  4659A  // 4658.10 Strongest line
 Fe 3  4608A  // 4607.13 
 * NUV lines
+TOTL  1750A  // N III] 
+N  2  2140A  // N 2 intercombination line (as Cloudy said). Not sure if it is the same as N III 2143 + 2144
 TOTL  2326A  // C II] Semi-forbidden 2324 - 2329 multiplet (5 lines)
 C  3 1910A   // C III] Semi-forbidden
 C  3 1907A   // [C III] forbidden
 O II  2471A  // [O II] forbidden (2470 in Tsamis)
+Mg II 2798A  // add both lines of multiplet together (2796 + 2804) 
 * FIR lines, just in case
+S II 1.029m
+S II 1.032m
+S II 1.034m
 Ne 2 12.81m
 Ne 3 15.55m
 end of lines
