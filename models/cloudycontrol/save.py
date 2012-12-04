@@ -73,7 +73,7 @@ S II  4078A  // [S II] auroral line (4076A in Mesa-Delgado)
 S  3  3722A  // [S III] 3721.83 same upper level as 6312
 S  3  6312A  // [S III] 6312.10
 S  3  9069A  // [SIII] 9068.90
-S  3  9530A  // [SIII] 9530.60
+S  3  9532A  // [SIII] 9530.60
 O  1  6300A  // [O I] 6300.3
 O  1  5577A  // [O I]
 O II  3729A  // [O II] 
@@ -89,7 +89,7 @@ Ar 4  4711A  // [Ar IV]
 Cl 3  5518A  // [Cl III]
 Cl 3  5538A  // [Cl III] given as 5539A in Tsamis et al 2011
 * Metal optical recombination lines
-O  1  8446A  // O I 8446 from six level atom
+6lev  8446A  // O I 8446 from six level atom
 O 2r  4651A   // O II 4651 total recombination, 4638.86-4696.35 (8 lines) 
 C  2  4267A   // C II recombination line
 TOTL  6580A   // C II recombination 6578 + 6580 A
@@ -109,12 +109,13 @@ Fe 3  4659A  // 4658.10 Strongest line
 Fe 3  4608A  // 4607.13 
 * NUV lines
 TOTL  1750A  // N III] 
-N  2  2140A  // N 2 intercombination line (as Cloudy said). Not sure if it is the same as N III 2143 + 2144
+N  2  2141A  // N 2 intercombination line (as Cloudy said). Not sure if it is the same as N III 2143 + 2144
 TOTL  2326A  // C II] Semi-forbidden 2324 - 2329 multiplet (5 lines)
 C  3 1910A   // C III] Semi-forbidden
 C  3 1907A   // [C III] forbidden
 O II  2471A  // [O II] forbidden (2470 in Tsamis)
-Mg II 2798A  // add both lines of multiplet together (2796 + 2804) 
+Mg 2  2796A  //
+Mg 2  2803A  // 
 * FIR lines, just in case
 S II 1.029m
 S II 1.032m
