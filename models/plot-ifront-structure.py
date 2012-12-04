@@ -7,7 +7,7 @@ Based on an earlier incarnation in proplyd.org
 """
 
 import numpy, sys, os
-sys.path.append("../src"); import claudia
+sys.path.append("../../../../src"); import claudia
 import matplotlib.pyplot as plt
 import argparse
 
