@@ -16,9 +16,13 @@ import multiprocessing
 from cloudycontrol.model import Model
 from cloudycontrol import incident, save, misc, physical
 
-sys.path.append("../src"); import claudia
-
-#sys.path.append("../../../src")       # make sure we can find claudia.py
+# ugly hack to make sure the claudia src folder is in sys.path
+sys.path.append(
+    os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
+        "src"
+        )
+    )
 import claudia
 
 scriptname = sys.argv[0]

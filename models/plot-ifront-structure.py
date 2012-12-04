@@ -7,7 +7,15 @@ Based on an earlier incarnation in proplyd.org
 """
 
 import numpy, sys, os
-sys.path.append("../../../../src"); import claudia
+
+# ugly hack to make sure the claudia src folder is in sys.path
+sys.path.append(
+    os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
+        "src"
+        )
+    )
+import claudia
 import matplotlib.pyplot as plt
 import argparse
 

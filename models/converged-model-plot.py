@@ -1,5 +1,11 @@
 import numpy, sys, os
-sys.path.append("/Users/will/Work/Nahiely/proplyd-cloudy/src")
+# ugly hack to make sure the claudia src folder is in sys.path
+sys.path.append(
+    os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
+        "src"
+        )
+    )
 import claudia
 import matplotlib.pyplot as plt
   
