@@ -80,7 +80,14 @@ def find_awt(emline):
         H=1.0, He=4.0, C=12.0, N=14.0, O=16.0, Ne=20.2, Mg=24.3,
         Si=28.1, S=32.1, Cl=35.5, Ar=40.0, Ca=40.1, Fe=55.8, Co=58.9, Ni=58.7
         )
-    special_dict = dict(TOTL__4363A="O", TOTL__2326A="O", 6lev__8446A="O", TOTL__1750A="N", TOTL__5199A="N", TOTL__6580A="C")
+    special_dict = {
+        "TOTL__4363A": "O", 
+        "TOTL__2326A": "O", 
+        "6lev__8446A": "O", 
+        "TOTL__1750A": "N", 
+        "TOTL__5199A": "N", 
+        "TOTL__6580A": "C",
+        }
     if emline in special_dict.keys():
         element = special_dict[emline]
     else:
