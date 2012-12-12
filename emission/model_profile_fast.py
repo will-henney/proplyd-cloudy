@@ -87,6 +87,16 @@ def find_awt(emline):
         "TOTL__1750A": "N", 
         "TOTL__5199A": "N", 
         "TOTL__6580A": "C",
+        "Ca_B__3704A": "H",
+        "Ca_B__3712A": "H",
+        "Ca_B__3734A": "H",
+        "Ca_B__3750A": "H",
+        "Ca_B__3771A": "H",
+        "Ca_B__8467A": "H",
+        "Ca_B__8502A": "H",
+        "Ca_B__8665A": "H",
+        "Ca_B__8750A": "H",
+        "Ca_B__8863A": "H",
         }
     if emline in special_dict.keys():
         element = special_dict[emline]
