@@ -1,0 +1,201 @@
+\documentclass[useAMS,usenatbib]{mn2e}
+\usepackage{wjh-mnras-custom}
+
+\newcommand\wav[1]{\ensuremath{\lambda #1}}
+\newcommand\wavwav[1]{\ensuremath{\lambda\!\lambda #1}}
+
+\graphicspath{
+  {../Stamps/},
+  }
+
+\newcommand\OnePV[3]{%
+  \includegraphics[width=#2\linewidth]
+  {p84-#1-stamp-#3-stages}
+}
+
+\newcommand\TwoPV[4]{%
+  \begin{tabular}{@{}l@{}}
+    (a)\\
+    \includegraphics[width=#3\linewidth]
+    {p84-#1-stamp-#4-stages}\\
+    \\
+    (b)\\
+    \includegraphics[width=#3\linewidth]
+    {p84-#2-stamp-#4-stages}
+  \end{tabular}
+}
+
+\title{Description of Keck HIRES data reduction steps}
+\author{William J. Henney}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  Material that may get included in a paper.  
+  Describes the data reduction steps carried out for the 
+  Keck HIRES spectra of the Orion proplyds.
+  Basic reduction steps: 
+  order extraction, wavelength calibration, detilting,
+  de-overlapping, flat-fielding.  
+  Decomposition into continuum plus line.  
+  Deconvolution of fine-structure multiplets. 
+  Decomposition of line into sky plus nebula plus proplyd. 
+  Sample results for slit p84 
+  from the giant proplyd 244-440. 
+\end{abstract}
+
+\section{Basic Reduction}
+\label{sec:basic}
+
+
+
+\section{Decomposition}
+\label{sec:decomp}
+
+\subsection{Continuum subtraction}
+\label{sec:cont}
+
+We fit the continuum and subtract it. 
+
+\subsection{Deconvolution of multiplets}
+\label{sec:deconv}
+
+
+For the \ion{O}{1} lines 
+
+\subsection{Nebular subtraction}
+\label{sec:neb}
+
+
+
+\section{Sample results: 244-440 slit 84}
+\label{sec:sample}
+
+
+\subsection{High-ionization lines}
+\label{sec:high}
+
+
+\begin{figure*}
+  \centering
+  \TwoPV{O_III_5007}{C_II_6578}{0.75}{line}
+  \caption{(a) Collisionally excited forbidden line of doubly ionized oxygen: [\ion{O}{3}] \wav{5007}.  (b)~Recombination line of singly ionized carbon: \ion{C}{2} \wav{6578}}
+  \label{fig:p84-oiii-cii-lines}
+\end{figure*}
+
+\begin{figure*}
+  \centering
+  \TwoPV{He_I_T_5876}{He_I_S_6678}{0.75}{line}
+  \caption{Recombination lines of neutral helium: (a) \ion{He}{1} \wav{5876} triplet;  (b)~\ion{He}{1} \wav{6678} singlet.}
+  \label{fig:p84-oi-collisional-lines}
+\end{figure*}
+
+
+\subsection{Moderate-ionization lines}
+\label{sec:moderate}
+
+
+\begin{figure*}
+  \centering
+  \OnePV{S_III_6312}{0.75}{line}
+  \caption{Collisionally excited line of doubly ionized sulfur: [\ion{S}{3}] \wav{6312}.}
+  \label{fig:p84-siii-line}
+\end{figure*}
+
+\begin{figure*}
+  \centering
+  \TwoPV{Cl_III_5518}{Cl_III_5538}{0.75}{line}
+  \caption{Collisionally excited lines of doubly ionized chlorine: (a)~[\ion{Cl}{3}] \wav{5518};  (b)~[\ion{Cl}{3}] \wav{5538}.}
+  \label{fig:p84-cl-iii-lines}
+\end{figure*}
+
+
+
+\subsection{Low-ionization lines}
+\label{sec:low}
+
+\begin{figure*}
+  \centering
+  \TwoPV{N_II_5755}{N_II_6548}{0.75}{line}
+  \caption{Collisionally excited lines of singly ionized nitrogen: (a)~[\ion{N}{2}] \wav{5575} auroral line;  (b)~[\ion{N}{2}] \wav{6548} nebular line.}
+  \label{fig:p84-nii-lines}
+\end{figure*}
+
+\begin{figure*}
+  \centering
+  \TwoPV{S_II_6716}{S_II_6731}{0.75}{line}
+  \caption{Collisionally excited lines of singly ionized sulfur: (a)~[\ion{S}{2}] \wav{6731};  (b)~[\ion{S}{2}] \wav{6716}.}
+  \label{fig:p84-sii-lines}
+\end{figure*}
+
+\begin{figure*}
+  \centering
+  \TwoPV{Fe_III_4881}{Fe_III_5270}{0.75}{line}
+  \caption{Collisionally excited lines of doubly ionized iron: (a)~[\ion{Fe}{3}] \wav{4881};  (b)~[\ion{Fe}{3}] \wav{5270}.}
+  \label{fig:p84-fe-iii-lines}
+\end{figure*}
+
+
+\subsection{Neutral collisional lines}
+\label{sec:neutral}
+
+\subsection{[\ion{O}{1}] lines}
+\label{sec:oi-forbidden}
+
+\begin{figure*}
+  \centering
+  \TwoPV{O_I_6300}{O_I_5577}{0.75}{line}
+  \caption{Collisionally excited forbidden lines of neutral oxygen: [\ion{O}{1}] \wav{6300} and \wav{5577}}
+  \label{fig:p84-oi-collisional-lines}
+\end{figure*}
+
+
+\subsection{Fluorescent lines}
+\label{sec:fluor}
+
+\subsubsection{[\ion{N}{1}] lines}
+\label{sec:ni}
+
+\begin{figure*}
+  \centering
+  \TwoPV{N_I_5198}{N_I_5200}{0.75}{line}
+  \caption{Continuum fluorescence-excited forbidden lines of neutral nitrogen: [\ion{N}{1}] \wavwav{5198,5200}}
+  \label{fig:p84-ni-lines}
+\end{figure*}
+
+\subsubsection{\ion{O}{1} lines}
+\label{sec:oi-permitted}
+
+\begin{figure*}
+  \centering
+  \TwoPV{O_I_6046}{O_I_7002}{1.0}{doublet}
+  \caption{Continuum fluorescence-excited forbidden lines of neutral oxygen: [\ion{O}{1}] \wav{6046} and \wav{7002}.}
+  \label{fig:oi-permitted-lines}
+\end{figure*}
+
+\subsubsection{\ion{Fe}{2} lines}
+\label{sec:feii}
+
+
+
+\begin{figure*}
+  \centering
+  \TwoPV{Fe_II_5159}{Fe_II_5262}{0.75}{line}
+  \caption{Continuum fluorescence-excited forbidden lines of singly-ionized iron: [\ion{Fe}{2}] \wav{5159} and \wav{5262}.}
+  \label{fig:fe-ii-lines}
+\end{figure*}
+
+\subsubsection{\ion{Si}{2} lines}
+\label{sec:silicon}
+
+\begin{figure*}
+  \centering
+  \TwoPV{Si_II_6347}{Si_II_6371}{0.75}{line}
+  \caption{Continuum fluorescence/recombination-excited permitted lines of singly-ionized silicon: \ion{Si}{2} \wav{6347} and \wav{6371}.}
+  \label{fig:si-ii-lines}
+\end{figure*}
+
+
+
+
+\end{document}

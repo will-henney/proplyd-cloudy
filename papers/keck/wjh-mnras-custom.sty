@@ -1,0 +1,27 @@
+\pdfoutput=1
+\usepackage[varg]{newtxmath}
+\usepackage{newtxtext}
+\usepackage{astrojournals}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{fixltx2e}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\hypersetup{colorlinks=True, linkcolor=blue!50!black, citecolor=black,
+  urlcolor=blue!50!black}
+
+\usepackage{color}
+
+\usepackage[greek,english]{babel} 
+\newcommand{\texttheta}{\greektext j\latintext}
+\newcommand\thC{\texttheta\textsuperscript{1}\,Ori~C}
+\newcommand\elec{\ensuremath{_{\mathrm{e}}}}
+\newcommand\Ion[2]{\ensuremath{\mathrm{#1\,\scriptstyle #2}}}
+\newcounter{ionstage}
+\newcommand{\ion}[2]{% needs to be renewcommand with aastex
+  \setcounter{ionstage}{#2}%
+  \Ion{#1}{\Roman{ionstage}}}
+\newcommand\nii{\ion{N}{2}}
+\newcommand\sii{\ion{S}{2}}
+\newcommand\oiii{\ion{O}{3}}
