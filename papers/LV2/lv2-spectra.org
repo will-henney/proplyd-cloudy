@@ -1,0 +1,35 @@
+
+* Summary of the observations we have for LV2
+
+** Yiannis FOS
+
++ Spectral range: 1900 - 7500 Angstroms
++ 3 apertures of 0.26" diameter
++ Positions uncertain
+
+
+** Yiannis FLAMES
++ Spectral range: 3700 - 6800 Angstroms
++ IFU with 0.31" spaxels
++ Big problem with the reddening map
+
+
+** Bally STIS NUV
++ Spectral range: 1500 - 3000 Angstroms
++ 2" slit
++ Spatial resolution 0.05"
++ Spectral resolution: 1.374 Angstrom (1 pixel)
+  + But only for point sources
+  + Diffuse sources are limited by slit width: 50 Angstrom
+  + Proplyds are limited by angular size of proplyd
+
+
+** Bally STIS optical
++ Spectral range: 6300 - 6900 Angstroms
++ 5 x 0.1" slits with 0.1" offset between slits
++ Spatial resolution 0.05"
++ Spectral resolution: 0.54 Angstrom (1 pixel)
+  + => 24 km/s at H alpha
+
+** WFPC2 images
+
