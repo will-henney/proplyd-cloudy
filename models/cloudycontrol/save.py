@@ -30,23 +30,23 @@ save last lines, emissivity ".em"
 * Hydrogen Balmer lines
 H  1  4861A  // H beta
 H  1  6563A  // H alpha
-Ca A  3704A  // H16 3703.86
-Ca A  3712A  // H15 3711.97
-Ca A  3734A  // H13 3734.37
-Ca A  3750A  // H12 3750.15
-Ca A  3771A  // H11 3770.63
-Ca A  3835A  // H9  3835.39
-Ca A  4102A  // H6  4101.74
-Ca A  4340A  // H gama 4340.47
-Ca A  8467A  // P17 8467.25
-Ca A  8502A  // P16 8502.48
-Ca A  8665A  // P13 8665.02
-Ca A  8750A  // P12 8750.47
-Ca A  8863A  // P11 8862.79
-Ca A  9015A  // P10 9014.91
-Ca A  9229A  // P9  9229.01
-Ca A  9546A  // P8  9545.97
-Ca A 1.005m  // P7  10049.4
+Ca B  3704A  // H16 3703.86
+Ca B  3712A  // H15 3711.97
+Ca B  3734A  // H13 3734.37
+Ca B  3750A  // H12 3750.15
+Ca B  3771A  // H11 3770.63
+H  1  3835A  // H9  3835.39
+H  1  4102A  // H6  4101.74
+H  1  4340A  // H gama 4340.47
+Ca B  8467A  // P17 8467.25
+Ca B  8502A  // P16 8502.48
+Ca B  8665A  // P13 8665.02
+Ca B  8750A  // P12 8750.47
+Ca B  8863A  // P11 8862.79
+H  1  9015A  // P10 9014.91
+H  1  9229A  // P9  9229.01
+H  1  9546A  // P8  9545.97
+H  1 1.005m  // P7  10049.4
 * Helium recombination lines (WARNING: some may be optically thick)
 He 1  7281A  // 7281.35
 He 1  7065A  // 7065.28
