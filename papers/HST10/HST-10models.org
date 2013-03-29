@@ -6,6 +6,201 @@
 #+TITLE: Modelos para HST-10
 
 
+* New version of Figure 1 - HST-FLAMES comparison
+  CLOCK: [2012-12-18 Tue 11:59]--[2013-01-03 Thu 13:37] => 385:38
+
++ We were assuming 0.3 arcsec/pixel but Yiannis now says that it is nearer to 0.31 arcsec/pixel
+  + We also made a mistake with the PC pixel size
++ (22, 14) 0.31 / 0.0452 = (150.885, 96.018) should be the size in PC pixels
+  + check PC scale and orientation from FITS header
+    : CD1_1   =          8.959642E-6                                                  
+    : CD1_2   =          8.795840E-6                                                  
+    : CD2_1   =          8.795840E-6                                                  
+    : CD2_2   =         -8.959642E-6       
+  + so plate scale is 3600 sqrt(8.959642E-6**2 +  8.795840E-6**2) = 0.0452
+  + position-angle of x-axis from N is arctan2(8.959642E-6, 8.795840E-6) = 45.5285633494
+    + so needs to be rotated by -135.529 deg to point N
++ Yiannis says that PA of ARGUS is -89.58 deg
+  + On the face of it, this imples that the original 135 degree rotation is correct, since both are rotated by about 0.5 degrees in the same direction
++ Alternatively (22, 14) 0.3 / 0.0452 = (146, 93)
+
+* QUOTE Referee report from Bob
+
+Reviewer's Comments:
+Reviewer:  O'Dell, C
+
+HST 10 is certainly an interesting object, one of the most attractive
+proplyds to target, and FLAMES is a powerful imaging spectroscopic
+system. However, I believe that this paper "pushes" the data they have
+too far, leaving their conclusions not as certain as they present.
+
+The problem begins to surface in the abstract, where it is said that
+the resolution employed was 0.31"x0.31". This was the pixel size of
+FLAMES, as they state in Section 2, paragraph 1, the seeing during the
+observations was 0.7"-0.9" and this is what defined the resolution.
+This is more than a question of semantics or wording because the HST
+images of HST 10 show that although its longest dimension is 2.2", the
+chord of the bright cusp facing Theta1 Ori C is 1.2" and the thickness
+of the outer ionized layer is only about 0.3". This means that the
+0.8" seeing really was not enough to give useful spatially resolved
+spectra.
+This fundamental limitation of using FLAMES on such a small object was
+compounded by what appears to have been an
+error in the pointing. Although HST is nicely centered along the long
+dimension of the fiber optics array, the
+brightest part of the bright cusp is almost on the right hand edge of
+the short dimension, thus precluding an
+accurate subtraction of the nebular background emission. These
+fundamental limitations of the observational data
+causes me to be rather conservative in believing the results presented
+and I believe that the authors should be
+more cautious in how deeply they analyze the data.
+
+I really don't expect them to abandon the paper, but a candid comment
+up-front about this limitations seems appropriateis necessary.
+
+Even having said that, I must congratulate the authors on Section 1,
+which gives a clear and complete introduction
+to the subject.
+
+Sect.3.1,par.1 It is better to use "good seeing", rather than "low
+seeing" to describe a small image resolution.
+
+Sect.3.1,par.3. This should read "...consistent with the underlying
+disc being shielded from Lyman continuum photons
+by the ionization front of the outer cusp".
+
+Sect.3.2,par.1. The peak extinction, expressed as c(Hb) does indeed
+agree with the value of 0.6 given in O'Dell (1998) and the value
+derived by O'Dell and Yusef-Zadeh (2000) by an independent method
+(comparing optical hydrogen emission
+with the radio continuum). However, both older studies refer to the
+general nebular emission in the vicinity of HST
+10. This means that good agreement would be that the region outside
+HST should have c(Hb) about 0.6. Figure 5-left
+indicates that the derived extinction outside of HST 10 is about 0.4.
+The last sentence of this paragraph is true
+(that the peak agrees with the O'Dell 1998 study), but actually there
+is a disagreement for the values in the
+nebular background. This raises a question in my mind about the flux
+calibration of the data. This paper does not
+present a comparison of FLAMES data of a different region of Orion
+that has been calibrated using inherently simpler
+single-slit spectroscopy
+
+A statement in the text responding to the above criticism is needed
+
+Sect.3.2,par.2. The authors say that the extra extinction is due to
+dust between the cusp's ionization front and the
+surface of the embedded circumstellar disc.  This seems in
+contradiction with Figure 5-left, where the peak
+extinction is well centered on the peak of the Ha emission.
+
+Sect.3.2,par.3. Makes my point about the disagreement for the c(Hb) of
+the nebula I refer to in my comments on
+paragraph 1. This means that the authors are aware of the
+disagreement, but don't try to "chase-down" the problem
+before beginning their analysis of the reddening-corrected data.  I
+believe that this raises a nagging concern
+about all of the interpretation.
+
+Sect.3.3,par.1. Sentence 5 is not correct. At high densities the
+derived densities become very sensitive to the
+accuracy of the 6716/6731 doublet ratio-it does NOT give only a lower
+limit. This point would be clarified by
+adding to Figure 7 a curve based on the [SII] 6716/6731 doublet ratio.
+ The authors may wish to show it as a band,
+showing the results from the nominal value in the sampled region and
+the two outer boundaries showing the curves
+based on one-sigmal deviations of the doublt ratio.  Only then can one
+draw conclusions about the correct
+density to assume in the remainder of the paper.
+
+If the numbers in Table 2 are assumed, then the 6716/6731 ratio is
+0.46, which corresponds to Ne about 30000, but the
+uncertainty of this ratio of about 0.07 means that the density could
+be anywhere from 3000 to infinity.
+
+The authors may want to simply point out that the uncertainty of the
+line ratio renders the doublet unusable in this density range,
+but it is not the case that the doublet gives a lower limit.
+
+Sect.3.3,par.3. The [SII] bright structure in the SE portion is due to
+the ionization front extending about the
+entire perimeter of HST 10 and its emission being superimposed on the
+low-ionization emission of the nebula there.
+
+Figure 12 Caption. There is another reason for inaccuracies of the
+Vicente and Alves (2005) sizes. They used HST
+images that were mosaiced. This is a process that reduces the
+effective resolution (because of shifting of the
+images when they are combined) and degrades the WFPC2 PC images to the
+resolution of the WFPC2 big pixels. I suggest that the authors do not
+show the Vicente and Alves result or add this additional caveat about
+possible systematic errors.
+
+* Comparing reddening with previous results
+
++ Box is 14 x 22 pixels =  = (13.64, 8.68) pixels in the O'Dell & Yusef Zadeh chbeta image
++ ODYZ find from Ha/20cm that C(Hb) ranges from 0.45 - 0.6 across the FLAMES FOV
++ ODYZ find average "CHb(radio-optical)/CHb(Ha/Hb) = 0.93"
++ So this would imply CHb(Ha/Hb) = 0.5 - 0.65
++ Yiannis finds 0.4 - 0.55 across the same FOV, which is about 10% lower.
+
+
+** Using Bob's equation for C(Hb)
+
+: CHb = 3.614 log [I(Ha,obs) /I(Hb,obs)] - 2.142
+: 
+: but "...where it should be recalled that the calibrated surface
+: brightnesses are expressed in photons and not ergs"
+
++ Ratio of energies: (1/4 - 1/9)/(1/4 - 1/16) = 0.740740740741
++ So we divide the ha/hb flux ratio by this: multiply by 1.35
++ F(Hb) = I(Hb) 10**(-CHb)
++ F(Ha) = I(Ha) 10**(-CHb s(Ha))
+  + s(lam) = A(lam)/A(Hb) is the shape of the extinction curve normalised to Hb
+  + Peimbert and Costero use f(lam) = E(lam,Hb)/A(Hb) = (A(lam) - A(Hb))/A(Hb)
+  + So f(lam) = s(lam) - 1 => s(Ha) = 1 + f(Ha)
++ F(Ha) / F(Hb) = [I(Ha) / I(Hb)] 10**[-CHb(s(Ha) - 1)]
++ log10[F(Ha) / F(Hb)] = log10[I(Ha) / I(Hb)] - CHb f(Ha)
++ CHb = {log10[I(Ha) / I(Hb)] -  log10[F(Ha) / F(Hb)]} / f(Ha)
++ Write r = I(Ha) / I(Hb) for intrinsic Balmer decrement
++ And r' = F(Ha) / F(Hb) for observed Balmer decrement
++ So CHb = [log10(r) - log10(r')]/f(Ha)
++ ODYZ have r = 2.92 in energy units,
++ PC have f(Ha) = -0.29
++ => CHb = 3.448 log10(r') - 1.605 
++ Applying this to Yiannis' data makes no sense at all - never mind
+
+| Region    | E(Ha,Hb) | C(Hb) |     A(Hb) |  f(H2) |
+|-----------+----------+-------+-----------+--------|
+| Orion I   |    -0.35 |  0.46 | 1.0591891 | -3.026 |
+| Orion II  |    -0.33 |  0.52 | 1.1973442 | -3.628 |
+| Orion III |    -0.25 |  0.44 | 1.0131374 | -4.053 |
+| Orion IV  |    -0.35 |  0.46 | 1.0591891 | -3.026 |
+   #+TBLFM: $4=$3 ln(10)::$5=$4/$2;f3
+
+
+** Bob's criticism
+: Sect.3.2,par.1. The peak extinction, expressed as c(Hb) does indeed
+: agree with the value of 0.6 given in O'Dell (1998) and the value
+: derived by O'Dell and Yusef-Zadeh (2000) by an independent method
+: (comparing optical hydrogen emission
+: with the radio continuum). However, both older studies refer to the
+: general nebular emission in the vicinity of HST
+: 10. This means that good agreement would be that the region outside
+: HST should have c(Hb) about 0.6. Figure 5-left
+: indicates that the derived extinction outside of HST 10 is about 0.4.
+: The last sentence of this paragraph is true
+: (that the peak agrees with the O'Dell 1998 study), but actually there
+: is a disagreement for the values in the
+: nebular background. This raises a question in my mind about the flux
+: calibration of the data. This paper does not
+: present a comparison of FLAMES data of a different region of Orion
+: that has been calibrated using inherently simpler
+: single-slit spectroscopy
+
 * Comments on the (final?) Nov 12 draft
 
 ** Abstract
