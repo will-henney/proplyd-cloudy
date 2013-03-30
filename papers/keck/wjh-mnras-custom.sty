@@ -18,10 +18,17 @@
 \newcommand\thC{\texttheta\textsuperscript{1}\,Ori~C}
 \newcommand\elec{\ensuremath{_{\mathrm{e}}}}
 \newcommand\Ion[2]{\ensuremath{\text{#1\,\scriptsize #2}}}
+\newcommand\tIon[2]{{#1\,\scriptsize #2}}
+\newcommand\mIon[2]{\mathrm{#1\,\scriptstyle #2}}
+\newcommand\scIon[2]{{#1\,\textsc{#2}}}
 \newcounter{ionstage}
 \newcommand{\ion}[2]{% needs to be renewcommand with aastex
   \setcounter{ionstage}{#2}%
-  \Ion{#1}{\Roman{ionstage}}}
+  \ifmmode%
+  \mIon{#1}{\Roman{ionstage}}%
+  \else%
+  \tIon{#1}{\Roman{ionstage}}%
+  \fi}
 \newcommand\nii{\ion{N}{2}}
 \newcommand\sii{\ion{S}{2}}
 \newcommand\oiii{\ion{O}{3}}
