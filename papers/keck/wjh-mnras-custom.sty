@@ -1,6 +1,8 @@
 \pdfoutput=1
-\usepackage[varg]{newtxmath}
-\usepackage{newtxtext}
+% \usepackage[version=3]{mhchem}
+\usepackage{txfonts}
+% \usepackage[varg]{newtxmath}
+% \usepackage{newtxtext}
 \usepackage{astrojournals}
 \usepackage{graphicx}
 \usepackage{microtype}
@@ -22,7 +24,7 @@
 \newcommand\mIon[2]{\mathrm{#1\,\scriptstyle #2}}
 \newcommand\scIon[2]{{#1\,\textsc{#2}}}
 \newcounter{ionstage}
-\newcommand{\ion}[2]{% needs to be renewcommand with aastex
+\DeclareRobustCommand{\ion}[2]{% needs to be renewcommand with aastex
   \setcounter{ionstage}{#2}%
   \ifmmode%
   \mIon{#1}{\Roman{ionstage}}%

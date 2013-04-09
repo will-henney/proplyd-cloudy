@@ -1,11 +1,17 @@
 \documentclass[useAMS,usenatbib]{mn2e}
 \usepackage{wjh-mnras-custom}
+\usepackage{savesym}
+\savesymbol{iint}
+\savesymbol{iiint}
+\savesymbol{iiiint}
+\savesymbol{idotsint}
+\usepackage{mhchem}
 
 \newcommand\wav[1]{\ensuremath{\lambda #1}}
 \newcommand\wavwav[1]{\ensuremath{\lambda\!\lambda #1}}
 
 \graphicspath{
-  {../Stamps/},
+  {figs/},
   }
 
 \newcommand\OnePV[3]{%
@@ -47,7 +53,22 @@
 \section{Basic Reduction}
 \label{sec:basic}
 
+% Let's try a subscript: \(X_{\ion{O}{3}}\)
 
+% {\tiny Let's do something small: \(\ion{Fe}{3}\) or \scIon{Fe}{iii}}
+
+% {
+% \itshape
+% XXXX [\ion{Fe}{2}] YYY
+% }
+
+With \texttt{mhchem} package: 
+\ce{O^2+ 2s^2 2p^2 ^1D_2 -> 2s^2 2p^2 ^3P_{0,1,2} }
+
+With normal math commands:
+\(
+\mathrm{O^{2+}\ 2s^2\,2p^2\,{}^1D_2 \to 2s^2\,2p^2\,{}^3P_{0,1,2}}
+\)
 
 \section{Decomposition}
 \label{sec:decomp}
@@ -75,13 +96,68 @@ For the \ion{O}{1} lines
 \subsection{High-ionization lines}
 \label{sec:high}
 
-
+\subsubsection{[\ion{O}{3}] forbidden lines}
 \begin{figure*}
   \centering
   \TwoPV{O_III_5007}{C_II_6578}{0.75}{line}
   \caption{(a) Collisionally excited forbidden line of doubly ionized oxygen: [\ion{O}{3}] \wav{5007}.  (b)~Recombination line of singly ionized carbon: \ion{C}{2} \wav{6578}}
   \label{fig:p84-oiii-cii-lines}
 \end{figure*}
+
+The only [\ion{O}{3}] lines that fall in the wavelength range of our observations
+are the three components of the \(^1\)D--\(^3\)P 5007, 4959, and 4931 multiplet is the only one that is detected,
+with theoretical relative intensities 1:0.34:0.00013.     
+Only the 5007 component is shown in Figure~\ref{fig:p84-oiii-cii-lines}.  
+The 4959 component shows identical structure, 
+while the very weak 4931 component is barely detected.   
+
+The line is very strong from the nebula (X times H b) 
+but significantly weaker from the proplyd (Y times Hb).   
+As a result the proplyd contrast against the underlying 
+nebula line is only 10--20\%.   
+Nonetheless, the very high S/N allows a reliable separation 
+of the proplyd and nebula contributions, 
+as shown in the right column of Figure~\ref{fig:p84-oiii-cii-lines}.   
+The proplyd emission separates into blue and red components 
+peaking at \(V_{\mathrm{prop}} = -19\) and \(+15\) km/s 
+in the proplyd reference frame.   
+The red component is about 3 times weaker and more compact 
+and shows a larger mean spatial shift of 2 arcsec from the proplyd center, 
+as opposed to 1 arcsec for the blue component.  
+
+\subsubsection{\ion{C}{2} permitted line}
+
+This line is produced from the recombination of C\(^{2+}\).   
+
+It is 200 times weaker than [\ion{O}{3}] 5007
+and is a similar intensity to the adjacent continuum.
+However, the proplyd shows a contrast of about 100\% with respect to the nebula,
+which again allows for a reliable separation.
+The proplyd emission is extremely similar to that of  [\ion{O}{3}]. 
+
+It is an important question whether the apparent complete lack of emission
+around the proplyd systemic velocity is real or whether it is an artifact
+induced by extinction of background nebular emission by the proplyd.    \citet{1999AJ....118.2350H} discuss this issue in detail
+and show that an effective proplyd extinction as low as \(A_V = 0.2\)
+would be enough to fill-in this missing emission.
+However, there are two reasons to believe that this does not occur in 244-440.
+First, the two-dimensional line profile would appear very unnatural,
+since the extra emission would appear at spatial positions
+in the core of the proplyd, rather than displaced along the slit,
+where the peak of the high ionization emission occurs.
+Secondly, the same amount of proplyd extinction
+would have a much smaller effect on C II than it would on [\ion{O}{3}] 
+
+
+The conclusion is that in 244-440 is not affected
+by internal extinction of the nebular emission.
+This implies that either the extended neutral core of the proplyd
+is optically thin at visual wavelengths or that the majority of the nebular emission
+arises from gas that is foreground to the proplyd.
+This is consistent with the kinematic profile of this proplyd,
+which suggests that it is seen head-on
+and therefore lies behind its ionizing source.   
+
 
 \begin{figure*}
   \centering
@@ -194,6 +270,15 @@ For the \ion{O}{1} lines
   \caption{Continuum fluorescence/recombination-excited permitted lines of singly-ionized silicon: \ion{Si}{2} \wav{6347} and \wav{6371}.}
   \label{fig:si-ii-lines}
 \end{figure*}
+
+\section*{Acknowledgements}
+
+WJH and NFF acknowledge financial support from DGAPA-UNAM through project PAPIIT IN102012 and from a postdoctoral fellowship to NFF\@. 
+
+
+
+\bibliographystyle{mn2e}
+\bibliography{BibdeskLibrary}
 
 
 
