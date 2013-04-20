@@ -19,6 +19,18 @@
   {p84-#1-stamp-#3-stages}
 }
 
+\newcommand\OnePVV[3]{%
+  \begin{tabular}{@{}l@{}}
+    (a)\\
+    \includegraphics[width=#2\linewidth]
+    {p84-#1-stamp-#3-stages}\\
+    \\
+    (b)\\
+    \includegraphics[width=#2\linewidth]
+    {p85-#1-stamp-#3-stages}
+  \end{tabular}
+}
+
 \newcommand\TwoPV[4]{%
   \begin{tabular}{@{}l@{}}
     (a)\\
@@ -28,6 +40,18 @@
     (b)\\
     \includegraphics[width=#3\linewidth]
     {p84-#2-stamp-#4-stages}
+  \end{tabular}
+}
+
+\newcommand\TwoPVb[4]{%
+  \begin{tabular}{@{}l@{}}
+    (a)\\
+    \includegraphics[width=#3\linewidth]
+    {p85-#1-stamp-#4-stages}\\
+    \\
+    (b)\\
+    \includegraphics[width=#3\linewidth]
+    {p85-#2-stamp-#4-stages}
   \end{tabular}
 }
 
@@ -103,6 +127,12 @@ For the \ion{O}{1} lines
   \caption{(a) Collisionally excited forbidden line of doubly ionized oxygen: [\ion{O}{3}] \wav{5007}.  (b)~Recombination line of singly ionized carbon: \ion{C}{2} \wav{6578}}
   \label{fig:p84-oiii-cii-lines}
 \end{figure*}
+\begin{figure*}
+  \centering
+  \TwoPVb{O_III_5007}{C_II_6578}{0.75}{line}
+  \caption{(a) Collisionally excited forbidden line of doubly ionized oxygen: [\ion{O}{3}] \wav{5007}.  (b)~Recombination line of singly ionized carbon: \ion{C}{2} \wav{6578}}
+  \label{fig:p84-oiii-cii-lines}
+\end{figure*}
 
 The only [\ion{O}{3}] lines that fall in the wavelength range of our observations
 are the three components of the \(^1\)D--\(^3\)P 5007, 4959, and 4931 multiplet is the only one that is detected,
@@ -165,6 +195,12 @@ and therefore lies behind its ionizing source.
   \caption{Recombination lines of neutral helium: (a) \ion{He}{1} \wav{5876} triplet;  (b)~\ion{He}{1} \wav{6678} singlet.}
   \label{fig:p84-oi-collisional-lines}
 \end{figure*}
+\begin{figure*}
+  \centering
+  \TwoPVb{He_I_T_5876}{He_I_S_6678}{0.75}{line}
+  \caption{Recombination lines of neutral helium: (a) \ion{He}{1} \wav{5876} triplet;  (b)~\ion{He}{1} \wav{6678} singlet.}
+  \label{fig:p84-oi-collisional-lines}
+\end{figure*}
 
 
 \subsection{Moderate-ionization lines}
@@ -173,7 +209,7 @@ and therefore lies behind its ionizing source.
 
 \begin{figure*}
   \centering
-  \OnePV{S_III_6312}{0.75}{line}
+  \OnePVV{S_III_6312}{0.75}{line}
   \caption{Collisionally excited line of doubly ionized sulfur: [\ion{S}{3}] \wav{6312}.}
   \label{fig:p84-siii-line}
 \end{figure*}
@@ -184,8 +220,14 @@ and therefore lies behind its ionizing source.
   \caption{Collisionally excited lines of doubly ionized chlorine: (a)~[\ion{Cl}{3}] \wav{5518};  (b)~[\ion{Cl}{3}] \wav{5538}.}
   \label{fig:p84-cl-iii-lines}
 \end{figure*}
+\begin{figure*}
+  \centering
+  \TwoPVb{Cl_III_5518}{Cl_III_5538}{0.75}{line}
+  \caption{Collisionally excited lines of doubly ionized chlorine: (a)~[\ion{Cl}{3}] \wav{5518};  (b)~[\ion{Cl}{3}] \wav{5538}.}
+  \label{fig:p84-cl-iii-lines}
+\end{figure*}
 
-
+\clearpage
 
 \subsection{Low-ionization lines}
 \label{sec:low}
@@ -196,10 +238,22 @@ and therefore lies behind its ionizing source.
   \caption{Collisionally excited lines of singly ionized nitrogen: (a)~[\ion{N}{2}] \wav{5575} auroral line;  (b)~[\ion{N}{2}] \wav{6548} nebular line.}
   \label{fig:p84-nii-lines}
 \end{figure*}
+\begin{figure*}
+  \centering
+  \TwoPVb{N_II_5755}{N_II_6548}{0.75}{line}
+  \caption{Collisionally excited lines of singly ionized nitrogen: (a)~[\ion{N}{2}] \wav{5575} auroral line;  (b)~[\ion{N}{2}] \wav{6548} nebular line.}
+  \label{fig:p84-nii-lines}
+\end{figure*}
 
 \begin{figure*}
   \centering
   \TwoPV{S_II_6716}{S_II_6731}{0.75}{line}
+  \caption{Collisionally excited lines of singly ionized sulfur: (a)~[\ion{S}{2}] \wav{6731};  (b)~[\ion{S}{2}] \wav{6716}.}
+  \label{fig:p84-sii-lines}
+\end{figure*}
+\begin{figure*}
+  \centering
+  \TwoPVb{S_II_6716}{S_II_6731}{0.75}{line}
   \caption{Collisionally excited lines of singly ionized sulfur: (a)~[\ion{S}{2}] \wav{6731};  (b)~[\ion{S}{2}] \wav{6716}.}
   \label{fig:p84-sii-lines}
 \end{figure*}
@@ -210,11 +264,19 @@ and therefore lies behind its ionizing source.
   \caption{Collisionally excited lines of doubly ionized iron: (a)~[\ion{Fe}{3}] \wav{4881};  (b)~[\ion{Fe}{3}] \wav{5270}.}
   \label{fig:p84-fe-iii-lines}
 \end{figure*}
+\begin{figure*}
+  \centering
+  \TwoPVb{Fe_III_4881}{Fe_III_5270}{0.75}{line}
+  \caption{Collisionally excited lines of doubly ionized iron: (a)~[\ion{Fe}{3}] \wav{4881};  (b)~[\ion{Fe}{3}] \wav{5270}.}
+  \label{fig:p84-fe-iii-lines}
+\end{figure*}
 
 
+\clearpage
 \subsection{Neutral collisional lines}
 \label{sec:neutral}
 
+\clearpage
 \subsection{[\ion{O}{1}] lines}
 \label{sec:oi-forbidden}
 
@@ -224,8 +286,15 @@ and therefore lies behind its ionizing source.
   \caption{Collisionally excited forbidden lines of neutral oxygen: [\ion{O}{1}] \wav{6300} and \wav{5577}}
   \label{fig:p84-oi-collisional-lines}
 \end{figure*}
+\begin{figure*}
+  \centering
+  \TwoPVb{O_I_6300}{O_I_5577}{0.75}{line}
+  \caption{Collisionally excited forbidden lines of neutral oxygen: [\ion{O}{1}] \wav{6300} and \wav{5577}}
+  \label{fig:p84-oi-collisional-lines}
+\end{figure*}
 
 
+\clearpage
 \subsection{Fluorescent lines}
 \label{sec:fluor}
 
@@ -238,6 +307,12 @@ and therefore lies behind its ionizing source.
   \caption{Continuum fluorescence-excited forbidden lines of neutral nitrogen: [\ion{N}{1}] \wavwav{5198,5200}}
   \label{fig:p84-ni-lines}
 \end{figure*}
+\begin{figure*}
+  \centering
+  \TwoPVb{N_I_5198}{N_I_5200}{0.75}{line}
+  \caption{Continuum fluorescence-excited forbidden lines of neutral nitrogen: [\ion{N}{1}] \wavwav{5198,5200}}
+  \label{fig:p84-ni-lines}
+\end{figure*}
 
 \subsubsection{\ion{O}{1} lines}
 \label{sec:oi-permitted}
@@ -245,6 +320,12 @@ and therefore lies behind its ionizing source.
 \begin{figure*}
   \centering
   \TwoPV{O_I_6046}{O_I_7002}{1.0}{doublet}
+  \caption{Continuum fluorescence-excited forbidden lines of neutral oxygen: [\ion{O}{1}] \wav{6046} and \wav{7002}.}
+  \label{fig:oi-permitted-lines}
+\end{figure*}
+\begin{figure*}
+  \centering
+  \TwoPVb{O_I_6046}{O_I_7002}{1.0}{doublet}
   \caption{Continuum fluorescence-excited forbidden lines of neutral oxygen: [\ion{O}{1}] \wav{6046} and \wav{7002}.}
   \label{fig:oi-permitted-lines}
 \end{figure*}
@@ -260,6 +341,12 @@ and therefore lies behind its ionizing source.
   \caption{Continuum fluorescence-excited forbidden lines of singly-ionized iron: [\ion{Fe}{2}] \wav{5159} and \wav{5262}.}
   \label{fig:fe-ii-lines}
 \end{figure*}
+\begin{figure*}
+  \centering
+  \TwoPVb{Fe_II_5159}{Fe_II_5262}{0.75}{line}
+  \caption{Continuum fluorescence-excited forbidden lines of singly-ionized iron: [\ion{Fe}{2}] \wav{5159} and \wav{5262}.}
+  \label{fig:fe-ii-lines}
+\end{figure*}
 
 \subsubsection{\ion{Si}{2} lines}
 \label{sec:silicon}
@@ -267,6 +354,12 @@ and therefore lies behind its ionizing source.
 \begin{figure*}
   \centering
   \TwoPV{Si_II_6347}{Si_II_6371}{0.75}{line}
+  \caption{Continuum fluorescence/recombination-excited permitted lines of singly-ionized silicon: \ion{Si}{2} \wav{6347} and \wav{6371}.}
+  \label{fig:si-ii-lines}
+\end{figure*}
+\begin{figure*}
+  \centering
+  \TwoPVb{Si_II_6347}{Si_II_6371}{0.75}{line}
   \caption{Continuum fluorescence/recombination-excited permitted lines of singly-ionized silicon: \ion{Si}{2} \wav{6347} and \wav{6371}.}
   \label{fig:si-ii-lines}
 \end{figure*}
