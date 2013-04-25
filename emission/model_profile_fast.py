@@ -1,22 +1,13 @@
 import numpy as np
-import scipy
-import sys, os, glob
+import os 
+import glob
 import argparse
 import pyfits
 import fastcube
 import fastcube_gauss
 
-# ugly hack to make sure the claudia src folder is in sys.path
-sys.path.append(
-    os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
-        "src"
-        )
-    )
-import claudia
-
 # Avoid verbose error messages from numpy during the reading of the Cloudy files
-import warnings, argparse
+import warnings
 warnings.filterwarnings("ignore")
 
 
@@ -26,11 +17,11 @@ def parse_command_args():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description="""
-    Calculate 3-d position-position-velocity cube of rebinned Cloudy proplyd model. 
+    Calculate 3-d position-position-velocity cube of rebinned Cloudy proplyd model.
     """)
 
     parser.add_argument(
-        "--modeldir", type=str, default=".",  
+        "--modeldir", type=str, default=".",
         help='Path to proplyd directory model')
     parser.add_argument(
         "--nphi", type=int, default=400,
@@ -54,7 +45,7 @@ def parse_command_args():
         metavar=("X1", "Y1", "X2", "Y2"),
         help='Ounding box of view window (in units of r0) for the position-position-velocity cube')
     parser.add_argument(
-        "--pixelsize", type=float, default=0.1, 
+        "--pixelsize", type=float, default=0.1,
         help='Size of pixels (in units of r0) for the PPV cube')
 
     parser.add_argument(
@@ -66,7 +57,7 @@ def parse_command_args():
         help='Only create cubes for lines listed in this file (one per line)')
 
     parser.add_argument(
-        "--gauss", action="store_true",  
+        "--gauss", action="store_true",
         help='Calculate thermal broadening of lines (MAY BE SLOW!)')
 
 
@@ -81,11 +72,11 @@ def find_awt(emline):
         Si=28.1, S=32.1, Cl=35.5, Ar=40.0, Ca=40.1, Fe=55.8, Co=58.9, Ni=58.7
         )
     special_dict = {
-        "TOTL__4363A": "O", 
-        "TOTL__2326A": "O", 
-        "6lev__8446A": "O", 
-        "TOTL__1750A": "N", 
-        "TOTL__5199A": "N", 
+        "TOTL__4363A": "O",
+        "TOTL__2326A": "O",
+        "6lev__8446A": "O",
+        "TOTL__1750A": "N",
+        "TOTL__5199A": "N",
         "TOTL__6580A": "C",
         "Ca_B__3704A": "H",
         "Ca_B__3712A": "H",
@@ -105,7 +96,7 @@ def find_awt(emline):
 
     return symbol_dict[element]
 
-        
+
 
 
 def read_rebinned_models():
@@ -124,10 +115,10 @@ def read_rebinned_models():
         return pyfits.open(fitsname)[0].data
 
     # Find list of rebinned models that can be used
-    rebindirs = [
-        os.path.basename(p) for p in 
-        glob.glob(os.path.join(cmd_args.modeldir, "rebin-*"))
-        ]
+    # rebindirs = [
+    #     os.path.basename(p) for p in
+    #     glob.glob(os.path.join(cmd_args.modeldir, "rebin-*"))
+    #     ]
     Mu = read_fits("mu")[:,0]
     R = read_fits("R")[0,:]
     i2 = len(R[R<1.0])             # find index where R = 1
@@ -136,13 +127,13 @@ def read_rebinned_models():
     Density2D = 10**Density2D
     sound_speed2D = np.sqrt(3./5.)*read_fits("pre-cadwind_kms")
     n0 = Density2D[:, i2:i2+1]
-    c0 = sound_speed2D[:, i2:i2+1] 
+    c0 = sound_speed2D[:, i2:i2+1]
     V = c0 * n0 / (R**2 * Density2D) # V should be 2-dimensional
 
     T = 10**read_fits("ovr-Te")
 
     emfiles_found = [
-        os.path.basename(p) for p in 
+        os.path.basename(p) for p in
         glob.glob(
             os.path.join(
                 cmd_args.modeldir,
@@ -173,7 +164,7 @@ def read_rebinned_models():
         # Otherwise, use all the lines whose emissivity files can be found
         emlines = emlines_found
         emfiles = emfiles_found
-        
+
 
     # list of emissivity arrays
     Emissivities = [10**read_fits("em-%s" % (emline)) for emline in emlines]
@@ -202,25 +193,25 @@ def write_datacubes():
         # write datacube to the HDU
         hdu = pyfits.PrimaryHDU(cube)
         # write WCS headers to the HDU
-        add_WCS_keyvals(3, dict(crpix=1, crval=umin+0.5*du, cdelt=du, 
+        add_WCS_keyvals(3, dict(crpix=1, crval=umin+0.5*du, cdelt=du,
                                 ctype="VELOCITY", cunit="km/s    ") )
-        add_WCS_keyvals(2, dict(crpix=1, crval=ymin+0.5*dy, cdelt=dy, 
+        add_WCS_keyvals(2, dict(crpix=1, crval=ymin+0.5*dy, cdelt=dy,
                                 ctype="YOFFSET ", cunit="r0      ") )
-        add_WCS_keyvals(1, dict(crpix=1, crval=xmin+0.5*dx, cdelt=dx, 
+        add_WCS_keyvals(1, dict(crpix=1, crval=xmin+0.5*dx, cdelt=dx,
                                 ctype="XOFFSET ", cunit="r0      ") )
         hdu.writeto(fitsfilename, clobber=True)
 
 
 def write_lineprofile_table():
     import matplotlib.mlab as mlab
-    datatable = np.rec.fromarrays([PerfilU] + Profiles.values(), 
+    datatable = np.rec.fromarrays([PerfilU] + Profiles.values(),
                                   names=','.join(['U'] + Profiles.keys()))
     mlab.rec2csv(datatable, savefile, delimiter="\t")
 
 
 def print_total_fluxes():
     hbeta = Fluxes["H__1__4861A"]
-    print "H beta line flux: "
+    print "H beta line flux: ", hbeta
     print "Line fluxes relative to H beta = 100:"
 
     def sortkey(cloudy_line):
@@ -249,7 +240,7 @@ def print_total_fluxes():
 
 def calculate_profiles():
     """
-    Returns 3 dicts (each keyed by line ID): 
+    Returns 3 dicts (each keyed by line ID):
 
     Fluxes : total flux of each lines
     Profiles : 1D velocity profile of each line
@@ -268,7 +259,7 @@ def calculate_profiles():
     print "Summing datacubes to find total fluxes...."
     for iline, emline in enumerate(emlines):
         # Put the physical units into the volume element
-        DataCubes[emline] = cubes[iline,:,:,:]  * r0**3 
+        DataCubes[emline] = cubes[iline,:,:,:]  * r0**3
         # 1-D line profile as function of velocity
         Profiles[emline] =  DataCubes[emline].sum(axis=-1).sum(axis=-1)
         # Total line flux (integral of line profile)
@@ -282,7 +273,7 @@ def calculate_profiles():
 
 
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
 
     cmd_args = parse_command_args()
 

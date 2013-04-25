@@ -1,0 +1,192 @@
+#+OPTIONS:   H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:{} -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+TITLE: RECETA PARA LOS MODELOS DE LOS PROPLYDS -- CLOUDY
+
+Para poder tener un modelo para un proplyd dado, necesitamos tener una idea a partir de las observaciones de los siguientes datos:
+
+PhiH ::
+Z ::
+r_0 ::
+
+
+* Modelos
+
+** Modelos originales 1D en CLOUDY (auto-models.py)
+
+En : Cloudy/proplyd-cloudy/models
+
+corres el modelo que se requiera usando las diferentes opciones que hay para Teff, Z, etc.
+
+
+#+BEGIN_EXAMPLE
+>> time python auto-model.py --cloudyexec /fs/../cloudy.exe
+
+-n 10
+--r0 3.7e15
+--logPhiH 12.1
+--Tstar 39000
+--diffuseBeta 0.1
+--composition
+#+END_EXAMPLE
+
+** Hacer una malla fina por interpolacion (rebin-models.py)
+
+En : Cloudy/proplyd-cloudy/models/proplyd-auto-models/ejemplo
+
+haces la interpolacion de los modelos originales, el resultado sera una serie de archivos FITS 
+
+#+BEGIN_EXAMPLE
+>> time python ../../rebin-models.py 
+
+>> time python ../../rebin-models.py --nangle 1001 --r0 3.7e15 --method linear
+#+END_EXAMPLE
+
+Aqui hay una serie de opciones importantes a considerar:
+
+-- nangle :: es el numero de \mu s en donde \mu = cos \theta (de preferencia no usar menos de 1001, en realidad no tarda nada en hacer la interpolacion)
+-- r0 :: aqui no hay ningun numero por default, es forzoso poner el r_0 (de preferencia no el que se suposo al correr los modelos sino el real, es decir, aquel que es el resultante de converger los mdolos.
+-- method :: por default es lineal pero se puede usar tambien la opcion de vecinos cercanos, pero parece que no es la mejor opcion por lo pronto.
+
+El resultado sera una carpeta que contenga los archivos FITS de las emisividades de cada linea y demas.
+
+** Hacer los cubos (model-profile-fast.py)
+
+En la carpeta del modelo al que ya le hiciste la interpolacion:
+
+#+BEGIN_EXAMPLE
+>> time python ../../../emission/model_profile_fast.py 
+
+>> time python ../../../emission/model_profile_fast.py --inc 30 --r0 3.7e15 --rebin linear-1001 --onlylinesin
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --modeldir MODELDIR   Path to proplyd directory model (default: .)
+  --nphi NPHI           Number of angles phi (default: 400)
+  --nvel NVEL           Number of velocity bins (default: 50)
+  --inc INC             Inclination in degrees (default: 0.0)
+  --r0 R0               Radius of proplyd ionization front in cm (default:
+                        8e+14)
+  --Rmax RMAX           Radius of outer face of cloudy model in units of r0
+                        (default: 9.0)
+  --window X1 Y1 X2 Y2  Ounding box of view window (in units of r0) for the
+                        position-position-velocity cube (default: (-1.0, -2.0,
+                        3.0, 2.0))
+  --pixelsize PIXELSIZE
+                        Size of pixels (in units of r0) for the PPV cube
+                        (default: 0.1)
+  --rebin REBIN         Load rebinned model from "rebin-REBIN" (default:
+                        linear-101)
+  --onlylinesin ONLYLINESIN
+                        Only create cubes for lines listed in this file (one
+                        per line) (default: None)
+  --gauss               Calculate thermal broadening of lines (MAY BE SLOW!)
+                        (default: False)
+
+
+#+END_EXAMPLE
+El resultados son una serie de archivos cube*.fits en los que esta la informacion de cada una de las lineas
+
+* Modelos semi-3D
+
+** Extraccion de perfiles
+
+Tienes que tener ya hecho:
+
++ La interpolacion
++ Los cubos (a partir de la interpolacion)
+
+En la carperta del modelo:
+
+>> time python ../../../emission/extract_aperture.py
+
+>> time python ../../../emission/extract_aperture.py --suffix nphi400-nvel50-inc30 --size 1.6 1.6
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --suffix SUFFIX       Last part of cube file names (default:
+                        nphi400-nvel200-inc60)
+  --onlylinesin ONLYLINESIN
+                        Give intensities for only those lines listed in this
+                        file (one per line) (default: None)
+  --center x y          Coordinates of the center of the aperture (default:
+                        (1.0, 0.0))
+  --size w h            Size of aperture (width, height) (default: (1.0, 1.0))
+
+El resultado es
+
+>> time python ../../../emission/extract_aperture_rotation.py --suffix nphi400-nvel50-inc30 --size 1.6 1.6 --rotation 30
+
+* Interpretacion y analisis
+
+** Para los modelos 1D
+
+*** Condiciones fisicas (converged_model_thermo.py)
+
+Se pueden graficar en funcion del radio de adimensional
+
+En el modelo:
+
+>> python ../../../converged_model_thermo.py modelo
+
+lo que se obtiene es un archivo: modelo.png con la grafica de dichas condiciones fisicas.
+
+*** Estructura ionica (converged-model-cum-emiss-plot.py)
+
+Tambien puede ser graficada en funcion del radio adimensional del modelo
+
+En el modelo:
+
+>> python ../../../converged-model-cum-emiss-plot.py modelo
+
+*** Perfiles (model_profile.py)
+
+En el modelo:
+
+>> python ../../../emission/model_profile.py
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --modeldir MODELDIR   Path to proplyd directory model (default: .)
+  --nphi NPHI           Number of angles phi (default: 200)
+  --nvel NVEL           Number of velocity bins (default: 50)
+  --inc INC             Inclination in degrees (default: 0.0)
+  --r0 R0               Radius of proplyd ionization front in cm (default:
+                        8e+14)
+  --Rmax RMAX           Radius of outer face of cloudy model in units of r0
+                        (default: 9.0)
+  --window X1 Y1 X2 Y2  If present, bounding box of view window (in units of
+                        r0) for the position-position-velocity cube
+  --pixelsize PIXELSIZE
+                        Size of pixels (in units of r0) for the PPV cube
+                        (default: 0.1)
+  --rebin REBIN         If present, a rebinned model will be loaded from
+                        "rebin-REBIN" instead of from the original "th??"
+                        directories
+
+
+
+*** Diagnosticos (emiss-NT-plane.py)
+
+
+
+** Para aquellos semi-3D
+
+*** Extraccion de aperturas (extract_aperture.py)
+
+Una vez realizados los cubos de cada modelo, se puede hacer la extraccion de solo una ventana simulando el tamaño de la region observada
+
+
+(kurtosis-check.py)
+
+(linewidth-T.py)
+
+(model_temperature_fast.py)
+
+(moments-cube.py)
+
+(plot-profile.py)
+
+(pvcube.py)

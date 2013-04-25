@@ -1,0 +1,149 @@
+Models of the giant proplyd illuminated by 1 or 2 stars.  For comparison with the Keck spectra. 
+
+** STARTED Model spectra for 244-440
+:LOGBOOK:
+- State "STARTED"    from ""           [2013-04-25 Thu 11:16]
+CLOCK: [2013-04-25 Thu 11:16]--[2013-04-25 Thu 11:29] =>  0:13
+:END:
+
+*** Model parameters
++ Radius: 10**16.02 = 1.05e16 cm
++ Illumination by \theta^2 A
+  + T_* = 35,000 K
+  + Q_H = 2.43e48
+  + Two positions:
+    1. inc = 38, log_10 \Phi_H = 12.3, \beta = 0.01
+    2. inc = 30, log_10 \Phi_H = 12.12, \beta = 0.004
++ Illumination by \theta^1 C
+  + T_* = 39,000 K
+  + Q_H = 9.02e48
+  + Two positions:
+    1. inc = 90, log_10 \Phi_H = 11.914, \beta = 0.1
+    2. inc = 126, log_10 \Phi_H = 11.73, \beta = 0.1
++ Metallicity
+  + Esteban
+
+*** Model runs
+:LOGBOOK:
+CLOCK: [2013-04-25 Thu 11:55]
+:END:
++ Nahiely has run the models and the output is on [[file:/ssh:astro04.crya.privado:/fs/astro04/other0/nahiely/Cloudy/proplyd-cloudy/models/proplyd-auto-models/][astro04]]
+  + Illuminated by th2A
+    + WM035000-phi12.12-r16.02-ZE
+    + WM035000-phi12.30-r16.02-ZE
+  + Iluminated by th1C
+    + WM039000-phi11.73-r16.02-ZE
+    + WM039000-phi11.91-r16.02-ZE
+      
+
+
+**** Copying the models to will's laptop
+#+BEGIN_SRC sh 
+DIR=models/proplyd-auto-models
+cd ../../$DIR
+FILES="WM03?000-phi*-r16.02-ZE"
+ROOT=/fs/astro04/other0/nahiely/Cloudy/proplyd-cloudy
+rsync -avP astro04.crya.privado:$ROOT/$DIR/$FILES .
+#+END_SRC
+Don't actually try to run this inside org-mode!
+
+**** Running model-profile-fast
++ This seems to be the next step after rebinning the models.
++ It produces the emission line PPV cubes
++ Note that it takes 30 minutes to run on my laptop
+***** Example command line and output
+#+BEGIN_SRC sh
+time python ../../../emission/model_profile_fast.py --inc 30 --r0 1.05e16 --rebin linear-1001
+#+END_SRC
+****** Table of relative line intensities
+| TOTL | 1750A |   0.0544491 |
+| C  3 | 1907A |     1.42576 |
+| C  3 | 1910A |     1.19706 |
+| N  2 | 2141A |     1.01156 |
+| TOTL | 2326A |     27.6635 |
+| O II | 2471A |     16.5813 |
+| Mg 2 | 2796A |     5.44955 |
+| Mg 2 | 2803A |     3.09006 |
+| He 1 | 2829A |    0.547615 |
+| He 1 | 2945A |     0.94561 |
+| He 1 | 3188A |     1.83801 |
+| Ca B | 3704A |     1.37745 |
+| Ca B | 3712A |     1.63646 |
+| S  3 | 3722A |     1.22015 |
+| O II | 3726A |     79.3452 |
+| O II | 3729A |     35.3706 |
+| Ca B | 3734A |      2.4343 |
+| Ca B | 3750A |     3.06205 |
+| Ca B | 3771A |     3.94748 |
+| H  1 | 3835A |     8.49129 |
+| Ne 3 | 3869A |    0.616424 |
+| He 1 | 3889A |     4.26233 |
+| Ne 3 | 3968A |    0.185788 |
+| S II | 4070A |       19.15 |
+| S II | 4078A |     6.29309 |
+| H  1 | 4102A |     26.9063 |
+| C  2 | 4267A |   0.0870399 |
+| H  1 | 4340A |     48.5347 |
+| TOTL | 4363A |   0.0824485 |
+| He 1 | 4471A |     2.46232 |
+| Fe 3 | 4608A |   0.0398104 |
+| O 2r | 4651A |   0.0544221 |
+| Fe 3 | 4659A |    0.567722 |
+| Fe 3 | 4702A |    0.232198 |
+| Ar 4 | 4711A |  0.00202444 |
+| Fe 3 | 4734A |    0.101019 |
+| Ar 4 | 4740A |  0.00216557 |
+| Fe 3 | 4755A |    0.103817 |
+| H  1 | 4861A |         100 |
+| Fe 3 | 4881A |    0.284232 |
+| He 1 | 4922A |    0.665391 |
+| O  3 | 4959A |     12.5953 |
+| Fe 3 | 4988A |   0.0488006 |
+| O  3 | 5007A |     37.9102 |
+| He 1 | 5016A |     1.34507 |
+| Ar 3 | 5192A |    0.031201 |
+| TOTL | 5199A |    0.113695 |
+| Fe 3 | 5271A |    0.356457 |
+| Cl 3 | 5518A |    0.299422 |
+| Cl 3 | 5538A |    0.508152 |
+| O  1 | 5577A |   0.0755323 |
+| N  2 | 5755A |     1.78333 |
+| He 1 | 5876A |     7.47795 |
+| O  1 | 6300A |     5.46727 |
+| S  3 | 6312A |       2.068 |
+| N  2 | 6548A |     33.1376 |
+| H  1 | 6563A |     292.596 |
+| C 2p | 6580A | 5.32534e-17 |
+| C 2r | 6580A |  0.00643378 |
+| C  2 | 6580A | 5.32534e-17 |
+| TOTL | 6580A |  0.00643378 |
+| N  2 | 6584A |      97.782 |
+| He 1 | 6678A |     2.07632 |
+| S II | 6716A |     8.04179 |
+| S II | 6731A |     17.0721 |
+| He 1 | 7065A |     2.30745 |
+| Ar 3 | 7135A |     9.85211 |
+| He 1 | 7281A |    0.373139 |
+| O II | 7323A |     11.6935 |
+| O II | 7332A |     9.47679 |
+| 6lev | 8446A |  0.00966512 |
+| Ca B | 8467A |    0.399321 |
+| Ca B | 8502A |    0.471126 |
+| Ca B | 8665A |    0.850292 |
+| Ca B | 8750A |     1.07579 |
+| Ca B | 8863A |     1.39387 |
+| H  1 | 9015A |     2.10426 |
+| S  3 | 9069A |     48.5983 |
+| H  1 | 9229A |     2.79915 |
+| S  3 | 9532A |      120.52 |
+| H  1 | 9546A |     3.87531 |
+| H  1 | 1005m |     5.82101 |
+| S II | 1029m |       4.527 |
+| S II | 1032m |     6.18137 |
+| S II | 1034m |     4.32916 |
+| Ne 2 | 1281m |     68.7645 |
+| Ne 3 | 1555m |     2.91728 |
+|      |       |             |
+
+
+
