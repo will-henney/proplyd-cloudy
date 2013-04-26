@@ -68,7 +68,7 @@ elements = dict(
     Ne_3__3869A = r"Ne", 
     )
 
-colors = dict(O="g", H="r", N="b", S="y", He="r", C="m", Ne="k", Ar="c")
+colors = dict(O="g", H="r", N="b", S="y", He="r", C="m", Ne="k", Ar="c", Cl="#ee8020")
 
 
 
@@ -78,10 +78,10 @@ def ionfrac(R, dR):
     x = x0*(R - 1.0 + dR)/dR
     return 0.5*(numpy.tanh(x) + 1)
 
-def ionfrac2(R, f1=0.0, f2=1.0):
-    "Smooth change of ion fraction between f1 on neutral side and f2 on ionized side"
-    x = x0*(R - 1.0 + dR)/dR
-    return f1 + (f2 - f1)*0.5*(numpy.tanh(x) + 1)
+# def ionfrac2(R, f1=0.0, f2=1.0):
+#     "Smooth change of ion fraction between f1 on neutral side and f2 on ionized side"
+#     x = x0*(R - 1.0 + dR)/dR
+#     return f1 + (f2 - f1)*0.5*(numpy.tanh(x) + 1)
 
 def ioniz(x):
     "Degreee pf ionization: log x / (1 - x)"
@@ -154,7 +154,7 @@ def plot_vars(modelid):
     dR = A/(r0*sigma*rho_Rmax*Rmax*Rmax*U[0])
 
     # Approximate ionization fraction that we use in dense_fabden.cpp
-    xapprox = ionfrac(R, dR)
+    # xapprox = ionfrac(R, dR)
 
     print "-"*72
     print "model %s: Tmax at R = %.4f, ifrac = %.4f" % (modelid, R[i1], ifrac[i1])
@@ -216,14 +216,14 @@ def plot_vars(modelid):
     plt.subplot(numRows, numCols, numRows)
     for ifrac, element in [
         [oplus, "O"], [nplus, "N"], [heplus, "He"], 
-        [splus, "S"], [cplus, "C"], [neplus, "Ne"],
+        [splus, "S"], [cplus, "C"], [neplus, "Ne"], [clplus, "Cl"],
         ]:
         if not ifrac is None:
             plt.plot(delta, ifrac, 
                      '-', c=colors[element], 
                      label=r'\(\mathrm{{{0}^+\!/\,{0}}}\)'.format(element))
 
-    if cmd_args.plusplus:
+    if args.plusplus:
         for ifrac, element in [
             [splusplus, "S"], 
             ]:
@@ -250,7 +250,7 @@ def plot_vars(modelid):
         plt.xlim(deltascale, Rmax*r0)
         
 
-    plt.legend(loc="upper right", ncol=3, title="Ion fractions", prop={'size':10})
+    plt.legend(loc="upper right", ncol=4, title="Ion fractions", prop={'size':10})
 
     if hasEmissivityPanel:
         plt.subplot(numRows, numCols, 2)
