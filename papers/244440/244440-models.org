@@ -1,12 +1,12 @@
 Models of the giant proplyd illuminated by 1 or 2 stars.  For comparison with the Keck spectra. 
 
-** STARTED Model spectra for 244-440
+* STARTED Model spectra for 244-440
 :LOGBOOK:
 - State "STARTED"    from ""           [2013-04-25 Thu 11:16]
 CLOCK: [2013-04-25 Thu 11:16]--[2013-04-25 Thu 11:29] =>  0:13
 :END:
 
-*** Model parameters
+** Model parameters
 + Radius: 10**16.02 = 1.05e16 cm
 + Illumination by \theta^2 A
   + T_* = 35,000 K
@@ -23,9 +23,10 @@ CLOCK: [2013-04-25 Thu 11:16]--[2013-04-25 Thu 11:29] =>  0:13
 + Metallicity
   + Esteban
 
-*** Model runs
+** Model runs
 :LOGBOOK:
-CLOCK: [2013-04-25 Thu 11:55]
+CLOCK: [2013-04-25 Thu 16:14]--[2013-04-25 Thu 17:10] =>  0:56
+CLOCK: [2013-04-25 Thu 11:55]--[2013-04-25 Thu 13:45] =>  1:50
 :END:
 + Nahiely has run the models and the output is on [[file:/ssh:astro04.crya.privado:/fs/astro04/other0/nahiely/Cloudy/proplyd-cloudy/models/proplyd-auto-models/][astro04]]
   + Illuminated by th2A
@@ -37,7 +38,8 @@ CLOCK: [2013-04-25 Thu 11:55]
       
 
 
-**** Copying the models to will's laptop
+*** DONE Copying the models to will's laptop
+CLOSED: [2013-04-25 Thu 16:24]
 #+BEGIN_SRC sh 
 DIR=models/proplyd-auto-models
 cd ../../$DIR
@@ -46,16 +48,30 @@ ROOT=/fs/astro04/other0/nahiely/Cloudy/proplyd-cloudy
 rsync -avP astro04.crya.privado:$ROOT/$DIR/$FILES .
 #+END_SRC
 Don't actually try to run this inside org-mode!
-
-**** Running model-profile-fast
+*** Looking at the model structure
+Run in =proplyd-auto-models/WM035000-phi12.12-r16.02-ZE/th00=
+#+BEGIN_SRC sh
+  python ../../../converged-model-multi-plot.py \
+      it12n1.770e+02x01.82 --x0 1.82 --r0 1.040e16 --scale 1e12 \
+      --emlinefile line-list.dat --plusplus --density-scale 5e4
+#+END_SRC
++ [ ] It is quite different from the HST10 structure
+  + There is a more abrupt change at the He i-front, which is very well separated from the H i-front
+    + H i-front is at r - r_0 = 3e13, u = 7 km/s
+    + He i-front is at r - r_0 = 2.5e15, u = 20 km/s
+  + The He I, C II and [O III] all have similar distributions, wholly within the He+ zone
+  + 
++ [ ] We should look at the \theta = 30\deg and 60\deg models too
+*** Running model-profile-fast
 + This seems to be the next step after rebinning the models.
 + It produces the emission line PPV cubes
 + Note that it takes 30 minutes to run on my laptop
-***** Example command line and output
+**** Example command line
 #+BEGIN_SRC sh
 time python ../../../emission/model_profile_fast.py --inc 30 --r0 1.05e16 --rebin linear-1001
 #+END_SRC
-****** Table of relative line intensities
+**** Table of relative line intensities
+Notes on these are on 
 | TOTL | 1750A |   0.0544491 |
 | C  3 | 1907A |     1.42576 |
 | C  3 | 1910A |     1.19706 |
@@ -147,3 +163,7 @@ time python ../../../emission/model_profile_fast.py --inc 30 --r0 1.05e16 --rebi
 
 
 
+*** Looking at the resulting cubes
++ They look a bit strange - only 2 or 3 velocity channels have anything in them
++ 
+*** Line profiles

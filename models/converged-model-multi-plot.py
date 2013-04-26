@@ -16,7 +16,7 @@ params = {
     "font.family": "serif",
     "text.usetex": True,
     "text.latex.preamble": [r"\usepackage[varg]{txfonts}"],
-    "figure.figsize": (7, 10),
+    "figure.figsize": (6, 15),
     }
 matplotlib.rcParams.update(params)
 
@@ -49,26 +49,60 @@ em_labels = dict(
     Ne_3__3869A = r"[Ne \textsc{iii}] \(\lambda\)3869", 
     )
 
-elements = dict(
-    H__1__6563A = r"H", 
-    TOTL__5199A = r"N", 
-    O__1__6300A = r"O", 
-    O_II__3726A = r"O", 
-    S_II__4070A = r"S", 
-    S_II__6731A = r"S", 
-    N__2__5755A = r"N", 
-    N__2__6584A = r"N", 
-    S__3__6312A = r"S", 
-    Ar_3__7135A = r"Ar", 
-    He_1__5876A = r"He", 
-    C__2__4267A = r"C", 
-    TOTL__4363A = r"O", 
-    O__3__5007A = r"O", 
-    O_2r__4651A = r"O", 
-    Ne_3__3869A = r"Ne", 
-    )
 
-colors = dict(O="g", H="r", N="b", S="y", He="r", C="m", Ne="k", Ar="c", Cl="#ee8020")
+known_elements = dict(
+    TOTL__5199A = r"N", 
+    TOTL__4363A = r"O", 
+    TOTL__6580A = r"C", 
+    )
+known_stages = {"2r": 2, "I": 1, "II": 2, "III": 3, "IV": 4}
+permitted_line_elements = ["H", "He", "D"]
+permitted_line_wavs = [4651, 4267, 6580]
+
+
+def find_element(lineid):
+    """Try to infer the element from a lineid"""
+    if lineid in known_elements:
+        return known_elements[lineid]
+    else:
+        first = lineid.split("_")[0]
+        if len(first) <= 2:
+            return first
+        else:
+            return "H"
+
+
+def decompose_lineid(lineid):
+    """Split a lineid into the 3 parts: element, stage, wavelength"""
+    ion = lineid[:4]
+    wav = lineid[-5:]
+    el = find_element(lineid)
+    stage = ion.split('_')[-1]
+    try:
+        stage = int(stage)
+    except ValueError:
+        stage = known_stages.get(stage, 1)
+    if wav.endswith("A"):
+        wav = int(wav[:4])
+    else:
+        raise NotImplementedError("I cannot cope with non-angstrom units - sorry!")
+    return el, stage, wav
+
+
+def pretty_print_lineid(lineid):
+    """Create latex representation of line id"""
+    el, stage, wav = decompose_lineid(lineid)
+    permitted = (el in permitted_line_elements) or (wav in permitted_line_wavs)
+    s = el + r" \textsc{" + "i"*stage + "}"
+    if not permitted: 
+        s = "[" + s + "]"
+    s += r" \(\lambda\)" + str(wav)
+    return s
+    
+
+
+colors = dict(O="g", H="r", N="b", S="y", He="r", C="m",
+              Ne="k", Ar="c", Cl="#ee8020", Fe="#55aaee")
 
 
 
@@ -126,9 +160,15 @@ def plot_vars(modelid):
     try:
         neplus = m.ion_ne.Ne_2
         clplus = m.ion_cl.Cl_2
+        clplusplus = m.ion_cl.Cl_3
+        # feplus = m.ion_fe.Fe_2
+        # feplusplus = m.ion_fe.Fe_3
     except IndexError:
         neplus = None
         clplus = None
+        clplusplus = None
+        # feplus = None
+        # feplusplus = None
 
     # Calculate the optical depths
 
@@ -226,6 +266,8 @@ def plot_vars(modelid):
     if args.plusplus:
         for ifrac, element in [
             [splusplus, "S"], 
+            [clplusplus, "Cl"], 
+            # [feplusplus, "Fe"], 
             ]:
             if not ifrac is None:
                 plt.plot(delta, ifrac, 
@@ -250,14 +292,14 @@ def plot_vars(modelid):
         plt.xlim(deltascale, Rmax*r0)
         
 
-    plt.legend(loc="upper right", ncol=4, title="Ion fractions", prop={'size':10})
+    plt.legend(loc="upper right", ncol=5, title="Ion fractions", prop={'size':10})
 
     if hasEmissivityPanel:
         plt.subplot(numRows, numCols, 2)
         linelist = [lineid for lineid in args.emlinefile.read().split("\n") if lineid]
         nlines = len(linelist)
         for iline, lineid in enumerate(linelist):
-            color = colors.get(elements[lineid], "k")
+            color = colors.get(find_element(lineid), "k")
             emissivity = 10**m.em[lineid]
             cumemiss = numpy.cumsum(R**2 * emissivity*dz)
             cumemiss /= cumemiss.max()
@@ -269,7 +311,8 @@ def plot_vars(modelid):
                      '-|', lw=6, c=color, ms=8.0, solid_capstyle="butt")
             plt.plot(centiles[0.5], iline, '|', ms=12.0, c=color)
             plt.text(deltascale, iline-0.2, 
-                     em_labels.get(lineid, r"\verb|{}|".format(lineid)), 
+                     pretty_print_lineid(lineid),
+                     # em_labels.get(lineid, r"\verb|{}|".format(lineid)), 
                      fontdict=dict(size=10), 
                      horizontalalignment="left"
                      )
