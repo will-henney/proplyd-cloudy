@@ -123,23 +123,39 @@ El resultado es
 
 ** Para los modelos 1D
 
-*** Condiciones fisicas (converged_model_thermo.py)
+*** Multiplot de las condiciones fisicas y las fracciones ionicas (converged-model-multi-plot.py)
+
+>> time python ../../../converged-model-multi-plot.py --r0 10.4e15 it14n2.185e+02x01.88
+
+El resultado es un archivo pdf con dos graficas: la de las condiciones fisicas del modelo y la de las fracciones ionicas de un modelo
+
+multiplot-it14n2.185e+02x01.88.pdf
+
+Si quieres los cuartiles debes de tener también un archivo que contenga las líneas de las que quieres los cuartiles.
+
+
+
+*** Condiciones fisicas (converged-model-thermo-plot.py)
 
 Se pueden graficar en funcion del radio de adimensional
 
 En el modelo:
 
->> python ../../../converged_model_thermo.py modelo
+>> python ../../../converged-model-thermo-plot.py modelo
 
-lo que se obtiene es un archivo: modelo.png con la grafica de dichas condiciones fisicas.
+lo que se obtiene es un archivo: modelo.pdf con la grafica de dichas condiciones fisicas en funsion del radio.
+
+thermoplot-it14n2.185e+02x01.88.pdf
 
 *** Estructura ionica (converged-model-cum-emiss-plot.py)
 
-Tambien puede ser graficada en funcion del radio adimensional del modelo
+Tambien puede ser graficada en funcion del radio adimensional del modelo la emision acumulada de las diferentes iones
 
 En el modelo:
 
 >> python ../../../converged-model-cum-emiss-plot.py modelo
+
+emissplot-it14n2.185e+02x01.88.png
 
 *** Perfiles (model_profile.py)
 

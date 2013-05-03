@@ -161,9 +161,54 @@ Notes on these are on
 | Ne 3 | 1555m |     2.91728 |
 |      |       |             |
 
-
-
 *** Looking at the resulting cubes
 + They look a bit strange - only 2 or 3 velocity channels have anything in them
-+ 
+  + The H1 6563 cube has data only between the 22 - 32 velocity channels 
+  + Is exactly using r0 = 10.4e15 (the correct one) or 10.5
++ It seems to have a jump in 24-25 velocity channels
+
+*** Comparing between use the i_A = 30º, 38º
+
++ The ionization strusture looks very similar
+  + Besides the obvious differences in the peak density and the distance of the i-front, the only ion that shows a "change" is the N+
+
+** Quartiles
+
++ [NII]
+  + 5755 from 30º is more extended to the inner part than this from 38º
+  + 6584 and 6548 are very similar
++ [OI]
+  + 6300 from 38º is more extended to the inner part than this from 30º, and the emission zone is bigger in the first case
+  + 5577 from 38º is "shifted" to the inner part and the emission zone is bigger
++ [OIII]
+  + 5007 almost the same
++ [SII]
+  + 6716 from 38º is more extended to the inner part
+  + 6736 from 30º is more extended to the inner part - in fact is almost the same.
+
+** Comparing selected line fluxes
+|      |       |       i_30 |       i_38 |
+|------+-------+------------+------------|
+| H  1 | 4861A |        100 |        100 |
+| Fe 3 | 4881A |   0.284232 |   0.303978 |
+| O  3 | 5007A |    37.9102 |    45.6528 |
+| Fe 3 | 5271A |   0.356457 |   0.373063 |
+| Cl 3 | 5518A |   0.299422 |   0.301803 |
+| Cl 3 | 5538A |   0.508152 |   0.558285 |
+| O  1 | 5577A |  0.0755323 |   0.061447 |
+| N  2 | 5755A |    1.78333 |    1.96192 |
+| He 1 | 5876A |    7.47795 |    7.65372 |
+| O  1 | 6300A |    5.46727 |    4.18945 |
+| S  3 | 6312A |      2.068 |    2.31976 |
+| N  2 | 6548A |    33.1376 |    31.7767 |
+| H  1 | 6563A |    292.596 |    291.639 |
+| C 2r | 6580A | 0.00643378 | 0.00696771 |
+| N  2 | 6584A |     97.782 |    93.7872 |
+| He 1 | 6678A |    2.07632 |     2.1134 |
+| S II | 6716A |    8.04179 |    6.13042 |
+| S II | 6731A |    17.0721 |    13.2126 |
+
+It seems that we don't have a significant difference in the ion kinematic between the two models but may be with the integer fluxes we can "favorecer" one model. 
+
+
 *** Line profiles
