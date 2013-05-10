@@ -121,9 +121,10 @@ for line, cube in zip(emlines, cubefiles):
     # add add add in to a total flux
     total_aperture_flux[line] = aperture_cube.sum()
 
-
+print "cube:",cmd_args.suffix 
+print "xc=", xc, "yc=", yc, "w=", w, "h=", h
 hbeta = total_aperture_flux["H__1__4861A"]
-print "H beta line flux: "
+print "H beta line flux: ", hbeta
 print "Line fluxes relative to H beta = 100:"
 
 for line in emlines:
