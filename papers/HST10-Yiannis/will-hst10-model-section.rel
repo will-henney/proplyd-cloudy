@@ -1,0 +1,34 @@
+;; RefTeX parse info file
+;; File: /Users/nahiely/CLOUDY/proplyd-cloudy/papers/HST10/will-hst10-model-section.tex
+;; User: nahiely (Nahiely Flores)
+
+(set reftex-docstruct-symbol '(
+
+
+(xr nil "\\\\\\\\\\\\")
+
+(index-tags)
+
+(is-multi nil)
+
+(bibview-cache)
+
+(master-dir . "/Users/nahiely/CLOUDY/proplyd-cloudy/papers/HST10/")
+
+(label-numbers)
+
+(bof "/Users/nahiely/CLOUDY/proplyd-cloudy/papers/HST10/will-hst10-model-section.tex")
+
+(toc "toc" "    1 Photoevaporation models of HST~10" "/Users/nahiely/CLOUDY/proplyd-cloudy/papers/HST10/will-hst10-model-section.tex" nil 2 "1" "\\section{Photoevaporation models of HST~10}" 989)
+
+("sec:phot-models-hst" "s" "\\begin{table} \\centering \\caption{Input parameters for example physical models of 182-413} \\begin{ta" "/Users/nahiely/CLOUDY/proplyd-cloudy/papers/HST10/will-hst10-model-section.tex" nil)
+
+("tab:model:pars" "t" "Input parameters for example physical models of 182-413" "/Users/nahiely/CLOUDY/proplyd-cloudy/papers/HST10/will-hst10-model-section.tex" nil)
+
+("fig:models" "f" "Comparison between predicted and observed emission line fluxes for photoevaporation models of HST~10" "/Users/nahiely/CLOUDY/proplyd-cloudy/papers/HST10/will-hst10-model-section.tex" nil)
+
+("fig:model-structure" "f" "Physical variables as a function of radius along a line at an angle of \\(\\theta = 30^{\\circ}\\) to th" "/Users/nahiely/CLOUDY/proplyd-cloudy/papers/HST10/will-hst10-model-section.tex" nil)
+
+(eof "/Users/nahiely/CLOUDY/proplyd-cloudy/papers/HST10/will-hst10-model-section.tex")
+))
+

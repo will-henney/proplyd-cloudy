@@ -1,29 +1,70 @@
-\documentclass[aaspp]{article}
+\documentclass[useAMS,usenatbib]{mn2e}
 
-\usepackage[utf8]{inputenc}
-\usepackage{txfonts}
-\usepackage{rotating}
-\usepackage{amssymb}
-\usepackage{natbib}
-\usepackage{varioref}
+\addtolength\topmargin{-2cm}
+
+\pdfoutput=1
+\usepackage[varg]{txfonts}
+\usepackage{astrojournals}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{fixltx2e}
+\usepackage{hyperref}
+\usepackage{siunitx}
 \usepackage{xspace}
+\hypersetup{colorlinks=True, linkcolor=blue!50!black, citecolor=black,
+  urlcolor=blue!50!black}
+
+\usepackage{color}
 
 \input{my_commands}
 
 \newcommand{\R}{$\mathrm{R}$\xspace}
 
+%-------------------------------------------------------
+\title[Semi 3D Photoionization with Hydrodynamics for the Proplyds in Orion]{Semi 3D Photoionization with Hydrodynamics for the Proplyds in Orion}
+\author[N. Flores-Fajardo and W. Henney]{N. Flores-Fajardo$^{1,2}$\thanks{E-mail:
+nahieflores@gmail.com} and W. Henney$^{2}$\thanks{E-mail:
+w.henney@gmail.com.}\\
+$^{1}$Kavli Institute of Astronomy and Astrophysics, Peking University, China\\
+$^{2}$Centro de Radioastronomía y Astrofisica, Universidad Nacional Autonoma de Mexico, Morelia, Mexico.}
+%-------------------------------------------------------
+
+
 \begin{document}
 
 \include{Article_macro}
+
+\date{Accepted 1988 December 15. Received 1988 December 14; in original form 1988 October 11}
+
+%\pagerange{\pageref{firstpage}--\pageref{lastpage}} \pubyear{2002}
+
+\maketitle
+
+\label{firstpage}
+
+%--------------------------------------------------------
+\begin{abstract}
+We present semi 3D models for both, the fully ionized and the partially ionized zones. These models take, for the first time, into account the radiative transfer and the hydrodynamics of the gas flow.
+\end{abstract}
+%--------------------------------------------------------
+
+\begin{keywords}
+Protoplanetary discs, stars: protostars, ISM: abundances, H II regions, ISM individual objects: Orion nebula.
+\end{keywords}
 
 %--------------------------------------------------------
 \section{Introduction}
 \label{sec:introduction}
 %--------------------------------------------------------
 
-These objects were discovered as six knots compact emission lines located very close to the high-mass stars of the Trapezium in the Orion Nebula \citep{1979AA.7397L}. Later observations, particularly those of Hubble Space Telescope in direct imaging of emission lines \citep{1993ApJ410..696O, 1998AJ.115..263O, 1998AJ.116..293B} have allowed a clear picture of these objects: are accretion disks around young low-mass stars, which are being evaporated by ultraviolet radiation from of a nearby massive star \citep{1998ApJ499..758J, 1998AJ.116..322H, 1999ApJ515..669S}. Until today, there has not been a comprehensive study of the abundance of heavy elements in the gas phase of any of these objects, even when found evidence of the evolution of dust properties in proplyd's molecular opaque disks \citep{2003ApJ587L.109S} and in the photoevaporated and ionized flow \citep{2001ApJ561..830G}.
+The Proplyds in the Orion Nebula were discovered as six knots compact emission lines located very close to the high-mass stars of the Trapezium \citep{1979AA.7397L}. Later observations, particularly those of Hubble Space Telescope in direct imaging of emission lines \citep{1993ApJ410..696O,1998AJ....115..263O,1998AJ....116.1346O} have allowed a clear picture of these objects: are accretion disks around young low-mass stars, which are being evaporated by ultraviolet radiation from of a nearby massive star \citep{1998ApJ499..758J, 1998AJ....116..322H, 1999ApJ515..669S}.
 
-The models developed in this research are semi 3-D models using the 1D photoionization code {\sc CLOUDY} \citep{1998PASP..110..761F} which makes a detailed calculation of radiative transfer. The hydrodynamic of the gas in these models is being taken into account from the introduction of the density and velocity profiles calculated from self-consistent manner the conservation of mass and momentum. Both profiles are specified for both the photoionized zone as well as the ionization front, based on analytical models of W. Henney et al. \citep{1999AJ.118.2350H,2005ApJ621..328H}.
+\citep{1999AJ....118.2350H} have the photoevaporating models. Fig 5.
+
+Until today, there has not been a comprehensive study of the abundance of heavy elements in the gas phase of any of these objects, even when found evidence of the evolution of dust properties in proplyd's molecular opaque disks \citep{2003ApJ587L.109S} and in the photoevaporated and ionized flow \citep{2001ApJ...561..830G}.
+
+The models developed in this research are semi 3-D models using the 1D photoionization code {\sc CLOUDY} \citep{1998PASP..110..761F} which makes a detailed calculation of radiative transfer. The hydrodynamic of the gas in these models is being taken into account from the introduction of the density and velocity profiles calculated from self-consistent manner the conservation of mass and momentum. Both profiles are specified for both the photoionized zone as well as the ionization front, based on analytical models of W. Henney et al. \citep{1999AJ....118.2350H,2005ApJ...621..328H}.
 
 For the low mass stars in the Orion Nebula, the external radiation field \tc is much more efficient than the internal one in the photoevaporation of the acretion disk. In this case we have:
 
@@ -39,7 +80,7 @@ For the low mass stars in the Orion Nebula, the external radiation field \tc is 
 
 We follow the analytic model of a photoevaporated wind described in \citet{1998AJ....116..322H}.
  
-The simplest assumpion is that there is a static semi-spherical distribution of gas around the central lowmass star. This gas is being evaporated and ionizing by the radiation coming from \tc
+The simplest assumpion is that there is a static semi-spherical distribution of gas around the central low mass star. This gas is being evaporated and ionizing by the radiation coming from \tc
 
 \begin{itemize}
 \item{Ionizing radiation incident from only one direction.}
@@ -51,7 +92,7 @@ The simplest assumpion is that there is a static semi-spherical distribution of 
 
 We construct 1D Cloudy models of a series of individual radial cuts from the center of the proplyd, at different angles $\theta$ from the proplyd axis. From these models, we interpolate the physical conditions to create a semi-3D model assuming symmetry in the $\phi$ angle.
 
-\begin{figure}[h]
+\begin{figure}
 \centering
   \includegraphics[width=8.5 cm]{viento.jpg}
   \caption{A sketched disk photoevaporation wind.} \label{fig:wind}
@@ -71,13 +112,13 @@ $\Delta$ is the ionization front width in terms of the mean free path at 1 Rydbe
 
 For simplicity and clarity of the model we chose to use a dimenssionless radial coordinate $R \,=\, r\,/\,r_0$ where $r$ is the radial coordinate in $\rm cm$ starting in the low-mass star inside the proplyd and $\rm r_0$ is the distance between the proplyd center, the low-mass star, and the sonic point.
 
-\begin{figure}[h]
+\begin{figure}
 \centering
   \includegraphics[width=8.5 cm]{./IFront/ifront.png}
   \caption{A sketched geometry of the 1D Cloudy model.} \label{fig:1Dgeom}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}
   \centering
   \includegraphics[width=8.5 cm]{./graf_model_3D/geometry_model.jpg}
   \caption{A sketched geometry of the semi-3D model.} \label{fig:3Dgeom}
@@ -101,7 +142,7 @@ so the greater peak density is for $\theta \, = \, 0$
     \begin{equation}
       D_\beta = \frac{1}{4} \frac{\alpha_1}{\alpha_B} \frac{\sigma_{star}}{\sigma_{diffuse}}
     \end{equation}
-    where $\alpha_1$ and $\alpha_B$ are the recombination coefficients to the ground level and to the case B respectively.  $\sigma_{star}$ and $\sigma_{diffuse}$ are the star and diffuse radiation field mean effective cross section respectively. $D_\beta \, = \, 0.004$ means that $\sigma_{star} \, = \, 2.5 \, \sigma_{diffuse}$ that is likely for those proplyds nearest to \tc. For those in the outer zones of the nebulae (where the diffuse radiation field is more important) the $D_\beta \, \sim \, 0.1$
+    where $\alpha_1$ and $\alpha_B$ are the recombination coefficients to the ground level and to the case B respectively.  $\sigma_{star}$ and $\sigma_{diffuse}$ are the star and diffuse radiation field mean effective cross section respectively. $D_\beta \, = \, 0.004$ means that $\sigma_{star} \, = \, 2.5 \, \sigma_{diffuse}$ that is likely for those proplyds nearest to \tc. For those in the outer zones of the nebulae (where the diffuse radiation field is more important) the $D_\beta \, \sim \, 0.1$ \citep{1999AJ....118.2350H}.
 }
 \end{itemize}
 
@@ -137,14 +178,14 @@ This is equivalent to say that the behavior of the physical conditions are difer
 
 This is similar to what Will did in \citep{2002ApJ...566..315H}
 
-In the outer zone we assume an isothermal, supersonic, complite ionized flow. From mass conservation, in spherical geometry and in the steady state, the radial gas velocity is given by Dyson solution \citep{1968Ap&SS...1..388D}
+In the outer zone we assume an isothermal, supersonic, complite ionized flow. From mass conservation, in spherical geometry and in the steady state, the radial gas velocity is given by Dyson solution \citep{1968Ap26SS...2..461D}.
 
 \begin{equation}
   R = U^{(-1/2)} exp \left [ \frac{1}{4} \left (U^2 -1 \right )
   \right ]
 \end{equation}
 
-where $U(R) = u / c_0$ with $u(R)$ is the gas velocity and $c(R)$ is the sound speed. Due that we can not have an analytic solution for $U$ as a function of $R$, from this equation generate a table of values for $U$ and $R$ and interpolate this table for each $R$ that is necesary in the Cloudy model.
+where $U(R) = u(R) / c_0$ where $u(R)$ is the gas velocity and $c_0$ is the sound speed. Due that, the analytic solution for $U$ as a function of $R$ is not possible, from this equation generate a table of values for $U$ and $R$ and interpolate this table for each $R$ that is necesary in the Cloudy model.
 
 At each point the density is calculated by the continuity equation:
 
@@ -183,7 +224,7 @@ $u = c_0$ by definition of the boundary
 
 Partially ionized region: Density is function of sound speed
 
-In this zone, we follow the simplified analytic model for weak--D ionization front described in Appendix of the \citet{2005ApJ...621..328H} paper. Even when this model is for a plane-parallel ionization front (the momentum conservation assumes plane parallel geometry) and this is not our case (we have an divergent geometry) this is an aproximation that could give us a good idea of the advection effects on the I-front.
+In this zone, we follow the simplified analytic model for weak--D ionization front described in Appendix of \citet{2005ApJ...621..328H}. Even when this model is for a plane-parallel ionization front (the momentum conservation assumes plane parallel geometry) and this is not our case (we have an divergent geometry) this is an aproximation that could give us a good idea of the advection effects on the I-front.
 
 Following the A8 equation, 
 \begin{equation}
@@ -206,7 +247,7 @@ where
   x = x_0 \frac{R + dR -1.0}{dR}
 \end{equation}
 
-$x_0$ is where the H ionization fraction is 0.99, i.e. in the sonic point where $R = 1$.
+$x_0$ is where the H ionization fraction is 0.99, i.e. the sonic point where $R = 1$.
 
 Making use of the Mach number $M = u/c$ and the fact of $c_0/c = \frac{1}{2} \left ( M + M^{-1} \right)$. Then, once more by continuity, the electronic density in this zone is:
 \begin{equation}
@@ -227,13 +268,13 @@ in contrast to the static case where the density is: $\rho \sim 1/c^2$
 %--------------------------------------------------------
 
 \begin{itemize}
-  \item{Electron Density: It has an almost constant increase reaching the maximum value in the I-front (after the sonic point) where the Hydrogen is partially ionized. In this zone, the electron density reach the critical electron density for some ions, making the collisional deexitation a process that need to take into account at least for those ions that has an important contribution to their emissivity from this zone.\\ 
+  \item{Electron Density: It has an almost constant increase reaching the maximum value in the I-front (after the sonic point) where the Hydrogen became partially ionized. In this zone, the electron density reach the critical electron density for some ions, making the collisional deexitation a process that need to take into account at least for those ions that has an important contribution to their emissivity from this zone.\\ 
 This could be negligible in the outer parts of the flow since they are highly ionized, which means that \oiii is the dominant coolant. The critical density of this ion is about $\rm 1e6 \, cm^{-3}$, which is reached just near of the sonic point, that is, where the \oiii emission is less than the 10\% of the total \oiii emission. (See Sect.~\ref{sec:emi}).}
   \item{Temperature: The electron temperature is almost constant in the outer zone. As we approache to the He recombination front the Te increase reaching the maximum value just before the I-front, where the He is neutral and the H still fully ionized. \\
-It is due for two reasons: The first one is that as the radiation field goes into the gas-phase of the proplyd, the less energy photons are absorved. This cause a hardening of the radiation field increasing the mean electron kinetic energy. That is, increasing the photoelectric heating per recombination. The second one is the electron density increase. It causes collisional deexcitation of the main cooling lines.}
+It is due for two reasons: The first one is that as the radiation field goes into the gas-phase of the proplyd, the less energy photons are absorved. This cause a hardening of the radiation field increasing the mean electron kinetic energy. That is, increasing the photoelectric heating per recombination. The second reason is because the electron density increase and the collisional deexcitation of the main cooling lines becomes an important effect.}
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}
   \centering
   \includegraphics[width=8.5 cm]{ifrac-vs-Rlog.png}
   \caption{1D model structure of several physical properties.} \label{fig:ifrac}
@@ -272,14 +313,25 @@ Discutir tambien la diferencia que hay entre la linea auroral y la nebular de \n
 
 
 %--------------------------------------------------------
+\subsection{IR Emission}
+\label{sec:IR}
+%--------------------------------------------------------
+
+
+%--------------------------------------------------------
 \section{Conclusion}
 \label{sec:conclusions}
 %--------------------------------------------------------
 
 We will construct Cloudy models of a series of individual radial cuts from the center of the proplyd, at different angles $\theta$ from the proplyd axis.
 
+%--------------------------------------------------------
+\section{Acknowledgements}
+\label{sec:Acknowledgements}
+%--------------------------------------------------------
+
 \bibliographystyle{t}
 
-\bibliography{model}
+\bibliography{biblio}
 
 \end{document}

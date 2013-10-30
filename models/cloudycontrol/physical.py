@@ -22,7 +22,7 @@ def abundances(variant="Orion"):
                              abundances H II region no grains
                              grains Orion single
                              """)
-    elif variant == "Tsamis":
+    elif variant == "TsamisLV2":
         abun_string = dedent("""\
                              * Tsamis abundances plus full Orion dust
                              abundances H II region no grains
@@ -56,41 +56,7 @@ def abundances(variant="Orion"):
                              grains PAH
                              set PAH "H" // Only have PAH in the neutral gas
                              """)
-    elif variant == "Tweak01":
-        abun_string = dedent("""\
-                             * Tweaked abundances to try and improve fit
-                             abundances H II region no grains
-                             element scale factor helium 1.0
-                             element scale factor carbon 0.85
-                             element scale factor nitrogen 1.1
-                             element scale factor oxygen 0.8
-                             element scale factor neon 1.0
-                             element scale factor sulphur 1.1
-                             element scale factor chlorine 2.0
-                             element scale factor argon 0.7
-                             element scale factor iron 0.2
-                             grains Orion
-                             grains PAH
-                             set PAH "H" // Only have PAH in the neutral gas
-                             """)
-    elif variant == "Tweak02":
-        abun_string = dedent("""\
-                             * Further tweaked abundances to try and improve fit
-                             abundances H II region no grains
-                             element scale factor helium 1.0
-                             element scale factor carbon 0.85
-                             element scale factor nitrogen 1.1
-                             element scale factor oxygen 0.5
-                             element scale factor neon 0.8
-                             element scale factor sulphur 1.1
-                             element scale factor chlorine 2.0
-                             element scale factor argon 0.7
-                             element scale factor iron 0.2
-                             grains Orion
-                             grains PAH
-                             set PAH "H" // Only have PAH in the neutral gas
-                             """)
-    elif variant == "Tweak03":
+    elif variant == "HST1":
         abun_string = dedent("""\
                              * Further tweaked abundances to try and improve fit
                              abundances H II region no grains
@@ -107,81 +73,7 @@ def abundances(variant="Orion"):
                              grains PAH
                              set PAH "H" // Only have PAH in the neutral gas
                              """)
-    elif variant == "TsamisHST10":
-        abun_string = dedent("""\
-                             * Further tweaked abundances to try and improve fit
-                             abundances H II region no grains
-                             element scale factor oxygen 1.5
-                             element scale factor sulphur 0.79
-                             element scale factor iron 0.2
-                             grains Orion
-                             grains PAH
-                             set PAH "H" // Only have PAH in the neutral gas
-                             """)
-    elif variant == "HST10t01":
-        abun_string = dedent("""\
-                             * Further tweaked abundances to try and improve fit
-                             abundances H II region no grains
-                             element scale factor oxygen 0.48
-                             element scale factor sulphur 0.79
-                             element scale factor iron 0.2
-                             grains Orion
-                             grains PAH
-                             set PAH "H" // Only have PAH in the neutral gas
-                             """)
-    elif variant == "HST10t02":
-        abun_string = dedent("""\
-                             * Further tweaked abundances to try and improve fit
-                             abundances H II region no grains
-                             element scale factor oxygen 0.72
-                             element scale factor sulphur 0.79
-                             element scale factor iron 0.2
-                             grains Orion
-                             grains PAH
-                             set PAH "H" // Only have PAH in the neutral gas
-                             """)
-    elif variant == "HST10t03":
-        abun_string = dedent("""\
-                             * Further tweaked abundances to try and improve fit
-                             abundances H II region no grains
-                             element scale factor nitrogen 0.432
-                             element scale factor oxygen 1.07
-                             element scale factor sulphur 0.5623
-                             element scale factor neon 0.93
-                             element scale factor iron 0.1
-                             grains Orion
-                             grains PAH
-                             set PAH "H" // Only have PAH in the neutral gas
-                             """)
-    elif variant == "HST10t04":
-        abun_string = dedent("""\
-                             * Further tweaked abundances to try and improve fit
-                             abundances H II region no grains
-                             element scale factor nitrogen 0.76
-                             element scale factor oxygen 1.07
-                             element scale factor sulphur 0.5623
-                             element scale factor neon 0.93
-                             element scale factor iron 0.31
-                             element scale factor argon 0.58
-                             grains Orion
-                             grains PAH
-                             set PAH "H" // Only have PAH in the neutral gas
-                             """)
-    elif variant == "HST10t05":
-        abun_string = dedent("""\
-                             * Further tweaked abundances to try and improve fit
-                             abundances H II region no grains
-                             element scale factor nitrogen 0.59
-                             element scale factor oxygen 1.07
-                             element scale factor sulphur 0.56
-                             element scale factor neon 1.3
-                             element scale factor iron 0.2
-                             element scale factor argon 0.62
-                             grains Orion
-                             grains PAH
-                             set PAH "H" // Only have PAH in the neutral gas
-                             """)
-    elif variant == "HST10t06":
+    elif variant == "HST10":
         abun_string = dedent("""\
                              * Further tweaked abundances to try and improve fit
                              abundances H II region no grains
@@ -205,6 +97,20 @@ def abundances(variant="Orion"):
                              element scale factor neon 2.4
                              element scale factor iron 0.2
                              element scale factor argon 0.67
+                             """)
+    elif variant == "Tweak01":
+        abun_string = dedent("""\
+                             * Further tweaked abundances to try and improve fit
+                             abundances H II region no grains
+                             element scale factor nitrogen 0.59
+                             element scale factor oxygen 0.95
+                             element scale factor sulphur 0.46
+                             element scale factor neon 2.6
+                             element scale factor iron 0.1
+                             element scale factor argon 0.67
+                             grains Orion
+                             grains PAH
+                             set PAH "H" // Only have PAH in the neutral gas
                              """)
     else:
         raise NotImplementedError

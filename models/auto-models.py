@@ -304,9 +304,7 @@ if __name__ == '__main__':
                         help="Type of stellar atmosphere model")
     parser.add_argument("--composition", type=str, default="Orion",
                         choices=["Orion", "FastOrion", "Esteban",
-                                 "Tsamis", "Tweak01", "Tweak02", "Tweak03",
-                                 "Tweak04", "TsamisHST10","HST10t01", "HST10t02", "HST10t03", 
-                                 "HST10t04", "HST10t05", "HST10t06", "HST10nd", "file"],
+                                 "TsamisLV2", "HST1", "HST10", "HST10nd", "Tweak01", "file"],
                         help="""Gas-phase abundance set to use.
                         Either a presestablished set, or 'file'.  In
                         the second case, use the option
@@ -352,22 +350,14 @@ if __name__ == '__main__':
         Zstring = "-ZF"
     elif cmdargs.composition.startswith("Tweak"):
         Zstring = "-ZZ%s" % (cmdargs.composition[-2:])
-    elif cmdargs.composition == "TsamisHST10":
+    elif cmdargs.composition == "HST10":
         Zstring = "-ZT10"
-    elif cmdargs.composition == "HST10t01":
-        Zstring = "-ZT101"
-    elif cmdargs.composition == "HST10t02":
-        Zstring = "-ZT102"
-    elif cmdargs.composition == "HST10t03":
-        Zstring = "-ZT103"
-    elif cmdargs.composition == 'HST10t04':
-        Zstring = "-ZT104"
-    elif cmdargs.composition == 'HST10t05':
-        Zstring = "-ZT105"
-    elif cmdargs.composition == 'HST10t06':
-        Zstring = "-ZT106"
+    elif cmdargs.composition == "HST1":
+        Zstring = "-ZT1"
     elif cmdargs.composition == 'HST10nd':
-        Zstring = "-ZT106nd"
+        Zstring = "-ZT10nd"
+    elif cmdargs.composition == 'TsamisLV2':
+        Zstring = "-ZTLV2"
     elif cmdargs.composition == "file":
         Zstring = cmdargs.composition_file.split(".")[0]
     else:
