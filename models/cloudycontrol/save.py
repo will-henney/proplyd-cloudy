@@ -60,6 +60,7 @@ He 1  3188A
 He 1  2945A  // 2946 in STIS identification
 He 1  2829A  // 2830 in STIS identification
 * Collisionally excited optical diagnostic lines
+TOTL  5199A  // [N I] 5200 + 5198 (all process included)
 N  2  6548A  // [N II] 6548.03
 N  2  6584A  // [N II] nebular line 6583.41
 N  2  5755A  // [N II] auroral line 5754.64
