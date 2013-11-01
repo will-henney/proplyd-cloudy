@@ -304,7 +304,7 @@ if __name__ == '__main__':
                         help="Type of stellar atmosphere model")
     parser.add_argument("--composition", type=str, default="Orion",
                         choices=["Orion", "FastOrion", "Esteban",
-                                 "TsamisLV2", "HST1", "HST10", "HST10nd", "Tweak01", "file"],
+                                 "TsamisLV2", "HST1", "HST10", "HST10nd", "Tweak01", "Tweak02", "file"],
                         help="""Gas-phase abundance set to use.
                         Either a presestablished set, or 'file'.  In
                         the second case, use the option
