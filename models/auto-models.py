@@ -304,13 +304,16 @@ if __name__ == '__main__':
                         help="Type of stellar atmosphere model")
     parser.add_argument("--composition", type=str, default="Orion",
                         choices=["Orion", "FastOrion", "Esteban",
-                                 "TsamisLV2", "HST1", "HST10", "HST10nd", "Tweak01", "Tweak02", "file"],
+                                 "TsamisLV2", "HST1", "HST10", "HST10nd", 
+                                 "Tweak01", "Tweak02", "Tweak03", "Tweak04", "Tweak05", 
+                                 "Tweak06", "Tweak07", "Tweak08", "Tweak09", "Tweak10", 
+                                 "file"],
                         help="""Gas-phase abundance set to use.
                         Either a presestablished set, or 'file'.  In
                         the second case, use the option
-                        '--composition-file' to specify the actual Cloudy commands.
+                        '--compositionFile' to specify the actual Cloudy commands.
                         """)
-    parser.add_argument("--composition-file", type=file, default=None,
+    parser.add_argument("--compositionFile", type=str, default=None,
                         help="""File name containing Cloudy commands
                         for a custom abundance set.  The file prefix
                         (before the first '.')  will be used in the
@@ -342,7 +345,7 @@ if __name__ == '__main__':
             warnings.warn("Overwriting abundance set with FastOrion")
             cmdargs.composition = "FastOrion"
 
-    if cmdargs.composition == "Tsamis":
+    if cmdargs.composition == "TsamisLV2":
         Zstring = "-ZT"
     elif cmdargs.composition == "Esteban":
         Zstring = "-ZE"
@@ -350,16 +353,14 @@ if __name__ == '__main__':
         Zstring = "-ZF"
     elif cmdargs.composition.startswith("Tweak"):
         Zstring = "-ZZ%s" % (cmdargs.composition[-2:])
-    elif cmdargs.composition == "HST10":
-        Zstring = "-ZT10"
     elif cmdargs.composition == "HST1":
         Zstring = "-ZT1"
+    elif cmdargs.composition == "HST10":
+        Zstring = "-ZT10"
     elif cmdargs.composition == 'HST10nd':
         Zstring = "-ZT10nd"
-    elif cmdargs.composition == 'TsamisLV2':
-        Zstring = "-ZTLV2"
     elif cmdargs.composition == "file":
-        Zstring = cmdargs.composition_file.split(".")[0]
+        Zstring = "-Z%s" % (cmdargs.compositionFile)
     else:
         Zstring = ""
 

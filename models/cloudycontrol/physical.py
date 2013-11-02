@@ -126,6 +126,54 @@ def abundances(variant="Orion"):
                              grains PAH
                              set PAH "H" // Only have PAH in the neutral gas
                              """)
+    elif variant == "Tweak03":
+        abun_string = dedent("""\
+                             * Further tweaked abundances to try and improve fit
+                             abundances H II region no grains
+                             element scale factor nitrogen 0.59
+                             element scale factor oxygen 0.8
+                             element scale factor sulphur 0.46
+                             element scale factor neon 3.4
+                             element scale factor iron 0.08
+                             element scale factor argon 0.67
+                             grains Orion
+                             grains PAH
+                             set PAH "H" // Only have PAH in the neutral gas
+                             """)
+    elif variant == "Tweak04":
+        abun_string = dedent("""\
+                             * Further tweaked abundances to try and improve fit
+                             abundances H II region no grains
+                             element scale factor nitrogen 0.76
+                             element scale factor oxygen 1.2
+                             element scale factor sulphur 0.46
+                             element scale factor neon 3.8
+                             element scale factor iron 0.08
+                             element scale factor argon 0.67
+                             grains Orion
+                             grains PAH
+                             set PAH "H" // Only have PAH in the neutral gas
+                             """)
+    elif variant == "Tweak05":
+        abun_string = dedent("""\
+                             """)
+    elif variant == "Tweak06":
+        abun_string = dedent("""\
+                             """)
+    elif variant == "Tweak07":
+        abun_string = dedent("""\
+                             """)
+    elif variant == "Tweak08":
+        abun_string = dedent("""\
+                             """)
+    elif variant == "Tweak09":
+        abun_string = dedent("""\
+                             """)
+    elif variant == "Tweak10":
+        abun_string = dedent("""\
+                             """)
+    elif variant == "file":
+        abund_string =
     else:
         raise NotImplementedError
     return abun_string
