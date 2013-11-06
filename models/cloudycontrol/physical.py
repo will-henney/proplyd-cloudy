@@ -131,9 +131,9 @@ def abundances(variant="Orion"):
                              * Further tweaked abundances to try and improve fit
                              abundances H II region no grains
                              element scale factor nitrogen 0.59
-                             element scale factor oxygen 0.8
+                             element scale factor oxygen 1.00
                              element scale factor sulphur 0.46
-                             element scale factor neon 3.4
+                             element scale factor neon 3.0
                              element scale factor iron 0.08
                              element scale factor argon 0.67
                              grains Orion
@@ -144,9 +144,9 @@ def abundances(variant="Orion"):
         abun_string = dedent("""\
                              * Further tweaked abundances to try and improve fit
                              abundances H II region no grains
-                             element scale factor nitrogen 0.76
-                             element scale factor oxygen 1.2
-                             element scale factor sulphur 0.46
+                             element scale factor nitrogen 0.5
+                             element scale factor oxygen 0.9
+                             element scale factor sulphur 0.4
                              element scale factor neon 3.8
                              element scale factor iron 0.08
                              element scale factor argon 0.67
@@ -172,8 +172,6 @@ def abundances(variant="Orion"):
     elif variant == "Tweak10":
         abun_string = dedent("""\
                              """)
-    elif variant == "file":
-        abund_string =
     else:
         raise NotImplementedError
     return abun_string
