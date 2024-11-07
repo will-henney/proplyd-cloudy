@@ -42,3 +42,5 @@ emission/test_data/aperture-*
 /papers/HST10/HST-10models.tex
 testdata
 /papers/HST10/will-hst10-model-section.out
+/emission/.DS_Store
+.DS_Store
